@@ -1,0 +1,1962 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<u2 OMVersion="3.6" StorageVersion="4" ToolVersion="4.0.0.3.10003" xmlns="http://www.telelogic.com/tau">
+<Resource Guid="cH9R9L1JgTVLrj9aeEpTGCyI">
+<cHiddenStereotypeInstance>
+<InstanceExpr Guid="ni4AeVNaN5FL04WgnLAatNSI">
+<cExpression>
+<BinaryExpr>
+<rOperation R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+<cRightOperand>
+<CharstringValue ValueString="urn:u2:etc\TTDPredefinedStereotypes.u2">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="strUri">
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@modelDependency"/>
+</InstanceExpr>
+<InstanceExpr Guid="Cx1zDIH0AQVLtBX7WE43SHmI">
+<cExpression>
+<BinaryExpr>
+<rOperation R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+<cRightOperand>
+<CharstringValue ValueString="urn:u2:etc\LineStyle.u2">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="strUri">
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@modelDependency"/>
+</InstanceExpr>
+</cHiddenStereotypeInstance>
+<rRoot R="uid:IljXrLgrGTiLtFXg5VjN-AEL"/>
+</Resource>
+<Package Guid="IljXrLgrGTiLtFXg5VjN-AEL" Name="LingosHookApp">
+<cDiagram>
+<ClassDiagram Guid="H9sD8LnRsTvLBp7d-IUoApUV" Name="Class diagram1" Size="3958 2885">
+<cHiddenStereotypeInstance>
+<InstanceExpr Guid="O03qkIUSlaLLKLRXbLL8yaSL">
+<cExpression>
+<BinaryExpr>
+<rOperation R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+<cRightOperand>
+<CharstringValue ValueString="Arial">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="name">
+<rDefinition R="uid:@TTDLineStyles@presentationFont@name"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+<cRightOperand>
+<IntegerValue ValueString="10">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="points">
+<rDefinition R="uid:@TTDLineStyles@presentationFont@points"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@presentationFont"/>
+</InstanceExpr>
+<InstanceExpr Guid="3ROa0VySUTeLBS3kzEzzmdqI">
+<rInstanceOf R="uid:@TTDLineStyles@diagramAutosizing"/>
+</InstanceExpr>
+<InstanceExpr Guid="o025sVoCU65LFK598ITHWePI">
+<cExpression>
+<BinaryExpr>
+<rOperation R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+<cRightOperand>
+<IntegerValue ValueString="16773875">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="color">
+<rDefinition R="uid:@TTDLineStyles@symbolColor@color"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@symbolColor"/>
+</InstanceExpr>
+</cHiddenStereotypeInstance>
+<cDiagramElement>
+<FrameSymbol Guid="AhHYCLv5qevL850heIyz0*fL" Position="100 100" Size="3720 2680">
+</FrameSymbol>
+<ClassSymbol Guid="ChZUPVNb9lILD4UjJEjb*18L" Position="700 200" Size="740 540" Autosize="true" Text="MainFrame">
+<rDefinition R="uid:*ELcVEsWaICLRozfkIkRhuOL"/>
+<cCompartment>
+<Compartment Guid="c0pA-VS3FtELIaL6sESBFQBI">
+<cStereotypeInstance>
+<InstanceExpr Guid="ClDqvVk3DZFLJocYJEuSiH9I">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="5MwF*LtqWoCLYdi7MENTv5kL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Attribute">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="jRWQiLzoN5SLUux63V3sr2CV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="AttributeLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<AttributeLabel Guid="aVusJEq1OWALYi47TEKruTYV">
+</AttributeLabel>
+<AttributeLabel Guid="5*F2dV1kBdALhVGbDE98F6dV" Text="part _objDBAccess : DBAccess">
+<rDefinition R="uid:2TtinVkZ5VLLiIB7XVcWUNEL"/>
+</AttributeLabel>
+<AttributeLabel Guid="64abuEEmLJSLZy5dLVd9Gd8V" Text="part _objDisplayProc : SearchProcObject">
+<rDefinition R="uid:1uFVqEJMzLELF9vbAVA1hlwI"/>
+</AttributeLabel>
+<AttributeLabel Guid="Fpx5-Lyxw-ALX1F6GENxYsKI" Text="part _objHook : HookObject">
+<rDefinition R="uid:3doxjLS5w1vLQ1q6PEPiGyuI"/>
+</AttributeLabel>
+<AttributeLabel Guid="nUP*VECNipDLkl8ZjLLfZz3E" Text="part _objResultProc : ResultProcObject">
+<rDefinition R="uid:aWtPoVCAJTlLfB5jiEJS*LuE"/>
+</AttributeLabel>
+</cLabel>
+</Compartment>
+<Compartment Guid="PKjCZIyxteAL1Q96JVhJs6xI">
+<cStereotypeInstance>
+<InstanceExpr Guid="4ZGygEfz9IeLFxyZTI50jk4I">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="AzkefVsPEflLPgzcFV3JPNXI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Operation">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="ApcIvLN*IReLV5rZuETbTMSE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="OperationLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<OperationLabel Guid="bmrG0V8-FuDLQh46*Enxo-OI" Text="+ HookTextProc()">
+<rDefinition R="uid:qlo-QLLeu7vLgwaakI8a5b9E"/>
+</OperationLabel>
+<OperationLabel Guid="WvUWWVJhBe5LgI8dULeZfNZV" Text="+ HookHTMLProc()">
+<rDefinition R="uid:NA5pILSyBWVLwncWJEyoBThL"/>
+</OperationLabel>
+<OperationLabel Guid="7*HZ*VOf0jVLos-gqL1Yt-KE" Text="+ ResultProc()">
+<rDefinition R="uid:diwwzVcAWziLiUpYLEhrVCcE"/>
+</OperationLabel>
+<OperationLabel Guid="pH-W9I8zhoAL4rl6DIQUxI3V" Text="+ DisplayIndex()">
+<rDefinition R="uid:Dfb59V6brUELLfoY7L8zjDBI"/>
+</OperationLabel>
+<OperationLabel Guid="RruJkIhjNTiLUOoZkI*NbrUL" Text="+ DisplayResult()">
+<rDefinition R="uid:YjsYqVoSV5vLjoudtErCcOfI"/>
+</OperationLabel>
+</cLabel>
+</Compartment>
+</cCompartment>
+</ClassSymbol>
+<ClassSymbol Guid="Ur5xGV7fYAlLnbvc3VR7J8JL" Position="120 780" Size="600 240" Autosize="true" Text="HookObject">
+<rDefinition R="uid:pKQ8nIf*SdFLUJsaDL40nTUI"/>
+<cCompartment>
+<Compartment Guid="CzwCbIpA4uVLCJNWkIXqgczE">
+<cStereotypeInstance>
+<InstanceExpr Guid="OhmfzVy9LwDLsScYBIuq7GNI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="FvazVI9Fj-eLucb7aEPJp7HE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Attribute">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="DKlmZI-JNB0L8rq7GVrjs5yL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="AttributeLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<AttributeLabel Guid="g3Gi8VHqovCLZUDXpIhwdkGL" Text="- shared _objFrame : MainFrame">
+<rDefinition R="uid:uELEdVKL30iLBY*d9Vs*kMHL"/>
+</AttributeLabel>
+</cLabel>
+</Compartment>
+<Compartment Guid="rT0a4ETpOEBLv*670I4V7CMV">
+<cStereotypeInstance>
+<InstanceExpr Guid="DK-YuEpSiQeLWwd6VEFrgcEL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="ZIFp5IZWtUCLAD7hmE9T21EI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Operation">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="WDG3vVdrPPlLieF9UIIGNNbV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="OperationLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<OperationLabel Guid="jHmkWE--7NALLWOffIOyOIwV" Text="+ Hook():Integer">
+<rDefinition R="uid:-*8O6EC0VHALbj2gbVPTObQV"/>
+</OperationLabel>
+<OperationLabel Guid="sVqA2VTxLjBLI8WgUI82473V" Text="+ Unhook()">
+<rDefinition R="uid:gaEbPIKkppiLvctj6VscaOVL"/>
+</OperationLabel>
+</cLabel>
+</Compartment>
+</cCompartment>
+</ClassSymbol>
+<ClassSymbol Guid="L-8yKIjPp4LL1s6dAIYInBYL" Position="500 1080" Size="660 280" Autosize="true" Text="ResultProcObject">
+<rDefinition R="uid:IoVqzEjlHuILwMKkCErzx0gL"/>
+<cCompartment>
+<Compartment Guid="D3kIQLDc-8vLhpK71Ecxug3I">
+<cStereotypeInstance>
+<InstanceExpr Guid="V5ckTVR9QWAL*tK9JEle478E">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="46oahIuATpBL7YucpI91VQxI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Attribute">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="SdHUAEyYo1ELX*bfAEQyOEzV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="AttributeLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<AttributeLabel Guid="2tOW1In--EFL*dBdCVImWMAI" Text="- shared _objDBAccess : DBAccess">
+<rDefinition R="uid:31WD9E7yBEDLFswhoIEWFWGI"/>
+</AttributeLabel>
+<AttributeLabel Guid="xmb63VlsMzFLTjD6GIjdHtUL" Text="- shared _objFrame : MainFrame">
+<rDefinition R="uid:2Pwy9E9r2kVLqUCa3V5yUWGI"/>
+</AttributeLabel>
+</cLabel>
+</Compartment>
+<Compartment Guid="bAMOHLR5GvFL5oH75I4-X0GL">
+<cStereotypeInstance>
+<InstanceExpr Guid="0dIG*EhE3kLLuso92EgWD10V">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="mmUzSEfOzzeLwv49GIKj0UOV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Operation">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="H6pcwEsxyevL-R7j5LtK5ALV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="OperationLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<OperationLabel Guid="9HusULDcuzVLwXJZAEVQpS0I" Text="+ TextProc()">
+<rDefinition R="uid:XVfo0VSLtDELC6TgLEBCaB*I"/>
+</OperationLabel>
+<OperationLabel Guid="JKXduEzD9wILKtdZHITy7UEL" Text="+ HTMLProc()">
+<rDefinition R="uid:ilDV2LCcTGeLBDfjdENu4FeL"/>
+</OperationLabel>
+</cLabel>
+</Compartment>
+</cCompartment>
+</ClassSymbol>
+<ClassSymbol Guid="Q01QeI0cjWILB-N6*V6mz-VV" Position="1300 800" Size="660 280" Autosize="true" Text="SearchProcObject">
+<rDefinition R="uid:bfT-bLY0*ZlLJzthlEv8Y55I"/>
+<cCompartment>
+<Compartment Guid="dxvCYIjBvlELdrwkoEQtDVXV">
+<cStereotypeInstance>
+<InstanceExpr Guid="ov1RjEFGqEALgzmWwLLsFovV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="6ZbqHVNTjLBL*9l91V*3sMCV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Attribute">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="1nP1SLoSXylLL5*6GL3XUUiV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="AttributeLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<AttributeLabel Guid="KkqQqVaU8OBLKKx78ECAeHdE" Text="- shared _objDBAccess : DBAccess">
+<rDefinition R="uid:yP221IotlzeLPyZfXLMrMITI"/>
+</AttributeLabel>
+<AttributeLabel Guid="7yfwpI1r4tvLmr3gPLxj-fUL" Text="- shared _objFrame : MainFrame">
+<rDefinition R="uid:jlFxtIIYQ5ILd3aZ7EkwLk3E"/>
+</AttributeLabel>
+</cLabel>
+</Compartment>
+<Compartment Guid="o2YZbIfWmEELJyGbkVnITYlE">
+<cStereotypeInstance>
+<InstanceExpr Guid="0FupkVQJFmILE3ZgrEEjdtLL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="5fs*HLX*fpALHVykSIEs7ylI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Operation">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="3fVLtLJSfEvLv0*a0LkBaZLV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="OperationLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<OperationLabel Guid="M*m1EINtayCLvptcBE-xBlfV" Text="+ GetAllIndex()">
+<rDefinition R="uid:VKYHZVMrXiELDn6azVhpbJOL"/>
+</OperationLabel>
+<OperationLabel Guid="GGHWIEWgphIL6dm6kIO2x53E" Text="+ GetResult(): Integer">
+<rDefinition R="uid:2YZfPE8EP2lLrI16ZLrprWdE"/>
+</OperationLabel>
+</cLabel>
+</Compartment>
+</cCompartment>
+</ClassSymbol>
+<ClassSymbol Guid="PEHD*V0jQCeLO23brESWlRTE" Position="1060 1400" Size="400 280" Autosize="true" Text="DBAccess">
+<rDefinition R="uid:fD2D-VZlz4eLUT3b-VsbYP6L"/>
+<cCompartment>
+<Compartment Guid="sej9yVt2ULBLuwaj1L1pJd-L">
+<cStereotypeInstance>
+<InstanceExpr Guid="lIREoL-qMHvLkv0YtLI4sCHV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="7xAriLaoQCCL*s*c0VdacqVV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Attribute">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="tCN1EI-GsELLYQ5adLNfMwjL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="AttributeLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+</Compartment>
+<Compartment Guid="HnhwDI85DhFL9oDW6VM0VxTL">
+<cStereotypeInstance>
+<InstanceExpr Guid="Ssv-cI0d9CLLc9BajIVqLOKV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="a2WDWEBLUeIL6bGdlVXhzWIV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Operation">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="a-OxYIQv*Y0LRa9fnVmLvEfL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="OperationLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<cLabel>
+<OperationLabel Guid="zCi*HVpICBALVRccBIAdbuWV" Text="+ Insert(): Integer">
+<rDefinition R="uid:ewTXxVQxJEVLR927MIW8jQcV"/>
+</OperationLabel>
+<OperationLabel Guid="7To3IEdArhVL4HYYLILnE2tL" Text="+ Remove(): Integer">
+<rDefinition R="uid:AQB9PIRjNX5LKWxjXV-OhukL"/>
+</OperationLabel>
+<OperationLabel Guid="2KEETEHUrCILKmzbWVCxtbgV" Text="+ Search(): Integer">
+<rDefinition R="uid:aLQ92Vf7fnILdPo9UL3u40LL"/>
+</OperationLabel>
+</cLabel>
+</Compartment>
+</cCompartment>
+</ClassSymbol>
+<AssociationLine Guid="c*HvvIKEXkCLZGA9ZLLpMHzI" SegmentPoints="700 380 380 380 380 780">
+<cStereotypeInstance>
+<InstanceExpr Guid="G8*lvLfwg-SLRtWYRLB*z5kI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rDst R="uid:Ur5xGV7fYAlLnbvc3VR7J8JL"/>
+<rSource R="uid:3doxjLS5w1vLQ1q6PEPiGyuI"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="Ys3aAELzEceLGdncFE5Con*L" Text="_objHook">
+<cStereotypeInstance>
+<InstanceExpr Guid="6FSGfVh2DqVLG8WbeV9SLZ5I">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<IntegerValue ValueString="115">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="331">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+<rDefinition R="uid:3doxjLS5w1vLQ1q6PEPiGyuI"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="hPQ3aL3L47BLMutktI5WjcFI">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="LULfJETZRqeLhOwY5IKV2tKV" SegmentPoints="960 740 960 1080">
+<cStereotypeInstance>
+<InstanceExpr Guid="c16nbIDL4h5L4vQYkEMEKedV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rDst R="uid:L-8yKIjPp4LL1s6dAIYInBYL"/>
+<rSource R="uid:aWtPoVCAJTlLfB5jiEJS*LuE"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="Qm1KtVas8tlLshh6TI15PYVI" Text="_objResultProc">
+<cStereotypeInstance>
+<InstanceExpr Guid="rlC1uLdfNQVLxX3W5VZHneFL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="85">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="251">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+<rDefinition R="uid:aWtPoVCAJTlLfB5jiEJS*LuE"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="qudTxVRKp15LN-*WMVvP*MuI">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="PsR8OLS2VMELfRCc5VCaIF8V" SegmentPoints="1440 560 1560 560 1560 800">
+<cStereotypeInstance>
+<InstanceExpr Guid="qMwoEIfuPzILzWQWoVbfXyCE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rDst R="uid:Q01QeI0cjWILB-N6*V6mz-VV"/>
+<rSource R="uid:1uFVqEJMzLELF9vbAVA1hlwI"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="rmYveVMIr*VLs0vcwIMIMRXL" Text="_objDisplayProc">
+<cStereotypeInstance>
+<InstanceExpr Guid="cuvvKVcFK4EL*pYdHE5aO2MV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="185">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="171">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+<rDefinition R="uid:1uFVqEJMzLELF9vbAVA1hlwI"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="l52lKECUY9DLG-x9TIx*Kd6I">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="zhE6WVg63JeLq7g9*IzhnTMI" SegmentPoints="1260 740 1260 1400">
+<cStereotypeInstance>
+<InstanceExpr Guid="zY8I-E*j4UBLn6FZ3VW5J9GE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="AutomaticAssign">
+<rDefinition R="uid:ud4RrLD7TmlLYSF7WEdq4vHL"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rDst R="uid:PEHD*V0jQCeLO23brESWlRTE"/>
+<rSource R="uid:2TtinVkZ5VLLiIB7XVcWUNEL"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="mWbr0VKNDyeLBArbYVOn3G*E" Text="_objDBAccess">
+<rDefinition R="uid:2TtinVkZ5VLLiIB7XVcWUNEL"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="wOov9I*2yTFLdebaZV9RVh6V">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="AXnFlV2tmKFLsN1WQLR56TOV" SegmentPoints="680 1360 680 1520 1060 1520">
+<cStereotypeInstance>
+<InstanceExpr Guid="ob7moEHs365LuJ2dkIkvxZaI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:L-8yKIjPp4LL1s6dAIYInBYL"/>
+<rDst R="uid:PEHD*V0jQCeLO23brESWlRTE"/>
+<rSource R="uid:31WD9E7yBEDLFswhoIEWFWGI"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="iqf20L98IzCLTxEjNL2Hs1ME" Text="- _objDBAccess">
+<rDefinition R="uid:31WD9E7yBEDLFswhoIEWFWGI"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="n937CLSeaUELBbWWKVfFKLVV">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="gVZWPL9VbOILKF9bBILueygI" SegmentPoints="1640 1080 1640 1500 1460 1500">
+<cStereotypeInstance>
+<InstanceExpr Guid="NU61UVE6KQALruuWEVPh4*ME">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:Q01QeI0cjWILB-N6*V6mz-VV"/>
+<rDst R="uid:PEHD*V0jQCeLO23brESWlRTE"/>
+<rSource R="uid:yP221IotlzeLPyZfXLMrMITI"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="9e4eLIvfziiLMOxc*EEuH7KV" Text="- _objDBAccess">
+<rDefinition R="uid:yP221IotlzeLPyZfXLMrMITI"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="eV21ELR8jFFLSUjfJVpLUK3L">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="k9LI-EUzcxlLq45WpVmfxvwL" SegmentPoints="260 780 260 320 700 320">
+<cStereotypeInstance>
+<InstanceExpr Guid="Qjp0BVzqrVBLKUV6*VFgW8RI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:Ur5xGV7fYAlLnbvc3VR7J8JL"/>
+<rDst R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rSource R="uid:uELEdVKL30iLBY*d9Vs*kMHL"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="Wl4hLIdmgvlLv4fcWEgNYwRI" Text="- _objFrame">
+<cStereotypeInstance>
+<InstanceExpr Guid="Jh1tAIVgkr0Lrh77dLzNXSnV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="356">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<IntegerValue ValueString="368">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+<rDefinition R="uid:uELEdVKL30iLBY*d9Vs*kMHL"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="ikKUQIYyL*vL9g9WQVFkZacI">
+<cStereotypeInstance>
+<InstanceExpr Guid="Q5KQAVFzlmCLjovbQEI9SZ*I">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="21">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<IntegerValue ValueString="175">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="7mE3CIpWPuBLEIfkyIhhhHXL" SegmentPoints="860 1080 860 740">
+<cStereotypeInstance>
+<InstanceExpr Guid="KRzl-Lghfw5L9-Bb3VY50srE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:L-8yKIjPp4LL1s6dAIYInBYL"/>
+<rDst R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rSource R="uid:2Pwy9E9r2kVLqUCa3V5yUWGI"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="6abD2IUgje0LUq5bULki7XlI" Text="- _objFrame">
+<cStereotypeInstance>
+<InstanceExpr Guid="I2p0WVvMPOELJ7XWuLT9BLkE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<UnaryExpr>
+<rOperation>
+<Ident Name="-">
+<rDefinition R="uid:@Predefined@Integer@-@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cOperand>
+<IntegerValue ValueString="165">
+</IntegerValue>
+</cOperand>
+</UnaryExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<IntegerValue ValueString="275">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+<rDefinition R="uid:2Pwy9E9r2kVLqUCa3V5yUWGI"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="tpLs2I2PVDELFTBfDEqrtBwV">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<AssociationLine Guid="VMqzDVt*hbDLGA-6HIKhQ5lL" SegmentPoints="1700 800 1700 480 1440 480">
+<cStereotypeInstance>
+<InstanceExpr Guid="eOE6FEECmoLLfTo7yI8X*44I">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<Ident Name="Automatic">
+<rDefinition R="uid:g2iM9IvvWYBLmKFalIZwEhtI"/>
+</Ident>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="shape">
+<rDefinition R="uid:rlPkmLAr1GDLOxGcmE*Y4*FV"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@TTDLineStyles@automaticLineStyle"/>
+</InstanceExpr>
+</cStereotypeInstance>
+<rSrc R="uid:Q01QeI0cjWILB-N6*V6mz-VV"/>
+<rDst R="uid:ChZUPVNb9lILD4UjJEjb*18L"/>
+<rSource R="uid:jlFxtIIYQ5ILd3aZ7EkwLk3E"/>
+<cSrcRoleLabel>
+<AttributeLabel Guid="DmTXiLn2y35L97ZXmVkwTWmE" Text="- _objFrame">
+<cStereotypeInstance>
+<InstanceExpr Guid="4o3YfVYERu5LtaI6pV-MX*PL">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<IntegerValue ValueString="235">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="x">
+<rDefinition R="uid:LYKGzICgAiCLIxn6HEivUOwE"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Integer@=@Integer@Integer@Integer"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<IntegerValue ValueString="309">
+</IntegerValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="y">
+<rDefinition R="uid:vqqvnEuKAJLL1nIWvIoV*H4E"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf>
+<Ident Name="labelOffset">
+<rDefinition R="uid:@TTDLineStyles@labelOffset"/>
+</Ident>
+</rInstanceOf>
+</InstanceExpr>
+</cStereotypeInstance>
+<rDefinition R="uid:jlFxtIIYQ5ILd3aZ7EkwLk3E"/>
+</AttributeLabel>
+</cSrcRoleLabel>
+<cSrcMultiplicityLabel>
+<MultiplicityLabel Guid="mi6S5EvZivILvHx6aEaytyvL">
+</MultiplicityLabel>
+</cSrcMultiplicityLabel>
+</AssociationLine>
+<ClassSymbol Guid="5yzpsV8m9Q0L1qeYBLZ2lRuE" Position="1620 200" Size="300 200" Autosize="true" Text="DisplayObject">
+<rDefinition R="uid:RKQh3LNlAJILtvhfsVgChSMV"/>
+<cCompartment>
+<Compartment Guid="XcZlLIIvfMVLEPe69VqQVawE">
+<cStereotypeInstance>
+<InstanceExpr Guid="tNYQkLuPwBIL38Ec2VN6vogV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="FrkQXI8-e5VLjtjWbVcBbnAE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Attribute">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="EVmnSVl04h0LoRNa5IogR0EV">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="AttributeLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+</Compartment>
+<Compartment Guid="Zl99LVY-kpILbFE6JECak3mV">
+<cStereotypeInstance>
+<InstanceExpr Guid="4TNkJIs*hq5LWdv62LMwFUkE">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<ListExpr>
+<cExpression>
+<InstanceExpr Guid="BfKiOI9ZbQBL5tyWOVk1C9XI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="Operation">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentFilter@MetaclassFilter@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter@MetaclassFilter"/>
+</InstanceExpr>
+</cExpression>
+</ListExpr>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="filters">
+<rDefinition R="uid:@Predefined@compartmentFilter@filters"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentFilter"/>
+</InstanceExpr>
+<InstanceExpr Guid="SbIdDVfvR4DLbB2Y8VRYtAgI">
+<cExpression>
+<BinaryExpr>
+<rOperation>
+<Ident Name="=">
+<rDefinition R="uid:@Predefined@Collection@=@Collection@Collection@Collection"/>
+</Ident>
+</rOperation>
+<cRightOperand>
+<CharstringValue ValueString="OperationLabel">
+</CharstringValue>
+</cRightOperand>
+<cLeftOperand>
+<Ident Name="metaClass">
+<rDefinition R="uid:@Predefined@compartmentLabelType@metaClass"/>
+</Ident>
+</cLeftOperand>
+</BinaryExpr>
+</cExpression>
+<rInstanceOf R="uid:@Predefined@compartmentLabelType"/>
+</InstanceExpr>
+</cStereotypeInstance>
+</Compartment>
+</cCompartment>
+</ClassSymbol>
+</cDiagramElement>
+</ClassDiagram>
+</cDiagram>
+<cOwnedMember>
+<Class Guid="*ELcVEsWaICLRozfkIkRhuOL" Name="MainFrame">
+<cOwnedMember>
+<Attribute Guid="3doxjLS5w1vLQ1q6PEPiGyuI" Name="_objHook" Aggregation="AkComposite">
+<rType>
+<Ident Name="HookObject">
+<rDefinition R="uid:pKQ8nIf*SdFLUJsaDL40nTUI"/>
+</Ident>
+</rType>
+</Attribute>
+<Attribute Guid="aWtPoVCAJTlLfB5jiEJS*LuE" Name="_objResultProc" Aggregation="AkComposite">
+<rType>
+<Ident Name="ResultProcObject">
+<rDefinition R="uid:IoVqzEjlHuILwMKkCErzx0gL"/>
+</Ident>
+</rType>
+</Attribute>
+<Attribute Guid="1uFVqEJMzLELF9vbAVA1hlwI" Name="_objDisplayProc" Aggregation="AkComposite">
+<rType>
+<Ident Name="SearchProcObject">
+<rDefinition R="uid:bfT-bLY0*ZlLJzthlEv8Y55I"/>
+</Ident>
+</rType>
+</Attribute>
+<Attribute Guid="2TtinVkZ5VLLiIB7XVcWUNEL" Name="_objDBAccess" Aggregation="AkComposite">
+<rType>
+<Ident Name="DBAccess">
+<rDefinition R="uid:fD2D-VZlz4eLUT3b-VsbYP6L"/>
+</Ident>
+</rType>
+</Attribute>
+<Operation Guid="qlo-QLLeu7vLgwaakI8a5b9E" Name="HookTextProc" Visibility="VkPublic">
+</Operation>
+<Operation Guid="NA5pILSyBWVLwncWJEyoBThL" Name="HookHTMLProc" Visibility="VkPublic">
+</Operation>
+<Operation Guid="diwwzVcAWziLiUpYLEhrVCcE" Name="ResultProc" Visibility="VkPublic">
+</Operation>
+<Operation Guid="Dfb59V6brUELLfoY7L8zjDBI" Name="DisplayIndex" Visibility="VkPublic">
+</Operation>
+<Operation Guid="YjsYqVoSV5vLjoudtErCcOfI" Name="DisplayResult" Visibility="VkPublic">
+</Operation>
+</cOwnedMember>
+</Class>
+<Class Guid="pKQ8nIf*SdFLUJsaDL40nTUI" Name="HookObject">
+<cOwnedMember>
+<Operation Guid="mfEBnIgDwGlLotl9NIBpxY0E" Name="Hook" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="11wUzVRHscFLREtYGEfilxBV" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+<Operation Guid="n1zlhETInV0LlZzcXVLu3zaL" Name="Unhook" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="ibZlqLKGZVDLY2WjPV2N2ZHL" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+<Attribute Guid="uELEdVKL30iLBY*d9Vs*kMHL" Name="_objFrame" Aggregation="AkAggregate" Visibility="VkPrivate">
+<rType>
+<Ident Name="MainFrame">
+<rDefinition R="uid:*ELcVEsWaICLRozfkIkRhuOL"/>
+</Ident>
+</rType>
+</Attribute>
+<Operation Guid="-*8O6EC0VHALbj2gbVPTObQV" Name="Hook" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="FNYoUIDkNMeLxVlXEL7KR4LI" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+<Operation Guid="gaEbPIKkppiLvctj6VscaOVL" Name="Unhook" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="qYP4VIX3vnBL9cUXWEPzatiL" Direction="DkReturn">
+</Parameter>
+</cParameter>
+</Operation>
+</cOwnedMember>
+</Class>
+<Class Guid="IoVqzEjlHuILwMKkCErzx0gL" Name="ResultProcObject">
+<cOwnedMember>
+<Attribute Guid="31WD9E7yBEDLFswhoIEWFWGI" Name="_objDBAccess" Aggregation="AkAggregate" Visibility="VkPrivate">
+<rType>
+<Ident Name="DBAccess">
+<rDefinition R="uid:fD2D-VZlz4eLUT3b-VsbYP6L"/>
+</Ident>
+</rType>
+</Attribute>
+<Attribute Guid="2Pwy9E9r2kVLqUCa3V5yUWGI" Name="_objFrame" Aggregation="AkAggregate" Visibility="VkPrivate">
+<rType>
+<Ident Name="MainFrame">
+<rDefinition R="uid:*ELcVEsWaICLRozfkIkRhuOL"/>
+</Ident>
+</rType>
+</Attribute>
+<Operation Guid="XVfo0VSLtDELC6TgLEBCaB*I" Name="TextProc" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="cruqoEps3pvLicdfTL*IkZWL" Direction="DkReturn">
+</Parameter>
+</cParameter>
+</Operation>
+<Operation Guid="ilDV2LCcTGeLBDfjdENu4FeL" Name="HTMLProc" Visibility="VkPublic">
+</Operation>
+</cOwnedMember>
+</Class>
+<Class Guid="bfT-bLY0*ZlLJzthlEv8Y55I" Name="SearchProcObject">
+<cOwnedMember>
+<Attribute Guid="yP221IotlzeLPyZfXLMrMITI" Name="_objDBAccess" Aggregation="AkAggregate" Visibility="VkPrivate">
+<rType>
+<Ident Name="DBAccess">
+<rDefinition R="uid:fD2D-VZlz4eLUT3b-VsbYP6L"/>
+</Ident>
+</rType>
+</Attribute>
+<Attribute Guid="jlFxtIIYQ5ILd3aZ7EkwLk3E" Name="_objFrame" Aggregation="AkAggregate" Visibility="VkPrivate">
+<rType>
+<Ident Name="MainFrame">
+<rDefinition R="uid:*ELcVEsWaICLRozfkIkRhuOL"/>
+</Ident>
+</rType>
+</Attribute>
+<Operation Guid="VKYHZVMrXiELDn6azVhpbJOL" Name="GetAllIndex" Visibility="VkPublic">
+</Operation>
+<Operation Guid="2YZfPE8EP2lLrI16ZLrprWdE" Name="GetResult" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="IF4dvVc6rfLL*lddFVfYxq2E" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+</cOwnedMember>
+</Class>
+<Class Guid="fD2D-VZlz4eLUT3b-VsbYP6L" Name="DBAccess">
+<cOwnedMember>
+<Operation Guid="ewTXxVQxJEVLR927MIW8jQcV" Name="Insert" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="Jwv1jLAL0wFLAO9gMVtR4j3I" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+<Operation Guid="AQB9PIRjNX5LKWxjXV-OhukL" Name="Remove" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="UYDsbIOqQmCLe7AhUIcx3YiL" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+<Operation Guid="aLQ92Vf7fnILdPo9UL3u40LL" Name="Search" Visibility="VkPublic">
+<cParameter>
+<Parameter Guid="dXYLOV3pTDDLm5zb*Ir0-g4L" Direction="DkReturn">
+<rType>
+<Ident Name="Integer">
+<rDefinition R="uid:@Predefined@Integer"/>
+</Ident>
+</rType>
+</Parameter>
+</cParameter>
+</Operation>
+</cOwnedMember>
+</Class>
+<Class Guid="RKQh3LNlAJILtvhfsVgChSMV" Name="DisplayObject">
+<cOwnedMember>
+<Attribute Guid="uKZFPLLo4dvLBuK6XVNdD8EI">
+<rType>
+<Ident Name="MainFrame">
+<rDefinition R="uid:*ELcVEsWaICLRozfkIkRhuOL"/>
+</Ident>
+</rType>
+</Attribute>
+</cOwnedMember>
+</Class>
+</cOwnedMember>
+</Package>
+</u2>
