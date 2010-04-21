@@ -5,4 +5,6 @@
 //App message
 #define WM_OBJECT_INIT      WM_USER + 1000
 
+#define VERSION     1.0.0.a
+
 #endif
