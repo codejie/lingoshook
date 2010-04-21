@@ -135,7 +135,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     panel_4 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
     m_btnTagRemove = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGREMOVE, wxT("Delete"));
     m_textTrace = new wxTextCtrl(m_noteContext_pane_6, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
-    label_8 = new wxStaticText(m_noteContext_pane_5, wxID_ANY, wxT("LingosHook v1.0.0.a  by Jie."), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+    label_8 = new wxStaticText(m_noteContext_pane_5, wxID_ANY, wxT("LingosHook v0.9.xxx  by Jie."), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
     static_line_4 = new wxStaticLine(m_noteContext_pane_5, wxID_ANY);
     m_btnAboutHelp = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTHELP, wxT("Welcome to online help.."));
     m_btnAboutSend = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
