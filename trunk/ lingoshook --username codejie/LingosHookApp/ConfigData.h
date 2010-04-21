@@ -20,6 +20,7 @@ public:
     static const int CA_HTMLLOAD        =   10;
     static const int CA_EXPANDDICT      =   11;
     static const int CA_IGNOREDICT      =   12;
+    static const int CA_AUTOSPEAK       =   13;
 public:
     CConfigData(CDBAccess& db);
 	virtual ~CConfigData() {}
@@ -50,6 +51,7 @@ public:
     int m_iHTMLLoad;
     int m_iExpandDict;
     int m_iIgnoreDict;
+    int m_iAutoSpeak;
 };
 
 

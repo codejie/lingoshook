@@ -9,10 +9,10 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved)
 	switch(reason)
 	{
 	case DLL_PROCESS_ATTACH:
-        Init();
+//        Init();
 		break;
 	case DLL_PROCESS_DETACH:
-        Final();
+//        Final();
 		break;
 	default:;
 	}

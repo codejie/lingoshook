@@ -10,7 +10,10 @@ extern "C"
 {
 #endif
 
+DllExport BOOL Init();
+DllExport VOID Final();
 DllExport BOOL Speak(LPCTSTR word);
+
 
 #if defined(__cplusplus)
 }

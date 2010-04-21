@@ -10,7 +10,7 @@ CTriggerObject::CTriggerObject()
 , _objDisplay(NULL)
 , _objTag(NULL)
 , _objMemoryDaily(NULL)
-//, _iSortShowMode(SM_UNKNOWN)
+, _objSpeak(NULL)
 {
 }
 
@@ -37,6 +37,11 @@ void CTriggerObject::AttachTagObject(CTagObject* obj)
 void CTriggerObject::AttachMemoryDailyObject(MemoryDaily::CManageObject* obj)
 {
     _objMemoryDaily = obj;
+}
+
+void CTriggerObject::AttachSpeakObject(CSpeakObject* obj)
+{
+    _objSpeak = obj;
 }
 
 void CTriggerObject::OnHTMLTrace(const wxString& html)
@@ -126,8 +131,11 @@ void CTriggerObject::OnWordRemove(int wordid)
 
 void CTriggerObject::OnWordResultGetOver(int wordid, const TWordData& data)
 {
+    if(_dataConfig->m_iAutoSpeak == 1)
+        _objSpeak->Speak(data.m_strWord);
+
     _objTag->GetTagByWord(wordid);
-    _objDisplay->ShowWordData(data);        
+    _objDisplay->ShowWordData(data);
 }
 
 void CTriggerObject::OnTagLoad(int tagid, const CTagObject::TRecord &record)

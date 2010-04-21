@@ -279,6 +279,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\SpeakObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TagInputDialog.cpp"
 				>
 			</File>
@@ -346,6 +350,10 @@
 			</File>
 			<File
 				RelativePath=".\ExceptionRaisedDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FilterShowObject.h"
 				>
 			</File>
 			<File

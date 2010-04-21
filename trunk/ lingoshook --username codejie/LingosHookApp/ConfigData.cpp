@@ -14,6 +14,7 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iHTMLLoad(1)
 , m_iExpandDict(-1)
 , m_iIgnoreDict(0)
+, m_iAutoSpeak(0)
 {
 }
 
@@ -180,6 +181,8 @@ int CConfigData::Load()
         m_iExpandDict = -1;
     if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
         m_iIgnoreDict = 0;
+    if(GetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
+        m_iAutoSpeak = 0;
     return 0;
 }
 
@@ -206,6 +209,8 @@ int CConfigData::Save()
     if(SetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         return -1;
     if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+        return -1;
+    if(SetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         return -1;
     return 0;
 }
