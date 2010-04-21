@@ -11,8 +11,7 @@
 #include "DisplayObject.h"
 #include "TriggerObject.h"
 #include "TagInputDialog.h"
-
-#include "LHSpeak.h"
+#include "SpeakObject.h"
 
 #include "LingosHookApp.h"
 
@@ -43,6 +42,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
 , _objTag(NULL)
 , _objDisplay(NULL)
 , _objMemoryDaily(NULL)
+, _objSpeak(NULL)
 {
     // begin wxGlade: LingosHookFrame::LingosHookFrame
     m_splitWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_BORDER);
@@ -51,7 +51,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_noteContext_pane_6 = new wxPanel(m_noteContext, wxID_ANY);
     m_noteContext_pane_5 = new wxPanel(m_noteContext, wxID_ANY);
     m_noteContext_pane_3 = new wxPanel(m_noteContext, wxID_ANY);
-    m_noteContext_pane_4 = new wxPanel(m_noteContext, wxID_ANY);
+    m_noteContext_pane_4 = new wxScrolledWindow(m_noteContext, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
     m_noteContext_pane_2 = new wxPanel(m_noteContext, wxID_ANY);
     notebook_2_pane_1 = new wxPanel(m_noteContext, wxID_ANY);
     window_1_pane_1 = new wxPanel(m_splitWindow, wxID_ANY);
@@ -108,6 +108,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
         wxT("Alt+Ctrl+F12")		
     };
 	m_listHotkey = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 6, m_listHotkey_choices, wxCB_DROPDOWN|wxCB_READONLY);
+    m_checkAutoSpeak = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Auto Speak"));
     label_1 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Synchronization"));
     m_checkSetTagSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Tags"));
     m_checkSetMemSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Memory Daily"));
@@ -217,6 +218,7 @@ void LingosHookFrame::set_properties()
     m_radioMemLevel1->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel2->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel3->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    m_noteContext_pane_4->SetScrollRate(10, 10);
     m_btnMemNext->SetDefault();
     m_listTagMgnt->InsertColumn(0, _("Tag"));
     m_listTagMgnt->InsertColumn(1, _("Counter"));
@@ -268,6 +270,7 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_43 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_38 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_19 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_23 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer* sizer_15 = new wxStaticBoxSizer(sizer_15_staticbox, wxHORIZONTAL);
@@ -337,11 +340,14 @@ void LingosHookFrame::do_layout()
     m_noteContext_pane_2->SetSizer(sizer_10);
     sizer_15->Add(m_radioIfLang, 0, 0, 0);
     sizer_14->Add(sizer_15, 0, wxEXPAND, 0);
-    sizer_23->Add(m_checkAutoHook, 0, wxEXPAND |wxALIGN_CENTER_VERTICAL, 4);
+    sizer_23->Add(m_checkAutoHook, 0, wxEXPAND |wxALIGN_CENTER_VERTICAL, 2);
+    sizer_23->Add(48, 8, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_19->Add(m_checkHotkey, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_19->Add(m_listHotkey, 0, wxLEFT|wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_23->Add(sizer_19, 0, wxEXPAND, 0);
     sizer_16->Add(sizer_23, 1, wxEXPAND, 0);
-    sizer_19->Add(m_checkHotkey, 0, wxALIGN_CENTER_VERTICAL, 4);
-    sizer_19->Add(m_listHotkey, 0, wxLEFT|wxTOP|wxBOTTOM, 4);
-    sizer_16->Add(sizer_19, 1, wxEXPAND, 0);
+    sizer_45->Add(m_checkAutoSpeak, 0, wxTOP|wxBOTTOM|wxEXPAND|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_16->Add(sizer_45, 1, wxEXPAND, 0);
     sizer_37->Add(label_1, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_37->Add(m_checkSetTagSync, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
     sizer_37->Add(m_checkSetMemSync, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
@@ -422,14 +428,15 @@ int LingosHookFrame::CreateObjects()
     _objTag.reset(new CTagObject(_objDB));
     _objMemoryDaily.reset(new MemoryDaily::CManageObject(_objDB));
 	_objHook.reset(new CHookObject(this));
-
     _objDisplay.reset(new CDisplayObject(this));
+    _objSpeak.reset(new CSpeakObject());
 
     g_objTrigger.AttachConfigData(_dataConfig.get());
     g_objTrigger.AttachDictObject(_objDict.get());
     g_objTrigger.AttachDisplayObject(_objDisplay.get());
     g_objTrigger.AttachTagObject(_objTag.get());
     g_objTrigger.AttachMemoryDailyObject(_objMemoryDaily.get());
+    g_objTrigger.AttachSpeakObject(_objSpeak.get());
 
     return 0;
 }
@@ -451,6 +458,9 @@ int LingosHookFrame::InitObjects()
         return -1;
 
     if(_objHook->Init(*_dataConfig) != 0)
+        return -1;
+
+    if(_objSpeak->Init() != 0)
         return -1;
 
 	return 0;
@@ -516,6 +526,8 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
             _dataConfig->m_iExpandDict = data->Index();
         }
 
+        _dataConfig->m_iAutoSpeak = m_checkAutoSpeak->IsChecked() ? 1 : 0;
+
         if(_dataConfig->Save() == 0)
         {
             wxMessageBox(_("Some configuration data will be not valid until application restart."));
@@ -571,6 +583,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
     
         m_checkDSMIgnore->SetValue(_dataConfig->m_iIgnoreDict == 1);
         m_checkDSMClose->SetValue(_dataConfig->m_iIgnoreDict == 2);
+        m_checkAutoSpeak->SetValue(_dataConfig->m_iAutoSpeak == 1);
     }
     return 0;
 }
@@ -671,7 +684,7 @@ int LingosHookFrame::CopyWord(const wxString& word)
 
 int LingosHookFrame::SpeakWord(const wxString& word)
 {
-    Speak(word.c_str());
+    _objSpeak->Speak(word);
     return 0;
 }
 

@@ -3,6 +3,9 @@
 #include <wx/wx.h>
 #include <wx/image.h>
 // begin wxGlade: ::dependencies
+
+
+
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/tglbtn.h>
@@ -25,15 +28,13 @@
 #include "LHControls.h"
 #include "DBAccess.h"
 #include "MemoryDailyObject.h"
-//#include "HotkeyObject.h"
 
 class CHookObject;
 class CConfigData;
 class CDictObject;
 class CTagObject;
 class CDisplayObject;
-//class CResultProcObject;
-//class CSearchProcObject;
+class CSpeakObject;
 
 class LingosHookFrame: public wxFrame {
 public:
@@ -108,6 +109,7 @@ protected:
 	wxCheckBox* m_checkAutoHook;
     wxCheckBox* m_checkHotkey;
     wxComboBox* m_listHotkey;
+    wxCheckBox* m_checkAutoSpeak;
     wxStaticText* label_1;
     wxCheckBox* m_checkSetTagSync;
     wxCheckBox* m_checkSetMemSync;
@@ -122,6 +124,7 @@ protected:
     wxPanel* panel_1;
     wxPanel* panel_2;
     wxButton* m_btnSetApply;
+
     wxPanel* m_noteContext_pane_3;
     wxStaticText* label_3;
     wxTextCtrl* m_textDefTag;
@@ -131,6 +134,7 @@ protected:
     wxButton* m_btnTagAdd;
     wxPanel* panel_4;
     wxButton* m_btnTagRemove;
+
     wxStaticText* label_8;
     wxStaticLine* static_line_4;
     wxButton* m_btnAboutHelp;
@@ -138,7 +142,7 @@ protected:
     wxButton* m_btnAboutPost;
     wxPanel* panel_9;
 	
-    wxPanel* m_noteContext_pane_4;
+    wxScrolledWindow* m_noteContext_pane_4;
     wxPanel* m_noteContext_pane_5;
     wxTextCtrl* m_textTrace;
     wxPanel* m_noteContext_pane_6;
@@ -156,11 +160,18 @@ public:
     virtual void OnWordIndexText(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexDClick(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexSelected(wxCommandEvent &event); // wxGlade: <event_handler>
+
+
+
+
     virtual void OnIndexDelete(wxCommandEvent& event);
     virtual void OnIndexFindItem(wxCommandEvent& event);
+
     virtual void OnIndexContextMenu(wxCommandEvent& event);
     virtual void OnNoteIndexChanged(wxNotebookEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckBoxHotkey(wxCommandEvent &event); // wxGlade: <event_handler>
+
+
     virtual void OnBtnSetApply(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntDeselect(wxListEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntSelect(wxListEvent &event); // wxGlade: <event_handler>
@@ -179,6 +190,8 @@ public:
     virtual void OnBtnAboutHelp(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutSend(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutPost(wxCommandEvent &event); // wxGlade: <event_handler>	
+
+
     virtual void OnMenuIndexSpeak(wxCommandEvent& event);
     virtual void OnMenuIndexCopy(wxCommandEvent& event);
     virtual void OnMenuIndexDelete(wxCommandEvent& event);
@@ -222,6 +235,7 @@ private:
     std::auto_ptr<CTagObject> _objTag;
     std::auto_ptr<CDisplayObject> _objDisplay;
     std::auto_ptr<MemoryDaily::CManageObject> _objMemoryDaily;
+    std::auto_ptr<CSpeakObject> _objSpeak;
 }; // wxGlade: end class
 
 

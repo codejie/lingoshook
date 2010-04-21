@@ -7,6 +7,7 @@
 #include "DisplayObject.h"
 #include "TagObject.h"
 #include "MemoryDailyObject.h"
+#include "SpeakObject.h"
 
 class CTriggerObject
 {
@@ -20,6 +21,7 @@ public:
     void AttachDisplayObject(CDisplayObject* obj);
     void AttachTagObject(CTagObject* obj);
     void AttachMemoryDailyObject(MemoryDaily::CManageObject* obj);
+    void AttachSpeakObject(CSpeakObject* obj);
 public:
     void OnHTMLTrace(const wxString& html);
     void OnHTMLParserFail(const wxString& html);
@@ -66,6 +68,7 @@ protected:
     CDisplayObject* _objDisplay;
     CTagObject* _objTag;
     MemoryDaily::CManageObject* _objMemoryDaily;
+    CSpeakObject* _objSpeak;
 private:
 //    int _iSortShowMode;
 };
