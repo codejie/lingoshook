@@ -5,6 +5,5 @@
 //App message
 #define WM_OBJECT_INIT      WM_USER + 1000
 
-//Test
-
+//Trunk testing
 #endif
