@@ -1,3 +1,6 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
 
 #include "DBAccess.h"
 #include "ConfigData.h"
@@ -162,7 +165,6 @@ int CTagObject::RemoveTag(int id)
         if(query.ExecuteUpdate() != 0)
         {
             _mapRecord.erase(id);
-            g_objTrigger.OnTagRemove(id);
 
             if(id == _iDefaultTag)
             {
@@ -182,6 +184,8 @@ int CTagObject::RemoveTag(int id)
 
             _mapRecord[_iDefaultTag].m_uiCounter += rows;
             g_objTrigger.OnTagUpdate(_iSysDefTag, _mapRecord[_iSysDefTag]);
+
+            g_objTrigger.OnTagRemove(id);
         }
     }
     catch(const CDBAccess::TException& e)
@@ -203,6 +207,68 @@ int CTagObject::UpdateDefaultTag(int id)
         _iDefaultTag = id;
 
         g_objTrigger.OnTagDefLoad(_iDefaultTag, _mapRecord[_iDefaultTag]);
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CTagObject::AddIndex(int wordid, int tagid)
+{
+    if(IsIndexExist(wordid, tagid) == 0)
+        return 0;
+    if(InsertIndex(wordid, tagid) != 0)
+        return -1;
+
+    g_objTrigger.OnTagUpdate(tagid, _mapRecord[tagid]);
+
+    g_objTrigger.OnTagIndexUpdate(wordid, tagid);
+
+    return 0;
+}
+
+int CTagObject::DeleteIndex(int wordid, int tagid)
+{
+    if(IsOnlySysDefTag(wordid) == 0)
+        return 0;
+    if(RemoveIndex(wordid, tagid) != 0)
+        return -1;
+
+    g_objTrigger.OnTagUpdate(tagid, _mapRecord[tagid]);
+
+    if(IsNoTag(wordid) == 0)
+    {
+        if(InsertIndex(wordid, _iSysDefTag) != 0)
+        {
+            return -1;
+        }
+        g_objTrigger.OnTagUpdate(_iSysDefTag, _mapRecord[_iSysDefTag]);
+    }
+
+    g_objTrigger.OnTagIndexUpdate(wordid, tagid);
+
+    return 0;
+}
+
+int CTagObject::DeleteWord(int wordid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT TagID FROM TagIndexTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        while(res.NextRow())
+        {
+            int tagid = res.GetInt(0);
+            if(RemoveIndex(wordid, tagid) != 0)
+                return -1;
+            g_objTrigger.OnTagUpdate(tagid, _mapRecord[tagid]);    
+        }
+        g_objTrigger.OnTagIndexUpdate(wordid, -1);
     }
     catch(const CDBAccess::TException& e)
     {
@@ -276,8 +342,6 @@ int CTagObject::InsertIndex(int wordid, int tagid)
         TRecordMap::iterator it = _mapRecord.find(tagid);
         if(it != _mapRecord.end())
             ++ it->second.m_uiCounter;
-
-        g_objTrigger.OnTagIndexInsert(tagid, wordid, it->second);
     }
     catch(const CDBAccess::TException& e)
     {
@@ -298,35 +362,6 @@ int CTagObject::RemoveIndex(int wordid, int tagid)
             TRecordMap::iterator it = _mapRecord.find(tagid);
             if(it != _mapRecord.end())
                 -- it->second.m_uiCounter;
-
-            g_objTrigger.OnTagIndexRemove(tagid, wordid, it->second);
-            if(IsNoTag(wordid) == 0)
-            {
-                if(IsIndexExist(wordid, _iSysDefTag) != 0)
-                    return InsertIndex(wordid, _iSysDefTag);
-            }
-        }
-    }
-    catch(const CDBAccess::TException& e)
-    {
-        return -1;
-    }
-    return 0;
-}
-
-int CTagObject::RemoveIndex(int wordid)
-{
-    try
-    {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT TagID FROM TagIndexTable WHERE WordID = ?");
-        query.Bind(1, wordid);
-        CDBAccess::TResult res = query.ExecuteQuery();
-        if(!res.IsOk())
-            return -1;
-        while(res.NextRow())
-        {
-            if(RemoveIndex(wordid, res.GetInt(0)) != 0)
-                return -1;
         }
     }
     catch(const CDBAccess::TException& e)
@@ -441,11 +476,4 @@ const wxString CTagObject::GetTitle(int tagid) const
     return _("Undefined");
 }
 
-void CTagObject::GetAll()
-{
-    for(TRecordMap::const_iterator it = _mapRecord.begin(); it != _mapRecord.end(); ++ it)
-    {
-        g_objTrigger.OnTagGet(it->first, it->second);
-        GetWordByTag(it->first);
-    }
-}
+

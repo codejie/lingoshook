@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __TINYHTMLPARSER_H__
 #define __TINYHTMLPARSER_H__
 

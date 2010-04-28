@@ -35,6 +35,7 @@ class CDictObject;
 class CTagObject;
 class CDisplayObject;
 class CSpeakObject;
+class CFilterShowObject;
 
 class LingosHookFrame: public wxFrame {
 public:
@@ -236,6 +237,7 @@ private:
     std::auto_ptr<CDisplayObject> _objDisplay;
     std::auto_ptr<MemoryDaily::CManageObject> _objMemoryDaily;
     std::auto_ptr<CSpeakObject> _objSpeak;
+    std::auto_ptr<CFilterShowObject> _objFilterShow;
 }; // wxGlade: end class
 
 

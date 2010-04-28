@@ -66,7 +66,7 @@ public:
                const wxString& name = wxTreeCtrlNameStr);
 public:
     FilterType GetFilterType() const { return _eFilterType; }
-    void SetFilterType(FilterType type) { _eFilterType; }
+    void SetFilterType(FilterType type) { _eFilterType = type; }
 protected:
     virtual void OnContextMenu(wxContextMenuEvent& event);
 protected:
@@ -91,7 +91,7 @@ protected:
 class CLHFilterTreeItemData : public wxTreeItemData
 {
 public:
-    enum ItemType { IT_TAG, IT_WORD };
+    enum ItemType { IT_WORD, IT_TAG, IT_DATE_DAY, IT_DATE_WEEK, IT_DATE_MONTH, IT_SCORE };
 public:
     CLHFilterTreeItemData(ItemType type, int id, int pid = -1)
         : _type(type), _id(id), _pid(pid)

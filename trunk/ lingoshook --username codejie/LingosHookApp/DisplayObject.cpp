@@ -1,3 +1,6 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
 
 #include "LingosHookApp.h"
 #include "ExceptionRaisedDialog.h"
@@ -20,9 +23,6 @@ void CDisplayObject::AppendWord(int wordid, const wxString &word)
     _frame->m_listIndex->Append(word, (void*)wordid);
 }
 
-void CDisplayObject::AppendResult(const TWordResultMap &result)
-{
-}
 
 void CDisplayObject::ShowWord(int wordid, const wxString& word)
 {
@@ -66,14 +66,6 @@ void CDisplayObject::RemoveWord(int wordid)
     _frame->m_listIndex->DeleteItem(wordid);
 }
 
-//void CDisplayObject::RemoveWord(const wxString& word)
-//{
-//    int index = _frame->m_listIndex->FindString(word, true);// ->FindItem(word);
-//    if(index != wxNOT_FOUND)
-//    {
-//        _frame->m_listIndex->Delete(index);
-//    }
-//}
 
 void CDisplayObject::TraceHTML(const wxString& html)
 {
@@ -126,90 +118,6 @@ void CDisplayObject::ShowTag(const wxString &tag)
     _frame->m_treeResult->AppendItem(item, tag);
 }
 
-void CDisplayObject::SortTagAppend(int tagid, const CTagObject::TRecord &record)
-{
-    if(_frame->m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        return;
-
-    wxTreeItemId root = _frame->m_treeFilter->GetRootItem();
-    if(!root.IsOk())
-    {
-        root = _frame->m_treeFilter->AddRoot(_("Tag"));
-    }
-    wxString str(wxString::Format(_("%s(%d)"), record.m_strTitle, record.m_uiCounter));
-    CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_TAG, tagid);
-    _frame->m_treeFilter->AppendItem(root, str, -1, -1, data);
-}
-
-void CDisplayObject::SortTagAppendWordData(int tagid, const TWordData& data)
-{
-    wxTreeItemId item;
-    if(SortTagFindTagItemID(tagid, item) == 0)
-    {
-        _frame->m_treeFilter->AppendItem(item, data.m_strWord, -1, -1, new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_WORD, data.m_iID, tagid));
-    }
-}
-
-void CDisplayObject::SortTagRemove(int tagid)
-{
-    if(_frame->m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        return;
-
-    wxTreeItemId item;
-    if(SortTagFindTagItemID(tagid, item) == 0)
-    {
-        _frame->m_treeFilter->Delete(item);
-    }
-}
-
-int CDisplayObject::SortTagUpdate(int tagid, const CTagObject::TRecord& record)
-{
-    if(_frame->m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        return -1;
-
-    wxTreeItemId item;
-    if(SortTagFindTagItemID(tagid, item) == 0)
-    {
-        _frame->m_treeFilter->DeleteChildren(item);
-        wxString str(wxString::Format(_("%s(%d)"), record.m_strTitle, record.m_uiCounter));
-        _frame->m_treeFilter->SetItemText(item, str);
-    }
-    return 0;
-}
-
-void CDisplayObject::SortTagIndexInsert(int tagid, const CTagObject::TRecord &record, const TWordData& data)
-{
-    if(_frame->m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        return;
-
-    wxTreeItemId item;
-    if(SortTagFindTagItemID(tagid, item) == 0)
-    {
-        _frame->m_treeFilter->AppendItem(item, data.m_strWord, -1, -1, new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_WORD, data.m_iID, tagid));    
-
-        wxString str(wxString::Format(_("%s(%d)"), record.m_strTitle, record.m_uiCounter));
-        _frame->m_treeFilter->SetItemText(item, str);
-    }
-}
-
-void CDisplayObject::SortTagIndexRemove(int tagid, const CTagObject::TRecord &record, int wordid)
-{
-    if(_frame->m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        return;
-
-    wxTreeItemId item;
-    if(SortTagFindTagItemID(tagid, item) == 0)
-    {
-        wxTreeItemId worditem;
-        if(SortTagFindWordItemID(item, wordid, worditem) == 0)
-        {
-            _frame->m_treeFilter->Delete(worditem);
-
-            wxString str(wxString::Format(_("%s(%d)"), record.m_strTitle, record.m_uiCounter));
-            _frame->m_treeFilter->SetItemText(item, str);
-        }
-    }
-}
 
 void CDisplayObject::SortModeChanged(CLHFilterTreeCtrl::FilterType type)
 {
@@ -319,41 +227,6 @@ void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
     }
 }
 
-int CDisplayObject::SortTagFindTagItemID(int tagid, wxTreeItemId &item)
-{
-    wxTreeItemId root = _frame->m_treeFilter->GetRootItem();
-    if(!root.IsOk())
-        return -1;
-
-    wxTreeItemIdValue cookie;
-    item =_frame->m_treeFilter->GetFirstChild(root, cookie);
-    while(item.IsOk())
-    {
-        CLHFilterTreeItemData* idata = (CLHFilterTreeItemData*)(_frame->m_treeFilter->GetItemData(item));
-        if(idata != NULL && idata->Type() == CLHFilterTreeItemData::IT_TAG && idata->ID() == tagid)
-        {
-            return 0;
-        }
-        item = _frame->m_treeFilter->GetNextSibling(item);
-    }
-    return -1;
-}
-
-int CDisplayObject::SortTagFindWordItemID(wxTreeItemId& tagitem, int wordid, wxTreeItemId& item)
-{
-    wxTreeItemIdValue cookie;
-    item =_frame->m_treeFilter->GetFirstChild(tagitem, cookie);
-    while(item.IsOk())
-    {
-        CLHFilterTreeItemData* idata = (CLHFilterTreeItemData*)(_frame->m_treeFilter->GetItemData(item));
-        if(idata != NULL && idata->Type() == CLHFilterTreeItemData::IT_WORD && idata->ID() == wordid)
-        {
-            return 0;
-        }
-        item = _frame->m_treeFilter->GetNextSibling(item);
-    }
-    return -1;
-}
 
 void CDisplayObject::MemoryDailyLoadWord(const wxString &word, int score)
 {

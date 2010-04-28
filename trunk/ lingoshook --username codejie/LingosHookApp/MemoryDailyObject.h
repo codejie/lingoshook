@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __MEMORYDAILYOBJECT_H__
 #define __MEMORYDAILYOBJECT_H__
 
@@ -39,15 +43,14 @@ public:
 
     int NextWord();
     int NextWord(int offset);
-    //int PopWord();
-    //int PushWord(int offset);
 
     int GetScore() const { return _iCacheScore; }
     int GetWordID() const { return _stCacheRec.m_iID; }
     const wxString& GetWord() const { return _stCacheRec.m_strWord; }
 
-    int WordInsert(int wordid, const wxString& word, int counter = 1);
+    int WordInsert(int wordid);
     int WordRemove(int wordid);
+    int WordUpdate(int wordid);
 protected:
     int InitSeed();
     void Clear();
@@ -57,7 +60,6 @@ private:
     int InsertRecrod(int id, const wxString& word, int counter, const wxDateTime& checkin, const wxDateTime& update);
 
     int PushWord(int score, const TRecord& rec, int offset);
-    //int PopWord();
     int UpdateScoreVector(int score, bool add);
 private:
     CDBAccess::TDatabase& _db;

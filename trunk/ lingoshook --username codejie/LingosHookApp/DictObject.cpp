@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #include <string>
 #include <memory>
 
@@ -294,7 +298,7 @@ int CDictObject::SaveWord(const wxString& word, const wxString& html, int& wordi
 
         UpdateWordData(wordid, counter + 1);
 
-        g_objTrigger.OnWordUpdate(wordid, word, counter + 1);
+        g_objTrigger.OnWordUpdate(wordid, word);
 	}
 	else
 	{
@@ -369,37 +373,7 @@ int CDictObject::SaveResult(const wxString& html, const TWordResultMap &result)
     return 0;
 }
 
-//int CDictObject::GetWordData(const wxString &word, TWordData& data)
-//{
-//    try
-//    {
-//	    CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter, CheckinTime, UpdateTime, HTML FROM WordTable WHERE Word = ?");
-//	    query.Bind(1, word);
-//	    CDBAccess::TResult res = query.ExecuteQuery();
-//	    if(!res.IsOk())
-//		    return -1;
-//	    if(!res.Eof())
-//	    {
-//            data.m_iID = res.GetInt(0);
-//            data.m_strWord = word;
-//            data.m_iCounter = res.GetInt(1);
-//            data.m_dtCheckin = res.GetDateTime(2);
-//            data.m_dtUpdate = res.GetDateTime(3);
-//            data.m_strHTML = res.GetString(4);
-//
-//            g_objTrigger.OnWordDataGet(data);
-//        }
-//        else
-//        {
-//            return -1;
-//        }
-//    }
-//    catch(CDBAccess::TException& e)
-//    {
-//        return -1;
-//    }
-//    return 0; 
-//}
+
 
 int CDictObject::GetWordData(int wordid, TWordData& data)
 {
@@ -421,7 +395,7 @@ int CDictObject::GetWordData(int wordid, TWordData& data)
                 data.m_dtUpdate = res.GetDateTime(3);
                 data.m_strHTML = res.GetString(4);
 
-                g_objTrigger.OnWordDataGet(data);
+//                g_objTrigger.OnWordDataGet(data);
             }
             else
             {
@@ -444,7 +418,7 @@ int CDictObject::GetWordData(int wordid, TWordData& data)
                 data.m_dtUpdate = res.GetDateTime(3);
                 data.m_strHTML = _("<HTML></HTML>");
 
-                g_objTrigger.OnWordDataGet(data);
+//                g_objTrigger.OnWordDataGet(data);
             }
             else
             {

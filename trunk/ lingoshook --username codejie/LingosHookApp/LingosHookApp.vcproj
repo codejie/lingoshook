@@ -219,6 +219,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FilterShowObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HookObject.cpp"
 				>
 			</File>

@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #include <stdlib.h>
 
 #include "TriggerObject.h"
@@ -72,10 +76,20 @@ int CManageObject::LoadWords()
 
 int CManageObject::SortWords()
 {
+    size_t szmap = _mapScore.size();
+    int loop = 0;
     for(TScoreMap::iterator it = _mapScore.begin(); it != _mapScore.end(); ++ it)
     {
         it->second.sort(std::greater<_record_t>());
-        _vctScore.push_back(it->first);
+
+        size_t szque = it->second.size();
+        loop = (szque + szmap) / szmap;
+        if(loop > 6)
+            loop = 6;
+        for(int i = 0; i < loop; ++ i)
+        {
+            _vctScore.push_back(it->first);
+        }
     }
 
     return 0;
@@ -195,76 +209,6 @@ int CManageObject::PushWord(int score, const TRecord& rec, int offset)
     return 0;
 }
 
-
-//int CManageObject::PopWord()
-//{
-//    if(_vctScore.size() == 0)
-//    {
-//        //_iCacheScore = -1;
-//        g_objTrigger.OnMemoryDailyPopWordFail();
-//        return -1;
-//    }
-//
-//    size_t r =  ((double)rand() / (double)(RAND_MAX + 1)) * _vctScore.size();
-//    
-//   _itCache = _mapScore.find(_vctScore[r]);
-//    if(_itCache == _mapScore.end())
-//        return -1;
-//
-//    //_iCacheScore = it->first;
-//    //_stCacheRec = (*it->second.begin());
-//
-//    //it->second.pop_front();
-//
-//    //if(it->second.size() == 0)
-//    //{
-//    //    UpdateScoreVector(it->first, false);
-//    //    _mapScore.erase(it);
-//    //}
-//
-//    g_objTrigger.OnMemoryDailyPopWord(_itCache->second.begin()->m_iID, _itCache->second.begin()->m_strWord, _itCache->first);// ._stCacheRec.m_iID, _stCacheRec.m_strWord, _iCacheScore);
-//
-//    return 0;
-//}
-
-//int CManageObject::PushWord(int offset)
-//{
-//    if(_iCacheScore == -1)
-//        return -1;
-//
-//    _iCacheScore += offset;
-//    if(_iCacheScore < 1)
-//        _iCacheScore = 1;
-//
-//    try
-//    {
-//        CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE ID = ?");
-//        query.Bind(1, _iCacheScore);
-//        query.Bind(2, _stCacheRec.m_iID);
-//        query.ExecuteUpdate();
-//
-//        TScoreMap::iterator it = _mapScore.find(_iCacheScore);
-//        if(it == _mapScore.end())
-//        {
-//            it = _mapScore.insert(std::make_pair(_iCacheScore, TRecordList())).first;
-//            it->second.push_back(_stCacheRec);
-//
-//            UpdateScoreVector(it->first, true);
-//        }
-//        else
-//        {
-//            it->second.push_back(_stCacheRec);
-//        }
-//
-//        g_objTrigger.OnMemoryDailyPushWord(_stCacheRec.m_iID, _stCacheRec.m_strWord, _iCacheScore);
-//    }
-//    catch(const CDBAccess::TException& e)
-//    {
-//        return -1;
-//    }
-//    return 0;
-//}
-
 int CManageObject::UpdateScoreVector(int score, bool add)
 {
     if(add == true)
@@ -301,28 +245,48 @@ int CManageObject::UpdateScoreVector(int score, bool add)
     return -1;
 }
 
-int CManageObject::WordInsert(int wordid, const wxString& word, int counter)
+int CManageObject::WordInsert(int wordid)
 {
     if(_bBuilt == false)
         return 0;
 
-    _record_t rec;
-    rec.m_iID = wordid;
-    rec.m_strWord = word;
-    rec.m_iScore = 0;
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter FROM WordTable WHERE ID = ?");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res =  query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(res.NextRow())
+        {
+            _record_t rec;
+            rec.m_iID = wordid;
+            rec.m_strWord = res.GetString(0);
+            rec.m_iScore = res.GetInt(1);
 
-    TScoreMap::iterator it = _mapScore.find(counter);
-    if(it == _mapScore.end())
-    {
-        it = _mapScore.insert(std::make_pair(counter, TRecordList())).first;
-        it->second.push_back(rec);
-        UpdateScoreVector(counter, true);
+            TScoreMap::iterator it = _mapScore.find(rec.m_iScore);
+            if(it == _mapScore.end())
+            {
+                it = _mapScore.insert(std::make_pair(rec.m_iScore, TRecordList())).first;
+                it->second.push_back(rec);
+                UpdateScoreVector(rec.m_iScore, true);
+            }
+            else
+            {
+                it->second.push_back(rec);
+            }
+        }
+        else
+        {
+            return -1;
+        }
     }
-    else
+    catch(const CDBAccess::TException& e)
     {
-        it->second.push_back(rec);
+        return -1;
     }
     return 0;
+
 }
 
 int CManageObject::WordRemove(int wordid)
@@ -356,6 +320,34 @@ int CManageObject::WordRemove(int wordid)
         ++ it;
     }
     return 0;
+}
+
+int CManageObject::WordUpdate(int wordid)
+{
+    if(_bBuilt == false)
+        return 0;
+
+
+    try
+    {
+        if(!_db.TableExists(_("DictTable")))
+            return -1;
+
+        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, Word, Counter, CheckinTime, UpdateTime FROM WordTable");
+        if(!res.IsOk())
+            return -1;
+        while(res.NextRow())
+        {
+            InsertRecrod(res.GetInt(0), res.GetString(1), res.GetInt(2), res.GetTimestamp(3), res.GetTimestamp(4));
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+
+    return -1;
 }
 
 }

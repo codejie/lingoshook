@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __TAGOBJECT_H__
 #define __TAGOBJECT_H__
 
@@ -9,9 +13,6 @@ class CTagObject
 {
 public:
     static const wxString DEFAULT_SYSTEM_TAG;
-//public:
-//    typedef void (*CallbackGetWordByTag)(int wordid, int tagid, void* cbparam);
-//    typedef void (*CallbackGetTagByWord)(int tagid, int wordid, void* cbparam);
 public:
     struct TRecord
     {
@@ -36,12 +37,9 @@ public:
 
     int UpdateDefaultTag(int id);
 
-    int IsIndexExist(int wordid, int tagid);
-    int IsOnlySysDefTag(int wordid);
-    int IsNoTag(int wordid);
-    int InsertIndex(int wordid, int tagid);
-    int RemoveIndex(int wordid, int tagid);
-    int RemoveIndex(int wordid);
+    int AddIndex(int wordid, int tagid);
+    int DeleteIndex(int wordid, int tagid);
+    int DeleteWord(int wordid);
 
     int GetWordByTag(int tagid, TWordIDVector& vctwordid);
     int GetTagByWord(int wordid, TTagIDVector& vcttagid);
@@ -55,6 +53,12 @@ public:
     const wxString GetTitle(int tagid) const;
 
     void GetAll();
+protected:
+    int IsIndexExist(int wordid, int tagid);
+    int IsOnlySysDefTag(int wordid);
+    int IsNoTag(int wordid);
+    int InsertIndex(int wordid, int tagid);
+    int RemoveIndex(int wordid, int tagid);
 protected:
     CDBAccess::TDatabase& _db;
 private:

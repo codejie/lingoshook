@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #include <mshtml.h>
 #include <atlbase.h>
 #include <oleacc.h>

@@ -12,6 +12,7 @@
 #include "TriggerObject.h"
 #include "TagInputDialog.h"
 #include "SpeakObject.h"
+#include "FilterShowObject.h"
 
 #include "LingosHookApp.h"
 
@@ -43,6 +44,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
 , _objDisplay(NULL)
 , _objMemoryDaily(NULL)
 , _objSpeak(NULL)
+, _objFilterShow(NULL)
 {
     // begin wxGlade: LingosHookFrame::LingosHookFrame
     m_splitWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_BORDER);
@@ -110,7 +112,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
 	m_listHotkey = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 6, m_listHotkey_choices, wxCB_DROPDOWN|wxCB_READONLY);
     m_checkAutoSpeak = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Auto Speak"));
     label_1 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Synchronization"));
-    m_checkSetTagSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Tags"));
+    m_checkSetTagSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Classifications"));
     m_checkSetMemSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Memory Daily"));
     label_2 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Process"));
     m_checkHTMLSave = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Storage"));
@@ -135,7 +137,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     panel_4 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
     m_btnTagRemove = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGREMOVE, wxT("Delete"));
     m_textTrace = new wxTextCtrl(m_noteContext_pane_6, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
-    label_8 = new wxStaticText(m_noteContext_pane_5, wxID_ANY, wxT("LingosHook v0.9.xxx  by Jie."), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+    label_8 = new wxStaticText(m_noteContext_pane_5, wxID_ANY, wxString::Format(_("%s v%s by Jie."), APP_TITLE, APP_VERSION), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
     static_line_4 = new wxStaticLine(m_noteContext_pane_5, wxID_ANY);
     m_btnAboutHelp = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTHELP, wxT("Welcome to online help.."));
     m_btnAboutSend = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
@@ -365,6 +367,9 @@ void LingosHookFrame::do_layout()
     sizer_14->Add(sizer_16, 0, wxEXPAND, 0);
     sizer_18->Add(m_checkTrace, 0, wxTOP|wxBOTTOM, 4);
     sizer_14->Add(sizer_18, 0, wxEXPAND, 0);
+#ifndef __LH_DEBUG__
+    sizer_18->Show(false);
+#endif
     sizer_14->Add(panel_1, 1, wxEXPAND, 0);
     sizer_17->Add(panel_2, 1, wxEXPAND, 0);
     sizer_17->Add(m_btnSetApply, 0, 0, 0);
@@ -403,7 +408,11 @@ void LingosHookFrame::do_layout()
     m_noteContext->AddPage(m_noteContext_pane_3, wxT("Tags"));
     m_noteContext->AddPage(m_noteContext_pane_4, wxT("Setting"));
     m_noteContext->AddPage(m_noteContext_pane_5, wxT("About"));	
+#ifdef __LH_DEBUG__
     m_noteContext->AddPage(m_noteContext_pane_6, wxT("Trace"));
+#else
+    m_noteContext_pane_6->Hide();
+#endif
     sizer_7->Add(m_noteContext, 1, wxEXPAND, 0);
     sizer_6->Add(sizer_7, 1, wxEXPAND, 0);
     window_1_pane_2->SetSizer(sizer_6);
@@ -413,6 +422,7 @@ void LingosHookFrame::do_layout()
     sizer_3->Add(m_btnHook, 0, 0, 0);
     sizer_2->Add(sizer_3, 0, wxEXPAND, 0);
     sizer_1->Add(sizer_2, 1, wxEXPAND, 0);
+
     SetSizer(sizer_1);
     Layout();
     // end wxGlade
@@ -430,6 +440,7 @@ int LingosHookFrame::CreateObjects()
 	_objHook.reset(new CHookObject(this));
     _objDisplay.reset(new CDisplayObject(this));
     _objSpeak.reset(new CSpeakObject());
+    _objFilterShow.reset(new CFilterShowObject(_objDB, m_treeFilter));
 
     g_objTrigger.AttachConfigData(_dataConfig.get());
     g_objTrigger.AttachDictObject(_objDict.get());
@@ -437,6 +448,7 @@ int LingosHookFrame::CreateObjects()
     g_objTrigger.AttachTagObject(_objTag.get());
     g_objTrigger.AttachMemoryDailyObject(_objMemoryDaily.get());
     g_objTrigger.AttachSpeakObject(_objSpeak.get());
+    g_objTrigger.AttachFilterShowObject(_objFilterShow.get());
 
     return 0;
 }
@@ -709,16 +721,12 @@ int LingosHookFrame::CopyToTag(const wxString &word, int tagpos)
     int tagid = m_listTagMgnt->GetItemData(tagpos);
     if(tagid == -1)
         return -1;
-    if(_objTag->IsIndexExist(wordid, tagid) != 0)
-        return _objTag->InsertIndex(wordid, tagid);
-    return 0;
+    return _objTag->AddIndex(wordid, tagid);
 }
 
 int LingosHookFrame::RemoveFromTag(int wordid, int tagid)
 {
-    if(_objTag->IsOnlySysDefTag(wordid) != 0)
-        return _objTag->RemoveIndex(wordid, tagid);
-    return 0;
+    return _objTag->DeleteIndex(wordid, tagid);
 }
 
 /////////////////////////////////////////////////
@@ -920,9 +928,9 @@ void LingosHookFrame::OnBtnFilter(wxCommandEvent &event)
     wxMenu menu;
     menu.Append(FMID_TAG, _("Classification by Tag"));
     menu.Append(FMID_DATE, _("Classification by Date"));
-    menu.Enable(FMID_DATE, false);
+    //menu.Enable(FMID_DATE, false);
     menu.Append(FMID_COUNTER, _("Classification by Score"));
-    menu.Enable(FMID_COUNTER, false);
+    //menu.Enable(FMID_COUNTER, false);
     menu.AppendSeparator();
     menu.Append(FMID_CLOSE, _("Close"));
 
@@ -1076,7 +1084,21 @@ void LingosHookFrame::OnTreeFilterContextMenu(wxCommandEvent& event)
     wxPoint pos = ::wxGetMousePosition();
     pos = ScreenToClient(pos);
 
-    MakeContextMenu(event.GetString(), 2, pos);
+    if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
+    {
+        MakeContextMenu(event.GetString(), 2, pos);
+    }
+    else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_DATE)
+    {
+        MakeContextMenu(event.GetString(), 0, pos);
+    }
+    else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_SCORE)
+    {
+        MakeContextMenu(event.GetString(), 0, pos);
+    }
+    else
+    {
+    }
 }
 
 void LingosHookFrame::OnTreeResultContextMenu(wxCommandEvent& event)

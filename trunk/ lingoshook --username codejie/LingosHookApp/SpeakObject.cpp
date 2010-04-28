@@ -1,3 +1,6 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
 
 #include "LHSpeak.h"
 
@@ -6,7 +9,8 @@
 
 HANDLE CSpeakObject::_hEvent[2] = { NULL, NULL };
 HANDLE CSpeakObject::_hThread = NULL;
-wxString CSpeakObject::_strCacheWord = wxEmptyString;
+//wxString CSpeakObject::_strCacheWord = wxEmptyString;
+CSpeakObject::TCacheQueue CSpeakObject::_queWord;
 wxMutex CSpeakObject::_stMutex;
 
 CSpeakObject::CSpeakObject()
@@ -59,8 +63,11 @@ DWORD CSpeakObject::ThreadProc(LPVOID param)
             break;
         case WAIT_OBJECT_0 + 1://speak
             {
-                wxMutexLocker lock(_stMutex);
-                ::Speak(_strCacheWord.c_str());
+                wxString word;
+                if(GetNextWord(word) == 0)
+                {
+                    ::Speak(word.c_str());
+                }
             }
             break;
         default:
@@ -87,11 +94,27 @@ DWORD CSpeakObject::ThreadProc(LPVOID param)
     return 0;
 }
 
+int CSpeakObject::GetNextWord(wxString& word)
+{
+    wxMutexLocker lock(_stMutex);
+    if(_queWord.size() == 0)
+        return -1;
+
+    word = *_queWord.begin();
+    _queWord.pop_front();
+
+    ::SetEvent(_hEvent[1]);
+
+    return 0;
+}
+
+
 int CSpeakObject::Speak(const wxString &word)
 {
     wxMutexLocker lock(_stMutex);
 
-    _strCacheWord = word;
-    ::SetEvent(_hEvent[1]);
+    _queWord.push_back(word);
+    if(_queWord.size() == 1)
+        ::SetEvent(_hEvent[1]);
     return 0;
 }

@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __DISPLAYOBJECT_H__
 #define __DISPLAYOBJECT_H__
 
@@ -26,7 +30,6 @@ public:
     void ShowWordData(const TWordData& data);
     void ShowResult(const CDictParser* dict, const CDictResult& result, bool expand);
     void RemoveWord(int wordid);
-    //void RemoveWord(const wxString& word);
 
     void AppendTag(int tagid, const CTagObject::TRecord& record);
     void ShowDefaultTag(int tagid, const CTagObject::TRecord& record);
@@ -35,12 +38,6 @@ public:
     void ShowTag();
     void ShowTag(const wxString& tag);
 
-    void SortTagAppend(int tagid, const CTagObject::TRecord& record);
-    void SortTagAppendWordData(int tagid, const TWordData& data);
-    void SortTagRemove(int tagid);
-    int SortTagUpdate(int tagid, const CTagObject::TRecord& record);
-    void SortTagIndexInsert(int tagid, const CTagObject::TRecord& record, const TWordData& data);
-    void SortTagIndexRemove(int tagid, const CTagObject::TRecord& record, int wordid);
     void SortModeChanged(CLHFilterTreeCtrl::FilterType type);
 
     void MemoryDailyLoadWord(const wxString& word, int score);
@@ -59,9 +56,6 @@ protected:
 private:
     void ShowViconECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result);
     void ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result);
-
-    int SortTagFindTagItemID(int tagid, wxTreeItemId& item);
-    int SortTagFindWordItemID(wxTreeItemId& tagitem, int wordid, wxTreeItemId& item);
 protected:
     LingosHookFrame* _frame;
 };

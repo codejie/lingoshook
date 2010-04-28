@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __VICONDICTOBJECT_H__
 #define __VICONDICTOBJECT_H__
 

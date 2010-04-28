@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __TRIGGEROBJECT_H__
 #define __TRIGGEROBJECT_H__
 
@@ -8,6 +12,7 @@
 #include "TagObject.h"
 #include "MemoryDailyObject.h"
 #include "SpeakObject.h"
+#include "FilterShowObject.h"
 
 class CTriggerObject
 {
@@ -22,6 +27,7 @@ public:
     void AttachTagObject(CTagObject* obj);
     void AttachMemoryDailyObject(MemoryDaily::CManageObject* obj);
     void AttachSpeakObject(CSpeakObject* obj);
+    void AttachFilterShowObject(CFilterShowObject* obj);
 public:
     void OnHTMLTrace(const wxString& html);
     void OnHTMLParserFail(const wxString& html);
@@ -29,14 +35,14 @@ public:
 
     void OnWordLoad(int wordid, const wxString& word);
     void OnWordSave(int wordid, const wxString& word);
-    void OnWordUpdate(int wordid, const wxString& word, int counter);
-    void OnWordDataGet(const TWordData& data);
+    void OnWordUpdate(int wordid, const wxString& word);
+
+    //void OnWordDataGet(const TWordData& data);
     void OnWordFound(int wordid, const wxString& word);
     void OnResultSave(const TWordResultMap& result);
     void OnResultSave(int wordid, const CDictParser* dict, const CDictResult& result);
     void OnResultGet(int wordid, const CDictParser* dict, const CDictResult& result);
     void OnWordRemove(int wordid);
-    //void OnWordRemove(const wxString& word);
     void OnWordResultGetOver(int wordid, const TWordData& data);
     
     void OnTagLoad(int tagid, const CTagObject::TRecord& record);
@@ -44,8 +50,9 @@ public:
     void OnTagInsert(int tag, const CTagObject::TRecord& record);
     void OnTagUpdate(int tagid, const CTagObject::TRecord& record);
     void OnTagRemove(int tagid);
-    void OnTagIndexInsert(int tagid, int wordid, const CTagObject::TRecord& record);
-    void OnTagIndexRemove(int tagid, int wordid, const CTagObject::TRecord& record);
+
+    void OnTagIndexUpdate(int wordid, int tagid);
+     
     void OnTagFoundByWord(int wordid);
     void OnTagGetByWord(int tagid, int wordid);
     void OnTagGet(int tagid, const CTagObject::TRecord& record);
@@ -54,9 +61,9 @@ public:
     void OnSortShow(CLHFilterTreeCtrl::FilterType type);
 
     void OnMemoryDailyLoadOver();
-    void OnMemoryDailyLoadWord(int id, const wxString& word, int score);
-    void OnMemoryDailyPopWord(int id, const wxString& word, int score);
-    void OnMemoryDailyPushWord(int id, const wxString& word, int score);
+    void OnMemoryDailyLoadWord(int wordid, const wxString& word, int score);
+    void OnMemoryDailyPopWord(int wordid, const wxString& word, int score);
+    void OnMemoryDailyPushWord(int wordid, const wxString& word, int score);
     void OnMemoryDailyPopWordFail();
 
     void OnParserUnknown(const wxString& id, const wxString& title);
@@ -69,8 +76,7 @@ protected:
     CTagObject* _objTag;
     MemoryDaily::CManageObject* _objMemoryDaily;
     CSpeakObject* _objSpeak;
-private:
-//    int _iSortShowMode;
+    CFilterShowObject* _objFilterShow;
 };
 
 extern CTriggerObject g_objTrigger;
