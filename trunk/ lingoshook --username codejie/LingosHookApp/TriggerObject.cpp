@@ -92,6 +92,8 @@ void CTriggerObject::OnWordSave(int wordid, const wxString& word)
 
 void CTriggerObject::OnWordUpdate(int wordid, const wxString& word)
 {
+    _objTag->AddIndex(wordid, _objTag->DefaultTag());
+
     if(_dataConfig->m_iDataSyncTag == 1)
     {
         _objFilterShow->UpdateWord(wordid);    

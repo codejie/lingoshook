@@ -134,4 +134,20 @@ protected:
     wxString _str;
 };
 
+/////////////
+class CLHTextCtrl : public wxTextCtrl
+{
+public:
+    CLHTextCtrl(wxWindow *parent, wxWindowID id, const wxString& value)
+        : wxTextCtrl(parent, id, value)
+    {
+    }
+protected:
+    virtual void OnKeyDown(wxKeyEvent& event);
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, -1)
+
 #endif

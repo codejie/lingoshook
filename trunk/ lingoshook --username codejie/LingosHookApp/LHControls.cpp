@@ -186,5 +186,30 @@ void CLHResultTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
     }
 }
 
+//////////////
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN)
+
+BEGIN_EVENT_TABLE(CLHTextCtrl, wxTextCtrl)
+    EVT_KEY_DOWN(CLHTextCtrl::OnKeyDown)
+END_EVENT_TABLE()
+
+void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
+{
+    int key = event.GetKeyCode();
+    if(!::wxIsdigit(key))
+    {
+        event.Skip();
+    }
+    else
+    {
+        wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN);
+        ev.SetEventObject(this);
+        ev.SetId(this->GetId());
+        ev.SetInt(key);
+
+        GetEventHandler()->ProcessEvent(ev);
+    }
+}
 
 

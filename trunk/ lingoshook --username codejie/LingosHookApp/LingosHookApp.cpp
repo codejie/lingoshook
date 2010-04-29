@@ -87,6 +87,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     panel_5 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
     m_btnMemNext = new wxButton(m_noteIndex_pane_3, CIID_BUTTON_MEMNEXT, wxT("Next"));
     panel_6 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
+    m_textMemType = new CLHTextCtrl(m_noteIndex_pane_3, CIID_TEXT_MEMTYPE, wxEmptyString);
+    panel_10 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
     static_line_3 = new wxStaticLine(m_noteIndex_pane_3, wxID_ANY);
     panel_7 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
     m_btnMemRegen = new wxButton(m_noteIndex_pane_3, CIID_BUTTON_MEMREGEN, wxT("Re-Generate"));
@@ -102,6 +104,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_checkAutoHook = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Auto-Hook"));
     m_checkHotkey = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_HOTKEY, wxT("Use Hotkey"));
     const wxString m_listHotkey_choices[] = {
+
         wxT("Ctrl+F10"),
         wxT("Alt+Ctrl+F10"),
         wxT("Ctrl+F11"),
@@ -142,7 +145,9 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnAboutHelp = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTHELP, wxT("Welcome to online help.."));
     m_btnAboutSend = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
     m_btnAboutPost = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTPORT, wxT("Post a comment to me. (www.cppblog.com/codejie)"));
+    m_btnAboutOpenSource = new wxButton(m_noteContext_pane_5, wxID_ANY, wxT("Welcome to LingosHook Open Source Site"));
     panel_9 = new wxPanel(m_noteContext_pane_5, wxID_ANY);
+
     m_labelInfo = new wxStaticText(this, wxID_ANY, wxT("Ready.."));
     m_btnHook = new wxToggleButton(this, CIID_BUTTON_HOOK, wxT("Hook"));
 
@@ -186,6 +191,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_BUTTON(CIID_BUTTON_ABOUTHELP, LingosHookFrame::OnBtnAboutHelp)
     EVT_BUTTON(CIID_BUTTON_ABOUTSEND, LingosHookFrame::OnBtnAboutSend)
     EVT_BUTTON(CIID_BUTTON_ABOUTPORT, LingosHookFrame::OnBtnAboutPost)
+	EVT_BUTTON(wxID_ANY, LingosHookFrame::OnBtnAboutOpenSource)
 	EVT_CHECKBOX(CIID_CHECKBOX_DSMIGNORE, LingosHookFrame::OnCheckDSMIgnore)
     EVT_CHECKBOX(CIID_CHECKBOX_DSMCLOSE, LingosHookFrame::OnCheckDSMClose)	
     EVT_MENU(IMID_SPEAK, LingosHookFrame::OnMenuIndexSpeak)
@@ -195,6 +201,9 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_MENU_RANGE(IMID_TAGCOPY_START, IMID_TAGCOPY_END, OnMenuIndexTagCopy)
     EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeFilterContextMenu)
     EVT_COMMAND(CIID_TREE_RESULT, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeResultContextMenu)
+
+    EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, LingosHookFrame::OnMemTypeKeyDown)
+
 //    EVT_MENU_RANGE(IMID_TAGMOVE_START, IMID_TAGMOVE_END, OnMenuIndexTagMove)
 
    // end wxGlade
@@ -220,7 +229,11 @@ void LingosHookFrame::set_properties()
     m_radioMemLevel1->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel2->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel3->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+
+    m_textMemType->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+
     m_noteContext_pane_4->SetScrollRate(10, 10);
+
     m_btnMemNext->SetDefault();
     m_listTagMgnt->InsertColumn(0, _("Tag"));
     m_listTagMgnt->InsertColumn(1, _("Counter"));
@@ -243,7 +256,6 @@ void LingosHookFrame::set_properties()
     // end wxGlade
 }
 
-
 void LingosHookFrame::do_layout()
 {
     // begin wxGlade: LingosHookFrame::do_layout
@@ -255,6 +267,7 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_26 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_12 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_39 = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* sizer_46 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_41 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_40 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_42 = new wxBoxSizer(wxHORIZONTAL);
@@ -273,6 +286,7 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_38 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
+
     wxBoxSizer* sizer_19 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_23 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer* sizer_15 = new wxStaticBoxSizer(sizer_15_staticbox, wxHORIZONTAL);
@@ -325,6 +339,8 @@ void LingosHookFrame::do_layout()
     sizer_35->Add(m_btnMemNext, 0, 0, 0);
     sizer_27->Add(sizer_35, 0, wxALL|wxEXPAND, 8);
     sizer_27->Add(panel_6, 1, wxEXPAND, 0);
+    sizer_27->Add(m_textMemType, 0, wxALL|wxEXPAND, 12);
+    sizer_27->Add(panel_10, 1, wxEXPAND, 0);
     sizer_27->Add(static_line_3, 0, wxALL|wxEXPAND, 4);
     sizer_36->Add(panel_7, 2, wxEXPAND, 0);
     sizer_36->Add(m_btnMemRegen, 3, 0, 0);
@@ -398,6 +414,9 @@ void LingosHookFrame::do_layout()
     sizer_39->Add(sizer_40, 1, wxALL|wxEXPAND, 8);
     sizer_41->Add(m_btnAboutPost, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
     sizer_39->Add(sizer_41, 1, wxALL|wxEXPAND, 8);
+    sizer_39->Add(32, 32, 0, 0, 0);
+    sizer_46->Add(m_btnAboutOpenSource, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
+    sizer_39->Add(sizer_46, 1, wxALL|wxEXPAND, 8);
     sizer_12->Add(sizer_39, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(panel_9, 1, wxEXPAND, 0);
 	m_noteContext_pane_5->SetSizer(sizer_12);	
@@ -405,6 +424,7 @@ void LingosHookFrame::do_layout()
     m_noteContext_pane_6->SetSizer(sizer_26);
     m_noteContext->AddPage(notebook_2_pane_1, wxT("Result"));
     m_noteContext->AddPage(m_noteContext_pane_2, wxT("HTML"));
+
     m_noteContext->AddPage(m_noteContext_pane_3, wxT("Tags"));
     m_noteContext->AddPage(m_noteContext_pane_4, wxT("Setting"));
     m_noteContext->AddPage(m_noteContext_pane_5, wxT("About"));	
@@ -424,6 +444,7 @@ void LingosHookFrame::do_layout()
     sizer_1->Add(sizer_2, 1, wxEXPAND, 0);
 
     SetSizer(sizer_1);
+
     Layout();
     // end wxGlade
 }
@@ -612,7 +633,6 @@ int LingosHookFrame::MakeContextMenu(const wxString& title, int orig, const wxPo
         menu.Append(IMID_TAGREMOVE, _("Remove from this tag"));
     }
     
-//    menu.Append(wxID_ANY, _("Move to tag"), MakeTagSubMenu(IMID_TAGMOVE_START));
     menu.AppendSeparator();
     menu.Append(IMID_COPY, _("Copy"));
     menu.AppendSeparator();
@@ -637,16 +657,16 @@ wxMenu* LingosHookFrame::MakeTagSubMenu(int baseid)
     return menu;
 }
 
+
 void LingosHookFrame::HookTextProc(const wxString &text)
 {
-//	_objDict->TextProc(text);
-
 	if(_dataConfig->m_iOpenTrace == 1)
 		m_textTrace->AppendText(_("\n----- TEXT -----\n") + text);
 }
 
 void LingosHookFrame::HookHTMLProc(const wxString &html)
 {
+
     _objDict->HTMLProc(html, _dataConfig->m_iIgnoreDict);
 
 	if(_dataConfig->m_iOpenTrace == 1)
@@ -766,15 +786,11 @@ void LingosHookFrame::OnWordIndexEnter(wxCommandEvent &event)
 void LingosHookFrame::OnWordIndexText(wxCommandEvent &event)
 {
     m_listIndex->FindItem(event.GetString());
-//    event.Skip();
-//    wxLogDebug(wxT("Event handler (LingosHookFrame::OnWordIndexText) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
 
 
 void LingosHookFrame::OnIndexDClick(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnIndexDClick) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
 
 
@@ -802,7 +818,6 @@ void LingosHookFrame::OnIndexDelete(wxCommandEvent& event)
 
 void LingosHookFrame::OnIndexFindItem(wxCommandEvent& event)
 {
-//    m_listIndex->SetSelection(event.GetInt());
 }
 
 void LingosHookFrame::OnIndexContextMenu(wxCommandEvent& event)
@@ -811,7 +826,6 @@ void LingosHookFrame::OnIndexContextMenu(wxCommandEvent& event)
     pos = ScreenToClient(pos);
 
     MakeContextMenu(event.GetString(), 0, pos);
-//    m_listIndex->SetSelection(event.GetInt());
 }
 
 void LingosHookFrame::OnNoteIndexChanged(wxNotebookEvent &event)
@@ -875,10 +889,7 @@ void LingosHookFrame::OnListTagMgntDeselect(wxListEvent &event)
 {
     m_btnTagRemove->Enable(false);
     m_btnTagDefault->Enable(false);
-    //event.Skip();
-    //wxLogDebug(wxT("Event handler (LingosHookFrame::OnListTagMgntDeselect) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
-
 
 void LingosHookFrame::OnListTagMgntSelect(wxListEvent &event)
 {
@@ -928,16 +939,12 @@ void LingosHookFrame::OnBtnFilter(wxCommandEvent &event)
     wxMenu menu;
     menu.Append(FMID_TAG, _("Classification by Tag"));
     menu.Append(FMID_DATE, _("Classification by Date"));
-    //menu.Enable(FMID_DATE, false);
     menu.Append(FMID_COUNTER, _("Classification by Score"));
     //menu.Enable(FMID_COUNTER, false);
     menu.AppendSeparator();
     menu.Append(FMID_CLOSE, _("Close"));
 
     PopupMenu(&menu, pos.x, pos.y);
-
-//    event.Skip();
-//    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnFilter) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
 
 void LingosHookFrame::OnTreeFilterChange(wxTreeEvent &event)
@@ -964,15 +971,6 @@ void LingosHookFrame::OnBtnMemRemove(wxCommandEvent &event)
 {
     int wordid = _objMemoryDaily->GetWordID();
     RemoveWord(wordid);
-
-    //g_objTrigger.OnWordRemove(_objMemoryDaily->GetWord());
-    //g_objTrigger.OnWordRemove(wordid);
-
-    //if(_objDict->RemoveWord(wordid) == 0)
-    //{  
-    //    if(_dataConfig->m_iDataSyncMem != 1)
-    //        _objMemoryDaily->WordRemove(wordid);
-    //}
 }
 
 void LingosHookFrame::OnBtnMemNext(wxCommandEvent &event)
@@ -999,8 +997,6 @@ void LingosHookFrame::OnBtnMemNext(wxCommandEvent &event)
         return;
     }
     _objMemoryDaily->NextWord(offset);
-//    event.Skip();
-//    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnMemNext) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
 
 void LingosHookFrame::OnRadioMemLevel(wxCommandEvent &event)
@@ -1035,6 +1031,12 @@ void LingosHookFrame::OnBtnAboutSend(wxCommandEvent &event)
 void LingosHookFrame::OnBtnAboutPost(wxCommandEvent &event)
 {
     wxString cmd = _("http://www.cppblog.com/codejie");
+    ::wxLaunchDefaultBrowser(cmd);
+}
+
+void LingosHookFrame::OnBtnAboutOpenSource(wxCommandEvent &event)
+{
+    wxString cmd = _("http://code.google.com/p/lingoshook");
     ::wxLaunchDefaultBrowser(cmd);
 }
 
@@ -1128,3 +1130,42 @@ void LingosHookFrame::OnCheckDSMClose(wxCommandEvent &event)
         m_checkHTMLLoad->SetValue(true);
     }
 }
+
+void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
+{
+    int key = event.GetInt() - 48;
+    
+    switch(key)
+    {
+    case 1:
+        m_radioMemLevel0->SetValue(true);
+        break;
+    case 2:
+        m_radioMemLevel1->SetValue(true);
+        break;
+    case 3:
+        m_radioMemLevel2->SetValue(true);
+        break;
+    case 4:
+        m_radioMemLevel3->SetValue(true);
+        break;
+    case 0:
+        {
+            if(m_btnMemRemove->IsEnabled())
+            {
+                int wordid = _objMemoryDaily->GetWordID();
+                RemoveWord(wordid);
+            }
+        }
+        return;
+    default:
+        return;
+    }
+
+    if(_objDict->GetResult(_objMemoryDaily->GetWordID()) == 0)
+    {
+        m_btnMemRemove->Enable(true);
+        m_btnMemNext->Enable(true);
+    }
+}
+

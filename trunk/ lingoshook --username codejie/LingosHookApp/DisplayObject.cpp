@@ -236,15 +236,19 @@ void CDisplayObject::MemoryDailyLoadWord(const wxString &word, int score)
 
 void CDisplayObject::MemoryDailyPopWord(const wxString &word, int score)
 {
-//    _frame->m_radioMemLevel0->SetFocus();
+    //_frame->m_radioMemLevel0->SetFocus();
 
     _frame->m_radioMemLevel0->SetValue(false);
     _frame->m_radioMemLevel1->SetValue(false);
     _frame->m_radioMemLevel2->SetValue(false);
     _frame->m_radioMemLevel3->SetValue(false);
 
+        
     _frame->m_btnMemRemove->Enable(false);
     _frame->m_btnMemNext->Enable(false);
+
+    _frame->m_textMemType->SetValue(wxEmptyString);
+    _frame->m_textMemType->SetFocus();
 
 	_frame->m_treeResult->DeleteAllItems();
     _frame->m_winHTML->SetPage(_("<HTML></HTML>"));

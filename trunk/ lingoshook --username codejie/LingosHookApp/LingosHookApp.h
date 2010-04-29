@@ -46,7 +46,7 @@ public:
             , CIID_BUTTON_TAGREMOVE, CIID_BUTTON_HOOK, XIID_BUTTON_FILTER, CIID_TREE_FILTER, CIID_BUTTON_MEMREMOVE
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPORT
-            , CIID_CHECKBOX_DSMIGNORE, CIID_CHECKBOX_DSMCLOSE};
+            , CIID_CHECKBOX_DSMIGNORE, CIID_CHECKBOX_DSMCLOSE, CIID_TEXT_MEMTYPE};
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -95,6 +95,8 @@ protected:
     wxPanel* panel_5;
     wxButton* m_btnMemNext;
     wxPanel* panel_6;
+    wxTextCtrl* m_textMemType;
+    wxPanel* panel_10;
     wxStaticLine* static_line_3;
     wxPanel* panel_7;
     wxButton* m_btnMemRegen;
@@ -141,6 +143,7 @@ protected:
     wxButton* m_btnAboutHelp;
     wxButton* m_btnAboutSend;
     wxButton* m_btnAboutPost;
+    wxButton* m_btnAboutOpenSource;
     wxPanel* panel_9;
 	
     wxScrolledWindow* m_noteContext_pane_4;
@@ -191,8 +194,7 @@ public:
     virtual void OnBtnAboutHelp(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutSend(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutPost(wxCommandEvent &event); // wxGlade: <event_handler>	
-
-
+    virtual void OnBtnAboutOpenSource(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnMenuIndexSpeak(wxCommandEvent& event);
     virtual void OnMenuIndexCopy(wxCommandEvent& event);
     virtual void OnMenuIndexDelete(wxCommandEvent& event);
@@ -202,7 +204,7 @@ public:
     virtual void OnCheckDSMIgnore(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckDSMClose(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnTreeResultContextMenu(wxCommandEvent& event);
-
+    virtual void OnMemTypeKeyDown(wxCommandEvent &event); // wxGlade: <event_handler>
 
 	virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 

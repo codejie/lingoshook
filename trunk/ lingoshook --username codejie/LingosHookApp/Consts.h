@@ -9,7 +9,7 @@
 
 #include "wx/wx.h"
 
-#define __LH_DEBUG__
+//#define __LH_DEBUG__
 
 //App
 const wxString APP_TITLE        = _("LingosHook"); 
