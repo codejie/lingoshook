@@ -157,6 +157,11 @@ void CTriggerObject::OnTagLoad(int tagid, const CTagObject::TRecord &record)
 void CTriggerObject::OnTagDefLoad(int tagid, const CTagObject::TRecord &record)
 {
     _objDisplay->ShowDefaultTag(tagid, record);
+
+    if(_dataConfig->m_iDataSyncTag == 1)
+    {
+        _objFilterShow->UpdateTitle(tagid);
+    }
 }
 
 void CTriggerObject::OnTagInsert(int tagid, const CTagObject::TRecord& record)

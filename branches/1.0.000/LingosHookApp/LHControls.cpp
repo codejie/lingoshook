@@ -152,7 +152,7 @@ void CLHFilterTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
     {
         this->SelectItem(id, true);
         CLHFilterTreeItemData* idata = (CLHFilterTreeItemData*)(this->GetItemData(id));
-        if(idata != NULL && idata->Type() == CLHFilterTreeItemData::IT_WORD)
+        if(idata != NULL)// && idata->Type() == CLHFilterTreeItemData::IT_WORD)
         {
             wxCommandEvent ev(wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, GetId());
             ev.SetEventObject(this);

@@ -134,7 +134,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     label_3 = new wxStaticText(m_noteContext_pane_3, wxID_ANY, wxT("Default Tag"));
     m_textDefTag = new wxTextCtrl(m_noteContext_pane_3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
     m_listTagMgnt = new wxListCtrl(m_noteContext_pane_3, CIID_LIST_TAGMGNT, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_NO_SORT_HEADER|wxSUNKEN_BORDER);
-    m_btnTagDefault = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGSETDEFAULT, wxT("Set Default"));
+    m_btnTagDefault = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGSETDEFAULT, wxT("Set as Default"));
     panel_3 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
     m_btnTagAdd = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGADD, wxT("Add.."));
     panel_4 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
@@ -199,6 +199,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_MENU(IMID_DELETE, LingosHookFrame::OnMenuIndexDelete)
     EVT_MENU(IMID_TAGREMOVE, LingosHookFrame::OnMenuIndexTagRemove)
     EVT_MENU_RANGE(IMID_TAGCOPY_START, IMID_TAGCOPY_END, OnMenuIndexTagCopy)
+    EVT_MENU(IMID_SETTAGDEFAULT, LingosHookFrame::OnMenuSetTagDefault)
     EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeFilterContextMenu)
     EVT_COMMAND(CIID_TREE_RESULT, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeResultContextMenu)
 
@@ -623,20 +624,32 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
 
 int LingosHookFrame::MakeContextMenu(const wxString& title, int orig, const wxPoint& pos)
 {
-    wxMenu menu(title);
-    menu.Append(IMID_SPEAK, _("Speak.."));
-//    menu.Enable(IMID_SPEAK, false);
-    menu.AppendSeparator();
-    menu.Append(wxID_ANY, _("Copy to tag"), MakeTagSubMenu(IMID_TAGCOPY_START));
-    if(orig == 2)
-    {//pop on Tag panel
-        menu.Append(IMID_TAGREMOVE, _("Remove from this tag"));
-    }
+    wxMenu menu;
     
-    menu.AppendSeparator();
-    menu.Append(IMID_COPY, _("Copy"));
-    menu.AppendSeparator();
-    menu.Append(IMID_DELETE, _("Delete"));
+    if(orig == 0 || orig == 2)
+    {
+        menu.SetTitle(title);
+        menu.Append(IMID_SPEAK, _("Speak.."));
+        menu.AppendSeparator();
+        menu.Append(wxID_ANY, _("Copy to tag"), MakeTagSubMenu(IMID_TAGCOPY_START));
+        if(orig == 2)
+        {//pop on Tag panel
+            menu.Append(IMID_TAGREMOVE, _("Remove from this tag"));
+        }
+        
+        menu.AppendSeparator();
+        menu.Append(IMID_COPY, _("Copy"));
+        menu.AppendSeparator();
+        menu.Append(IMID_DELETE, _("Delete"));
+    }
+    else if(orig == 1)
+    {
+        menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
+    }
+    else
+    {
+        return 0;
+    }
 
     PopupMenu(&menu, pos.x, pos.y);
 
@@ -1081,25 +1094,49 @@ void LingosHookFrame::OnMenuIndexTagRemove(wxCommandEvent& event)
     }
 }
 
+void LingosHookFrame::OnMenuSetTagDefault(wxCommandEvent& event)
+{
+    wxMenu* menu = (wxMenu*)event.GetEventObject();
+    wxTreeItemId item = m_treeFilter->GetSelection();
+
+    if(item.IsOk())
+    {
+        CLHFilterTreeItemData* idata = (CLHFilterTreeItemData*)m_treeFilter->GetItemData(item);
+        _objTag->UpdateDefaultTag(idata->ID());
+    }
+}
+
 void LingosHookFrame::OnTreeFilterContextMenu(wxCommandEvent& event)
 {
     wxPoint pos = ::wxGetMousePosition();
     pos = ScreenToClient(pos);
 
-    if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
+    int dt = event.GetInt();
+
+    if(dt == CLHFilterTreeItemData::IT_WORD)
     {
-        MakeContextMenu(event.GetString(), 2, pos);
-    }
-    else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_DATE)
-    {
-        MakeContextMenu(event.GetString(), 0, pos);
-    }
-    else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_SCORE)
-    {
-        MakeContextMenu(event.GetString(), 0, pos);
+        if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
+        {
+            MakeContextMenu(event.GetString(), 2, pos);
+        }
+        else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_DATE)
+        {
+            MakeContextMenu(event.GetString(), 0, pos);
+        }
+        else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_SCORE)
+        {
+            MakeContextMenu(event.GetString(), 0, pos);
+        }
+        else
+        {
+        }
     }
     else
     {
+        if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
+        {
+            MakeContextMenu(event.GetString(), 1, pos);
+        }
     }
 }
 

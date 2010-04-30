@@ -49,7 +49,7 @@ public:
             , CIID_CHECKBOX_DSMIGNORE, CIID_CHECKBOX_DSMCLOSE, CIID_TEXT_MEMTYPE};
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
-            , IMID_DELETE, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
+            , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
             , IMID_TAGMOVE_START = IMID_TAGCOPY_END + 1 , IMID_TAGMOVE_END = IMID_TAGMOVE_START + 500 };
 public:
     // begin wxGlade: LingosHookFrame::ids
@@ -200,6 +200,7 @@ public:
     virtual void OnMenuIndexDelete(wxCommandEvent& event);
     virtual void OnMenuIndexTagCopy(wxCommandEvent& event);
     virtual void OnMenuIndexTagRemove(wxCommandEvent& event);
+    virtual void OnMenuSetTagDefault(wxCommandEvent& event);    
     virtual void OnTreeFilterContextMenu(wxCommandEvent& event);
     virtual void OnCheckDSMIgnore(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckDSMClose(wxCommandEvent &event); // wxGlade: <event_handler>
