@@ -30,6 +30,7 @@ public:
     virtual int LoadWords(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree) = 0;
     virtual int AddTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
     virtual int RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
+    virtual int UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
     virtual int AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) = 0;
     virtual int RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) = 0;
     virtual int UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) = 0;
@@ -79,7 +80,7 @@ public:
     virtual int LoadWords(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree);
     virtual int AddTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
     virtual int RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
-
+    virtual int UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
     virtual int AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) { return -1; }
     virtual int RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) { return -1; }
 
@@ -96,6 +97,7 @@ private:
     int GetTagData(CDBAccess::TDatabase& db, int tagid, wxString& title) const;
 private:
     TTagMap _mapTag;
+    int _iDefaultTag;
 };
 
 class CScoreMode : public CBase
@@ -139,6 +141,7 @@ public:
     int LoadWords();
     int AddTitle(int id);
     int RemoveTitle(int id);
+    int UpdateTitle(int id);
 
     int AddWord(int wordid);
     int RemoveWord(int wordid);
