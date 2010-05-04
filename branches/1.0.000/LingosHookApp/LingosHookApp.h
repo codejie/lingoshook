@@ -164,18 +164,11 @@ public:
     virtual void OnWordIndexText(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexDClick(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexSelected(wxCommandEvent &event); // wxGlade: <event_handler>
-
-
-
-
     virtual void OnIndexDelete(wxCommandEvent& event);
     virtual void OnIndexFindItem(wxCommandEvent& event);
-
     virtual void OnIndexContextMenu(wxCommandEvent& event);
     virtual void OnNoteIndexChanged(wxNotebookEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckBoxHotkey(wxCommandEvent &event); // wxGlade: <event_handler>
-
-
     virtual void OnBtnSetApply(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntDeselect(wxListEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntSelect(wxListEvent &event); // wxGlade: <event_handler>
@@ -206,6 +199,7 @@ public:
     virtual void OnCheckDSMClose(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnTreeResultContextMenu(wxCommandEvent& event);
     virtual void OnMemTypeKeyDown(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnMemTypeText(wxCommandEvent &event); // wxGlade: <event_handler>
 
 	virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
