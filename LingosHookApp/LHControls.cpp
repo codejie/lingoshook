@@ -197,11 +197,8 @@ END_EVENT_TABLE()
 void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
 {
     int key = event.GetKeyCode();
-    if(!::wxIsdigit(key))
-    {
-        event.Skip();
-    }
-    else
+    
+    if(::wxIsdigit(key) || key == 126 || key == VK_ESCAPE)
     {
         wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN);
         ev.SetEventObject(this);
@@ -209,6 +206,10 @@ void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
         ev.SetInt(key);
 
         GetEventHandler()->ProcessEvent(ev);
+    }
+    else
+    {
+        event.Skip();
     }
 }
 

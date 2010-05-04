@@ -204,6 +204,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_COMMAND(CIID_TREE_RESULT, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeResultContextMenu)
 
     EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, LingosHookFrame::OnMemTypeKeyDown)
+    EVT_TEXT(CIID_TEXT_MEMTYPE, LingosHookFrame::OnMemTypeText)
 
 //    EVT_MENU_RANGE(IMID_TAGMOVE_START, IMID_TAGMOVE_END, OnMenuIndexTagMove)
 
@@ -226,12 +227,12 @@ void LingosHookFrame::set_properties()
     label_8->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_textMemWord->SetFont(wxFont(16, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_textMemWord->SetAutoLayout(true);
-    m_radioMemLevel0->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
-    m_radioMemLevel1->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
-    m_radioMemLevel2->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
-    m_radioMemLevel3->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    m_radioMemLevel0->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    m_radioMemLevel1->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    m_radioMemLevel2->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    m_radioMemLevel3->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
 
-    m_textMemType->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
 
     m_noteContext_pane_4->SetScrollRate(10, 10);
 
@@ -1170,23 +1171,23 @@ void LingosHookFrame::OnCheckDSMClose(wxCommandEvent &event)
 
 void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
 {
-    int key = event.GetInt() - 48;
+    int key = event.GetInt();// - 48;
     
     switch(key)
     {
-    case 1:
+    case 1 + 48:
         m_radioMemLevel0->SetValue(true);
         break;
-    case 2:
+    case 2+ 48:
         m_radioMemLevel1->SetValue(true);
         break;
-    case 3:
+    case 3 + 48:
         m_radioMemLevel2->SetValue(true);
         break;
-    case 4:
+    case 4 + 48:
         m_radioMemLevel3->SetValue(true);
         break;
-    case 0:
+    case 0 + 48:
         {
             if(m_btnMemRemove->IsEnabled())
             {
@@ -1194,6 +1195,12 @@ void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
                 RemoveWord(wordid);
             }
         }
+        return;
+    case VK_ESCAPE:
+        m_textMemType->SetValue(wxEmptyString);
+        return;
+    case 126:
+        _objSpeak->Speak(_objMemoryDaily->GetWord());
         return;
     default:
         return;
@@ -1203,6 +1210,19 @@ void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
     {
         m_btnMemRemove->Enable(true);
         m_btnMemNext->Enable(true);
+    }
+}
+
+void LingosHookFrame::OnMemTypeText(wxCommandEvent &event)
+{
+    wxString str = event.GetString();
+    if(str == _objMemoryDaily->GetWord())
+    {
+        m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("MS Shell Dlg 2")));
+    }
+    else
+    {
+        m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     }
 }
 
