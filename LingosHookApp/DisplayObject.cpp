@@ -2,6 +2,7 @@
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
 
+#include "Consts.h"
 #include "LingosHookApp.h"
 #include "ExceptionRaisedDialog.h"
 #include "ViconDictObject.h"
@@ -277,7 +278,7 @@ void CDisplayObject::ExceptionRaised(const wxString &html, const TinyHtmlParser:
     ShowInfo(_("Catches a EXCEPTION info.."));
 
     CExceptionRaisedDialog dlg(_frame);
-    wxString info = wxString::Format(_("Exception:[%d]%s\n---- HTML ----\n"), e.Number(), wxString(e.Info().c_str(), wxConvISO8859_1));
+    wxString info = wxString::Format(_("%s v%s - Exception:[%d]%s\n---- HTML ----\n"), APP_TITLE, APP_VERSION, e.Number(), wxString(e.Info().c_str(), wxConvISO8859_1));
     info += html;
 
     dlg.SetInfo(info);
