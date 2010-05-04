@@ -91,17 +91,17 @@ int Test()
 //    std::wstring str = \
 //L"<DIV style=\"MARGIN: 0px 0px 5px\"><DIV style=\"MARGIN: 4px 0px\">超文字标记语言, 为因特网书写网页的语言 (计算机用语)</DIV></DIV>";
 
-    std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
+    //std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
 
-    //std::wstring tmp, str;
-    //std::wifstream ifs("C:\\test.html");
-    //while(!ifs.eof())
-    //{
-    //    std::getline(ifs, tmp);
-    //    str += tmp;
-    //}
-    ////ifs >> str;
-    //ifs.close();
+    std::wstring tmp, str;
+    std::wifstream ifs("C:\\test.html");
+    while(!ifs.eof())
+    {
+        std::getline(ifs, tmp);
+        str += tmp;
+    }
+    //ifs >> str;
+    ifs.close();
 
     CDocumentObject doc;
     try
