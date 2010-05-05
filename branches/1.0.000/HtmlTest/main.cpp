@@ -113,7 +113,7 @@ int Test()
         return -1;
     }
 
-    setlocale(LC_ALL, "chs");
+//    setlocale(LC_ALL, "chs");
     doc.Show(std::wcout);
 
     std::cout << "\n----------------" << std::endl;

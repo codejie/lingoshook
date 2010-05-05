@@ -149,6 +149,7 @@ private:
     int PreParserBroken(const std::wstring& html, TDataStack& datastack, TNodeQueue& nodeque) const;
     
     int CheckSpecialTag(const std::wstring& html, const CParserData& data) const;
+    int IsSpecialTag(const std::wstring& tag) const;
     int CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const;
     CElementObject* MakeElement(const std::wstring& html, const TNodeData& node, CElementObject* parent, CElementObject* sibling) const;
 
