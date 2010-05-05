@@ -492,10 +492,10 @@ int CDocumentObject::PushValueData(CParserData::DataType type, size_t start, siz
 
 int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CDocumentObject::TDataStack& datastack, CDocumentObject::TNodeQueue& nodeque) const
 {
-    if(CheckSpecialTag(html, data) == 0)
-    {
-        data.type = CParserData::DT_DONE;
-    }
+    //if(CheckSpecialTag(html, data) == 0)
+    //{
+    //    data.type = CParserData::DT_DONE;
+    //}
 
     if(data.type == CParserData::DT_TAG)
     {
@@ -509,11 +509,43 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
             return -1;
         }
 
-        if(CheckTag(html, datastack.top(), data) != 0)
-            return -1;
-        
-        nodeque.push_front(std::make_pair(datastack.size() - 1, datastack.top()));
-        datastack.pop();
+        while(datastack.size() > 0)
+        {
+            CParserData& tag = datastack.top();
+
+            std::wstring str = html.substr(tag.tag.first + 1, tag.tag.second - tag.tag.first - 1);
+            std::wstring::size_type pos = str.find(L" ");
+            if(pos != std::wstring::npos)
+                str = str.substr(0, pos);
+            std::wstring end = html.substr(data.tag.first + 2, data.tag.second - data.tag.first - 2);
+
+            if(str == end)
+            {
+                nodeque.push_front(std::make_pair(datastack.size() - 1, datastack.top()));
+                datastack.pop();
+                break;
+            }
+            else
+            {
+                if(IsSpecialTag(str) == 0)
+                {
+                    tag.type = CParserData::DT_DONE;
+                    nodeque.push_front(std::make_pair(datastack.size() - 1, tag));
+                    datastack.pop();                    
+                }
+                else
+                {
+                    THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << str << L" and " << end);
+                    return -1;
+                }
+            }
+        }
+
+        //if(CheckTag(html, datastack.top(), data) != 0)
+        //    return -1;
+        //
+        //nodeque.push_front(std::make_pair(datastack.size() - 1, datastack.top()));
+        //datastack.pop();
     }
     else if(data.type == CParserData::DT_DONE)
     {
@@ -560,6 +592,22 @@ int CDocumentObject::CheckSpecialTag(const std::wstring& html, const CParserData
     if(pos != std::wstring::npos)
         tag = tag.substr(0, pos);   
    
+    if(tag == L"IMG")
+        return 0;
+    if(tag == L"PARAM")
+        return 0;
+    if(tag == L"BR")
+        return 0;
+    if(tag == L"HR")
+        return 0;
+    if(tag == L"P")
+        return 0;
+
+    return -1;
+}
+
+int CDocumentObject::IsSpecialTag(const std::wstring& tag) const
+{
     if(tag == L"IMG")
         return 0;
     if(tag == L"PARAM")
