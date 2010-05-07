@@ -94,7 +94,7 @@ int Test()
     //std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
 
     std::wstring tmp, str;
-    std::wifstream ifs("C:\\test.html");
+    std::wifstream ifs("C:\\test1.html");
     while(!ifs.eof())
     {
         std::getline(ifs, tmp);
