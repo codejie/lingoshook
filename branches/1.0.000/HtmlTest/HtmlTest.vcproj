@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../LingosHookApp;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHookApp;D:\Studio\LingosHook\Tidy\tidylib\include;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,7 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="tidy.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="D:\Studio\LingosHook\Tidy\Release - dll (fast)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -175,6 +177,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\LingosHookApp\HtmlTidyObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -188,6 +194,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\LingosHookApp\HtmlTidyObject.h"
+				>
+			</File>
 			<File
 				RelativePath="..\LingosHookApp\TinyHtmlParser.h"
 				>

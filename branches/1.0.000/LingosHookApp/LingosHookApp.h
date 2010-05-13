@@ -45,8 +45,8 @@ public:
             , CIID_BUTTON_APPLY, CIID_LIST_TAGMGNT, CIID_BUTTON_TAGSETDEFAULT, CIID_BUTTON_TAGADD, CIID_TREE_RESULT
             , CIID_BUTTON_TAGREMOVE, CIID_BUTTON_HOOK, XIID_BUTTON_FILTER, CIID_TREE_FILTER, CIID_BUTTON_MEMREMOVE
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
-            , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPORT
-            , CIID_CHECKBOX_DSMIGNORE, CIID_CHECKBOX_DSMCLOSE, CIID_TEXT_MEMTYPE};
+            , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
+            , CIID_CHECKBOX_DSMIGNORE, CIID_CHECKBOX_DSMCLOSE, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG};
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -116,6 +116,8 @@ protected:
     wxStaticText* label_1;
     wxCheckBox* m_checkSetTagSync;
     wxCheckBox* m_checkSetMemSync;
+    wxStaticText* label_7;
+    wxCheckBox* m_checkSetUseTidy;
     wxStaticText* label_2;
     wxCheckBox* m_checkHTMLSave;
     wxCheckBox* m_checkHTMLLoad;
@@ -148,6 +150,8 @@ protected:
 	
     wxScrolledWindow* m_noteContext_pane_4;
     wxPanel* m_noteContext_pane_5;
+    wxTextCtrl* m_textDebug;
+    wxButton* m_btnDebug;
     wxTextCtrl* m_textTrace;
     wxPanel* m_noteContext_pane_6;
     wxNotebook* m_noteContext;
@@ -200,6 +204,8 @@ public:
     virtual void OnTreeResultContextMenu(wxCommandEvent& event);
     virtual void OnMemTypeKeyDown(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnMemTypeText(wxCommandEvent &event); // wxGlade: <event_handler>
+
+    virtual void OnBtnDebug(wxCommandEvent &event); // wxGlade: <event_handler>
 
 	virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 

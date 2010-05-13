@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 
+#include "HtmlTidyObject.h"
 #include "TinyHtmlParser.h"
 
 using namespace TinyHtmlParser;
@@ -94,7 +95,7 @@ int Test()
     //std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
 
     std::wstring tmp, str;
-    std::wifstream ifs("C:\\test1.html");
+    std::wifstream ifs("C:\\test5.html");
     while(!ifs.eof())
     {
         std::getline(ifs, tmp);
@@ -103,17 +104,25 @@ int Test()
     //ifs >> str;
     ifs.close();
 
+    std::wstring s;
+    CHtmlTidyObject::Tidy(str, s);
+
+    std::wofstream ofs("C:\\out.html");
+    ofs << s << std::endl;
+    ofs.close();
+
     CDocumentObject doc;
     try
     {
-        doc.Load(str, false);
+        doc.Load(s, false);
     }
     catch(const CExceptionObject& e)
     {
         return -1;
     }
 
-//    setlocale(LC_ALL, "chs");
+    //setlocale(LC_ALL, "chs");
+
     doc.Show(std::wcout);
 
     std::cout << "\n----------------" << std::endl;
