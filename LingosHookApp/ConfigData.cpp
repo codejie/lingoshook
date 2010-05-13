@@ -18,6 +18,8 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iExpandDict(-1)
 , m_iIgnoreDict(0)
 , m_iAutoSpeak(0)
+, m_iUseTidy(1)
+//, m_iSaveUseTidy(0)
 {
 }
 
@@ -186,6 +188,10 @@ int CConfigData::Load()
         m_iIgnoreDict = 0;
     if(GetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         m_iAutoSpeak = 0;
+    if(GetData(CA_USETIDY, m_iUseTidy) != 0)
+        m_iUseTidy = 1;
+    //if(GetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    m_iSaveUseTidy = 0;
     return 0;
 }
 
@@ -215,6 +221,10 @@ int CConfigData::Save()
         return -1;
     if(SetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         return -1;
+    if(SetData(CA_USETIDY, m_iUseTidy) != 0)
+        return -1;
+    //if(SetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    return -1;
     return 0;
 }
 

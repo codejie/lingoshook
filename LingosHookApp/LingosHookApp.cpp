@@ -2,6 +2,9 @@
 
 #include <wx/app.h>
 #include <wx/clipbrd.h>
+#include <wx/filedlg.h>
+#include <wx/txtstrm.h>
+#include <wx/wfstream.h>
 
 #include "Consts.h"
 #include "ConfigData.h"
@@ -117,6 +120,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     label_1 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Synchronization"));
     m_checkSetTagSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Classifications"));
     m_checkSetMemSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Memory Daily"));
+    label_7 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Pre-Analyse"));
+    m_checkSetUseTidy = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Uses Tidy"));
     label_2 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Process"));
     m_checkHTMLSave = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Storage"));
     m_checkHTMLLoad = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Loading"));
@@ -139,13 +144,15 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnTagAdd = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGADD, wxT("Add.."));
     panel_4 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
     m_btnTagRemove = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGREMOVE, wxT("Delete"));
+    m_textDebug = new wxTextCtrl(m_noteContext_pane_6, wxID_ANY, wxEmptyString);
+    m_btnDebug = new wxButton(m_noteContext_pane_6, CIID_BUTTON_DEBUG, wxT("Debug"));
     m_textTrace = new wxTextCtrl(m_noteContext_pane_6, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
     label_8 = new wxStaticText(m_noteContext_pane_5, wxID_ANY, wxString::Format(_("%s v%s by Jie."), APP_TITLE, APP_VERSION), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
     static_line_4 = new wxStaticLine(m_noteContext_pane_5, wxID_ANY);
     m_btnAboutHelp = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTHELP, wxT("Welcome to online help.."));
     m_btnAboutSend = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
-    m_btnAboutPost = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTPORT, wxT("Post a comment to me. (www.cppblog.com/codejie)"));
-    m_btnAboutOpenSource = new wxButton(m_noteContext_pane_5, wxID_ANY, wxT("Welcome to LingosHook Open Source Site"));
+    m_btnAboutPost = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTPOST, wxT("Post a comment to me. (www.cppblog.com/codejie)"));
+    m_btnAboutOpenSource = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTOPENSOURCE, wxT("Welcome to LingosHook Open Source Site"));
     panel_9 = new wxPanel(m_noteContext_pane_5, wxID_ANY);
 
     m_labelInfo = new wxStaticText(this, wxID_ANY, wxT("Ready.."));
@@ -190,8 +197,8 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_BUTTON(CIID_BUTTON_MEMREGEN, LingosHookFrame::OnBtnMemRegen)
     EVT_BUTTON(CIID_BUTTON_ABOUTHELP, LingosHookFrame::OnBtnAboutHelp)
     EVT_BUTTON(CIID_BUTTON_ABOUTSEND, LingosHookFrame::OnBtnAboutSend)
-    EVT_BUTTON(CIID_BUTTON_ABOUTPORT, LingosHookFrame::OnBtnAboutPost)
-	EVT_BUTTON(wxID_ANY, LingosHookFrame::OnBtnAboutOpenSource)
+    EVT_BUTTON(CIID_BUTTON_ABOUTPOST, LingosHookFrame::OnBtnAboutPost)
+	EVT_BUTTON(CIID_BUTTON_ABOUTOPENSOURCE, LingosHookFrame::OnBtnAboutOpenSource)
 	EVT_CHECKBOX(CIID_CHECKBOX_DSMIGNORE, LingosHookFrame::OnCheckDSMIgnore)
     EVT_CHECKBOX(CIID_CHECKBOX_DSMCLOSE, LingosHookFrame::OnCheckDSMClose)	
     EVT_MENU(IMID_SPEAK, LingosHookFrame::OnMenuIndexSpeak)
@@ -208,6 +215,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
 
 //    EVT_MENU_RANGE(IMID_TAGMOVE_START, IMID_TAGMOVE_END, OnMenuIndexTagMove)
 
+    EVT_BUTTON(CIID_BUTTON_DEBUG, LingosHookFrame::OnBtnDebug)
    // end wxGlade
 END_EVENT_TABLE();
 
@@ -266,7 +274,8 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_3 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_6 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_7 = new wxBoxSizer(wxHORIZONTAL);
-    wxBoxSizer* sizer_26 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_26 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer_48 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_12 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_39 = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer* sizer_46 = new wxBoxSizer(wxHORIZONTAL);
@@ -286,6 +295,7 @@ void LingosHookFrame::do_layout()
     wxStaticBoxSizer* sizer_44 = new wxStaticBoxSizer(sizer_44_staticbox, wxVERTICAL);
     wxBoxSizer* sizer_43 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_38 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_47 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
 
@@ -372,6 +382,9 @@ void LingosHookFrame::do_layout()
     sizer_37->Add(m_checkSetTagSync, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
     sizer_37->Add(m_checkSetMemSync, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_16->Add(sizer_37, 1, wxEXPAND, 0);
+    sizer_47->Add(label_7, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_47->Add(m_checkSetUseTidy, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_16->Add(sizer_47, 1, wxEXPAND, 0);
     sizer_38->Add(label_2, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_38->Add(m_checkHTMLSave, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
     sizer_38->Add(m_checkHTMLLoad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
@@ -422,6 +435,9 @@ void LingosHookFrame::do_layout()
     sizer_12->Add(sizer_39, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(panel_9, 1, wxEXPAND, 0);
 	m_noteContext_pane_5->SetSizer(sizer_12);	
+    sizer_48->Add(m_textDebug, 1, wxEXPAND, 0);
+    sizer_48->Add(m_btnDebug, 0, 0, 0);
+    sizer_26->Add(sizer_48, 0, wxEXPAND, 0);
     sizer_26->Add(m_textTrace, 1, wxEXPAND, 0);
     m_noteContext_pane_6->SetSizer(sizer_26);
     m_noteContext->AddPage(notebook_2_pane_1, wxT("Result"));
@@ -431,7 +447,7 @@ void LingosHookFrame::do_layout()
     m_noteContext->AddPage(m_noteContext_pane_4, wxT("Setting"));
     m_noteContext->AddPage(m_noteContext_pane_5, wxT("About"));	
 #ifdef __LH_DEBUG__
-    m_noteContext->AddPage(m_noteContext_pane_6, wxT("Trace"));
+    m_noteContext->AddPage(m_noteContext_pane_6, wxT("Debug"));
 #else
     m_noteContext_pane_6->Hide();
 #endif
@@ -562,6 +578,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         }
 
         _dataConfig->m_iAutoSpeak = m_checkAutoSpeak->IsChecked() ? 1 : 0;
+        _dataConfig->m_iUseTidy = m_checkSetUseTidy->IsChecked() ? 1 : 0;
 
         if(_dataConfig->Save() == 0)
         {
@@ -619,6 +636,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         m_checkDSMIgnore->SetValue(_dataConfig->m_iIgnoreDict == 1);
         m_checkDSMClose->SetValue(_dataConfig->m_iIgnoreDict == 2);
         m_checkAutoSpeak->SetValue(_dataConfig->m_iAutoSpeak == 1);
+        m_checkSetUseTidy->SetValue(_dataConfig->m_iUseTidy == 1);
     }
     return 0;
 }
@@ -680,7 +698,6 @@ void LingosHookFrame::HookTextProc(const wxString &text)
 
 void LingosHookFrame::HookHTMLProc(const wxString &html)
 {
-
     _objDict->HTMLProc(html, _dataConfig->m_iIgnoreDict);
 
 	if(_dataConfig->m_iOpenTrace == 1)
@@ -1226,3 +1243,25 @@ void LingosHookFrame::OnMemTypeText(wxCommandEvent &event)
     }
 }
 
+void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
+{
+#ifndef __LH_DEBUG__
+    return;
+#endif
+
+    wxFileDialog dlg(this, wxT("Select a HTML File.."), wxEmptyString, wxEmptyString, wxT("HTML Files(*.html;*.htm)|*.html;*.htm|All Files(*.*)|*.*"), wxFD_OPEN);
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        wxString file = dlg.GetPath();
+        m_textDebug->SetValue(file);
+        wxFileInputStream input(file);
+        wxTextInputStream ifs(input);
+        wxString str;
+        while(input.IsOk() && !input.Eof())
+        {
+            str += ifs.ReadLine();
+        }
+        m_textTrace->SetValue(str); 
+        HookHTMLProc(str);
+    }
+}

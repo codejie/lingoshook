@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "ConfigData.h"
-
+#include "HtmlTidyObject.h"
 #include "ViconDictObject.h"
 #include "LangdaoDictObject.h"
 #include "TriggerObject.h"
@@ -220,6 +220,13 @@ int CDictObject::HTMLProc(const wxString &str)
 
     //find dict
     TinyHtmlParser::CDocumentObject doc;
+
+    if(_config.m_iUseTidy == 1)
+    {
+        if(CHtmlTidyObject::Tidy(html, html) != 0)
+            return -1;
+    }
+
     try
     {
         if(doc.Load(html, false) != 0)
@@ -262,6 +269,9 @@ int CDictObject::HTMLProc(const wxString &str)
         }
         pe = doc.FindNextElement();
     }
+
+    //str = html.c_str();
+
     if(SaveResult(str, result) == 0)
     {
         g_objTrigger.OnResultSave(result);

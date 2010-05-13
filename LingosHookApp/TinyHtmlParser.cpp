@@ -602,6 +602,10 @@ int CDocumentObject::CheckSpecialTag(const std::wstring& html, const CParserData
         return 0;
     if(tag == L"P")
         return 0;
+    if(tag == L"META")
+        return 0;
+    if(tag == L"EMBED")
+        return 0;
 
     return -1;
 }
@@ -618,7 +622,10 @@ int CDocumentObject::IsSpecialTag(const std::wstring& tag) const
         return 0;
     if(tag == L"P")
         return 0;
-
+    if(tag == L"META")
+        return 0;
+    if(tag == L"EMBED")
+        return 0;
     return -1;
 }
 
