@@ -59,7 +59,7 @@ public:
 
     virtual int Init(CDBAccess::TDatabase& db) = 0;
 
-    virtual int ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const = 0;
+    virtual int ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const = 0;
     
     virtual int GetResult(CDBAccess::TDatabase& db, int wordid, TDictResultMap& result) = 0;
 

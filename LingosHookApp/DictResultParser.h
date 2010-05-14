@@ -15,8 +15,8 @@ public:
 	static CDictResultParser* MakeParser(const wxString& str);
 
 	virtual int ParserText(const wxString& text, const wxString& html, CDBAccess::TRecordDataVector& vct) const = 0;
-	virtual int ParserHTML(const wxString& html, CDBAccess::TRecordDataVector& vct) const = 0;
-    virtual int ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, CDBAccess::TRecordDataVector& vct) const = 0;
+	virtual int ParserHTML(const std::wstring& html, CDBAccess::TRecordDataVector& vct) const = 0;
+    virtual int ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, CDBAccess::TRecordDataVector& vct) const = 0;
 
 
     virtual const wxString GetTitle() const = 0;
@@ -37,8 +37,8 @@ public:
 	virtual ~CViconECDictResultParser() {}
 
 	virtual int ParserText(const wxString& text, const wxString& html, CDBAccess::TRecordDataVector& vct) const;
-	virtual int ParserHTML(const wxString& html, CDBAccess::TRecordDataVector& vct) const;
-    virtual int ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, CDBAccess::TRecordDataVector& vct) const;
+	virtual int ParserHTML(const std::wstring& html, CDBAccess::TRecordDataVector& vct) const;
+    virtual int ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, CDBAccess::TRecordDataVector& vct) const;
 
     virtual const wxString GetTitle() const { return CViconECDictResultParser::TITLE; }
     virtual const wxString GetID() const { return CViconECDictResultParser::ID; }

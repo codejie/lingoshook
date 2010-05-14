@@ -102,7 +102,7 @@ int CViconECDictResultParser::ParserText(const wxString &text, const wxString &h
 	return 0;
 }
 
-int CViconECDictResultParser::ParserHTML(const wxString &html, CDBAccess::TRecordDataVector &vct) const
+int CViconECDictResultParser::ParserHTML(const std::wstring& html, CDBAccess::TRecordDataVector &vct) const
 {
     std::wstring str(html.begin(), html.end());
 
@@ -142,7 +142,7 @@ int CViconECDictResultParser::ParserHTML(const wxString &html, CDBAccess::TRecor
 	return 0;
 }
 
-int CViconECDictResultParser::ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, CDBAccess::TRecordDataVector& vct) const
+int CViconECDictResultParser::ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, CDBAccess::TRecordDataVector& vct) const
 {
     if(dict == NULL)
         return -1;

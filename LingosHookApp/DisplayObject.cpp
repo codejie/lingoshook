@@ -7,6 +7,7 @@
 #include "ExceptionRaisedDialog.h"
 #include "ViconDictObject.h"
 #include "LangdaoDictObject.h"
+#include "FundsetDictObject.h"
 #include "DisplayObject.h"
 
 CDisplayObject::CDisplayObject(LingosHookFrame *frame)
@@ -158,6 +159,10 @@ void CDisplayObject::ShowDictResult(wxTreeItemId &item, const CDictParser* dict,
     {
         ShowLangdaoECDictResult(_frame->m_treeResult, item, dict, result);
     }
+    else if(dict->GetID() == FUNDSET::CDCParser::ID)
+    {
+        ShowFundsetDCDictResult(_frame->m_treeResult, item, dict, result);
+    }
     if(expand)
         _frame->m_treeResult->ExpandAllChildren(item);
 }
@@ -225,6 +230,20 @@ void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
         {
             tree->AppendItem(commonly, (*it));
         }
+    }
+}
+
+void CDisplayObject::ShowFundsetDCDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result)
+{
+    const FUNDSET::CDCParser* parser = dynamic_cast<const FUNDSET::CDCParser*>(dict);
+    const FUNDSET::CDCResult* res = dynamic_cast<const FUNDSET::CDCResult*>(result.Result());
+
+    if(!res->m_strKasus.empty())
+        tree->AppendItem(item, res->m_strKasus);
+
+    for(FUNDSET::CDCResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
+    {
+        tree->AppendItem(item, *it);
     }
 }
 

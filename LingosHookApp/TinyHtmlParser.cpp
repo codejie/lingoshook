@@ -198,6 +198,27 @@ void CElementObject::Show(std::wostream& os) const
     os << std::endl;
 }
 //
+
+int CParserData::GetTitle(const std::wstring& html)
+{
+    if(type == DT_TAG || type == DT_SPECIAL)
+    {
+        title = html.substr(tag.first + 1, tag.second - tag.first - 1);
+        std::wstring::size_type pos = title.find(L" ");
+        if(pos != std::wstring::npos)
+            title = title.substr(0, pos);
+    }
+    else if(type == DT_END)
+    {
+        title = html.substr(tag.first + 2, tag.second - tag.first - 2);
+    }
+    else
+    {
+        return -1;
+    }
+    return 0;
+}
+
 void CParserData::Show(std::wostream &os) const
 {
     os << "\nType = " << this->type;
@@ -311,7 +332,7 @@ int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQ
         {
             if(pos > start)
             {
-                if(PushValueData(CParserData::DT_VALUE, start, pos -1, datastack) != 0)
+                if(PushValueData(/*CParserData::DT_VALUE, */start, pos -1, datastack) != 0)
                     return -1;
             }
 
@@ -328,6 +349,7 @@ int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQ
                     break;
                 }
             }
+
             if(PushTagData(html, data, datastack, que) != 0)
                 return -1;
             
@@ -354,7 +376,7 @@ int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQ
 
         if(pos > start)
         {
-            if(PushValueData(CParserData::DT_BROKEN, start, pos, datastack) != 0)
+            if(PushValueData(/*CParserData::DT_BROKEN, */start, pos, datastack) != 0)
                 return -1;
         }
 
@@ -443,10 +465,11 @@ int CDocumentObject::PreParserLT(const std::wstring& html, std::wstring::size_ty
         {
             if(html[pos - 1] == TAG_SLASH)
             {
-                data.type = CParserData::DT_DONE;
+                data.type = CParserData::DT_SPECIAL;
             }
 
             data.tag.second = pos;
+            data.GetTitle(html);
      
             return 0;
         }
@@ -462,7 +485,7 @@ int CDocumentObject::PreParserLT(const std::wstring& html, std::wstring::size_ty
     return -1;
 }
 
-int CDocumentObject::PushValueData(CParserData::DataType type, size_t start, size_t end, TDataStack& datastack) const
+int CDocumentObject::PushValueData(/*CParserData::DataType type, */size_t start, size_t end, TDataStack& datastack) const
 {
     if(datastack.size() == 0)
     {
@@ -471,21 +494,23 @@ int CDocumentObject::PushValueData(CParserData::DataType type, size_t start, siz
     } 
 
     CParserData& prev = datastack.top();
-    if(prev.type == CParserData::DT_TAG)
-    {
-        prev.value.push_back(std::make_pair(start, end));
+    prev.value.push_back(std::make_pair(start, end));
 
-        prev.type = CParserData::DT_TAG_VALUE;
-    }
-    else if(prev.type == CParserData::DT_TAG_VALUE)
-    {
-        prev.value.push_back(std::make_pair(start, end));
-    }
-    else
-    {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Type does match : " << prev.type << " - pos : " << start);
-        return -1;
-    }
+    //if(prev.type == CParserData::DT_TAG)
+    //{
+    //    prev.value.push_back(std::make_pair(start, end));
+
+    //    prev.type = CParserData::DT_TAG_VALUE;
+    //}
+    //else if(prev.type == CParserData::DT_TAG_VALUE)
+    //{
+    //    prev.value.push_back(std::make_pair(start, end));
+    //}
+    //else
+    //{
+    //    THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Type does match : " << prev.type << " - pos : " << start);
+    //    return -1;
+    //}
 
     return 0;
 }
@@ -494,7 +519,7 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
 {
     //if(CheckSpecialTag(html, data) == 0)
     //{
-    //    data.type = CParserData::DT_DONE;
+    //    data.type = CParserData::DT_SPECIAL;
     //}
 
     if(data.type == CParserData::DT_TAG)
@@ -513,13 +538,13 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
         {
             CParserData& tag = datastack.top();
 
-            std::wstring str = html.substr(tag.tag.first + 1, tag.tag.second - tag.tag.first - 1);
-            std::wstring::size_type pos = str.find(L" ");
-            if(pos != std::wstring::npos)
-                str = str.substr(0, pos);
-            std::wstring end = html.substr(data.tag.first + 2, data.tag.second - data.tag.first - 2);
+            //std::wstring str = html.substr(tag.tag.first + 1, tag.tag.second - tag.tag.first - 1);
+            //std::wstring::size_type pos = str.find(L" ");
+            //if(pos != std::wstring::npos)
+            //    str = str.substr(0, pos);
+            //std::wstring end = html.substr(data.tag.first + 2, data.tag.second - data.tag.first - 2);
 
-            if(str == end)
+            if(tag.title == data.title)//str == end)
             {
                 nodeque.push_front(std::make_pair(datastack.size() - 1, datastack.top()));
                 datastack.pop();
@@ -527,15 +552,26 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
             }
             else
             {
-                if(IsSpecialTag(str) == 0)
+                if(IsSpecialTag(tag) == 0)
                 {
-                    tag.type = CParserData::DT_DONE;
-                    nodeque.push_front(std::make_pair(datastack.size() - 1, tag));
-                    datastack.pop();                    
+                    tag.type = CParserData::DT_SPECIAL;
+                    size_t level = datastack.size() - 1;
+
+                    TNodeQueue::iterator it = nodeque.begin();
+                    while(it != nodeque.end())
+                    {
+                        if(it->second.type = CParserData::DT_SPECIAL)
+                            it->first = level;
+                        else
+                            break;
+                        ++ it;
+                    }
+                    nodeque.push_front(std::make_pair(level, tag));
+                    datastack.pop();
                 }
                 else
                 {
-                    THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << str << L" and " << end);
+                    THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << tag.title << L"(Non-Special) and " << data.title);
                     return -1;
                 }
             }
@@ -547,10 +583,10 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
         //nodeque.push_front(std::make_pair(datastack.size() - 1, datastack.top()));
         //datastack.pop();
     }
-    else if(data.type == CParserData::DT_DONE)
-    {
-        nodeque.push_front(std::make_pair(datastack.size(), data));
-    }
+    //else if(data.type == CParserData::DT_SPECIAL)
+    //{
+    //    nodeque.push_front(std::make_pair(datastack.size(), data));
+    //}
     else
     {
         THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Wrong tag type : " << data.type << L" - pos : " << data.tag.first);
@@ -564,85 +600,89 @@ int CDocumentObject::PreParserBroken(const std::wstring& html, TDataStack& datas
     while(datastack.size() > 0)
     {
         CParserData& data = datastack.top();
-        if(data.type == CParserData::DT_TAG || data.type == CParserData::DT_TAG_VALUE)
-        {
-            nodeque.push_front(std::make_pair(datastack.size() - 1, data));
 
-            datastack.pop();
-        }
-        else if(data.type == CParserData::DT_BROKEN)
-        {
-            nodeque.push_front(std::make_pair(datastack.size() - 1, data));
+        nodeque.push_front(std::make_pair(datastack.size() - 1, data));
 
-            datastack.pop();        
-        }
-        else
-        {
-            return -1;
-        }
+        datastack.pop(); 
+        //if(data.type == CParserData::DT_TAG || data.type == CParserData::DT_TAG_VALUE)
+        //{
+        //    nodeque.push_front(std::make_pair(datastack.size() - 1, data));
+
+        //    datastack.pop();
+        //}
+        ////else if(data.type == CParserData::DT_BROKEN)
+        ////{
+        ////    nodeque.push_front(std::make_pair(datastack.size() - 1, data));
+
+        ////    datastack.pop();        
+        ////}
+        //else
+        //{
+        //    return -1;
+        //}
     }
 
     return 0;    
 }
 
-int CDocumentObject::CheckSpecialTag(const std::wstring& html, const CParserData& data) const
-{
-    std::wstring tag = html.substr(data.tag.first + 1, data.tag.second - data.tag.first - 1);
-    std::wstring::size_type pos = tag.find(L" ");
-    if(pos != std::wstring::npos)
-        tag = tag.substr(0, pos);   
-   
-    if(tag == L"IMG")
-        return 0;
-    if(tag == L"PARAM")
-        return 0;
-    if(tag == L"BR")
-        return 0;
-    if(tag == L"HR")
-        return 0;
-    if(tag == L"P")
-        return 0;
-    if(tag == L"META")
-        return 0;
-    if(tag == L"EMBED")
-        return 0;
+//int CDocumentObject::CheckSpecialTag(const std::wstring& html, const CParserData& data) const
+//{
+//    std::wstring tag = html.substr(data.tag.first + 1, data.tag.second - data.tag.first - 1);
+//    std::wstring::size_type pos = tag.find(L" ");
+//    if(pos != std::wstring::npos)
+//        tag = tag.substr(0, pos);   
+//   
+//    if(tag == L"IMG")
+//        return 0;
+//    if(tag == L"PARAM")
+//        return 0;
+//    if(tag == L"BR")
+//        return 0;
+//    if(tag == L"HR")
+//        return 0;
+//    if(tag == L"P")
+//        return 0;
+//    if(tag == L"META")
+//        return 0;
+//    if(tag == L"EMBED")
+//        return 0;
+//
+//    return -1;
+//}
 
+int CDocumentObject::IsSpecialTag(const CParserData& tag) const
+{
+    if(tag.title == L"IMG")
+        return 0;
+    if(tag.title == L"PARAM")
+        return 0;
+    if(tag.title == L"HR")
+        return 0;
+    if(tag.title == L"META")
+        return 0;
+    if(tag.title == L"EMBED")
+        return 0;
+    if(tag.title == L"P")
+        return 0;
+    if(tag.title == L"BR")
+        return 0;
     return -1;
 }
 
-int CDocumentObject::IsSpecialTag(const std::wstring& tag) const
-{
-    if(tag == L"IMG")
-        return 0;
-    if(tag == L"PARAM")
-        return 0;
-    if(tag == L"BR")
-        return 0;
-    if(tag == L"HR")
-        return 0;
-    if(tag == L"P")
-        return 0;
-    if(tag == L"META")
-        return 0;
-    if(tag == L"EMBED")
-        return 0;
-    return -1;
-}
-
-int CDocumentObject::CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const
-{
-    std::wstring str = html.substr(tag.tag.first + 1, tag.tag.second - tag.tag.first - 1);
-    std::wstring::size_type pos = str.find(L" ");
-    if(pos != std::wstring::npos)
-        str = str.substr(0, pos);
-    
-    if(str != html.substr(end.tag.first + 2, end.tag.second - end.tag.first - 2))
-    {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << str << L" and " << html.substr(end.tag.first + 2, end.tag.second - end.tag.first - 2));
-        return -1;
-    }
-   return 0;
-}
+//int CDocumentObject::CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const
+//{
+//    std::wstring str = html.substr(tag.tag.first + 1, tag.tag.second - tag.tag.first - 1);
+//    std::wstring::size_type pos = str.find(L" ");
+//    if(pos != std::wstring::npos)
+//        str = str.substr(0, pos);
+//    
+//    if(str != html.substr(end.tag.first + 2, end.tag.second - end.tag.first - 2))
+//    {
+//        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << str << L" and " << html.substr(end.tag.first + 2, end.tag.second - end.tag.first - 2));
+//        return -1;
+//    }
+//   return 0;
+//}
 
 CElementObject* CDocumentObject::MakeElement(const std::wstring& html, const CDocumentObject::TNodeData &node, CElementObject *parent, CElementObject *sibling) const
 {
@@ -650,22 +690,11 @@ CElementObject* CDocumentObject::MakeElement(const std::wstring& html, const CDo
     
     ele->level = node.first;
 
-    if(node.second.type == CParserData::DT_TAG)
-    {
-        ele->type = ET_NODE;
-        ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
-    }
-    else if(node.second.type == CParserData::DT_DONE)
-    {
-        ele->type = ET_TAG;
-        ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
-    }
-    else if(node.second.type == CParserData::DT_TAG_VALUE)
+    ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
+
+    if(node.second.value.size() > 0)
     {
         ele->type = ET_ELEMENT;
-        ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
-        
-        ele->value = L"";
         for(CParserData::TValueVector::const_iterator it = node.second.value.begin(); it != node.second.value.end(); ++ it)
         {
             ele->value += html.substr(it->first, it->second - it->first + 1);
@@ -673,9 +702,35 @@ CElementObject* CDocumentObject::MakeElement(const std::wstring& html, const CDo
     }
     else
     {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Wrong Tag Type : " << node.second.type);
-        return NULL;
+        ele->type = ET_NODE;
     }
+
+    //if(node.second.type == CParserData::DT_TAG)
+    //{
+    //    ele->type = ET_NODE;
+    //    ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
+    //}
+    ////else if(node.second.type == CParserData::DT_SPECIAL)
+    ////{
+    ////    ele->type = ET_TAG;
+    ////    ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
+    ////}
+    //else if(node.second.type == CParserData::DT_TAG_VALUE || node.second.type == CParserData::DT_SPECIAL)
+    //{
+    //    ele->type = ET_ELEMENT;
+    //    ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
+    //    
+    //    ele->value = L"";
+    //    for(CParserData::TValueVector::const_iterator it = node.second.value.begin(); it != node.second.value.end(); ++ it)
+    //    {
+    //        ele->value += html.substr(it->first, it->second - it->first + 1);
+    //    }
+    //}
+    //else
+    //{
+    //    THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Wrong Tag Type : " << node.second.type);
+    //    return NULL;
+    //}
 
     if(ele->Analyse() != 0)
     {
