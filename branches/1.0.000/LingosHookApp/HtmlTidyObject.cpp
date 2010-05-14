@@ -64,6 +64,7 @@ int CHtmlTidyObject::Tidy(const std::wstring &input, std::wstring &output)
                 int wsz = MultiByteToWideChar(codepage, 0, (const char*)outbuf.bp, outbuf.size, NULL, 0);
                 wchar_t* wbuf = new wchar_t[wsz + 1];
                 wsz = MultiByteToWideChar(codepage, 0, (const char*)outbuf.bp, outbuf.size, wbuf, wsz);
+                wbuf[wsz] = L'\0';
                 output = wbuf;
                 delete [] wbuf;
                 ret = 0;

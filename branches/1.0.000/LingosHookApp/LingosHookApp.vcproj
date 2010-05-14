@@ -223,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FundsetDictObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HookObject.cpp"
 				>
 			</File>

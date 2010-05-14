@@ -9,6 +9,7 @@
 #include "HtmlTidyObject.h"
 #include "ViconDictObject.h"
 #include "LangdaoDictObject.h"
+#include "FundsetDictObject.h"
 #include "TriggerObject.h"
 #include "DictObject.h"
 
@@ -91,6 +92,8 @@ int CDictObject::AddKnownParser()
         return -1;
     if(RegisterParser(LANGDAO::CECParser::ID, LANGDAO::CECParser::TITLE) != 0)
         return -1;
+    if(RegisterParser(FUNDSET::CDCParser::ID, FUNDSET::CDCParser::TITLE) != 0)
+        return -1;
     return 0;
 }
 
@@ -137,6 +140,10 @@ int CDictObject::LoadParser()
             else if(dictid == LANGDAO::CECParser::ID)
             {
                 p.reset(new LANGDAO::CECParser(res.GetInt(0), res.GetString(1), res.GetString(2), res.GetTimestamp(3)));
+            }
+            else if(dictid == FUNDSET::CDCParser::ID)
+            {
+                p.reset(new FUNDSET::CDCParser(res.GetInt(0), res.GetString(1), res.GetString(2), res.GetTimestamp(3)));
             }
             else
             {
@@ -257,7 +264,7 @@ int CDictObject::HTMLProc(const wxString &str)
                 CDictParser* parser = GetParser(dictid);
                 if(parser != NULL)
                 {
-                    if(parser->ParserHTML(str, doc, pe, result) != 0)
+                    if(parser->ParserHTML(html, doc, pe, result) != 0)
                     {
                        
                     }

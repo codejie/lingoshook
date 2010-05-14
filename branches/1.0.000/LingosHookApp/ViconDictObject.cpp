@@ -38,7 +38,7 @@ int CECParser::Init(CDBAccess::TDatabase &db)
     return 0;
 }
 
-int CECParser::ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const
+int CECParser::ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const
 {
     if(dict == NULL)
         return -1;
