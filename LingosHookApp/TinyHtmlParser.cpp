@@ -560,7 +560,7 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
                     TNodeQueue::iterator it = nodeque.begin();
                     while(it != nodeque.end())
                     {
-                        if(it->second.type = CParserData::DT_SPECIAL)
+                        if(it->second.type == CParserData::DT_SPECIAL)
                             it->first = level;
                         else
                             break;
