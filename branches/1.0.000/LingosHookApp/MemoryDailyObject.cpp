@@ -84,14 +84,13 @@ int CManageObject::SortWords()
 
         size_t szque = it->second.size();
         loop = (szque + szmap) / szmap;
-        if(loop > 6)
-            loop = 6;
+        if(loop > 10)
+            loop = 10;
         for(int i = 0; i < loop; ++ i)
         {
             _vctScore.push_back(it->first);
         }
     }
-
     return 0;
 }
 
