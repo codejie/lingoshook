@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__LH_DEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -118,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -475,6 +475,26 @@
 			>
 			<File
 				RelativePath=".\LingosHookApp.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="wxactivex"
+			>
+			<File
+				RelativePath="..\wxactivex\IEHtmlWin.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\IEHtmlWin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\wxactivex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\wxactivex.h"
 				>
 			</File>
 		</Filter>

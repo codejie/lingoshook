@@ -424,9 +424,9 @@ BOOL SendBSTRData(enum _HookDataType_t type, const BSTR& str)
 	size_t size = ::SysStringLen(str);
 	struct _HookData_t* hd = new struct _HookData_t;
 
-	hd->size = size;
-	hd->data = new wchar_t[size];
-	wcsncpy(hd->data, str, size);
+	hd->size = size + 1;
+	hd->data = new wchar_t[hd->size];
+	wcsncpy_s(hd->data, hd->size, str, size);
 
 	::SendMessage(_hWnd, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -443,9 +443,9 @@ BOOL SendCDData(enum _HookDataType_t type, const LingosCD* data)
 
 	struct _HookData_t* hd = new struct _HookData_t;
 
-    hd->size = data->_size;
+    hd->size = data->_size + 1;
     hd->data = new wchar_t[hd->size];
-    wcsncpy(hd->data, (const wchar_t*)data->_data, hd->size);
+    wcsncpy_s(hd->data, hd->size, (const wchar_t*)data->_data, data->_size);
 
 	::SendMessage(_hWnd, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -462,9 +462,9 @@ BOOL SendWCharData(enum _HookDataType_t type, const wchar_t* data, size_t size)
 
 	struct _HookData_t* hd = new struct _HookData_t;
 
-    hd->size = size;
+    hd->size = size + 1;
     hd->data = new wchar_t[hd->size];
-    wcsncpy(hd->data, data, size);
+    wcsncpy_s(hd->data, hd->size, data, size);
 
 	::SendMessage(_hWnd, _nMsgID, (WPARAM)type, (LPARAM)hd);
 

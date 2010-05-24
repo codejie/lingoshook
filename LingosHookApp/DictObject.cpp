@@ -5,6 +5,9 @@
 #include <string>
 #include <memory>
 
+#include "wx/wfstream.h"
+#include "wx/txtstrm.h"
+
 #include "ConfigData.h"
 #include "HtmlTidyObject.h"
 #include "ViconDictObject.h"
@@ -259,7 +262,7 @@ int CDictObject::HTMLProc(const wxString &str)
             pa = pe->FindAttribute(L"dictid");
             if(pa != NULL)
             {
-                wxString dictid(pa->value.c_str(), wxConvISO8859_1);
+                wxString dictid = pa->value.c_str();//, pa->value.size());//, wxConvISO8859_1);
                 dictid = dictid.substr(1, dictid.size() - 2);
                 CDictParser* parser = GetParser(dictid);
                 if(parser != NULL)
@@ -303,6 +306,11 @@ int CDictObject::ForceSaveHTML(const wxString& str)
 
 int CDictObject::SaveWord(const wxString& word, const wxString& html, int& wordid)
 {
+
+    wxFileOutputStream output(wxT("C:\\T1.html"));
+    wxTextOutputStream ofs(output);
+    ofs.WriteString(html);
+
     CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter FROM WordTable WHERE Word = ?");
 	query.Bind(1, word);
     CDBAccess::TResult res = query.ExecuteQuery();

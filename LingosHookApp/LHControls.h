@@ -6,6 +6,8 @@
 #include "wx/treectrl.h"
 #include "wx/clntdata.h"
 
+#include "Consts.h"
+
 class CLHListBox : public wxListBox
 {
 public:
@@ -149,5 +151,54 @@ private:
 };
 
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, -1)
+
+///
+
+#ifdef __LH_USE_WXIE__
+
+#include "IEHtmlWin.h"
+
+class CLHHtmlWindow : public wxIEHtmlWin
+{
+public:
+    CLHHtmlWindow(wxWindow * parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxPanelNameStr)
+    : wxIEHtmlWin(parent, id, pos, size, style, name)
+    {
+    }
+    virtual ~CLHHtmlWindow() {}
+
+public:
+    void LoadBlankPage() { wxIEHtmlWin::LoadWString(wxT("<HTML></HTML>")); }
+    bool LoadString(const wxString& html) { return wxIEHtmlWin::LoadWString(html); }
+    void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
+};
+
+#else
+
+#include <wx/html/htmlwin.h>
+
+class CLHHtmlWindow : public wxHtmlWindow
+{
+public:
+    CLHHtmlWindow(wxWindow * parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxPanelNameStr)
+    : wxHtmlWindow(parent, id, pos, size, style, name)
+    {
+    }
+    virtual ~CLHHtmlWindow() {}
+
+public:
+    void LoadBlankPage() { wxHtmlWindow::SetPage(wxT("<HTML></HTML>")); }
+    bool LoadString(const wxString& html)
+    { 
+        wxString str = html;
+        str.Replace(_("file:///"), _(""), true);
+        return wxHtmlWindow::SetPage(str); 
+    }
+    void SetCharset(const wxString& charset) {}
+};
+
+#endif
 
 #endif
