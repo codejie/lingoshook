@@ -189,7 +189,7 @@ int CViconECDictResultParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, co
                 return -1;
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            rec.m_strWord = wxString(p->child->child->value.c_str(), wxConvISO8859_1);
+            rec.m_strWord = p->child->child->value.c_str();//wxString(p->child->child->value.c_str(), wxConvISO8859_1);
 
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
@@ -198,7 +198,7 @@ int CViconECDictResultParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, co
             }
             else
             {
-                rec.m_strSymbol = wxString(p->child->sibling->child->value.c_str(), wxConvISO8859_1);
+                rec.m_strSymbol = p->child->sibling->child->value.c_str();//wxString(p->child->sibling->child->value.c_str(), wxConvISO8859_1);
             }
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
@@ -206,7 +206,7 @@ int CViconECDictResultParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, co
             CDBAccess::TResultPair result;
             if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            result.second = wxString(p->child->value.c_str(),wxConvISO8859_1);
+            result.second = p->child->value.c_str();//wxString(p->child->value.c_str(),wxConvISO8859_1);
             result.second.Trim(false);
 
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
@@ -216,7 +216,7 @@ int CViconECDictResultParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, co
             }
             else
             {
-                result.first = StrToWC(wxString(p->child->child->value.c_str(), wxConvISO8859_1));
+                result.first = StrToWCp->child->child->value.c_str());//(wxString(p->child->child->value.c_str());//, wxConvISO8859_1);
             }
             vct.push_back(result);
         }

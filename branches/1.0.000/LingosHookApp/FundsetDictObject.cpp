@@ -81,13 +81,13 @@ int CDCParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 return -1;
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            word = wxString(p->child->child->value.c_str(), wxConvISO8859_1);
+            word = wxString(p->child->child->value.c_str());//, wxConvISO8859_1);
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
         {//result
             if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            res->m_vctRecord.push_back(wxString(p->child->value.c_str(), wxConvISO8859_1));
+            res->m_vctRecord.push_back(wxString(p->child->value.c_str()));//, wxConvISO8859_1);
 
             if(p->child->child != NULL)
             {
@@ -96,11 +96,11 @@ int CDCParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 {
                     if(pc->tag == L"FONT")
                     {
-                        res->m_strKasus = wxString(pc->value.c_str(), wxConvISO8859_1);
+                        res->m_strKasus = wxString(pc->value.c_str());//, wxConvISO8859_1);
                     }
                     else
                     {
-                        res->m_vctRecord.push_back(wxString(pc->value.c_str(), wxConvISO8859_1));
+                        res->m_vctRecord.push_back(wxString(pc->value.c_str()));//, wxConvISO8859_1);
                     }
                    
                     pc = pc->sibling;

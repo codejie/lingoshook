@@ -29,7 +29,7 @@ void CDisplayObject::AppendWord(int wordid, const wxString &word)
 void CDisplayObject::ShowWord(int wordid, const wxString& word)
 {
 	_frame->m_treeResult->DeleteAllItems();
-    _frame->m_winHTML->SetPage(_("<HTML></HTML>"));
+    _frame->m_winHTML->LoadBlankPage();
 
     CLHResultTreeItemData* data = new CLHResultTreeItemData(wordid);
 	wxTreeItemId root = _frame->m_treeResult->AddRoot(word, -1, -1, data);
@@ -47,9 +47,10 @@ void CDisplayObject::ShowWordData(const TWordData &data)
     
     _frame->m_treeResult->Expand(root);
 
-	wxString html = data.m_strHTML;
-	html.Replace(_("file:///"), _(""), true);
-	_frame->m_winHTML->SetPage(html);
+    //_frame->m_winHTML->SetCharset(wxT("UTF-8"));
+    wxWindow* fw = _frame->FindFocus();
+    _frame->m_winHTML->LoadString(data.m_strHTML);
+    fw->SetFocus();
 }
 
 void CDisplayObject::ShowResult(const CDictParser* dict, const CDictResult &result, bool expand)
@@ -63,7 +64,7 @@ void CDisplayObject::ShowResult(const CDictParser* dict, const CDictResult &resu
 void CDisplayObject::RemoveWord(int wordid)
 {
 	_frame->m_treeResult->DeleteAllItems();
-    _frame->m_winHTML->SetPage(_("<HTML></HTML>"));
+    _frame->m_winHTML->LoadBlankPage();
 
     _frame->m_listIndex->DeleteItem(wordid);
 }
@@ -271,7 +272,7 @@ void CDisplayObject::MemoryDailyPopWord(const wxString &word, int score)
     _frame->m_textMemType->SetFocus();
 
 	_frame->m_treeResult->DeleteAllItems();
-    _frame->m_winHTML->SetPage(_("<HTML></HTML>"));
+    _frame->m_winHTML->LoadBlankPage();
 
     _frame->m_textMemWord->SetLabel(word);
     _frame->m_textMemScore->SetLabel(wxString::Format(_("Score:%d"), score));
@@ -297,7 +298,7 @@ void CDisplayObject::ExceptionRaised(const wxString &html, const TinyHtmlParser:
     ShowInfo(_("Catches a EXCEPTION info.."));
 
     CExceptionRaisedDialog dlg(_frame);
-    wxString info = wxString::Format(_("%s v%s - Exception:[%d]%s\n---- HTML ----\n"), APP_TITLE, APP_VERSION, e.Number(), wxString(e.Info().c_str(), wxConvISO8859_1));
+    wxString info = wxString::Format(_("%s v%s - Exception:[%d]%s\n---- HTML ----\n"), APP_TITLE, APP_VERSION, e.Number(), wxString(e.Info().c_str()));//);//, wxConvISO8859_1);
     info += html;
 
     dlg.SetInfo(info);

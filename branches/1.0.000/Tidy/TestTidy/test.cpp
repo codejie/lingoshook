@@ -26,17 +26,20 @@ int Tidy()
 
     if(tidyOptSetBool(tdoc, TidyHtmlOut, yes) != yes)
         return -1;
-    if(tidySetCharEncoding(tdoc, "gb18030") != 0)
-        return -1;
+    //if(tidySetCharEncoding(tdoc, "raw") != 0)
+    //    return -1;
+
+    //if(tidyOptSetBool(tdoc, TidyDecorateInferredUL, yes) != yes)
+    //    return -1;
     
-//    if(tidyOptSetBool(tdoc, TidyShowWarnings, no) != yes)
-//        return -1;
-//    if(tidyOptSetInt(tdoc, TidyShowErrors, 0) != yes)
-//        return -1;
+    if(tidyOptSetBool(tdoc, TidyShowWarnings, no) != yes)
+        return -1;
+    if(tidyOptSetInt(tdoc, TidyShowErrors, 0) != yes)
+        return -1;
     if(tidyOptSetBool(tdoc, TidyForceOutput, yes) != yes)
         return -1;
     
-    if(tidyParseFile(tdoc, "c:\\test3.html") >= 0)
+    if(tidyParseFile(tdoc, "c:\\about.htm") >= 0)
     {
         TidyBuffer errbuf = {0};
         tidySetErrorBuffer( tdoc, &errbuf );      // Capture diagnostics

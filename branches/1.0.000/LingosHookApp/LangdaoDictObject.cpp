@@ -81,7 +81,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
             if(p->child == NULL || p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
             //word
-            word = wxString(p->child->child->value.c_str(), wxConvISO8859_1);
+            word = wxString(p->child->child->value.c_str());//, wxConvISO8859_1);
             //symbo
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
@@ -90,7 +90,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
             }
             else
             {
-                res->m_strSymbol = wxString(p->child->sibling->child->value.c_str(), wxConvISO8859_1);
+                res->m_strSymbol = wxString(p->child->sibling->child->value.c_str());//, wxConvISO8859_1);
             }
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
@@ -130,10 +130,10 @@ int CECParser::GetResult(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 CECResult::_result_t res;
                 if(pdiv->child->child == NULL || pdiv->child->child->type != TinyHtmlParser::ET_ELEMENT)
                     return -1;
-                res.m_eClass = StrToWC(wxString(pdiv->child->child->value.c_str(), wxConvISO8859_1));
+                res.m_eClass = StrToWC(wxString(pdiv->child->child->value.c_str()));//, wxConvISO8859_1);
                 if(pdiv->child->sibling == NULL || pdiv->child->sibling->type != TinyHtmlParser::ET_ELEMENT)
                     return -1;
-                res.m_strResult = wxString(pdiv->child->sibling->value.c_str(),wxConvISO8859_1);
+                res.m_strResult = wxString(pdiv->child->sibling->value.c_str());//,wxConvISO8859_1);
 
                 result.m_stRecord.m_vctResult.push_back(res);
             }
@@ -142,8 +142,8 @@ int CECParser::GetResult(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 CECResult::_special_t res;
                 if(pdiv->child->type != TinyHtmlParser::ET_ELEMENT)
                     return -1;
-                res.m_strSpecial = wxString(pdiv->child->value.c_str(), wxConvISO8859_1);
-                res.m_strResult = wxString(pdiv->value.c_str(), wxConvISO8859_1);
+                res.m_strSpecial = wxString(pdiv->child->value.c_str());//, wxConvISO8859_1);
+                res.m_strResult = wxString(pdiv->value.c_str());//, wxConvISO8859_1);
 
                 result.m_stRecord.m_vctSpecial.push_back(res);
             }
@@ -162,7 +162,7 @@ int CECParser::GetCommonly(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlP
     {
         if(pdiv->type == TinyHtmlParser::ET_ELEMENT)
         {
-            result.m_stRecord.m_vctCommonly.push_back(wxString(pdiv->value.c_str(), wxConvISO8859_1));
+            result.m_stRecord.m_vctCommonly.push_back(wxString(pdiv->value.c_str()));//, wxConvISO8859_1);
         }
 
         pdiv = doc->FindNextElement(pr, L"DIV", tmpstack);

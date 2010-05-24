@@ -9,6 +9,9 @@
 #include <comutil.h>
 #include <commctrl.h>
 
+#include "wx/wfstream.h"
+#include "wx/txtstrm.h"
+
 #include "LingosHookApp.h"
 #include "ConfigData.h"
 #include "HookObject.h"
@@ -396,9 +399,9 @@ int CHotkeyObject::SendData(HookDataType type, const BSTR& str)
 	size_t size = ::SysStringLen(str);
 	struct _HookData_t* hd = new struct _HookData_t;
 
-	hd->size = size;
-	hd->data = new wchar_t[size];
-	wcsncpy(hd->data, str, size);
+	hd->size = size + 1;
+	hd->data = new wchar_t[hd->size];
+	wcsncpy_s(hd->data, hd->size, str, size);
 
 	::SendMessage(_hwndFrame, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -415,9 +418,9 @@ int CHotkeyObject::SendData(HookDataType type, const wchar_t* data, size_t size)
 
 	struct _HookData_t* hd = new struct _HookData_t;
 
-	hd->size = size;
-	hd->data = new wchar_t[size];
-	wcsncpy(hd->data, data, size);
+	hd->size = size + 1;
+	hd->data = new wchar_t[hd->size];
+	wcsncpy_s(hd->data, hd->size, data, size);
 
 	::SendMessage(_hwndFrame, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -675,8 +678,11 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 		const struct _HookData_t* hd = (reinterpret_cast<const struct _HookData_t*>(lparam));
 		wxString str;
 		if(hd != NULL && hd->data != NULL)
-		{
+		{   
 			str.append(hd->data, hd->size);
+            wxFileOutputStream output(wxT("C:\\T2.html"));
+            wxTextOutputStream ofs(output);
+            ofs.WriteString(str);
 		}		
 
         if(wparam == HKT_CATCH)
