@@ -121,7 +121,7 @@ protected:
     wxStaticText* label_4;
     wxComboBox* m_comboxExpandDict;
     wxStaticText* label_9;
-    wxComboBox* m_comboxFavorityTab;
+    wxComboBox* m_listFavoriteTab;
     wxCheckBox* m_checkTrace;
     wxPanel* panel_1;
     wxPanel* panel_2;
@@ -196,8 +196,8 @@ public:
     virtual void OnMenuIndexTagRemove(wxCommandEvent& event);
     virtual void OnMenuSetTagDefault(wxCommandEvent& event);    
     virtual void OnTreeFilterContextMenu(wxCommandEvent& event);
-    virtual void OnCheckDSMIgnore(wxCommandEvent &event); // wxGlade: <event_handler>
-    virtual void OnCheckDSMClose(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnCheckIgnoreDict(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnCheckSkipHTML(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckSkipDict(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnTreeResultContextMenu(wxCommandEvent& event);
     virtual void OnMemTypeKeyDown(wxCommandEvent &event); // wxGlade: <event_handler>
