@@ -454,7 +454,7 @@ int CHookObject::Init(const CConfigData &conf)
     _bAutoHook = conf.m_iAutoHook == 1 ? true : false;
     _iIfLanguage = conf.m_iIfLanguage;
     _bOpenHotkey = conf.m_iOpenHotkey == 1 ? true : false;
-    _bHookCD = conf.m_iIgnoreDict == 0 ? false: true;
+    _bHookCD = (conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
 
     if(_bOpenHotkey)
     {

@@ -207,19 +207,28 @@ void CDictObject::CacheWord(const wxString& word)
 int CDictObject::HTMLProc(const wxString &str, int mode)
 {
     if(mode == 0)
-    {
+    {//normal
         return HTMLProc(str);
     }
     else if(mode == 1)
-    {
+    {//ignore
         if(HTMLProc(str) != 0)
         {
             return ForceSaveHTML(str);
         }
     }
+    else if(mode == 2)
+    {//Skip dict
+        return ForceSaveHTML(str);
+    }
+    else if(mode == 3)
+    {//Skip HTML
+        return -1;
+    }
     else
     {
-        return ForceSaveHTML(str);
+        return -1;
+        //return ForceSaveHTML(str);
     }
     return 0;
 }
