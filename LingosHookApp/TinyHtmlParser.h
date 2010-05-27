@@ -81,12 +81,14 @@ public:
 public:
     std::wstring tag;
     std::wstring value;
+    size_t start;
+    size_t end;
 };
 
 class CParserData
 {
 public:
-    enum DataType { DT_UNKNOWN = -1, DT_TAG = 0, DT_VALUE, DT_END, DT_DONE, DT_TAG_VALUE, DT_BROKEN };
+    enum DataType { DT_UNKNOWN = -1, DT_TAG = 0, /*DT_VALUE,*/ DT_END, DT_SPECIAL, /*DT_TAG_VALUE*//*, DT_BROKEN*/ };
     typedef std::pair<size_t, size_t> TRange;//start + end;
     typedef std::vector<TRange> TValueVector;
 public:
@@ -96,12 +98,16 @@ public:
     }
     virtual ~CParserData() {}
 
+    int GetTitle(const std::wstring& html);
+
     void Show(std::wostream& os) const;
     void Show(std::wostream& os, const std::wstring& html) const;
+
 public:
     DataType type;
-    TRange tag;
+    TRange range;
     TValueVector value;
+    std::wstring title;
 };
 
 class CDocumentObject
@@ -114,7 +120,19 @@ protected:
     static const wchar_t TAG_AND       =   L'&';
 
     typedef std::stack<CParserData> TDataStack;
-    typedef std::pair<size_t, CParserData> TNodeData;//level + tag;
+    //typedef std::pair<size_t, CParserData> TNodeData;//level + tag;
+    struct TNodeData
+    {
+        TNodeData() {}
+        TNodeData(size_t l, size_t s, size_t e, const CParserData& d)
+            : level(l), start(s), end(e), data(d)
+        {
+        }
+        size_t level;
+        size_t start;
+        size_t end;
+        CParserData data;
+    };
     typedef std::deque<TNodeData> TNodeQueue;
 public:
     typedef std::stack<const CElementObject*> TElementStack;
@@ -144,12 +162,14 @@ protected:
 private:
     int PreParserLT(const std::wstring& html, std::wstring::size_type& pos, CParserData& data);
 
-    int PushValueData(CParserData::DataType type, size_t start, size_t end, TDataStack& datastack) const;
+    int PushValueData(/*CParserData::DataType type, */size_t start, size_t end, TDataStack& datastack) const;
     int PushTagData(const std::wstring& html, CParserData& data, TDataStack& datastack, TNodeQueue& nodeque) const;
     int PreParserBroken(const std::wstring& html, TDataStack& datastack, TNodeQueue& nodeque) const;
     
-    int CheckSpecialTag(const std::wstring& html, const CParserData& data) const;
-    int CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const;
+    //int CheckSpecialTag(const std::wstring& html, const CParserData& data) const;
+    int IsSpecialTag(const CParserData& tag) const;
+    int IsLineTag(const CParserData& tag) const;
+    //int CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const;
     CElementObject* MakeElement(const std::wstring& html, const TNodeData& node, CElementObject* parent, CElementObject* sibling) const;
 
     void CDocumentObject::ShowElement(std::wostream& os, const CElementObject* e) const;

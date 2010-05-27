@@ -61,7 +61,7 @@ int CLHListBox::FindItem(const wxString &item)
             if(str == item)
             {
                 SendEvent(wxEVT_COMMAND_LH_LISTBOX_FINDITEM, i);
-                SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, i);
+                //SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, i);
                 return 0;
             }
             -- sz;
@@ -152,7 +152,7 @@ void CLHFilterTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
     {
         this->SelectItem(id, true);
         CLHFilterTreeItemData* idata = (CLHFilterTreeItemData*)(this->GetItemData(id));
-        if(idata != NULL && idata->Type() == CLHFilterTreeItemData::IT_WORD)
+        if(idata != NULL)// && idata->Type() == CLHFilterTreeItemData::IT_WORD)
         {
             wxCommandEvent ev(wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, GetId());
             ev.SetEventObject(this);
@@ -197,11 +197,8 @@ END_EVENT_TABLE()
 void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
 {
     int key = event.GetKeyCode();
-    if(!::wxIsdigit(key))
-    {
-        event.Skip();
-    }
-    else
+    
+    if(::wxIsdigit(key) || key == 126 || key == VK_ESCAPE)
     {
         wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN);
         ev.SetEventObject(this);
@@ -209,6 +206,10 @@ void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
         ev.SetInt(key);
 
         GetEventHandler()->ProcessEvent(ev);
+    }
+    else
+    {
+        event.Skip();
     }
 }
 

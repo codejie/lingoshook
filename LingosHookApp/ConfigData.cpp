@@ -16,8 +16,14 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iHTMLSave(1)
 , m_iHTMLLoad(1)
 , m_iExpandDict(-1)
-, m_iIgnoreDict(0)
+//, m_iIgnoreDict(0)
 , m_iAutoSpeak(0)
+, m_iUseTidy(1)
+//, m_iSaveUseTidy(0)
+//, m_iSkipDict(1)
+//, m_iSkipHtml(0)
+, m_iFavoriteTab(1)
+, m_iDataProcFlag(1)
 {
 }
 
@@ -182,10 +188,22 @@ int CConfigData::Load()
         m_iHTMLLoad = 1;
     if(GetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         m_iExpandDict = -1;
-    if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
-        m_iIgnoreDict = 0;
+    //if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+    //    m_iIgnoreDict = 0;
     if(GetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         m_iAutoSpeak = 0;
+    if(GetData(CA_USETIDY, m_iUseTidy) != 0)
+        m_iUseTidy = 1;
+    //if(GetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    m_iSaveUseTidy = 0;
+    //if(GetData(CA_SKIPDICT, m_iSkipDict) != 0)
+    //    m_iSkipDict = 1;
+    //if(GetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+    //    m_iSkipHtml = 0;
+    if(GetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
+        m_iFavoriteTab = 0;
+    if(GetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+        m_iDataProcFlag = 1;
     return 0;
 }
 
@@ -211,9 +229,21 @@ int CConfigData::Save()
         return -1;
     if(SetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         return -1;
-    if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
-        return -1;
+    //if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+    //    return -1;
     if(SetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
+        return -1;
+    if(SetData(CA_USETIDY, m_iUseTidy) != 0)
+        return -1;
+    //if(SetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    return -1;
+    //if(SetData(CA_SKIPDICT, m_iSkipDict) != 0)
+    //    return -1;
+    //if(SetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+    //    return -1;
+    if(SetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
+        return -1;
+    if(SetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
         return -1;
     return 0;
 }

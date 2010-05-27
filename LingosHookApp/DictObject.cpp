@@ -5,10 +5,14 @@
 #include <string>
 #include <memory>
 
-#include "ConfigData.h"
+#include "wx/wfstream.h"
+#include "wx/txtstrm.h"
 
+#include "ConfigData.h"
+#include "HtmlTidyObject.h"
 #include "ViconDictObject.h"
 #include "LangdaoDictObject.h"
+#include "FundsetDictObject.h"
 #include "TriggerObject.h"
 #include "DictObject.h"
 
@@ -91,6 +95,8 @@ int CDictObject::AddKnownParser()
         return -1;
     if(RegisterParser(LANGDAO::CECParser::ID, LANGDAO::CECParser::TITLE) != 0)
         return -1;
+    if(RegisterParser(FUNDSET::CDCParser::ID, FUNDSET::CDCParser::TITLE) != 0)
+        return -1;
     return 0;
 }
 
@@ -137,6 +143,10 @@ int CDictObject::LoadParser()
             else if(dictid == LANGDAO::CECParser::ID)
             {
                 p.reset(new LANGDAO::CECParser(res.GetInt(0), res.GetString(1), res.GetString(2), res.GetTimestamp(3)));
+            }
+            else if(dictid == FUNDSET::CDCParser::ID)
+            {
+                p.reset(new FUNDSET::CDCParser(res.GetInt(0), res.GetString(1), res.GetString(2), res.GetTimestamp(3)));
             }
             else
             {
@@ -197,19 +207,28 @@ void CDictObject::CacheWord(const wxString& word)
 int CDictObject::HTMLProc(const wxString &str, int mode)
 {
     if(mode == 0)
-    {
+    {//normal
         return HTMLProc(str);
     }
     else if(mode == 1)
-    {
+    {//ignore
         if(HTMLProc(str) != 0)
         {
             return ForceSaveHTML(str);
         }
     }
+    else if(mode == 2)
+    {//Skip dict
+        return ForceSaveHTML(str);
+    }
+    else if(mode == 3)
+    {//Skip HTML
+        return -1;
+    }
     else
     {
-        return ForceSaveHTML(str);
+        return -1;
+        //return ForceSaveHTML(str);
     }
     return 0;
 }
@@ -220,6 +239,13 @@ int CDictObject::HTMLProc(const wxString &str)
 
     //find dict
     TinyHtmlParser::CDocumentObject doc;
+
+    if(_config.m_iUseTidy == 1)
+    {
+        if(CHtmlTidyObject::Tidy(html, html) != 0)
+            return -1;
+    }
+
     try
     {
         if(doc.Load(html, false) != 0)
@@ -245,12 +271,12 @@ int CDictObject::HTMLProc(const wxString &str)
             pa = pe->FindAttribute(L"dictid");
             if(pa != NULL)
             {
-                wxString dictid(pa->value.c_str(), wxConvISO8859_1);
+                wxString dictid = pa->value.c_str();//, pa->value.size());//, wxConvISO8859_1);
                 dictid = dictid.substr(1, dictid.size() - 2);
                 CDictParser* parser = GetParser(dictid);
                 if(parser != NULL)
                 {
-                    if(parser->ParserHTML(str, doc, pe, result) != 0)
+                    if(parser->ParserHTML(html, doc, pe, result) != 0)
                     {
                        
                     }
@@ -262,6 +288,9 @@ int CDictObject::HTMLProc(const wxString &str)
         }
         pe = doc.FindNextElement();
     }
+
+    //str = html.c_str();
+
     if(SaveResult(str, result) == 0)
     {
         g_objTrigger.OnResultSave(result);
@@ -286,6 +315,11 @@ int CDictObject::ForceSaveHTML(const wxString& str)
 
 int CDictObject::SaveWord(const wxString& word, const wxString& html, int& wordid)
 {
+
+    wxFileOutputStream output(wxT("C:\\T1.html"));
+    wxTextOutputStream ofs(output);
+    ofs.WriteString(html);
+
     CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter FROM WordTable WHERE Word = ?");
 	query.Bind(1, word);
     CDBAccess::TResult res = query.ExecuteQuery();

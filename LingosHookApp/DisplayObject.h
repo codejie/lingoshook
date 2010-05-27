@@ -56,6 +56,7 @@ protected:
 private:
     void ShowViconECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result);
     void ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result);
+    void ShowFundsetDCDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result);
 protected:
     LingosHookFrame* _frame;
 };

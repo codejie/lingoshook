@@ -1,6 +1,8 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
+#include "wx/wfstream.h"
+#include "wx/txtstrm.h"
 
 #include "TriggerObject.h"
 
@@ -146,6 +148,11 @@ void CTriggerObject::OnWordResultGetOver(int wordid, const TWordData& data)
         _objSpeak->Speak(data.m_strWord);
 
     _objTag->GetTagByWord(wordid);
+
+    wxFileOutputStream output(wxT("C:\\T.html"));
+    wxTextOutputStream ofs(output);
+    ofs.WriteString(data.m_strHTML);
+
     _objDisplay->ShowWordData(data);
 }
 
@@ -157,6 +164,11 @@ void CTriggerObject::OnTagLoad(int tagid, const CTagObject::TRecord &record)
 void CTriggerObject::OnTagDefLoad(int tagid, const CTagObject::TRecord &record)
 {
     _objDisplay->ShowDefaultTag(tagid, record);
+
+    if(_dataConfig->m_iDataSyncTag == 1)
+    {
+        _objFilterShow->UpdateTitle(tagid);
+    }
 }
 
 void CTriggerObject::OnTagInsert(int tagid, const CTagObject::TRecord& record)

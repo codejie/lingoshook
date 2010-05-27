@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__LH_DEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,10 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="LHSpeak.lib sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
+				AdditionalDependencies="LHSpeak.lib tidy.lib sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
 				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(TIDY_ROOT)\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -118,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -137,10 +137,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sqlite3.lib wxcode_msw28u_wxsqlite3.lib wxbase28u.lib wxmsw28u_core.lib comctl32.lib rpcrt4.lib"
+				AdditionalDependencies="tidy.lib sqlite3.lib wxcode_msw28u_wxsqlite3.lib wxbase28u.lib wxmsw28u_core.lib comctl32.lib rpcrt4.lib"
 				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_lib&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(TIDY_ROOT)\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_lib&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -223,7 +223,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FundsetDictObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HookObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlTidyObject.cpp"
 				>
 			</File>
 			<File
@@ -361,7 +369,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FundsetDictObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HookObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlDictObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlTidyObject.h"
 				>
 			</File>
 			<File
@@ -459,6 +479,26 @@
 			>
 			<File
 				RelativePath=".\LingosHookApp.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="wxactivex"
+			>
+			<File
+				RelativePath="..\wxactivex\IEHtmlWin.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\IEHtmlWin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\wxactivex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\wxactivex.h"
 				>
 			</File>
 		</Filter>

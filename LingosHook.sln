@@ -1,10 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LHTest", "LHTest\LHTest.vcproj", "{ED56D78A-50FD-4770-BC35-62B89E0AA4DB}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLiteTest", "SQLiteTest\SQLiteTest.vcproj", "{99E87D86-7A79-4DA8-A42A-F893ECEAEE92}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LingosHookApp", "LingosHookApp\LingosHookApp.vcproj", "{F8F1F769-DE72-4747-9690-9F594B9983BC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097} = {144B3C27-0DB8-4DB2-A3F3-E005A5E57097}
@@ -15,8 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HtmlTest", "HtmlTest\HtmlTe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LHSpeak", "LHSpeak\LHSpeak.vcproj", "{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-Proj", "Test-Proj\Test-Proj.vcproj", "{770B0C8C-2201-45DA-9AF7-331D5956F0F6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LingosHook", "LingosHook\LingosHook.vcproj", "{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}"
 EndProject
 Global
@@ -25,14 +19,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ED56D78A-50FD-4770-BC35-62B89E0AA4DB}.Debug|Win32.ActiveCfg = Debug|Win32
-		{ED56D78A-50FD-4770-BC35-62B89E0AA4DB}.Debug|Win32.Build.0 = Debug|Win32
-		{ED56D78A-50FD-4770-BC35-62B89E0AA4DB}.Release|Win32.ActiveCfg = Release|Win32
-		{ED56D78A-50FD-4770-BC35-62B89E0AA4DB}.Release|Win32.Build.0 = Release|Win32
-		{99E87D86-7A79-4DA8-A42A-F893ECEAEE92}.Debug|Win32.ActiveCfg = Debug|Win32
-		{99E87D86-7A79-4DA8-A42A-F893ECEAEE92}.Debug|Win32.Build.0 = Debug|Win32
-		{99E87D86-7A79-4DA8-A42A-F893ECEAEE92}.Release|Win32.ActiveCfg = Release|Win32
-		{99E87D86-7A79-4DA8-A42A-F893ECEAEE92}.Release|Win32.Build.0 = Release|Win32
 		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Debug|Win32.Build.0 = Debug|Win32
 		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release|Win32.ActiveCfg = Release|Win32
@@ -45,10 +31,6 @@ Global
 		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Debug|Win32.Build.0 = Debug|Win32
 		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release|Win32.ActiveCfg = Release|Win32
 		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release|Win32.Build.0 = Release|Win32
-		{770B0C8C-2201-45DA-9AF7-331D5956F0F6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{770B0C8C-2201-45DA-9AF7-331D5956F0F6}.Debug|Win32.Build.0 = Debug|Win32
-		{770B0C8C-2201-45DA-9AF7-331D5956F0F6}.Release|Win32.ActiveCfg = Release|Win32
-		{770B0C8C-2201-45DA-9AF7-331D5956F0F6}.Release|Win32.Build.0 = Release|Win32
 		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Debug|Win32.ActiveCfg = Debug|Win32
 		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Debug|Win32.Build.0 = Debug|Win32
 		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release|Win32.ActiveCfg = Release|Win32

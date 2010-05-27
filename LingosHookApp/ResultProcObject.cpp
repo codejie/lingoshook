@@ -35,7 +35,7 @@ void CResultProcObject::HTMLProc(const wxString &str)
             pa = pe->FindAttribute(L"dictid");
             if(pa != NULL)
             {
-                wxString dictid(pa->value.c_str(), wxConvISO8859_1);
+                wxString dictid(pa->value.c_str());//, wxConvISO8859_1);
                 dictid = dictid.substr(1, dictid.size() - 2);
                 if(_objDictParser.get() == NULL || _objDictParser.get()->GetID() != dictid)
                 {

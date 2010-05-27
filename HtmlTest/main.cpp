@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 
+#include "HtmlTidyObject.h"
 #include "TinyHtmlParser.h"
 
 using namespace TinyHtmlParser;
@@ -91,10 +92,37 @@ int Test()
 //    std::wstring str = \
 //L"<DIV style=\"MARGIN: 0px 0px 5px\"><DIV style=\"MARGIN: 4px 0px\">超文字标记语言, 为因特网书写网页的语言 (计算机用语)</DIV></DIV>";
 
-    std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
+    //std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
 
+    //std::wstring str = L"<DIV style=\"MARGIN: 4px 0px\">Art. 中性单数定冠词。<BR>现代德语的四个格(Kasus)主要是通过冠词来显示。中性名词：<BR>单数：第一格 das 第二格 des 第三格 dem 第四格 das<BR>复数：第一格 die 第二格 der 第三格 den 第四格 die<BR>(dem pron) (用于中性名词: das, dessen, dem, das) 这,那<BR>(rel pron) (变化 das, dessen, dem, das) 这,那</DIV>";
+
+ //   std::wstring str = L"<DIV id=lingoes_dictarea></DIV>"
+ //L"<DIV id=dict_E1C27E806399D047822B6650194A3D32 style=\"PADDING-RIGHT: 10px; PADDING-LEFT: 10px; FONT-SIZE: 10.5pt; PADDING-BOTTOM: 0px; WIDTH: 100%; LINE-HEIGHT: 1.2em; PADDING-TOP: 10px; FONT-FAMILY: 'Tahoma'\" groupid=\"4\" dictid=\"E1C27E806399D047822B6650194A3D32\">"
+ //L"<TABLE onselectstart=\"return true\" id=dict_head_E1C27E806399D047822B6650194A3D32 cellSpacing=0 cellPadding=0 border=0>"
+ //L"<TBODY>"
+ //L"<TR>"
+ //L"<TD style=\"BORDER-RIGHT: #92b0dd 1px solid; BORDER-TOP: #92b0dd 1px solid; FONT-SIZE: 9pt; BACKGROUND: #cfddf0; BORDER-LEFT: #92b0dd 1px solid; COLOR: #000080; LINE-HEIGHT: 1em; BORDER-BOTTOM: #92b0dd 1px solid; FONT-FAMILY: ''\" noWrap>"
+ //L"<DIV class=btn2_mouse_out id=dict_title_E1C27E806399D047822B6650194A3D32 style=\"MARGIN: 0px 3px 1px 0px; CURSOR: default\"><IMG height=16 hspace=3 src=\"file:///D:/Profiles/grp436/Local%20Settings/Application%20Data/Lingoes/Translator/temp/dict/E1C27E806399D047822B6650194A3D32/icon.png\" width=16 align=absMiddle border=0><SPAN style=\"PADDING-RIGHT: 4px; PADDING-LEFT: 2px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px\">Vicon English-Chinese(S) Dictionary</SPAN> </DIV></TD>"
+ //L"<TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"><IMG style=\"DISPLAY: none\" height=8 hspace=5 src=\"file:///C:/Program%20Files/Lingoes/Translator2.7/dict/image/sst.png\" width=11 align=absMiddle border=0> </TD>"
+ //L"<TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\" align=right width=\"100%\">"
+ //L"<DIV style=\"OVERFLOW: hidden; WIDTH: 11px; CURSOR: hand; MARGIN-RIGHT: 10px; HEIGHT: 11px\"><IMG onmouseup=\"this.style.marginLeft = '-11px'\" onmousedown=\"this.style.marginLeft = '-11px'\" id=dict_remberword_E1C27E806399D047822B6650194A3D32 onmouseover=\"this.style.marginLeft = '-11px'\" title=\"Add the word to notebook\" style=\"MARGIN-TOP: 0px; MARGIN-LEFT: 0px\" onclick=\"window.navigate('app://remberword/E1C27E806399D047822B6650194A3D32-4') ;\" onmouseout=\"this.style.marginLeft = '0px'\" height=11 src=\"file:///C:/Program%20Files/Lingoes/Translator2.7/dict/image/remberword.png\" width=22 border=0></DIV></TD>"
+ //L"<TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\">"
+ //L"<DIV style=\"OVERFLOW: hidden; WIDTH: 11px; CURSOR: hand; HEIGHT: 11px\"><IMG onmouseup=\"this.style.marginLeft = '-11px'\" onmousedown=\"this.style.marginLeft = '-11px'\" id=dict_show_E1C27E806399D047822B6650194A3D32 onmouseover=\"this.style.marginLeft = '-11px'\" title=\"Minimize result\" style=\"MARGIN-TOP: 0px; MARGIN-LEFT: 0px\" onclick=\"window.navigate('app://hidemeaning/E1C27E806399D047822B6650194A3D32-4') ; this.style.marginTop = (parseInt(this.style.marginTop) == 0) ? '-11px' : '0px' ;\" onmouseout=\"this.style.marginLeft = '0px'\" height=22 src=\"file:///C:/Program%20Files/Lingoes/Translator2.7/dict/image/expand.png\" width=22 border=0></DIV></TD></TR></TBODY></TABLE>"
+ //L"<DIV id=dict_body_E1C27E806399D047822B6650194A3D32>"
+ //L"<DIV id=dict_gls_E1C27E806399D047822B6650194A3D32>"
+ //L"<DIV style=\"MARGIN: 5px 0px\">"
+ //L"<DIV style=\"WIDTH: 100%\">"
+ //L"<DIV style=\"FLOAT: left; LINE-HEIGHT: normal\"><IMG height=11 src=\"file:///C:/Program%20Files/Lingoes/Translator2.7/dict/image/entry_p.png\" width=10 align=absMiddle border=0>&nbsp;</DIV>"
+ //L"<DIV style=\"OVERFLOW-X: hidden; WIDTH: 100%\">"
+ //L"<DIV style=\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"><SPAN style=\"FONT-SIZE: 10.5pt; COLOR: #000000; LINE-HEIGHT: normal\"><B>about</B></SPAN> &nbsp;<SPAN style=\"FONT-SIZE: 10.5pt; LINE-HEIGHT: normal; FONT-FAMILY: 'Lingoes Unicode'\">[<FONT color=#009900>a·bout || ?'ba?t</FONT>]</SPAN></DIV>"
+ //L"<DIV style=\"MARGIN: 0px 0px 5px\">"
+ //L"<DIV style=\"MARGIN: 4px 0px\"><FONT color=#c00000>adv.</FONT> &nbsp;在四周; 在附近, 在近处; 到处; 大约</DIV></DIV>"
+ //L"<DIV style=\"MARGIN: 0px 0px 5px\">"
+ //L"<DIV style=\"MARGIN: 4px 0px\"><FONT color=#c00000>prep.</FONT> &nbsp;在附近; 在...周围; 关于#在四周; 在附近, 在近处; 到处; 大约</DIV></DIV></DIV></DIV></DIV></DIV></DIV></DIV>";
+
+    std::wstring str = L"<HTML><BODY>12345</BODY><BR>67890<IMG></HTML>";
     //std::wstring tmp, str;
-    //std::wifstream ifs("C:\\test.html");
+    //std::wifstream ifs("C:\\v.html");
     //while(!ifs.eof())
     //{
     //    std::getline(ifs, tmp);
@@ -103,10 +131,17 @@ int Test()
     ////ifs >> str;
     //ifs.close();
 
+    //std::wstring s;
+    //CHtmlTidyObject::Tidy(str, s);
+
+    //std::wofstream ofs("C:\\out.html");
+    //ofs << s << std::endl;
+    //ofs.close();
+
     CDocumentObject doc;
     try
     {
-        doc.Load(str, false);
+        doc.Load(str, true);
     }
     catch(const CExceptionObject& e)
     {
@@ -114,9 +149,16 @@ int Test()
     }
 
     setlocale(LC_ALL, "chs");
+
     doc.Show(std::wcout);
 
-    std::cout << "\n----------------" << std::endl;
+    std::wcout << str.substr(doc.Root()->start, doc.Root()->end - doc.Root()->start + 1) << std::endl;
+    std::wcout << str.substr(doc.Root()->child->start, doc.Root()->child->end - doc.Root()->child->start + 1) << std::endl;
+    std::wcout << str.substr(doc.Root()->child->sibling->start, doc.Root()->child->sibling->end - doc.Root()->child->sibling->start + 1) << std::endl;
+    std::wcout << str.substr(doc.Root()->child->sibling->sibling->start, doc.Root()->child->sibling->sibling->end - doc.Root()->child->sibling->sibling->start + 1) << std::endl;
+
+
+    std::wcout << L"\n----------------" << std::endl;
 
 //    const CElementObject* pe = doc.FindFirstElement(L"DIV");
 //    

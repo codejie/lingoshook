@@ -38,7 +38,7 @@ int CECParser::Init(CDBAccess::TDatabase &db)
     return 0;
 }
 
-int CECParser::ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const
+int CECParser::ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const
 {
     if(dict == NULL)
         return -1;
@@ -81,7 +81,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 return -1;
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            word = wxString(p->child->child->value.c_str(), wxConvISO8859_1);
+            word = wxString(p->child->child->value.c_str());//, wxConvISO8859_1);
 
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
@@ -90,7 +90,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
             }
             else
             {
-                res->m_strSymbol = wxString(p->child->sibling->child->value.c_str(), wxConvISO8859_1);
+                res->m_strSymbol = wxString(p->child->sibling->child->value.c_str());//, wxConvISO8859_1);
             }
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
@@ -99,7 +99,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
 
             if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            rec.m_strResult = wxString(p->child->value.c_str(),wxConvISO8859_1);
+            rec.m_strResult = wxString(p->child->value.c_str());//,wxConvISO8859_1);
             rec.m_strResult.Trim(false);
 
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
@@ -109,7 +109,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
             }
             else
             {
-                rec.m_eClass = StrToWC(wxString(p->child->child->value.c_str(), wxConvISO8859_1));
+                rec.m_eClass = StrToWC(wxString(p->child->child->value.c_str()));//, wxConvISO8859_1);
             }
             res->m_vctRecord.push_back(rec);            
         }

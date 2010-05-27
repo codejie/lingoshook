@@ -1,7 +1,7 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
-
+#include "ConfigData.h"
 #include "FilterShowObject.h"
 
 
@@ -263,6 +263,7 @@ int CDateMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word,
 /////
 CTagMode::CTagMode()
 : CBase(FM_TAG)
+, _iDefaultTag(-1)
 {
 }
 
@@ -300,6 +301,27 @@ int CTagMode::PreLoad(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree)
     tree->DeleteAllItems();
 
     wxTreeItemId root = tree->AddRoot(_("Tags"));
+    
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT IntVal FROM ConfigTable WHERE Attr = ?");
+        query.Bind(1, CConfigData::CA_DEFAULTTAG);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(!res.Eof())
+        {
+            _iDefaultTag = res.GetInt(0);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
 
     try
     {
@@ -332,7 +354,11 @@ void CTagMode::ShowTag(CLHFilterTreeCtrl *tree, const wxTreeItemId& root, int ta
 {
     CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_TAG, tagid);
     wxTreeItemId id = tree->AppendItem(root, title, -1, -1, data);
-    _mapTag.insert(std::make_pair(tagid, std::make_pair(title, id)));        
+    _mapTag.insert(std::make_pair(tagid, std::make_pair(title, id)));
+    if(tagid == _iDefaultTag)
+    {
+        tree->SetItemBold(id, true);
+    }
 }
 
 int CTagMode::ShowWord(CLHFilterTreeCtrl *tree, int tagid, int wordid, const wxString &word)
@@ -376,6 +402,44 @@ int CTagMode::AddTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id
 int CTagMode::RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id)
 {
     return LoadWords(db, tree);
+}
+
+int CTagMode::UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id)
+{
+    TTagMap::const_iterator it = _mapTag.find(_iDefaultTag);
+    if(it == _mapTag.end())
+        return -1;
+
+    tree->SetItemBold(it->second.second, false);
+
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT IntVal FROM ConfigTable WHERE Attr = ?");
+        query.Bind(1, CConfigData::CA_DEFAULTTAG);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(!res.Eof())
+        {
+            _iDefaultTag = res.GetInt(0);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+
+    it = _mapTag.find(_iDefaultTag);
+    if(it == _mapTag.end())
+        return -1;
+
+    tree->SetItemBold(it->second.second, true);
+
+    return 0;
 }
 
 //int CTagMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)
@@ -631,18 +695,48 @@ int CScoreMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int w
     tree->AppendItem(itemid, word, -1, -1, cd);
     
     UpdateItemText(tree, score, itemid);
+
     return 0;
 }
 
 int CScoreMode::RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)
 {
+    for(TScoreMap::const_iterator it = _mapScore.begin(); it != _mapScore.end(); ++ it)
+    {
+        if(it->second.IsOk())
+        {
+            wxTreeItemIdValue cookie;
+            wxTreeItemId id = tree->GetFirstChild(it->second, cookie);
+            while(id.IsOk())
+            {
+                const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)tree->GetItemData(id);
+                if(cd->ID() == wordid)
+                {
+                    tree->Delete(id);
+                    UpdateItemText(tree, it->first, it->second);
+                    return 0;
+                }
+                id = tree->GetNextChild(it->second, cookie);
+            }
+        }
+    }
+
+    return 0;
+}
+
+int CScoreMode::UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
+{
     wxString word;
     int score;
     if(GetWordData(db, wordid, word, score) != 0)
         return -1;
-    
-    for(int i = -2; i < 2; ++ i)
+
+    bool find = false;
+
+    for(int i = -2; i <= 2; ++ i)
     {
+        if(score + i < 1 || i == 0)
+            continue;
         wxTreeItemId itemid = GetItemID(tree, score + i);
         if(itemid.IsOk())
         {
@@ -653,20 +747,30 @@ int CScoreMode::RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, in
                 const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)tree->GetItemData(id);
                 if(cd->ID() == wordid)
                 {
+                    find = true;
+
                     tree->Delete(id);
                     UpdateItemText(tree, score + i, itemid);
-                    return 0;
+                    break;
                 }
                 id = tree->GetNextChild(itemid, cookie);
             }
         }
-    }
+        if(find == true)
+            break;
+    }    
+
+    wxTreeItemId itemid = GetItemID(tree, score);
+    if(!itemid.IsOk())
+        return -1;
+
+    CLHFilterTreeItemData* cd = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_WORD, wordid);
+    tree->AppendItem(itemid, word, -1, -1, cd);
+    
+    UpdateItemText(tree, score, itemid);
 
     return 0;
-}
 
-int CScoreMode::UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
-{
     if(RemoveWord(db, tree, wordid) != 0)
         return -1;
 
@@ -681,6 +785,8 @@ int CScoreMode::GetWordData(CDBAccess::TDatabase &db, int wordid, wxString &word
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
+            return -1;
+        if(res.Eof())
             return -1;
         
         word = res.GetString(0);
@@ -739,6 +845,13 @@ int CFilterShowObject::RemoveTitle(int id)
     if(_objFilter.get() == NULL)
         return -1;
     return _objFilter->RemoveTitle(_db, _tree, id);
+}
+
+int CFilterShowObject::UpdateTitle(int id)
+{
+    if(_objFilter.get() == NULL)
+        return -1;
+    return _objFilter->UpdateTitle(_db, _tree, id);
 }
 
 int CFilterShowObject::AddWord(int wordid)
