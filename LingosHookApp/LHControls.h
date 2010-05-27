@@ -169,8 +169,19 @@ public:
     virtual ~CLHHtmlWindow() {}
 
 public:
-    void LoadBlankPage() { wxIEHtmlWin::LoadWString(wxT("<HTML></HTML>")); }
-    bool LoadString(const wxString& html) { return wxIEHtmlWin::LoadWString(html); }
+    void LoadBlankPage() 
+    {
+        wxWindow* fw = this->FindFocus();
+        wxIEHtmlWin::LoadWString(wxT("<HTML><!-- created by Codejie(codejie@gmail.com) --></HTML>"));
+        fw->SetFocus();
+    }
+    bool LoadString(const wxString& html)
+    { 
+        wxWindow* fw = this->FindFocus();
+        wxIEHtmlWin::LoadWString(html); 
+        fw->SetFocus();
+        return true;
+    }
     void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
 };
 
@@ -189,7 +200,7 @@ public:
     virtual ~CLHHtmlWindow() {}
 
 public:
-    void LoadBlankPage() { wxHtmlWindow::SetPage(wxT("<HTML></HTML>")); }
+    void LoadBlankPage() { wxHtmlWindow::SetPage(wxT("<HTML><HTML><!-- created by Codejie(codejie@gmail.com) --></HTML></HTML>")); }
     bool LoadString(const wxString& html)
     { 
         wxString str = html;

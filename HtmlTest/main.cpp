@@ -94,7 +94,7 @@ int Test()
 
     //std::wstring str = L"<HTML>=====<SPARATOR>s-value</SPARATOR>++++++<BODY A=\"AA\">{123}<BR>[456]</BODY><IMG>*****</H";
 
-    std::wstring str = L"<DIV style=\"MARGIN: 4px 0px\">Art. 中性单数定冠词。<BR>现代德语的四个格(Kasus)主要是通过冠词来显示。中性名词：<BR>单数：第一格 das 第二格 des 第三格 dem 第四格 das<BR>复数：第一格 die 第二格 der 第三格 den 第四格 die<BR>(dem pron) (用于中性名词: das, dessen, dem, das) 这,那<BR>(rel pron) (变化 das, dessen, dem, das) 这,那</DIV>";
+    //std::wstring str = L"<DIV style=\"MARGIN: 4px 0px\">Art. 中性单数定冠词。<BR>现代德语的四个格(Kasus)主要是通过冠词来显示。中性名词：<BR>单数：第一格 das 第二格 des 第三格 dem 第四格 das<BR>复数：第一格 die 第二格 der 第三格 den 第四格 die<BR>(dem pron) (用于中性名词: das, dessen, dem, das) 这,那<BR>(rel pron) (变化 das, dessen, dem, das) 这,那</DIV>";
 
  //   std::wstring str = L"<DIV id=lingoes_dictarea></DIV>"
  //L"<DIV id=dict_E1C27E806399D047822B6650194A3D32 style=\"PADDING-RIGHT: 10px; PADDING-LEFT: 10px; FONT-SIZE: 10.5pt; PADDING-BOTTOM: 0px; WIDTH: 100%; LINE-HEIGHT: 1.2em; PADDING-TOP: 10px; FONT-FAMILY: 'Tahoma'\" groupid=\"4\" dictid=\"E1C27E806399D047822B6650194A3D32\">"
@@ -120,6 +120,7 @@ int Test()
  //L"<DIV style=\"MARGIN: 0px 0px 5px\">"
  //L"<DIV style=\"MARGIN: 4px 0px\"><FONT color=#c00000>prep.</FONT> &nbsp;在附近; 在...周围; 关于#在四周; 在附近, 在近处; 到处; 大约</DIV></DIV></DIV></DIV></DIV></DIV></DIV></DIV>";
 
+    std::wstring str = L"<HTML><BODY>12345</BODY><BR>67890<IMG></HTML>";
     //std::wstring tmp, str;
     //std::wifstream ifs("C:\\v.html");
     //while(!ifs.eof())
@@ -140,7 +141,7 @@ int Test()
     CDocumentObject doc;
     try
     {
-        doc.Load(str, false);
+        doc.Load(str, true);
     }
     catch(const CExceptionObject& e)
     {
@@ -151,7 +152,13 @@ int Test()
 
     doc.Show(std::wcout);
 
-    std::cout << "\n----------------" << std::endl;
+    std::wcout << str.substr(doc.Root()->start, doc.Root()->end - doc.Root()->start + 1) << std::endl;
+    std::wcout << str.substr(doc.Root()->child->start, doc.Root()->child->end - doc.Root()->child->start + 1) << std::endl;
+    std::wcout << str.substr(doc.Root()->child->sibling->start, doc.Root()->child->sibling->end - doc.Root()->child->sibling->start + 1) << std::endl;
+    std::wcout << str.substr(doc.Root()->child->sibling->sibling->start, doc.Root()->child->sibling->sibling->end - doc.Root()->child->sibling->sibling->start + 1) << std::endl;
+
+
+    std::wcout << L"\n----------------" << std::endl;
 
 //    const CElementObject* pe = doc.FindFirstElement(L"DIV");
 //    

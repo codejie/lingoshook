@@ -61,7 +61,7 @@ int CLHListBox::FindItem(const wxString &item)
             if(str == item)
             {
                 SendEvent(wxEVT_COMMAND_LH_LISTBOX_FINDITEM, i);
-                SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, i);
+                //SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, i);
                 return 0;
             }
             -- sz;

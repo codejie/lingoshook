@@ -871,7 +871,6 @@ void LingosHookFrame::OnIndexDClick(wxCommandEvent &event)
 {
 }
 
-
 void LingosHookFrame::OnIndexSelected(wxCommandEvent &event)
 {
     int pos = m_noteIndex->GetSelection();
@@ -896,6 +895,7 @@ void LingosHookFrame::OnIndexDelete(wxCommandEvent& event)
 
 void LingosHookFrame::OnIndexFindItem(wxCommandEvent& event)
 {
+    m_listIndex->Select(event.GetInt());
 }
 
 void LingosHookFrame::OnIndexContextMenu(wxCommandEvent& event)
