@@ -377,6 +377,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HtmlDictObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HtmlTidyObject.h"
 				>
 			</File>

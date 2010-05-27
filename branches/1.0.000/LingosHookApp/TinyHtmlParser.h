@@ -81,6 +81,8 @@ public:
 public:
     std::wstring tag;
     std::wstring value;
+    size_t start;
+    size_t end;
 };
 
 class CParserData
@@ -103,7 +105,7 @@ public:
 
 public:
     DataType type;
-    TRange tag;
+    TRange range;
     TValueVector value;
     std::wstring title;
 };
@@ -118,7 +120,19 @@ protected:
     static const wchar_t TAG_AND       =   L'&';
 
     typedef std::stack<CParserData> TDataStack;
-    typedef std::pair<size_t, CParserData> TNodeData;//level + tag;
+    //typedef std::pair<size_t, CParserData> TNodeData;//level + tag;
+    struct TNodeData
+    {
+        TNodeData() {}
+        TNodeData(size_t l, size_t s, size_t e, const CParserData& d)
+            : level(l), start(s), end(e), data(d)
+        {
+        }
+        size_t level;
+        size_t start;
+        size_t end;
+        CParserData data;
+    };
     typedef std::deque<TNodeData> TNodeQueue;
 public:
     typedef std::stack<const CElementObject*> TElementStack;

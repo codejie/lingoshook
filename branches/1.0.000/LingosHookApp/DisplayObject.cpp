@@ -48,9 +48,9 @@ void CDisplayObject::ShowWordData(const TWordData &data)
     _frame->m_treeResult->Expand(root);
 
     //_frame->m_winHTML->SetCharset(wxT("UTF-8"));
-    wxWindow* fw = _frame->FindFocus();
+    //wxWindow* fw = _frame->FindFocus();
     _frame->m_winHTML->LoadString(data.m_strHTML);
-    fw->SetFocus();
+    //fw->SetFocus();
 }
 
 void CDisplayObject::ShowResult(const CDictParser* dict, const CDictResult &result, bool expand)
