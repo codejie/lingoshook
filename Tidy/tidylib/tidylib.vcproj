@@ -375,7 +375,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\tidy.dll"
+				OutputFile="$(SolutionDir)\Output\Tidy\$(ConfigurationName)\tidy.dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile="tidylib.def"
 				GenerateDebugInformation="false"

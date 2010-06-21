@@ -7,7 +7,9 @@
 
 #include <map>
 
-class CDBAccess;
+#include "DBAccess.h"
+
+//class CDBAccess;
 
 class CTagObject
 {

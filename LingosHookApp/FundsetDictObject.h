@@ -7,7 +7,10 @@
 
 #include <vector>
 
-#include "DictObject.h"
+#include "SpecialDictParser.h"
+
+namespace SpecialDictParser
+{
 
 namespace FUNDSET
 {
@@ -15,39 +18,39 @@ namespace FUNDSET
 class CDCResult : public CParserResult
 {
 public:
-    typedef std::vector<wxString> TRecordVector;
+    typedef std::vector<std::wstring> TRecordVector;
 public:
     CDCResult() {}
     virtual ~CDCResult() {}
 public:
-    wxString m_strKasus;
+    std::wstring m_strKasus;
     TRecordVector m_vctRecord;
 };
 
 class CDCParser : public CDictParser
 {
 public:
-    static const wxString ID;
-    static const wxString TITLE;
+    static const std::wstring ID;
+    static const std::wstring TITLE;
 public:
-    CDCParser(int index, const wxString& id, const wxString& title, const wxDateTime& create);
+    CDCParser(int index, const std::wstring& id, const std::wstring& title, const wxDateTime& create);
     virtual ~CDCParser();
 
     virtual int Init(CDBAccess::TDatabase& db);
 
-    virtual int ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const;
+    virtual int ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result) const;
     
-    virtual int GetResult(CDBAccess::TDatabase& db, int wordid, TDictResultMap& result);
-    virtual int GetResult(CDBAccess::TDatabase& db, int wordid, CDictResult& result);
-    virtual int SaveResult(CDBAccess::TDatabase& db, int wordid, const CDictResult& result); 
+    virtual int GetResult(CDBAccess::TDatabase& db, int wordid, CDictResult& result) const;
+    virtual int SaveResult(CDBAccess::TDatabase& db, int wordid, const CDictResult& result) const; 
 
-    virtual int RemoveResult(CDBAccess::TDatabase& db, int wordid);
+    virtual int RemoveResult(CDBAccess::TDatabase& db, int wordid) const;
 private:
-    int GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TWordResultMap& result) const;
-    int IsWordExist(CDBAccess::TDatabase &db, int wordid);
+    int GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const;
+    int IsWordExist(CDBAccess::TDatabase &db, int wordid) const;
 };
 
 }
 
+}
 
 #endif

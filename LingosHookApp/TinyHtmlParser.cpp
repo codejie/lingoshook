@@ -76,55 +76,98 @@ int CElementObject::AnalyseAttribute(const std::wstring& attr)
 {
     if(attr.size() == 0)
         return 0;
-
-    std::wstring a, v;
-    std::wstring::size_type pos = attr.find(L"="), start = 0;
-    while(pos != std::wstring::npos)
+    
+    std::wstring::size_type as = 0, ae = 0, vs = 0, ve = 0;
+    std::wstring::size_type pos = 0;
+    while(pos < attr.size())
     {
-        if(pos == attr.size() - 1)
+        if(attr[pos] == L'=')
         {
-            THROW_EXCEPTION(EN_ATTRIB_VALUEMISS, L"Attribue analyse failed - attribute string : " << attr);
-            return -1;
+            ae = pos - 1;
+            vs = pos + 1;
         }
-        a = attr.substr(start, pos - start);
-        start = pos + 1;
-        if(attr[pos + 1] == L'\"')
+        else if(attr[pos] == L' ')
         {
-            pos = attr.find(L"\"", start + 1);
-            if(pos == std::wstring::npos)
+            if(ae < as)
+                ae = pos - 1;
+            else
+                ve = pos - 1;
+            if(as < ae)
             {
-                THROW_EXCEPTION(EN_ATTRIB_VALUEBROKEN, L"Attribue analyse failed - attribute string : " << attr);
+                if(vs < ve)
+                {
+                    if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
+                        return -1;
+                }
+                else
+                {
+                    if(MakeAttribute(attr.substr(as, ae - as), L"") != 0)
+                        return -1;
+                }
+                as = pos + 1;
+                //ae = pos + 1;
+                vs = pos + 1;
+                //ve = pos + 1;
+            }
+            else
+            {
                 return -1;
             }
-            v = attr.substr(start, pos - start + 1);
-            start = pos + 2;
         }
-        else
-        {
-            pos = attr.find(L" ", start);
-            if(pos == std::wstring::npos)
-                pos = attr.size();
-            v = attr.substr(start, pos - start);
-            start = pos + 1;
-        }
-        if(MakeAttribute(a, v) != 0)
-            return -1;
-
-        if(start >= attr.size())
-            break;
-
-        pos = attr.find(L"=", start);
+        ++ pos;
     }
+    if(as >= ae)
+    {
+        ae = attr.size() - 1;
+        if(MakeAttribute(attr.substr(as, ae - as + 1), L"") != 0)
+            return -1;
+    }
+    else
+    {
+        ve = attr.size() - 1;
+        if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
+            return -1;
+    }
+
+    //std::wstring a, v;
+    //std::wstring::size_type pos = attr.find(L"="), start = 0;
+    //while(pos != std::wstring::npos)
+    //{
+    //    if(pos == attr.size() - 1)
+    //    {
+    //        THROW_EXCEPTION(EN_ATTRIB_VALUEMISS, L"Attribue analyse failed - attribute string : " << attr);
+    //        return -1;
+    //    }
+    //    a = attr.substr(start, pos - start);
+    //    start = pos + 1;
+    //    if(attr[pos + 1] == L'\"')
+    //    {
+    //        pos = attr.find(L"\"", start + 1);
+    //        if(pos == std::wstring::npos)
+    //        {
+    //            THROW_EXCEPTION(EN_ATTRIB_VALUEBROKEN, L"Attribue analyse failed - attribute string : " << attr);
+    //            return -1;
+    //        }
+    //        v = attr.substr(start, pos - start + 1);
+    //        start = pos + 2;
+    //    }
+    //    else
+    //    {
+    //        pos = attr.find(L" ", start);
+    //        if(pos == std::wstring::npos)
+    //            pos = attr.size();
+    //        v = attr.substr(start, pos - start);
+    //        start = pos + 1;
+    //    }
+    //    if(MakeAttribute(a, v) != 0)
+    //        return -1;
+
+    //    if(start >= attr.size())
+    //        break;
+
+    //    pos = attr.find(L"=", start);
+    //}
     return 0;
-}
-
-int CElementObject::MakeAttribute(const std::wstring &attr)
-{
-    std::wstring::size_type pos = attr.find(L"=");
-    if(pos == std::wstring::npos)
-        return -1;
-
-    return MakeAttribute(attr.substr(0, pos), attr.substr(pos));
 }
 
 int CElementObject::MakeAttribute(const std::wstring &attr, const std::wstring& value)
@@ -165,7 +208,7 @@ int CElementObject::AnalyseValue()
     {
         this->value.replace(pos, 6, L" ");
         pos = this->value.find(L"&nbsp;", pos + 1);
-    }    
+    }
 
     return 0;
 }
@@ -273,34 +316,37 @@ int CDocumentObject::PreProcess(const std::wstring& str, std::wstring& html, boo
     bool tag = false;
     for(std::wstring::const_iterator it = str.begin(); it != str.end(); ++ it)
     {
-        if(*it == TAG_LT)
-        {
-            if(tag == true)
-            {
-                THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Double '<'.");
-                return -1;
-            }
-            tag = true;
-        }
-        else if(*it == TAG_GT)
-        {
-            if(tag == false)
-            {
-                THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss '<' before '>'.");
-                return -1;
-            }
-            tag = false;
-        }
-        else
-        {
-            if(tag == false)
-            {
-                //if(isspace((unsigned char)*it) != 0)
-                //    continue;
-                if((unsigned char)(*it) == '\r' || (unsigned char)(*it) == '\n')
-                    continue;
-            }
-        }
+        if((*it) == L'\r' || (*it) == L'\n')
+            continue;
+
+        //if(*it == TAG_LT)
+        //{
+        //    if(tag == true)
+        //    {
+        //        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Double '<'.");
+        //        return -1;
+        //    }
+        //    tag = true;
+        //}
+        //else if(*it == TAG_GT)
+        //{
+        //    if(tag == false)
+        //    {
+        //        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss '<' before '>'.");
+        //        return -1;
+        //    }
+        //    tag = false;
+        //}
+        //else
+        //{
+        //    if(tag == false)
+        //    {
+        //        //if(isspace((unsigned char)*it) != 0)
+        //        //    continue;
+        //        if((unsigned char)(*it) == '\r' || (unsigned char)(*it) == '\n')
+        //            continue;
+        //    }
+        //}
         html += *it;
     }
 
@@ -408,7 +454,7 @@ int CDocumentObject::Parser(const std::wstring& html, CDocumentObject::TNodeQueu
             ps = pe;
             pp = pe->parent;
             int t = level - node.level;
-            while(t > 0)
+            while(t > 0/* && pp != NULL && ps != NULL*/)
             {
                 ps = ps->parent;
                 pp = pp->parent;
@@ -546,7 +592,12 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
 
             if(tag.title == data.title)//str == end)
             {
-                nodeque.push_front(TNodeData(datastack.size() -1, tag.range.first, data.range.second,  datastack.top()));//(std::make_pair(datastack.size() - 1, datastack.top()));
+                size_t level = datastack.size() - 1;
+                //if(nodeque.size() > 0)
+                //{
+                //    level = nodeque.begin()->level;
+                //}
+                nodeque.push_front(TNodeData(level, tag.range.first, data.range.second,  datastack.top()));//(std::make_pair(datastack.size() - 1, datastack.top()));
                 datastack.pop();
                 break;
             }
@@ -560,18 +611,26 @@ int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CD
                     TNodeQueue::iterator it = nodeque.begin();
                     while(it != nodeque.end())
                     {
-                        if(it->data.type == CParserData::DT_SPECIAL)
-                            it->level = level;
+                        //if(it->data.type == CParserData::DT_SPECIAL)
+                        //    it->level = level;
+                        //else
+                        //    break;
+                        //-- it->level;
+                        if(it->level > level)
+                            -- it->level;// = level;
                         else
                             break;
+
                         ++ it;
                     }
+
                     size_t end = tag.range.second;
                     if(tag.value.size() > 0)
                     {
                         end = tag.value.begin()->second;
                     }
-                    nodeque.push_front(TNodeData(level, tag.range.first, end, tag));//. (std::make_pair(level, tag));
+                    //nodeque.push_front(TNodeData(level, tag.range.first, end, tag));//. (std::make_pair(level, tag));
+                    nodeque.insert(it, TNodeData(level, tag.range.first, end, tag));
                     datastack.pop();
                 }
                 else
@@ -799,7 +858,7 @@ void CDocumentObject::FreeElement(CElementObject* root)
     }
 }
 
-const CElementObject* CDocumentObject::FindFirstElement(const std::wstring &tag)
+const CElementObject* CDocumentObject::FindFirstElement(const std::wstring &tag) const
 {
     if(_root == NULL)
         return NULL;
@@ -811,7 +870,7 @@ const CElementObject* CDocumentObject::FindFirstElement(const std::wstring &tag)
     return FindElement(NULL, _root, _findtag, _findstack);
 }
 
-const CElementObject* CDocumentObject::FindNextElement()
+const CElementObject* CDocumentObject::FindNextElement() const
 {
     if(_findstack.empty())
         return NULL;
@@ -819,7 +878,7 @@ const CElementObject* CDocumentObject::FindNextElement()
     return FindElement(NULL, _findstack.top()->child, _findtag, _findstack);
 }
 
-const CElementObject* CDocumentObject::FindFirstElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack)
+const CElementObject* CDocumentObject::FindFirstElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack) const
 {
     if(element == NULL)
         return NULL;
@@ -830,7 +889,7 @@ const CElementObject* CDocumentObject::FindFirstElement(const CElementObject* el
     return FindElement(element, element, tag, tmpstack);
 }
 
-const CElementObject* CDocumentObject::FindNextElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack)
+const CElementObject* CDocumentObject::FindNextElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack) const
 {
     if(tmpstack.empty())
         return NULL;
@@ -838,7 +897,7 @@ const CElementObject* CDocumentObject::FindNextElement(const CElementObject* ele
     return FindElement(element, tmpstack.top()->child, tag, tmpstack);
 }
 
-const CElementObject* CDocumentObject::FindElement(const CElementObject* root, const CElementObject* pe, const std::wstring& tag, TElementStack& stack)
+const CElementObject* CDocumentObject::FindElement(const CElementObject* root, const CElementObject* pe, const std::wstring& tag, TElementStack& stack) const
 {
     while(pe != NULL)
     {
@@ -860,7 +919,7 @@ const CElementObject* CDocumentObject::FindElement(const CElementObject* root, c
     return FindElement(root, pe, tag, stack);
 }
 
-const CAttributeObject* CDocumentObject::FindAttribute(const TinyHtmlParser::CElementObject *element, const std::wstring &attr)
+const CAttributeObject* CDocumentObject::FindAttribute(const TinyHtmlParser::CElementObject *element, const std::wstring &attr) const
 {
     if(element == NULL)
         return NULL;

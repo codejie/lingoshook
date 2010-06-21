@@ -6,13 +6,16 @@
 
 #include "FundsetDictObject.h"
 
+namespace SpecialDictParser
+{
+
 namespace FUNDSET
 {
 
-const wxString CDCParser::ID        =   _("1E388F323A0BD943B30FC68598772814");
-const wxString CDCParser::TITLE     =   _("Fundset Deutsch2Chinese(S)");
+const std::wstring CDCParser::ID        =   _("1E388F323A0BD943B30FC68598772814");
+const std::wstring CDCParser::TITLE     =   _("Fundset Deutsch2Chinese(S)");
 
-CDCParser::CDCParser(int index, const wxString& id, const wxString& title, const wxDateTime& create)
+CDCParser::CDCParser(int index, const std::wstring& id, const std::wstring& title, const wxDateTime& create)
 : CDictParser(index, id, title, create)
 {
 }
@@ -38,7 +41,7 @@ int CDCParser::Init(CDBAccess::TDatabase& db)
     return 0;
 }
 
-int CDCParser::ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TWordResultMap &result) const
+int CDCParser::ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TResultMap &result) const
 {
     if(dict == NULL)
         return -1;
@@ -62,9 +65,9 @@ int CDCParser::ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObj
 	return 0;
 }
 
-int CDCParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TWordResultMap& result) const
+int CDCParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const
 {
-    wxString word;
+    std::wstring word;
     std::auto_ptr<CDCResult> res(new CDCResult);
 
     TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
@@ -81,13 +84,13 @@ int CDCParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 return -1;
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            word = wxString(p->child->child->value.c_str());//, wxConvISO8859_1);
+            word = p->child->child->value;//.c_str());//, wxConvISO8859_1);
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
         {//result
             if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            res->m_vctRecord.push_back(wxString(p->child->value.c_str()));//, wxConvISO8859_1);
+            res->m_vctRecord.push_back(p->child->value);//.c_str()));//, wxConvISO8859_1);
 
             if(p->child->child != NULL)
             {
@@ -96,11 +99,11 @@ int CDCParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
                 {
                     if(pc->tag == L"FONT")
                     {
-                        res->m_strKasus = wxString(pc->value.c_str());//, wxConvISO8859_1);
+                        res->m_strKasus = pc->value;//.c_str());//, wxConvISO8859_1);
                     }
                     else
                     {
-                        res->m_vctRecord.push_back(wxString(pc->value.c_str()));//, wxConvISO8859_1);
+                        res->m_vctRecord.push_back(pc->value);//.c_str()));//, wxConvISO8859_1);
                     }
                    
                     pc = pc->sibling;
@@ -111,94 +114,114 @@ int CDCParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
         p = doc->FindNextElement(pr, L"DIV", tmpstack);
     }
 
-    TWordResultMap::iterator it = result.insert(std::make_pair(word, TDictResultMap())).first;
-    it->second.insert(std::make_pair(ID, CDictResult(res.release())));
+    TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
+    it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
 
     return 0;
 }
 
-int CDCParser::IsWordExist(CDBAccess::TDatabase &db, int wordid)
+int CDCParser::IsWordExist(CDBAccess::TDatabase &db, int wordid) const
 {
     CDBAccess::TQuery query = db.PrepareStatement("SELECT COUNT(*) FROM FundsetDCResultTable WHERE WordID = ?");
     query.Bind(1, wordid);
     CDBAccess::TResult res = query.ExecuteQuery();
     if(res.GetInt(0) == 0)
         return -1;
-    return 0;
-}
-
-int CDCParser::GetResult(CDBAccess::TDatabase &db, int wordid, TDictResultMap &result)
-{
-    return -1;
-}
-
-int CDCParser::GetResult(CDBAccess::TDatabase &db, int wordid, CDictResult &result)
-{
-    std::auto_ptr<CDCResult> dcres(new CDCResult());
-
-    CDBAccess::TQuery query = db.PrepareStatement("SELECT Result FROM FundsetDCResultTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    CDBAccess::TResult res = query.ExecuteQuery();
-    if(res.Eof())
-        return -1;
-
-    while(res.NextRow())
-    {
-        dcres->m_vctRecord.push_back(res.GetString(0));
-    }
-
-    query.Reset();
-    query = db.PrepareStatement("SELECT Kasus FROM FundsetDCKasusTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    res = query.ExecuteQuery();
-    if(!res.Eof())
-    {
-        dcres->m_strKasus = res.GetString(0);
-    }
-
-    result.Attach(dcres.release());
 
     return 0;
 }
 
-int CDCParser::SaveResult(CDBAccess::TDatabase &db, int wordid, const CDictResult &result)
+
+int CDCParser::GetResult(CDBAccess::TDatabase &db, int wordid, CDictResult &result) const
 {
-    if(IsWordExist(db, wordid) == 0)
-        return 0;
-
-    const CDCResult* res = dynamic_cast<const CDCResult*>(result.Result());
-
-    if(!res->m_strKasus.empty())
+    try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("INSERT INTO FundsetDCKasusTable VALUES(?, ?)");
+        std::auto_ptr<CDCResult> dcres(new CDCResult());
+
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Result FROM FundsetDCResultTable WHERE WordID = ?");
         query.Bind(1, wordid);
-        query.Bind(2, res->m_strKasus);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(res.Eof())
+            return -1;
+
+        while(res.NextRow())
+        {
+            dcres->m_vctRecord.push_back(res.GetString(0).c_str());
+        }
+
+        query.Reset();
+        query = db.PrepareStatement("SELECT Kasus FROM FundsetDCKasusTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        res = query.ExecuteQuery();
+        if(!res.Eof())
+        {
+            dcres->m_strKasus = res.GetString(0).c_str();
+        }
+
+        result.Attach(dcres.release());
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+int CDCParser::SaveResult(CDBAccess::TDatabase &db, int wordid, const CDictResult &result) const
+{
+    try
+    {
+        if(IsWordExist(db, wordid) == 0)
+            return 0;
+
+        const CDCResult* res = dynamic_cast<const CDCResult*>(result.Result());
+
+        if(!res->m_strKasus.empty())
+        {
+            CDBAccess::TQuery query = db.PrepareStatement("INSERT INTO FundsetDCKasusTable VALUES(?, ?)");
+            query.Bind(1, wordid);
+            query.Bind(2, res->m_strKasus.c_str());
+            query.ExecuteUpdate();
+        }
+
+        for(CDCResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
+        {
+            CDBAccess::TQuery query = db.PrepareStatement("INSERT INTO FundsetDCResultTable VALUES(?, ?)");
+	        query.Bind(1, wordid);
+            query.Bind(2, it->c_str());
+	        query.ExecuteUpdate();	
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+int CDCParser::RemoveResult(CDBAccess::TDatabase &db, int wordid) const
+{
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("DELETE FROM FundsetDCKasusTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        query.ExecuteUpdate();
+
+        query.Reset();
+        query = db.PrepareStatement("DELETE FROM FundsetDCResultTable WHERE WordID = ?");
+        query.Bind(1, wordid);
         query.ExecuteUpdate();
     }
-
-    for(CDCResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
+    catch(const CDBAccess::TException& e)
     {
-        CDBAccess::TQuery query = db.PrepareStatement("INSERT INTO FundsetDCResultTable VALUES(?, ?)");
-	    query.Bind(1, wordid);
-        query.Bind(2, *it);
-	    query.ExecuteUpdate();	
+        return -1;
     }
 
     return 0;
 }
 
-int CDCParser::RemoveResult(CDBAccess::TDatabase &db, int wordid)
-{
-    CDBAccess::TQuery query = db.PrepareStatement("DELETE FROM FundsetDCKasusTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    query.ExecuteUpdate();
-
-    query.Reset();
-    query = db.PrepareStatement("DELETE FROM FundsetDCResultTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    query.ExecuteUpdate();
-
-    return 0;
 }
 
 }

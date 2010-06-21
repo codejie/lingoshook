@@ -454,7 +454,7 @@ int CHookObject::Init(const CConfigData &conf)
     _bAutoHook = conf.m_iAutoHook == 1 ? true : false;
     _iIfLanguage = conf.m_iIfLanguage;
     _bOpenHotkey = conf.m_iOpenHotkey == 1 ? true : false;
-    _bHookCD = (conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
+    _bHookCD = true;//(conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
 
     if(_bOpenHotkey)
     {
@@ -680,9 +680,9 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 		if(hd != NULL && hd->data != NULL)
 		{   
 			str.append(hd->data, hd->size);
-            wxFileOutputStream output(wxT("C:\\T2.html"));
-            wxTextOutputStream ofs(output);
-            ofs.WriteString(str);
+            //wxFileOutputStream output(wxT("C:\\T2.html"));
+            //wxTextOutputStream ofs(output);
+            //ofs.WriteString(str);
 		}		
 
         if(wparam == HKT_CATCH)

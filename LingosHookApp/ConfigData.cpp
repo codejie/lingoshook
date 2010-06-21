@@ -20,10 +20,11 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iAutoSpeak(0)
 , m_iUseTidy(1)
 //, m_iSaveUseTidy(0)
-//, m_iSkipDict(1)
-//, m_iSkipHtml(0)
+, m_iSkipDict(0)
+, m_iSkipHtml(0)
 , m_iFavoriteTab(1)
-, m_iDataProcFlag(1)
+//, m_iDataProcFlag(1)
+, m_iSkipError(1)
 {
 }
 
@@ -196,14 +197,16 @@ int CConfigData::Load()
         m_iUseTidy = 1;
     //if(GetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
     //    m_iSaveUseTidy = 0;
-    //if(GetData(CA_SKIPDICT, m_iSkipDict) != 0)
-    //    m_iSkipDict = 1;
-    //if(GetData(CA_SKIPHTML, m_iSkipHtml) != 0)
-    //    m_iSkipHtml = 0;
+    if(GetData(CA_SKIPDICT, m_iSkipDict) != 0)
+        m_iSkipDict = 1;
+    if(GetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+        m_iSkipHtml = 0;
     if(GetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
         m_iFavoriteTab = 0;
-    if(GetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
-        m_iDataProcFlag = 1;
+    //if(GetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //    m_iDataProcFlag = 1;
+    if(GetData(CA_SKIPERROR, m_iSkipError) != 0)
+        m_iSkipError = 0;
     return 0;
 }
 
@@ -237,13 +240,15 @@ int CConfigData::Save()
         return -1;
     //if(SetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
     //    return -1;
-    //if(SetData(CA_SKIPDICT, m_iSkipDict) != 0)
-    //    return -1;
-    //if(SetData(CA_SKIPHTML, m_iSkipHtml) != 0)
-    //    return -1;
+    if(SetData(CA_SKIPDICT, m_iSkipDict) != 0)
+        return -1;
+    if(SetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+        return -1;
     if(SetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
         return -1;
-    if(SetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //if(SetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //    return -1;
+    if(SetData(CA_SKIPERROR, m_iSkipError) != 0)
         return -1;
     return 0;
 }

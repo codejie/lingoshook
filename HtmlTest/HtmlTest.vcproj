@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="tidy.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(TIDY_ROOT)\Release - dll (fast)&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -179,13 +179,6 @@
 			<File
 				RelativePath="..\LingosHookApp\HtmlTidyObject.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\main.cpp"
