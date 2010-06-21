@@ -49,16 +49,21 @@ void CDisplayObject::ShowWordData(const TWordData &data)
 
     //_frame->m_winHTML->SetCharset(wxT("UTF-8"));
     //wxWindow* fw = _frame->FindFocus();
-    _frame->m_winHTML->LoadString(data.m_strHTML);
+    //_frame->m_winHTML->LoadString(data.m_strHTML);
     //fw->SetFocus();
 }
 
-void CDisplayObject::ShowResult(const CDictParser* dict, const CDictResult &result, bool expand)
+void CDisplayObject::ShowSpecialDictResult(const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult &result, bool expand)
 {
     wxTreeItemId root = _frame->m_treeResult->GetRootItem();
     //wxTreeItemId item = _frame->m_treeResult->InsertItem(root, _frame->m_treeResult->GetChildrenCount(root, false) - 1, dict->GetTitle());
     wxTreeItemId item = _frame->m_treeResult->AppendItem(root, dict->GetTitle());
     ShowDictResult(item, dict, result, expand);
+}
+
+void CDisplayObject::ShowHtmlDictResult(const wxString& html)
+{
+    _frame->m_winHTML->LoadString(html);
 }
 
 void CDisplayObject::RemoveWord(int wordid)
@@ -150,17 +155,17 @@ void CDisplayObject::SortModeChanged(CLHFilterTreeCtrl::FilterType type)
 }
 
 /////
-void CDisplayObject::ShowDictResult(wxTreeItemId &item, const CDictParser* dict, const CDictResult &result, bool expand)
+void CDisplayObject::ShowDictResult(wxTreeItemId &item, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult &result, bool expand)
 {
-    if(dict->GetID() == VICON::CECParser::ID)
+    if(dict->GetID() == SpecialDictParser::VICON::CECParser::ID)
     {
         ShowViconECDictResult(_frame->m_treeResult, item, dict, result);
     }
-    else if(dict->GetID() == LANGDAO::CECParser::ID)
+    else if(dict->GetID() == SpecialDictParser::LANGDAO::CECParser::ID)
     {
         ShowLangdaoECDictResult(_frame->m_treeResult, item, dict, result);
     }
-    else if(dict->GetID() == FUNDSET::CDCParser::ID)
+    else if(dict->GetID() == SpecialDictParser::FUNDSET::CDCParser::ID)
     {
         ShowFundsetDCDictResult(_frame->m_treeResult, item, dict, result);
     }
@@ -189,12 +194,12 @@ void CDisplayObject::ShowSortCloseMode()
 }
 
 ////
-void CDisplayObject::ShowViconECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result)
+void CDisplayObject::ShowViconECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result)
 {
-    const VICON::CECParser* parser = dynamic_cast<const VICON::CECParser*>(dict);
-    const VICON::CECResult* res = dynamic_cast<const VICON::CECResult*>(result.Result());
+    const SpecialDictParser::VICON::CECParser* parser = dynamic_cast<const SpecialDictParser::VICON::CECParser*>(dict);
+    const SpecialDictParser::VICON::CECResult* res = dynamic_cast<const SpecialDictParser::VICON::CECResult*>(result.Result());
     tree->AppendItem(item, _("[") + res->m_strSymbol + _("]"));
-    for(VICON::CECResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
+    for(SpecialDictParser::VICON::CECResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
     {
         wxString str = parser->WCToStr(it->m_eClass);
         str += _(" ") +  it->m_strResult;
@@ -202,13 +207,13 @@ void CDisplayObject::ShowViconECDictResult(wxTreeCtrl* tree, wxTreeItemId& item,
     }
 }
 
-void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result)
+void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result)
 {
-    const LANGDAO::CECParser* parser = dynamic_cast<const LANGDAO::CECParser*>(dict);
-    const LANGDAO::CECResult* res = dynamic_cast<const LANGDAO::CECResult*>(result.Result());
+    const SpecialDictParser::LANGDAO::CECParser* parser = dynamic_cast<const SpecialDictParser::LANGDAO::CECParser*>(dict);
+    const SpecialDictParser::LANGDAO::CECResult* res = dynamic_cast<const SpecialDictParser::LANGDAO::CECResult*>(result.Result());
     tree->AppendItem(item, _("[") + res->m_strSymbol + _("]"));
 
-    for(LANGDAO::CECResult::TResultRecordVector::const_iterator it = res->m_stRecord.m_vctResult.begin(); it != res->m_stRecord.m_vctResult.end(); ++ it)
+    for(SpecialDictParser::LANGDAO::CECResult::TResultRecordVector::const_iterator it = res->m_stRecord.m_vctResult.begin(); it != res->m_stRecord.m_vctResult.end(); ++ it)
     {
         wxString str = parser->WCToStr(it->m_eClass);
         str += _(" ") +  it->m_strResult;
@@ -218,7 +223,7 @@ void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
     if(res->m_stRecord.m_vctSpecial.size() > 0)
     {
         wxTreeItemId special = tree->AppendItem(item, _("Special Words"));
-        for(LANGDAO::CECResult::TSpecialRecordVector::const_iterator it = res->m_stRecord.m_vctSpecial.begin(); it != res->m_stRecord.m_vctSpecial.end(); ++ it)
+        for(SpecialDictParser::LANGDAO::CECResult::TSpecialRecordVector::const_iterator it = res->m_stRecord.m_vctSpecial.begin(); it != res->m_stRecord.m_vctSpecial.end(); ++ it)
         {
             tree->AppendItem(special, it->m_strSpecial + _(" ") + it->m_strResult);
         }
@@ -227,22 +232,22 @@ void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
     if(res->m_stRecord.m_vctCommonly.size() > 0)
     {
         wxTreeItemId commonly = tree->AppendItem(item, _("Commonly Phrase"));
-        for(LANGDAO::CECResult::TCommonlyRecordVector::const_iterator it = res->m_stRecord.m_vctCommonly.begin(); it != res->m_stRecord.m_vctCommonly.end(); ++ it)
+        for(SpecialDictParser::LANGDAO::CECResult::TCommonlyRecordVector::const_iterator it = res->m_stRecord.m_vctCommonly.begin(); it != res->m_stRecord.m_vctCommonly.end(); ++ it)
         {
             tree->AppendItem(commonly, (*it));
         }
     }
 }
 
-void CDisplayObject::ShowFundsetDCDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const CDictParser* dict, const CDictResult& result)
+void CDisplayObject::ShowFundsetDCDictResult(wxTreeCtrl* tree, wxTreeItemId& item, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result)
 {
-    const FUNDSET::CDCParser* parser = dynamic_cast<const FUNDSET::CDCParser*>(dict);
-    const FUNDSET::CDCResult* res = dynamic_cast<const FUNDSET::CDCResult*>(result.Result());
+    const SpecialDictParser::FUNDSET::CDCParser* parser = dynamic_cast<const SpecialDictParser::FUNDSET::CDCParser*>(dict);
+    const SpecialDictParser::FUNDSET::CDCResult* res = dynamic_cast<const SpecialDictParser::FUNDSET::CDCResult*>(result.Result());
 
     if(!res->m_strKasus.empty())
         tree->AppendItem(item, res->m_strKasus);
 
-    for(FUNDSET::CDCResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
+    for(SpecialDictParser::FUNDSET::CDCResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
     {
         tree->AppendItem(item, *it);
     }

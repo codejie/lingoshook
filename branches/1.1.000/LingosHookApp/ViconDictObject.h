@@ -7,7 +7,11 @@
 
 #include <vector>
 
-#include "DictObject.h"
+#include "DictStructure.h"
+#include "SpecialDictParser.h"
+
+namespace SpecialDictParser
+{
 
 namespace VICON
 {
@@ -21,7 +25,7 @@ public:
     struct _record_t
     {
         WordClass m_eClass;
-        wxString m_strResult;
+        std::wstring m_strResult;
     };
     typedef std::vector<_record_t> TRecordVector;
 public:
@@ -29,36 +33,37 @@ public:
     virtual ~CECResult() {}
 
 public:
-    wxString m_strSymbol;
+    std::wstring m_strSymbol;
     TRecordVector m_vctRecord;
 };
 
 class CECParser : public CDictParser
 {
 public:
-    static const wxString ID;
-    static const wxString TITLE;
+    static const std::wstring ID;
+    static const std::wstring TITLE;
 public:
-    CECParser(int index, const wxString& id, const wxString& title, const wxDateTime& create);
+    CECParser(int index, const std::wstring& id, const std::wstring& title, const wxDateTime& create);
     virtual ~CECParser();
 
     virtual int Init(CDBAccess::TDatabase& db);
 
-    virtual int ParserHTML(const std::wstring& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const;
+    virtual int ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result) const;
     
-    virtual int GetResult(CDBAccess::TDatabase& db, int wordid, TDictResultMap& result);
-    virtual int GetResult(CDBAccess::TDatabase& db, int wordid, CDictResult& result);
-    virtual int SaveResult(CDBAccess::TDatabase& db, int wordid, const CDictResult& result); 
+    virtual int GetResult(CDBAccess::TDatabase& db, int wordid, CDictResult& result) const;
+    virtual int SaveResult(CDBAccess::TDatabase& db, int wordid, const CDictResult& result) const; 
 
-    virtual int RemoveResult(CDBAccess::TDatabase& db, int wordid);
+    virtual int RemoveResult(CDBAccess::TDatabase& db, int wordid) const;
 
 public:
-	WordClass StrToWC(const wxString& str) const;
-	const wxString WCToStr(WordClass wc) const;
+	WordClass StrToWC(const std::wstring& str) const;
+	const std::wstring WCToStr(WordClass wc) const;
 private:
-    int GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TWordResultMap& result) const;
-    int IsWordExist(CDBAccess::TDatabase &db, int wordid);
+    int GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const;
+    int IsWordExist(CDBAccess::TDatabase &db, int wordid) const;
 };
+
+}
 
 }
 

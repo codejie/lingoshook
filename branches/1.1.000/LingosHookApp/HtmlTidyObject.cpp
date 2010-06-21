@@ -25,6 +25,8 @@ int CHtmlTidyObject::Tidy(const std::wstring &input, std::wstring &output)
         return -1;
     if(tidyOptSetInt(tdoc, TidyWrapLen, 0) != yes)
         return -1;
+    if(tidyOptSetBool(tdoc, TidyNewline, no) != yes)
+        return -1;
     //if(tidyOptSetBool(tdoc, TidyMakeClean, yes) != yes)//css
     //    return -1;
   

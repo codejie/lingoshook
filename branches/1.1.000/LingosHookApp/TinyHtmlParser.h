@@ -66,7 +66,7 @@ public:
     void Show(std::wostream& os) const;
 protected:
     int AnalyseAttribute(const std::wstring& attr);
-    int MakeAttribute(const std::wstring& attr);
+    //int MakeAttribute(const std::wstring& attr);
     int MakeAttribute(const std::wstring& attr, const std::wstring& value);
     void FreeAnalyseAttribute();
     int AnalyseValue();
@@ -144,13 +144,13 @@ public:
 
     const CElementObject* Root() const { return _root; }
 
-    const CElementObject* FindFirstElement(const std::wstring& tag);
-    const CElementObject* FindNextElement();
+    const CElementObject* FindFirstElement(const std::wstring& tag) const;
+    const CElementObject* FindNextElement() const;
 
-    const CElementObject* FindFirstElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack);
-    const CElementObject* FindNextElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack);
+    const CElementObject* FindFirstElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack) const;
+    const CElementObject* FindNextElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack) const;
 
-    const CAttributeObject* FindAttribute(const CElementObject* element, const std::wstring& attr);
+    const CAttributeObject* FindAttribute(const CElementObject* element, const std::wstring& attr) const;
     
     bool IsMistake() const { return _bIsMistake; }
 
@@ -176,12 +176,12 @@ private:
 
     void FreeElement(CElementObject* root);
 
-    const CElementObject* FindElement(const CElementObject* root, const CElementObject* pe, const std::wstring& tag, TElementStack& stack);
+    const CElementObject* FindElement(const CElementObject* root, const CElementObject* pe, const std::wstring& tag, TElementStack& stack) const;
 private:
     CElementObject* _root;
 private:
-    std::wstring _findtag;
-    TElementStack _findstack;
+    mutable std::wstring _findtag;
+    mutable TElementStack _findstack;
 private:
     bool _bIsMistake;
 };

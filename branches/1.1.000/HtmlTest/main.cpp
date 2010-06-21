@@ -120,9 +120,10 @@ int Test()
  //L"<DIV style=\"MARGIN: 0px 0px 5px\">"
  //L"<DIV style=\"MARGIN: 4px 0px\"><FONT color=#c00000>prep.</FONT> &nbsp;在附近; 在...周围; 关于#在四周; 在附近, 在近处; 到处; 大约</DIV></DIV></DIV></DIV></DIV></DIV></DIV></DIV>";
 
-    std::wstring str = L"<HTML><BODY>12345</BODY><BR>67890<IMG></HTML>";
+    std::wstring str = L"<HTML a1=num no a2=\"string\"><BODY noWrap>12345</BODY><BR no a1=kkkk><IMG><TT no no1>DD</TT><TAG>sss</TAG></HTML>";
+
     //std::wstring tmp, str;
-    //std::wifstream ifs("C:\\v.html");
+    //std::wifstream ifs("C:\\test.html");
     //while(!ifs.eof())
     //{
     //    std::getline(ifs, tmp);
@@ -131,8 +132,8 @@ int Test()
     ////ifs >> str;
     //ifs.close();
 
-    //std::wstring s;
-    //CHtmlTidyObject::Tidy(str, s);
+    std::wstring s;
+    CHtmlTidyObject::Tidy(str, s);
 
     //std::wofstream ofs("C:\\out.html");
     //ofs << s << std::endl;
@@ -152,10 +153,10 @@ int Test()
 
     doc.Show(std::wcout);
 
-    std::wcout << str.substr(doc.Root()->start, doc.Root()->end - doc.Root()->start + 1) << std::endl;
-    std::wcout << str.substr(doc.Root()->child->start, doc.Root()->child->end - doc.Root()->child->start + 1) << std::endl;
-    std::wcout << str.substr(doc.Root()->child->sibling->start, doc.Root()->child->sibling->end - doc.Root()->child->sibling->start + 1) << std::endl;
-    std::wcout << str.substr(doc.Root()->child->sibling->sibling->start, doc.Root()->child->sibling->sibling->end - doc.Root()->child->sibling->sibling->start + 1) << std::endl;
+    //std::wcout << str.substr(doc.Root()->start, doc.Root()->end - doc.Root()->start + 1) << std::endl;
+    //std::wcout << str.substr(doc.Root()->child->start, doc.Root()->child->end - doc.Root()->child->start + 1) << std::endl;
+    //std::wcout << str.substr(doc.Root()->child->sibling->start, doc.Root()->child->sibling->end - doc.Root()->child->sibling->start + 1) << std::endl;
+    //std::wcout << str.substr(doc.Root()->child->sibling->sibling->start, doc.Root()->child->sibling->sibling->end - doc.Root()->child->sibling->sibling->start + 1) << std::endl;
 
 
     std::wcout << L"\n----------------" << std::endl;

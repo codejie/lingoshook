@@ -576,22 +576,22 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         _dataConfig->m_iHTMLSave = m_checkHTMLSave->IsChecked() ? 1 : 0;
         _dataConfig->m_iHTMLLoad = m_checkHTMLLoad->IsChecked() ? 1 : 0;
 
-        if(m_checkIgnoreDict->IsChecked())
-        {
-            _dataConfig->m_iDataProcFlag = 1;
-        }
-        else if(m_checkSkipDict->IsChecked())
-        {
-            _dataConfig->m_iDataProcFlag = 2;
-        }
-        else if(m_checkSkipHtml->IsChecked())
-        {
-            _dataConfig->m_iDataProcFlag = 3;
-        }
-        else
-        {
-            _dataConfig->m_iDataProcFlag = 0;
-        }
+        //if(m_checkIgnoreDict->IsChecked())
+        //{
+        //    _dataConfig->m_iDataProcFlag = 1;
+        //}
+        //else if(m_checkSkipDict->IsChecked())
+        //{
+        //    _dataConfig->m_iDataProcFlag = 2;
+        //}
+        //else if(m_checkSkipHtml->IsChecked())
+        //{
+        //    _dataConfig->m_iDataProcFlag = 3;
+        //}
+        //else
+        //{
+        //    _dataConfig->m_iDataProcFlag = 0;
+        //}
 
         int sel = m_comboxExpandDict->GetSelection();
         if(sel == 0)
@@ -662,18 +662,18 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
             }
         }
     
-        if(_dataConfig->m_iDataProcFlag == 1)
-        {//
-            m_checkIgnoreDict->SetValue(true);
-        }
-        else if(_dataConfig->m_iDataProcFlag == 2)
-        {
-            m_checkSkipDict->SetValue(true);
-        }
-        else if(_dataConfig->m_iDataProcFlag == 3)
-        {
-            m_checkSkipHtml->SetValue(true);
-        }
+        //if(_dataConfig->m_iDataProcFlag == 1)
+        //{//
+        //    m_checkIgnoreDict->SetValue(true);
+        //}
+        //else if(_dataConfig->m_iDataProcFlag == 2)
+        //{
+        //    m_checkSkipDict->SetValue(true);
+        //}
+        //else if(_dataConfig->m_iDataProcFlag == 3)
+        //{
+        //    m_checkSkipHtml->SetValue(true);
+        //}
 ////        m_checkIgnoreDict->SetValue(_dataConfig->m_iIgnoreDict == 1);
 //        m_checkSkipDict->SetValue(_dataConfig->m_iSkipDict == 1);
 //        m_checkSkipHtml->SetValue(_dataConfig->m_iSkipHtml == 1);
@@ -745,13 +745,12 @@ void LingosHookFrame::HookTextProc(const wxString &text)
 
 void LingosHookFrame::HookHTMLProc(const wxString &html)
 {
-    _objDict->HTMLProc(html, _dataConfig->m_iDataProcFlag);
-
 	if(_dataConfig->m_iOpenTrace == 1)
     {
         if(_objDisplay.get() != NULL)
             _objDisplay->TraceHTML(html);
     }
+    _objDict->HTMLProc(html);//, _dataConfig->m_iDataProcFlag);
 }
 
 void LingosHookFrame::HookCDProc(const wxString& str)
@@ -801,7 +800,7 @@ int LingosHookFrame::SpeakWord(const wxString& word)
 int LingosHookFrame::RemoveWord(const wxString& word)
 {
     int wordid = -1;
-    if(_objDict->GetWordID(word, wordid) != 0)
+    if(_objDict->GetWordID(word.c_str(), wordid) != 0)
         return -1;
     return RemoveWord(wordid);
 }
@@ -814,7 +813,7 @@ int LingosHookFrame::RemoveWord(int wordid)
 int LingosHookFrame::CopyToTag(const wxString &word, int tagpos)
 {
     int wordid = -1;
-    if(_objDict->GetWordID(word, wordid) != 0)
+    if(_objDict->GetWordID(word.c_str(), wordid) != 0)
         return -1;
     int tagid = m_listTagMgnt->GetItemData(tagpos);
     if(tagid == -1)
@@ -1312,19 +1311,19 @@ void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
 
     size_t sz = strlen(str.mb_str());
 
-    //wxFileDialog dlg(this, wxT("Select a HTML File.."), wxEmptyString, wxEmptyString, wxT("HTML Files(*.html;*.htm)|*.html;*.htm|All Files(*.*)|*.*"), wxFD_OPEN);
-    //if(dlg.ShowModal() == wxID_OK)
-    //{
-    //    wxString file = dlg.GetPath();
-    //    m_textDebug->SetValue(file);
-    //    wxFileInputStream input(file);
-    //    wxTextInputStream ifs(input);
-    //    wxString str;
-    //    while(input.IsOk() && !input.Eof())
-    //    {
-    //        str += ifs.ReadLine();
-    //    }
-    //    m_textTrace->SetValue(str); 
-    //    HookHTMLProc(str);
-    //}
+    wxFileDialog dlg(this, wxT("Select a HTML File.."), wxEmptyString, wxEmptyString, wxT("HTML Files(*.html;*.htm)|*.html;*.htm|All Files(*.*)|*.*"), wxFD_OPEN);
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        wxString file = dlg.GetPath();
+        m_textDebug->SetValue(file);
+        wxFileInputStream input(file);
+        wxTextInputStream ifs(input);
+        wxString str;
+        while(input.IsOk() && !input.Eof())
+        {
+            str += ifs.ReadLine();
+        }
+        m_textTrace->SetValue(str); 
+        HookHTMLProc(str);
+    }
 }
