@@ -92,8 +92,8 @@ int CSpecialDictParser::RegisterParser(CDBAccess::TDatabase& db, const wstring& 
         query.Reset();
         query = db.PrepareStatement("INSERT INTO DictConfigTable (DictIndex, LoadParam, StoreParam) VALUES(?, ?, ?)");
         query.Bind(1, index);
-        query.Bind(2, 1);
-        query.Bind(3, 1);
+        query.Bind(2, 0);
+        query.Bind(3, 0);
         if(query.ExecuteUpdate() == 0)
             return -1;
     }

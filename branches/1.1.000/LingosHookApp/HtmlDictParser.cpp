@@ -152,18 +152,27 @@ int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring
 {
     try
     {      
+        HtmlDictParser::TDictInfo info;
+        info.m_strDictID = dictid;
+        info.m_strTitle = title;
+        info.m_stConfig.m_iLoadParam = 0xFFFF;
+        info.m_stConfig.m_iStoreParam = 0xFFFF;
+
         CDBAccess::TQuery query = db.PrepareStatement(wxT("INSERT INTO DictTable (DictID, Title) VALUES (?, ?)"));
-        query.Bind(1, dictid.c_str());
-        query.Bind(2, title.c_str());
+        query.Bind(1, info.m_strDictID.c_str());
+        query.Bind(2, info.m_strTitle.c_str());
         query.ExecuteUpdate();
 
         int index = db.GetLastRowId().ToLong();
 
         //Update config table
-
-        HtmlDictParser::TDictInfo info;
-        info.m_strDictID = dictid;
-        info.m_strTitle = title;
+        query.Reset();
+        query = db.PrepareStatement("INSERT INTO DictConfigTable (DictIndex, LoadParam, StoreParam) VALUES(?, ?, ?)");
+        query.Bind(1, index);
+        query.Bind(2, info.m_stConfig.m_iLoadParam);
+        query.Bind(3, info.m_stConfig.m_iStoreParam);
+        if(query.ExecuteUpdate() == 0)
+            return -1;
 
         if(_objDictInfo.Insert(index, info) != 0)
             return -1;
@@ -203,7 +212,7 @@ int CHtmlDictParser::GetResult(CDBAccess::TDatabase &db, int wordid, HtmlDictPar
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement(wxT("SELECT HtmlDictResultTable.DictIndex, DictStart, DictEnd FROM HtmlDictResultTable, DictConfigTable WHERE WordID=? AND HtmlDictResultTable.DictIndex = DictConfigTable.DictIndex ORDER BY DictConfigTable.LoadParam"));
+        CDBAccess::TQuery query = db.PrepareStatement(wxT("SELECT HtmlDictResultTable.DictIndex, DictStart, DictEnd FROM HtmlDictResultTable, DictConfigTable WHERE WordID=? AND HtmlDictResultTable.DictIndex = DictConfigTable.DictIndex and DictConfigTable.DictIndex != -1 ORDER BY DictConfigTable.LoadParam"));
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         while(res.NextRow())
