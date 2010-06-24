@@ -267,7 +267,7 @@ void LingosHookFrame::set_properties()
 
     m_comboxExpandDict->SetSelection(0);
 
-    m_checkSkipHtml->Enable(false);
+    //m_checkSkipHtml->Enable(false);
 
 	if(CreateObjects() != 0)
     {
@@ -576,6 +576,10 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         _dataConfig->m_iHTMLSave = m_checkHTMLSave->IsChecked() ? 1 : 0;
         _dataConfig->m_iHTMLLoad = m_checkHTMLLoad->IsChecked() ? 1 : 0;
 
+        _dataConfig->m_iSkipError = m_checkIgnoreDict->IsChecked() ? 1 : 0;
+        _dataConfig->m_iSkipDict = m_checkSkipDict->IsChecked() ? 1 : 0;
+        _dataConfig->m_iSkipHtml = m_checkSkipHtml->IsChecked() ? 1 : 0;
+
         //if(m_checkIgnoreDict->IsChecked())
         //{
         //    _dataConfig->m_iDataProcFlag = 1;
@@ -674,9 +678,9 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         //{
         //    m_checkSkipHtml->SetValue(true);
         //}
-////        m_checkIgnoreDict->SetValue(_dataConfig->m_iIgnoreDict == 1);
-//        m_checkSkipDict->SetValue(_dataConfig->m_iSkipDict == 1);
-//        m_checkSkipHtml->SetValue(_dataConfig->m_iSkipHtml == 1);
+        m_checkIgnoreDict->SetValue(_dataConfig->m_iSkipError == 1);
+        m_checkSkipDict->SetValue(_dataConfig->m_iSkipDict == 1);
+        m_checkSkipHtml->SetValue(_dataConfig->m_iSkipHtml == 1);
 
         m_checkAutoSpeak->SetValue(_dataConfig->m_iAutoSpeak == 1);
         m_checkSetUseTidy->SetValue(_dataConfig->m_iUseTidy == 1);

@@ -120,7 +120,7 @@ int Test()
  //L"<DIV style=\"MARGIN: 0px 0px 5px\">"
  //L"<DIV style=\"MARGIN: 4px 0px\"><FONT color=#c00000>prep.</FONT> &nbsp;在附近; 在...周围; 关于#在四周; 在附近, 在近处; 到处; 大约</DIV></DIV></DIV></DIV></DIV></DIV></DIV></DIV>";
 
-    std::wstring str = L"<HTML a1=num no a2=\"string\"><BODY noWrap>12345</BODY><BR no a1=kkkk><IMG><TT no no1>DD</TT><TAG>sss</TAG></HTML>";
+    std::wstring str = L"<HTML a1=\"num num1 num2\" no a2=\"string\"><BODY noWrap>12345</BODY><BR no a1=kkkk><IMG><TT no no1>DD</TT><TAG aa=aaa no2>sss</TAG></HTML>";
 
     //std::wstring tmp, str;
     //std::wifstream ifs("C:\\test.html");

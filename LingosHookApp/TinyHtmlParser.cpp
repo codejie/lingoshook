@@ -79,53 +79,55 @@ int CElementObject::AnalyseAttribute(const std::wstring& attr)
     
     std::wstring::size_type as = 0, ae = 0, vs = 0, ve = 0;
     std::wstring::size_type pos = 0;
+    bool v = false;
+    bool semicolon = false;
     while(pos < attr.size())
     {
         if(attr[pos] == L'=')
         {
             ae = pos - 1;
             vs = pos + 1;
+
+            v = true;
         }
         else if(attr[pos] == L' ')
         {
-            if(ae < as)
-                ae = pos - 1;
-            else
-                ve = pos - 1;
-            if(as < ae)
+            if(!semicolon)
             {
-                if(vs < ve)
+                if(v)
                 {
+                    ve = pos - 1;
                     if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
-                        return -1;
+                        return -1; 
                 }
                 else
                 {
-                    if(MakeAttribute(attr.substr(as, ae - as), L"") != 0)
-                        return -1;
+                    ae = pos - 1;
+                    if(MakeAttribute(attr.substr(as, ae - as + 1), L"") != 0)
+                        return -1; 
                 }
                 as = pos + 1;
-                //ae = pos + 1;
                 vs = pos + 1;
-                //ve = pos + 1;
+                v = false;
             }
-            else
-            {
-                return -1;
-            }
+        }
+        else if(attr[pos] == L'"')
+        {
+            semicolon = !semicolon;
         }
         ++ pos;
     }
-    if(as >= ae)
+
+    if(v)
     {
-        ae = attr.size() - 1;
-        if(MakeAttribute(attr.substr(as, ae - as + 1), L"") != 0)
+        ve = attr.size() - 1;
+        if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
             return -1;
     }
     else
     {
-        ve = attr.size() - 1;
-        if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
+        ae = attr.size() - 1;
+        if(MakeAttribute(attr.substr(as, ae - as + 1), L"") != 0)
             return -1;
     }
 
@@ -299,13 +301,13 @@ CDocumentObject::~CDocumentObject()
 
 int CDocumentObject::Load(const std::wstring &str, bool strict)
 {
-    std::wstring html;
-    if(PreProcess(str, html, strict) != 0)
-        return -1;
+    //std::wstring html;
+    //if(PreProcess(str, html, strict) != 0)
+    //    return -1;
     TNodeQueue que;
-    if(PreParser(html, que, strict) != 0)
+    if(PreParser(str, que, strict) != 0)
         return -1;
-    if(Parser(html, que, strict) != 0)
+    if(Parser(str, que, strict) != 0)
         return -1;
     return 0;
 }
@@ -316,37 +318,37 @@ int CDocumentObject::PreProcess(const std::wstring& str, std::wstring& html, boo
     bool tag = false;
     for(std::wstring::const_iterator it = str.begin(); it != str.end(); ++ it)
     {
-        if((*it) == L'\r' || (*it) == L'\n')
-            continue;
+        //if((*it) == L'\r' || (*it) == L'\n')
+        //    continue;
 
-        //if(*it == TAG_LT)
-        //{
-        //    if(tag == true)
-        //    {
-        //        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Double '<'.");
-        //        return -1;
-        //    }
-        //    tag = true;
-        //}
-        //else if(*it == TAG_GT)
-        //{
-        //    if(tag == false)
-        //    {
-        //        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss '<' before '>'.");
-        //        return -1;
-        //    }
-        //    tag = false;
-        //}
-        //else
-        //{
-        //    if(tag == false)
-        //    {
-        //        //if(isspace((unsigned char)*it) != 0)
-        //        //    continue;
-        //        if((unsigned char)(*it) == '\r' || (unsigned char)(*it) == '\n')
-        //            continue;
-        //    }
-        //}
+        if(*it == TAG_LT)
+        {
+            if(tag == true)
+            {
+                THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Double '<'.");
+                return -1;
+            }
+            tag = true;
+        }
+        else if(*it == TAG_GT)
+        {
+            if(tag == false)
+            {
+                THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss '<' before '>'.");
+                return -1;
+            }
+            tag = false;
+        }
+        else
+        {
+            if(tag == false)
+            {
+                //if(isspace((unsigned char)*it) != 0)
+                //    continue;
+                if((unsigned char)(*it) == '\r' || (unsigned char)(*it) == '\n')
+                    continue;
+            }
+        }
         html += *it;
     }
 

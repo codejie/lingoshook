@@ -241,13 +241,24 @@ int CDictObject::HTMLProc(const wxString& str)
             return -1;
     }
 
+    std::wstring prochtml;
+
+    for(std::wstring::const_iterator it = html.begin(); it != html.end(); ++ it)
+    {
+        if((*it) == L'\r' || (*it) == L'\n')
+        {
+            continue;
+        }
+        prochtml += (*it);
+    }
+
     if(_config.m_iSkipDict != 1 || _config.m_iSkipHtml != 1)
     {
-        if(ParserHTML(html) != 0)
+        if(ParserHTML(prochtml) != 0)
         {
             if(_config.m_iSkipError == 1)
             {
-                return ForceSaveHTML(html);
+                return ForceSaveHTML(prochtml);
             }
             else
             {
@@ -257,7 +268,7 @@ int CDictObject::HTMLProc(const wxString& str)
     }
     else
     {
-        return ForceSaveHTML(html);
+        return ForceSaveHTML(prochtml);
     }
     return 0;
 }
