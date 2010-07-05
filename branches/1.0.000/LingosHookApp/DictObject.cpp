@@ -316,9 +316,9 @@ int CDictObject::ForceSaveHTML(const wxString& str)
 int CDictObject::SaveWord(const wxString& word, const wxString& html, int& wordid)
 {
 
-    wxFileOutputStream output(wxT("C:\\T1.html"));
-    wxTextOutputStream ofs(output);
-    ofs.WriteString(html);
+    //wxFileOutputStream output(wxT("C:\\T1.html"));
+    //wxTextOutputStream ofs(output);
+    //ofs.WriteString(html);
 
     CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter FROM WordTable WHERE Word = ?");
 	query.Bind(1, word);

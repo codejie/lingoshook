@@ -149,9 +149,9 @@ void CTriggerObject::OnWordResultGetOver(int wordid, const TWordData& data)
 
     _objTag->GetTagByWord(wordid);
 
-    wxFileOutputStream output(wxT("C:\\T.html"));
-    wxTextOutputStream ofs(output);
-    ofs.WriteString(data.m_strHTML);
+    //wxFileOutputStream output(wxT("C:\\T.html"));
+    //wxTextOutputStream ofs(output);
+    //ofs.WriteString(data.m_strHTML);
 
     _objDisplay->ShowWordData(data);
 }

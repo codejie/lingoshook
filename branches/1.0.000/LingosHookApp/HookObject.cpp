@@ -680,9 +680,9 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 		if(hd != NULL && hd->data != NULL)
 		{   
 			str.append(hd->data, hd->size);
-            wxFileOutputStream output(wxT("C:\\T2.html"));
-            wxTextOutputStream ofs(output);
-            ofs.WriteString(str);
+            //wxFileOutputStream output(wxT("C:\\T2.html"));
+            //wxTextOutputStream ofs(output);
+            //ofs.WriteString(str);
 		}		
 
         if(wparam == HKT_CATCH)
