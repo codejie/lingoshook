@@ -38,7 +38,8 @@ public:
             , CIID_BUTTON_TAGREMOVE, CIID_BUTTON_HOOK, XIID_BUTTON_FILTER, CIID_TREE_FILTER, CIID_BUTTON_MEMREMOVE
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
-            , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW};
+            , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
+            , CIID_BUTTON_SETDICTCHOICE };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -120,6 +121,8 @@ protected:
     wxStaticLine* static_line_5;
     wxStaticText* label_4;
     wxComboBox* m_comboxExpandDict;
+    wxStaticText* label_10;
+    wxButton* m_btnSetDictChoice;
     wxStaticText* label_9;
     wxComboBox* m_listFavoriteTab;
     wxCheckBox* m_checkTrace;
@@ -204,6 +207,8 @@ public:
     virtual void OnMemTypeText(wxCommandEvent &event); // wxGlade: <event_handler>
 
     virtual void OnBtnDebug(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnSetDictChoice(wxCommandEvent &event); // wxGlade: <event_handler>
+
 
 	virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 

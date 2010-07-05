@@ -187,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DictChoiceDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DictObject.cpp"
 				>
 			</File>
@@ -209,13 +213,6 @@
 			<File
 				RelativePath=".\FundsetDictObject.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\HookObject.cpp"
@@ -232,13 +229,6 @@
 			<File
 				RelativePath=".\LangdaoDictObject.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LHControls.cpp"
@@ -279,13 +269,6 @@
 			<File
 				RelativePath=".\ViconDictObject.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -303,6 +286,10 @@
 			</File>
 			<File
 				RelativePath=".\DBAccess.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DictChoiceDialog.h"
 				>
 			</File>
 			<File

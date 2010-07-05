@@ -32,6 +32,7 @@ public:
     static const int CA_FAVORITETAB     =   18;
     static const int CA_DATAPROCFLAG    =   19;
     static const int CA_SKIPERROR       =   20;
+    static const int CA_LOADHTMLDICT    =   21;
 public:
     CConfigData(CDBAccess& db);
 	virtual ~CConfigData() {}
@@ -70,6 +71,7 @@ public:
     int m_iFavoriteTab;
 //    int m_iDataProcFlag;//0:normal; 1: Ignore Dict error; 2: Skip Dict; 3: Skip HTML
     int m_iSkipError;
+    int m_iLoadHtmlDict;//0: only html; 1: only dict; 2: dict -> html
 };
 
 
