@@ -171,15 +171,15 @@ public:
 public:
     void LoadBlankPage() 
     {
-        wxWindow* fw = this->FindFocus();
+        //wxWindow* fw = this->FindFocus();
         wxIEHtmlWin::LoadWString(wxT("<HTML><!-- created by Codejie(codejie@gmail.com) --></HTML>"));
-        fw->SetFocus();
+        //fw->SetFocus();
     }
     bool LoadString(const wxString& html)
     { 
-        wxWindow* fw = this->FindFocus();
+        //wxWindow* fw = this->FindFocus();
         wxIEHtmlWin::LoadWString(html); 
-        fw->SetFocus();
+        //fw->SetFocus();
         return true;
     }
     void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
