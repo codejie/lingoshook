@@ -16,6 +16,7 @@
 #include "TagInputDialog.h"
 #include "SpeakObject.h"
 #include "FilterShowObject.h"
+#include "DictChoiceDialog.h"
 
 #include "LingosHookApp.h"
 
@@ -134,6 +135,9 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
         wxT("All Dictionaries")
     };
     m_comboxExpandDict = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 1, m_comboxExpandDict_choices, wxCB_DROPDOWN|wxCB_READONLY);
+    label_10 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Expanded HTML Data on Result"));
+    m_btnSetDictChoice = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETDICTCHOICE, wxT("Dictionary Choice.."));
+
     label_9 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Favority Tab on Startup"));
     const wxString m_listFavoriteTab_choices[] = {
         wxT("Result"),
@@ -199,6 +203,8 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_BUTTON(XIID_BUTTON_FILTER, LingosHookFrame::OnBtnFilter)
     EVT_TREE_SEL_CHANGED(CIID_TREE_FILTER, LingosHookFrame::OnTreeFilterChange)
     EVT_MENU_RANGE(FMID_BEGIN, FMID_END, LingosHookFrame::OnMenuFilter)
+    EVT_BUTTON(CIID_BUTTON_SETDICTCHOICE, LingosHookFrame::OnBtnSetDictChoice)
+
     EVT_BUTTON(CIID_BUTTON_MEMREMOVE, LingosHookFrame::OnBtnMemRemove)
     EVT_BUTTON(CIID_BUTTON_MEMNEXT, LingosHookFrame::OnBtnMemNext)
     EVT_RADIOBUTTON(CIID_RADIO_MEMLEVEL1, LingosHookFrame::OnRadioMemLevel)
@@ -239,8 +245,9 @@ void LingosHookFrame::set_properties()
 {
     // begin wxGlade: LingosHookFrame::set_properties
     SetTitle(APP_TITLE);
-    SetSize(wxSize(644, 500));
+    SetSize(wxSize(674, 550));
 	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    m_cbWordIndex->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_listIndex->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_treeFilter->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_treeResult->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
@@ -268,6 +275,9 @@ void LingosHookFrame::set_properties()
     m_comboxExpandDict->SetSelection(0);
 
     //m_checkSkipHtml->Enable(false);
+    m_checkSetUseTidy->Enable(false);
+    m_checkHTMLSave->Enable(false);
+    m_checkHTMLLoad->Enable(false);
 
 	if(CreateObjects() != 0)
     {
@@ -308,6 +318,8 @@ void LingosHookFrame::do_layout()
     wxStaticBoxSizer* sizer_18 = new wxStaticBoxSizer(sizer_18_staticbox, wxHORIZONTAL);
     wxStaticBoxSizer* sizer_16 = new wxStaticBoxSizer(sizer_16_staticbox, wxVERTICAL);
     wxBoxSizer* sizer_49 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_51 = new wxBoxSizer(wxHORIZONTAL);
+
     wxBoxSizer* sizer_44 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_43 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_38 = new wxBoxSizer(wxHORIZONTAL);
@@ -414,6 +426,9 @@ void LingosHookFrame::do_layout()
     sizer_43->Add(label_4, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_43->Add(m_comboxExpandDict, 0, wxLEFT|wxTOP|wxBOTTOM, 4);
     sizer_16->Add(sizer_43, 0, wxEXPAND, 0);
+    sizer_51->Add(label_10, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_51->Add(m_btnSetDictChoice, 0, wxLEFT|wxTOP|wxBOTTOM, 4);
+    sizer_16->Add(sizer_51, 1, wxEXPAND, 0);
     sizer_49->Add(label_9, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_49->Add(m_listFavoriteTab, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
     sizer_16->Add(sizer_49, 1, wxEXPAND, 0);
@@ -557,7 +572,10 @@ int LingosHookFrame::LoadObjects()
         g_objTrigger.OnSortShow(CLHFilterTreeCtrl::FilterType(FMID_CLOSE - FMID_BEGIN));        
     }
 
+    m_cbWordIndex->SetFocus();
+
     ShowHint(_("Ready.."));
+
     return 0;
 }
 
@@ -867,6 +885,7 @@ void LingosHookFrame::OnWordIndexEnter(wxCommandEvent &event)
 void LingosHookFrame::OnWordIndexText(wxCommandEvent &event)
 {
     m_listIndex->FindItem(event.GetString());
+    //m_cbWordIndex->SetValue(event.GetString());
 }
 
 
@@ -898,7 +917,8 @@ void LingosHookFrame::OnIndexDelete(wxCommandEvent& event)
 
 void LingosHookFrame::OnIndexFindItem(wxCommandEvent& event)
 {
-    m_listIndex->Select(event.GetInt());
+//    m_listIndex->Select(event.GetInt());
+    //m_cbWordIndex->SetFocus();
 }
 
 void LingosHookFrame::OnIndexContextMenu(wxCommandEvent& event)
@@ -1221,9 +1241,9 @@ void LingosHookFrame::OnCheckIgnoreDict(wxCommandEvent &event)
     if(event.IsChecked())
     {
         m_checkSkipDict->SetValue(false);
-        m_checkSkipHtml->SetValue(false);
-        m_checkHTMLSave->SetValue(true);
-        m_checkHTMLLoad->SetValue(true);
+        //m_checkSkipHtml->SetValue(false);
+        //m_checkHTMLSave->SetValue(true);
+        //m_checkHTMLLoad->SetValue(true);
     }
 }
 
@@ -1231,10 +1251,10 @@ void LingosHookFrame::OnCheckSkipHTML(wxCommandEvent &event)
 {
     if(event.IsChecked())
     {
-        m_checkIgnoreDict->SetValue(false);
-        m_checkSkipDict->SetValue(false);
-        m_checkHTMLSave->SetValue(true);
-        m_checkHTMLLoad->SetValue(true);
+        //m_checkIgnoreDict->SetValue(false);
+        //m_checkSkipDict->SetValue(false);
+        //m_checkHTMLSave->SetValue(true);
+        //m_checkHTMLLoad->SetValue(true);
     }
 }
 
@@ -1243,9 +1263,9 @@ void LingosHookFrame::OnCheckSkipDict(wxCommandEvent &event)
     if(event.IsChecked())
     {
         m_checkIgnoreDict->SetValue(false);
-        m_checkSkipHtml->SetValue(false);
-        m_checkHTMLSave->SetValue(true);
-        m_checkHTMLLoad->SetValue(true);
+        //m_checkSkipHtml->SetValue(false);
+        //m_checkHTMLSave->SetValue(true);
+        //m_checkHTMLLoad->SetValue(true);
     }
 }
 
@@ -1303,6 +1323,18 @@ void LingosHookFrame::OnMemTypeText(wxCommandEvent &event)
     else
     {
         m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
+    }
+}
+
+void LingosHookFrame::OnBtnSetDictChoice(wxCommandEvent &event)
+{
+    CHtmlDictChoiceDialog dlg(this, wxID_ANY, wxEmptyString);
+    
+    _objDict->ShowHtmlDictInfo(dlg);
+
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        _objDict->GetHtmlDictInfo(dlg);
     }
 }
 

@@ -60,8 +60,8 @@ int CLHListBox::FindItem(const wxString &item)
             str = this->GetString(i).substr(0, sz);
             if(str == item)
             {
-                SendEvent(wxEVT_COMMAND_LH_LISTBOX_FINDITEM, i);
-                //SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, i);
+                //SendEvent(wxEVT_COMMAND_LH_LISTBOX_FINDITEM, i);
+                SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, i);
                 return 0;
             }
             -- sz;
@@ -213,4 +213,69 @@ void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
     }
 }
 
+////////////////////////////////////////////////////////
 
+
+//#include "res/checked.xpm"
+//#include "res/unchecked.xpm"
+ 
+//IMPLEMENT_CLASS(CLHCheckBoxList, wxListCtrl)
+ 
+BEGIN_EVENT_TABLE(CLHCheckBoxList, wxListCtrl)
+  EVT_LEFT_DOWN(CLHCheckBoxList::OnMouseEvent)
+END_EVENT_TABLE()
+ 
+CLHCheckBoxList::CLHCheckBoxList(wxWindow* parent, wxWindowID id, const wxPoint& pt, const wxSize& sz, long style)
+: wxListCtrl(parent, id, pt, sz, style)
+, m_imageList(32, 32, true)
+{
+   //m_imageList.Add(wxICON(checked), wxBITMAP_TYPE_ICO_RESOURCE);
+    m_imageList.Add(wxIcon(wxT("ICON_CHECKED")), wxBITMAP_TYPE_ICO_RESOURCE);
+    m_imageList.Add(wxIcon(wxT("ICON_UNCHECKED")), wxBITMAP_TYPE_ICO_RESOURCE);
+
+    //SetImageList(&m_imageList, wxIMAGE_LIST_NORMAL);
+    SetImageList(&m_imageList, wxIMAGE_LIST_SMALL);
+
+    InsertColumn(0, wxT("Title"), wxLIST_FORMAT_LEFT, 250);
+    InsertColumn(1, wxT("ID"), wxLIST_FORMAT_LEFT, 200);
+}
+
+void CLHCheckBoxList::OnMouseEvent(wxMouseEvent& event)
+{
+  if (event.LeftDown())
+  {
+     int flags;
+     long item = HitTest(event.GetPosition(), flags);
+     if (item > -1 && (flags & wxLIST_HITTEST_ONITEMICON))
+     {
+         SetChecked(item, !IsChecked(item));
+     }
+     else
+        event.Skip();
+  }
+  else
+  {
+     event.Skip();
+  }
+}
+
+bool CLHCheckBoxList::IsChecked(long item) const
+{
+   wxListItem info;
+   info.m_mask = wxLIST_MASK_IMAGE ;
+   info.m_itemId = item;
+ 
+   if (GetItem(info))
+   {
+      return (info.m_image == 0);
+   }
+   else
+      return FALSE;
+}
+ 
+void CLHCheckBoxList::SetChecked(long item, bool checked)
+{
+   SetItemImage(item, (checked ? 0 : 1), -1);
+}
+//0-p-[pdfsdpp00000.00/.'0'/0[00.0'0[]
+///[[[[[[...........[0'''''''''''''''''''''''0.0'[[[[[[,9;8p78m,o,oa9/99

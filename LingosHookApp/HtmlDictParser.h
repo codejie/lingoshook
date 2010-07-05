@@ -3,12 +3,16 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "wx/wx.h"
 
 #include "TinyHtmlParser.h"
 #include "DBAccess.h"
 #include "DictStructure.h"
+
+
+class CHtmlDictParser;
 
 namespace HtmlDictParser
 {
@@ -32,6 +36,9 @@ struct TDictInfo
 typedef std::map<std::wstring, int> TDictIDMap;//dictid + dictindex
 typedef std::map<int, TDictInfo> TDictIndexMap;//dictindex + info
 
+//typedef std::vector<std::pair<int, std::wstring> > TDictOrderVector;;//dictindex + title;
+
+
 class CDictInfoObject
 {
 public:
@@ -42,7 +49,10 @@ public:
 
     int Insert(int index, const TDictInfo& info);
     int GetDictIndex(const std::wstring& id) const;
+
+    size_t Size() const { return _mapDictID.size(); }
 protected:
+    friend class CHtmlDictParser;
     TDictIDMap _mapDictID;
     TDictIndexMap _mapDictIndex;
 };
@@ -78,11 +88,14 @@ public:
 
     const HtmlDictParser::TDictInfo* GetDictInfo(int dictindex) const;
     virtual int GenHtmlResult(const HtmlDictParser::TDictResultMap& dictresult, const std::wstring& html, std::wstring& htmlresult) const;
+
+    void ShowDictInfo(int usehtmldict, CHtmlDictChoiceDialog &dlg) const;
+    int GetDictInfo(CDBAccess::TDatabase &db, int& usehtmldict, const CHtmlDictChoiceDialog& dlg);
 protected:
     int CheckDictHtml();
     int UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring& dictid, const std::wstring& html, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict);
-    int UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring& dictid, const std::wstring& title);
-
+    int InsertDictInfo(CDBAccess::TDatabase &db, const std::wstring& dictid, const std::wstring& title);
+    int UpdateDictConfig(CDBAccess::TDatabase &db, int dictindex, int loadparam, int storeparam);
 protected:
     HtmlDictParser::CDictInfoObject _objDictInfo;
 };

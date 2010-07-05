@@ -136,6 +136,25 @@ protected:
     wxString _str;
 };
 
+//class CLHCheckListClientData : public wxClientData
+//{
+//public:
+//    CLHCheckListClientData(int index, int param)
+//        : wxClientData()
+//        , _index(index)
+//        , _param(param)
+//    {
+//    }
+//    int Index() const { return _index; }
+//    int Param() const { return _param; }
+//
+//    void Index(int index) { _index = index; }
+//    void Param(int param) { _param = param; }
+//protected:
+//    int _index;
+//    int _param;
+//};
+
 /////////////
 class CLHTextCtrl : public wxTextCtrl
 {
@@ -171,15 +190,15 @@ public:
 public:
     void LoadBlankPage() 
     {
-        wxWindow* fw = this->FindFocus();
+        //wxWindow* fw = this->FindFocus();
         wxIEHtmlWin::LoadWString(wxT("<HTML><!-- created by Codejie(codejie@gmail.com) --></HTML>"));
-        fw->SetFocus();
+        //fw->SetFocus();
     }
     bool LoadString(const wxString& html)
     { 
-        wxWindow* fw = this->FindFocus();
+        //wxWindow* fw = this->FindFocus();
         wxIEHtmlWin::LoadWString(html); 
-        fw->SetFocus();
+        //fw->SetFocus();
         return true;
     }
     void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
@@ -211,5 +230,23 @@ public:
 };
 
 #endif
+
+// 
+#include "wx/listctrl.h"
+
+class CLHCheckBoxList : public wxListCtrl
+{
+public:
+    CLHCheckBoxList(wxWindow* parent, wxWindowID id, const wxPoint& pt, const wxSize& sz, long style);
+
+    void OnMouseEvent(wxMouseEvent& event);
+    bool IsChecked(long item) const;
+    void SetChecked(long item, bool checked);
+protected:
+    wxImageList m_imageList;
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 
 #endif

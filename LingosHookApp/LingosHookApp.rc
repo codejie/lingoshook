@@ -1,2 +1,5 @@
-ICON32 ICON "lh_logo32.ico"
+ICON32 ICON "res/lh_logo32.ico"
+
+ICON_CHECKED ICON "res/checked.ico"
+ICON_UNCHECKED ICON "res/unchecked.ico"
 

@@ -13,6 +13,7 @@
 #include "TriggerObject.h"
 #include "SpecialDictParser.h"
 #include "HtmlDictParser.h"
+#include "DictChoiceDialog.h"
 #include "DictObject.h"
 
 
@@ -549,15 +550,24 @@ int CDictObject::GetSpecialDictResult(const TWordData& data)
 
 int CDictObject::GetHtmlDictResult(const TWordData& data)
 {
-    HtmlDictParser::TDictResultMap htmlresult;
-    if(_objHtmlDictParser->GetResult(_db, data.m_iID, htmlresult) != 0)
-        return -1;
+    if(_config.m_iLoadHtmlDict == 0)
+    {
+        g_objTrigger.OnResultHtmlDictGet(data.m_iID, data.m_strHTML);
+    }
+    else
+    {
+        HtmlDictParser::TDictResultMap htmlresult;
+        if(_objHtmlDictParser->GetResult(_db, data.m_iID, htmlresult) != 0)
+            return -1;
 
-    std::wstring html;
-    if(_objHtmlDictParser->GenHtmlResult(htmlresult, data.m_strHTML, html) != 0)
-        return -1;
-
-    g_objTrigger.OnResultHtmlDictGet(data.m_iID, html.c_str());
+        std::wstring html;
+        if(_objHtmlDictParser->GenHtmlResult(htmlresult, data.m_strHTML, html) != 0)
+            return -1;
+        if(!html.empty())
+            g_objTrigger.OnResultHtmlDictGet(data.m_iID, html.c_str());
+        else if(_config.m_iLoadHtmlDict == 2)
+            g_objTrigger.OnResultHtmlDictGet(data.m_iID, data.m_strHTML);
+    }
     return 0;
 }
 
@@ -603,6 +613,18 @@ int CDictObject::GetWordID(const std::wstring& word, int& wordid)
 }
 
 ////////////////////////////////////////////
+void CDictObject::ShowHtmlDictInfo(CHtmlDictChoiceDialog &dlg) const
+{
+    _objHtmlDictParser->ShowDictInfo(_config.m_iLoadHtmlDict, dlg);
+}
+
+int CDictObject::GetHtmlDictInfo(const CHtmlDictChoiceDialog& dlg)
+{
+    return _objHtmlDictParser->GetDictInfo(_db, _config.m_iLoadHtmlDict, dlg);
+}
+
+
+//////////////////////////////////////
 //
 //
 //int CDictObject::HTMLProc(const wxString &str, int mode)

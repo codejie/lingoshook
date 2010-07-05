@@ -17,6 +17,7 @@
 #include "DBAccess.h"
 #include "ConfigData.h"
 #include "DictStructure.h"
+//#include "LHControls.h"
 //#include "HtmlDictParser.h"
 //#include "SpecialDictParser.h"
 
@@ -88,6 +89,7 @@
 
 class CSpecialDictParser;
 class CHtmlDictParser;
+class CHtmlDictChoiceDialog;
 
 class CDictObject
 {
@@ -105,7 +107,10 @@ public:
 
     int RemoveWord(int wordid);
 
-    int GetWordID(const std::wstring& word, int& wordid);    
+    int GetWordID(const std::wstring& word, int& wordid);  
+
+    void ShowHtmlDictInfo(CHtmlDictChoiceDialog& dlg) const;
+    int GetHtmlDictInfo(const CHtmlDictChoiceDialog& dlg);
 private:
     int ParserHTML(const std::wstring& html);
     int ForceSaveHTML(const std::wstring& html);

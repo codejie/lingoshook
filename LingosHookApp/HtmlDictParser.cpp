@@ -1,6 +1,8 @@
 
 #include "wx/wx.h"
 
+//#include "LHControls.h"
+#include "DictChoiceDialog.h"
 #include "HtmlDictParser.h"
 
 namespace HtmlDictParser
@@ -57,6 +59,25 @@ int CDictInfoObject::GetDictIndex(const std::wstring &id) const
         return -1;
     return it->second;
 }
+//
+//int CDictInfoObject::GetOrderVector(TDictOrderVector& vct) const
+//{
+//    vct.clear();
+//    for(TDictIndexMap::const_iterator it = _mapDictIndex.begin(); it != _mapDictIndex.end(); ++ it)
+//    {
+//        if(it->second.m_stConfig.m_iLoadParam != 0)
+//        {
+//            TDictOrderVector::iterator i = vct.begin();
+//            while(i != vct.end())
+//            {
+//                if(it->second.m_stConfig.m_iLoadParam < 
+//            }
+//        }
+//        vct.push_back(std::make_pair(it->first, it->second.m_strTitle));
+//    }
+//
+//    return 0;
+//}
 
 }
 
@@ -139,7 +160,7 @@ int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring
         {
             if(pdiv->child != NULL && pdiv->child->sibling != NULL)
             {
-                return UpdateDictInfo(db, dictid, pdiv->child->sibling->value);
+                return InsertDictInfo(db, dictid, pdiv->child->sibling->value);
             }
         }
 
@@ -148,15 +169,15 @@ int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring
     return -1;
 }
 
-int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring &dictid, const std::wstring &title)
+int CHtmlDictParser::InsertDictInfo(CDBAccess::TDatabase &db, const std::wstring &dictid, const std::wstring &title)
 {
     try
     {      
         HtmlDictParser::TDictInfo info;
         info.m_strDictID = dictid;
         info.m_strTitle = title;
-        info.m_stConfig.m_iLoadParam = 0xFFFF;
-        info.m_stConfig.m_iStoreParam = 0xFFFF;
+        info.m_stConfig.m_iLoadParam = _objDictInfo.Size();
+        info.m_stConfig.m_iStoreParam = _objDictInfo.Size();
 
         CDBAccess::TQuery query = db.PrepareStatement(wxT("INSERT INTO DictTable (DictID, Title) VALUES (?, ?)"));
         query.Bind(1, info.m_strDictID.c_str());
@@ -186,6 +207,24 @@ int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring
     return -1;
 }
 
+int CHtmlDictParser::UpdateDictConfig(CDBAccess::TDatabase &db, int dictindex, int loadparam, int storeparam)
+{
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("UPDATE DictConfigTable SET LoadParam = ?, StoreParam = ? WHERE DictIndex = ?");
+        query.Bind(1, loadparam);
+        query.Bind(2, storeparam);
+        query.Bind(3, dictindex);
+        if(query.ExecuteUpdate() == 0)
+            return -1;
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
 int CHtmlDictParser::SaveResult(CDBAccess::TDatabase &db, int wordid, const HtmlDictParser::TDictResultMap &result)
 {
     try
@@ -212,7 +251,7 @@ int CHtmlDictParser::GetResult(CDBAccess::TDatabase &db, int wordid, HtmlDictPar
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement(wxT("SELECT HtmlDictResultTable.DictIndex, DictStart, DictEnd FROM HtmlDictResultTable, DictConfigTable WHERE WordID=? AND HtmlDictResultTable.DictIndex = DictConfigTable.DictIndex and DictConfigTable.DictIndex != -1 ORDER BY DictConfigTable.LoadParam"));
+        CDBAccess::TQuery query = db.PrepareStatement(wxT("SELECT HtmlDictResultTable.DictIndex, DictStart, DictEnd FROM HtmlDictResultTable, DictConfigTable WHERE WordID=? AND (HtmlDictResultTable.DictIndex = DictConfigTable.DictIndex) and DictConfigTable.LoadParam != 65535 ORDER BY DictConfigTable.LoadParam"));
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         while(res.NextRow())
@@ -255,3 +294,84 @@ int CHtmlDictParser::GenHtmlResult(const HtmlDictParser::TDictResultMap &result,
     }
     return 0;
 }
+
+void CHtmlDictParser::ShowDictInfo(int usehtmldict, CHtmlDictChoiceDialog &dlg) const
+{
+    CLHCheckBoxList& ctrl = dlg.ListCtrl();
+
+    for(HtmlDictParser::TDictIndexMap::const_iterator it = _objDictInfo._mapDictIndex.begin(); it != _objDictInfo._mapDictIndex.end(); ++ it)
+    {
+        if(it->second.m_stConfig.m_iLoadParam != 0xFFFF)
+        {
+            int i = 0;
+            while(i < ctrl.GetItemCount())
+            {
+                int data = ctrl.GetItemData(i);
+                const HtmlDictParser::TDictIndexMap::const_iterator iter = _objDictInfo._mapDictIndex.find(data);
+                if(iter == _objDictInfo._mapDictIndex.end())
+                    return;
+
+                if(it->second.m_stConfig.m_iLoadParam < iter->second.m_stConfig.m_iLoadParam)
+                {
+                    ctrl.InsertItem(i, it->second.m_strTitle, -1);
+                    ctrl.SetItem(i, 1, it->second.m_strDictID);
+                    ctrl.SetItemData(i, it->first);
+                    break;
+                }            
+                ++ i;
+            }
+            if(i == ctrl.GetItemCount())
+            {
+                ctrl.InsertItem(i, it->second.m_strTitle, -1);
+                ctrl.SetItem(i, 1, it->second.m_strDictID);
+                ctrl.SetItemData(i, it->first);
+            }
+
+            ctrl.SetChecked(i, true);
+        }
+        else
+        {
+            int i = ctrl.InsertItem(ctrl.GetItemCount(), it->second.m_strTitle, -1);
+            ctrl.SetItem(i, 1, it->second.m_strDictID);
+            ctrl.SetItemData(i, it->first);
+
+            ctrl.SetChecked(i, false);
+        }
+    }
+
+    dlg.SetUseDictRadio(usehtmldict);
+}
+
+int CHtmlDictParser::GetDictInfo(CDBAccess::TDatabase &db, int& usehtmldict, const CHtmlDictChoiceDialog &dlg)
+{
+    dlg.GetUseDictRadio(usehtmldict);
+
+    if(usehtmldict != 1)
+        return 0;
+
+    const CLHCheckBoxList& ctrl = dlg.ListCtrl();
+
+    int i = 0;
+    while(i < ctrl.GetItemCount())
+    {
+        int data = ctrl.GetItemData(i);
+        const HtmlDictParser::TDictIndexMap::iterator iter = _objDictInfo._mapDictIndex.find(data);
+        if(iter == _objDictInfo._mapDictIndex.end())
+            return -1;
+        if(ctrl.IsChecked(i) == true)
+        {
+            iter->second.m_stConfig.m_iLoadParam = i;
+        }
+        else
+        {
+            iter->second.m_stConfig.m_iLoadParam = 0xFFFF;
+        }
+        
+        if(UpdateDictConfig(db, iter->first, iter->second.m_stConfig.m_iLoadParam, iter->second.m_stConfig.m_iStoreParam) != 0)
+            return -1;        
+
+        ++ i;
+    }
+    return 0;
+}
+
