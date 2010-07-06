@@ -1,7 +1,9 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
 
 #include "wx/wx.h"
 
-//#include "LHControls.h"
 #include "DictChoiceDialog.h"
 #include "HtmlDictParser.h"
 
@@ -59,25 +61,6 @@ int CDictInfoObject::GetDictIndex(const std::wstring &id) const
         return -1;
     return it->second;
 }
-//
-//int CDictInfoObject::GetOrderVector(TDictOrderVector& vct) const
-//{
-//    vct.clear();
-//    for(TDictIndexMap::const_iterator it = _mapDictIndex.begin(); it != _mapDictIndex.end(); ++ it)
-//    {
-//        if(it->second.m_stConfig.m_iLoadParam != 0)
-//        {
-//            TDictOrderVector::iterator i = vct.begin();
-//            while(i != vct.end())
-//            {
-//                if(it->second.m_stConfig.m_iLoadParam < 
-//            }
-//        }
-//        vct.push_back(std::make_pair(it->first, it->second.m_strTitle));
-//    }
-//
-//    return 0;
-//}
 
 }
 
@@ -346,7 +329,7 @@ int CHtmlDictParser::GetDictInfo(CDBAccess::TDatabase &db, int& usehtmldict, con
 {
     dlg.GetUseDictRadio(usehtmldict);
 
-    if(usehtmldict != 1)
+    if(usehtmldict == 0)
         return 0;
 
     const CLHCheckBoxList& ctrl = dlg.ListCtrl();

@@ -1,3 +1,6 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
 #ifndef __HTMLDICTPARSER_H__
 #define __HTMLDICTPARSER_H__
 
@@ -36,9 +39,6 @@ struct TDictInfo
 typedef std::map<std::wstring, int> TDictIDMap;//dictid + dictindex
 typedef std::map<int, TDictInfo> TDictIndexMap;//dictindex + info
 
-//typedef std::vector<std::pair<int, std::wstring> > TDictOrderVector;;//dictindex + title;
-
-
 class CDictInfoObject
 {
 public:
@@ -56,20 +56,6 @@ protected:
     TDictIDMap _mapDictID;
     TDictIndexMap _mapDictIndex;
 };
-//
-//struct TDictResult
-//{
-//    int m_iDictIndex;
-//
-//    int m_iDictStart;
-//    int m_iDictEnd;
-//};
-//
-//typedef std::map<int, TDictResult> TDictResultMap;//order + result
-
-//typedef std::vector<TDictResult> TDictResultVector;
-//typedef std::map<std::wstring, TDictResultVector> TDictResultMap;
-
 }
 
 class CHtmlDictParser

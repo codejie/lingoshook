@@ -263,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TrayIconObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TriggerObject.cpp"
 				>
 			</File>
@@ -383,6 +387,10 @@
 			</File>
 			<File
 				RelativePath=".\TinyHtmlParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TrayIconObject.h"
 				>
 			</File>
 			<File

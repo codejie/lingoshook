@@ -1,4 +1,9 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 ICON32 ICON "res/lh_logo32.ico"
+ICON16 ICON "res/lh_logo16.ico"
 
 ICON_CHECKED ICON "res/checked.ico"
 ICON_UNCHECKED ICON "res/unchecked.ico"
