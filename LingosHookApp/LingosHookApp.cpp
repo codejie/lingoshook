@@ -57,8 +57,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_noteContext_pane_6 = new wxPanel(m_noteContext, wxID_ANY);
     m_noteContext_pane_5 = new wxPanel(m_noteContext, wxID_ANY);
     m_noteContext_pane_3 = new wxPanel(m_noteContext, wxID_ANY);
-    m_noteContext_pane_4 = new wxScrolledWindow(m_noteContext, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-    m_noteContext_pane_2 = new wxPanel(m_noteContext, wxID_ANY);
+    m_noteContext_pane_4 = new wxScrolledWindow(m_noteContext, wxID_ANY, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
+    m_noteContext_pane_2 = new wxPanel(m_noteContext, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
     notebook_2_pane_1 = new wxPanel(m_noteContext, wxID_ANY);
     window_1_pane_1 = new wxPanel(m_splitWindow, wxID_ANY);
     m_noteIndex = new wxNotebook(window_1_pane_1, CIID_PAGE_INDEX, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
@@ -598,23 +598,6 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         _dataConfig->m_iSkipDict = m_checkSkipDict->IsChecked() ? 1 : 0;
         _dataConfig->m_iSkipHtml = m_checkSkipHtml->IsChecked() ? 1 : 0;
 
-        //if(m_checkIgnoreDict->IsChecked())
-        //{
-        //    _dataConfig->m_iDataProcFlag = 1;
-        //}
-        //else if(m_checkSkipDict->IsChecked())
-        //{
-        //    _dataConfig->m_iDataProcFlag = 2;
-        //}
-        //else if(m_checkSkipHtml->IsChecked())
-        //{
-        //    _dataConfig->m_iDataProcFlag = 3;
-        //}
-        //else
-        //{
-        //    _dataConfig->m_iDataProcFlag = 0;
-        //}
-
         int sel = m_comboxExpandDict->GetSelection();
         if(sel == 0)
         {
@@ -684,18 +667,6 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
             }
         }
     
-        //if(_dataConfig->m_iDataProcFlag == 1)
-        //{//
-        //    m_checkIgnoreDict->SetValue(true);
-        //}
-        //else if(_dataConfig->m_iDataProcFlag == 2)
-        //{
-        //    m_checkSkipDict->SetValue(true);
-        //}
-        //else if(_dataConfig->m_iDataProcFlag == 3)
-        //{
-        //    m_checkSkipHtml->SetValue(true);
-        //}
         m_checkIgnoreDict->SetValue(_dataConfig->m_iSkipError == 1);
         m_checkSkipDict->SetValue(_dataConfig->m_iSkipDict == 1);
         m_checkSkipHtml->SetValue(_dataConfig->m_iSkipHtml == 1);

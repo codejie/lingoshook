@@ -1,3 +1,6 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
 #ifndef __DICTSTRUCTURE_H__
 #define __DICTSTRUCTURE_H__
 

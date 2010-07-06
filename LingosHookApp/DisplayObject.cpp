@@ -37,7 +37,6 @@ void CDisplayObject::ShowWord(int wordid, const wxString& word)
 
 void CDisplayObject::ShowWordData(const TWordData &data)
 {
-//	wxTreeItemId root = _frame->m_treeResult->AddRoot(data.m_strWord);
     wxTreeItemId root = _frame->m_treeResult->GetRootItem();
 
     wxTreeItemId stats = _frame->m_treeResult->AppendItem(root, _("Stats."));
@@ -46,11 +45,6 @@ void CDisplayObject::ShowWordData(const TWordData &data)
     _frame->m_treeResult->AppendItem(stats, wxString::Format(_("Checkin = %04d-%02d-%02d %02d:%02d:%02d"), data.m_dtCheckin.GetYear(), data.m_dtCheckin.GetMonth() + 1, data.m_dtCheckin.GetDay(), data.m_dtCheckin.GetHour(), data.m_dtCheckin.GetMinute(), data.m_dtCheckin.GetSecond()));
     
     _frame->m_treeResult->Expand(root);
-
-    //_frame->m_winHTML->SetCharset(wxT("UTF-8"));
-    //wxWindow* fw = _frame->FindFocus();
-    //_frame->m_winHTML->LoadString(data.m_strHTML);
-    //fw->SetFocus();
 }
 
 void CDisplayObject::ShowSpecialDictResult(const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult &result, bool expand)

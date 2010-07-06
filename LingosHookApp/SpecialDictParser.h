@@ -1,3 +1,7 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
 #ifndef __SPECIALDICTPARSER_H__
 #define __SPECIALDICTPARSER_H__
 
@@ -13,31 +17,6 @@
 
 namespace SpecialDictParser
 {
-
-//class CParserResult
-//{
-//public:
-//    CParserResult() {}
-//    virtual ~CParserResult() {}
-//};
-//
-//class CDictResult
-//{
-//public:
-//    CDictResult(const CParserResult* result = NULL);
-//    virtual ~CDictResult();
-//
-//    CDictResult(const CDictResult& right);
-//
-//    void Attach(const CParserResult* result);
-//    const CParserResult* Result() const;
-//protected:
-//    std::auto_ptr<const CParserResult> _result;
-//};
-//
-//typedef std::map<std::wstring, CDictResult> TDictResultMap;//dictid + result
-//typedef std::map<std::wstring, TDictResultMap> TWordResultMap;//word + result
-
 
 class CDictParser
 {

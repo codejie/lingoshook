@@ -2357,7 +2357,7 @@ HRESULT FrameSite::TranslateAccelerator(LPMSG pMsg, DWORD grfModifiers)
 HRESULT FrameSite::OnFocus(BOOL fGotFocus)
 {
 	WXOLE_TRACE("IOleControlSite::OnFocus");
-	return S_OK;
+	return S_OK;//E_NOTIMPL;//
 }
 
 HRESULT FrameSite::ShowPropertyFrame()
