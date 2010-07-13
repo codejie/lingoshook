@@ -1,4 +1,7 @@
 
+#include "wx/icon.h"
+
+
 #include "LHControls.h"
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_DELETE)

@@ -5,6 +5,7 @@
 #include <wx/filedlg.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
+#include <wx/icon.h>
 
 #include "Consts.h"
 #include "ConfigData.h"
@@ -17,6 +18,7 @@
 #include "SpeakObject.h"
 #include "FilterShowObject.h"
 #include "DictChoiceDialog.h"
+#include "TrayIconObject.h"
 
 #include "LingosHookApp.h"
 
@@ -34,6 +36,7 @@ bool MyApp::OnInit()
 {
     wxInitAllImageHandlers();
     LingosHookFrame* MainFrame = new LingosHookFrame(NULL, wxID_ANY, wxEmptyString);
+    MainFrame->SetIcon(wxICON(ICON_MAIN));
     SetTopWindow(MainFrame);
     MainFrame->Show();
     return true;
@@ -49,6 +52,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
 , _objMemoryDaily(NULL)
 , _objSpeak(NULL)
 , _objFilterShow(NULL)
+, _objTrayIcon(NULL)
+, _bSysCanClose(false)
 {
     // begin wxGlade: LingosHookFrame::LingosHookFrame
     m_splitWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_BORDER);
@@ -104,6 +109,9 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
         wxT("Chinese")
     };
     m_radioIfLang = new wxRadioBox(m_noteContext_pane_4, wxID_ANY, wxT("User Interface Language"), wxDefaultPosition, wxDefaultSize, 3, m_radioIfLang_choices, 0, wxRA_SPECIFY_COLS);
+    label_11 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Lingoes Location"));
+    m_textSetLgsLocal = new wxTextCtrl(m_noteContext_pane_4, wxID_ANY, wxEmptyString);
+    m_btnSetLgsBrowse = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETLGSBROWSE, wxT("Browse.."));
     m_checkAutoHook = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Auto-Hook"));
     m_checkHotkey = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_HOTKEY, wxT("Use Hotkey"));
     const wxString m_listHotkey_choices[] = {
@@ -120,13 +128,16 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     label_1 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Synchronization"));
     m_checkSetTagSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Classifications"));
     m_checkSetMemSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Memory Daily"));
-    label_7 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Pre-Analyse"));
-    m_checkSetUseTidy = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Uses Tidy"));
-    label_2 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Process"));
-    m_checkHTMLSave = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Storage"));
-    m_checkHTMLLoad = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Loading"));
+    label_12 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Retrieve Delay"));
+    m_sliderSetDelay = new wxSlider(m_noteContext_pane_4, CIID_SLIDER_SETDELAY, 0, 0, 20, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_AUTOTICKS);
+    m_labelSetDelay = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("0000 ms"));
+    //label_7 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Pre-Analyse"));
+    //m_checkSetUseTidy = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Uses Tidy"));
+    //label_2 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Process"));
+//    m_checkHTMLSave = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Storage"));
+//    m_checkHTMLLoad = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Loading"));
     static_line_6 = new wxStaticLine(m_noteContext_pane_4, wxID_ANY);
-    m_checkIgnoreDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_IGNOREDICT, wxT("Ignore Dictionary Analysis Error"));
+    m_checkIgnoreDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_IGNOREDICT, wxT("Ignore HTML Data Analysis Error"));
     m_checkSkipDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_SKIPDICT, wxT("Skip Dictionary Analysis Process"));
     m_checkSkipHtml = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_SKIPHTML, wxT("Skip HTML Data  Analysis Process"));
     static_line_5 = new wxStaticLine(m_noteContext_pane_4, wxID_ANY);
@@ -136,7 +147,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     };
     m_comboxExpandDict = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 1, m_comboxExpandDict_choices, wxCB_DROPDOWN|wxCB_READONLY);
     label_10 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Expanded HTML Data on Result"));
-    m_btnSetDictChoice = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETDICTCHOICE, wxT("Dictionary Choice.."));
+    m_btnSetDictChoice = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETDICTCHOICE, wxT("Dictionary Chooser.."));
 
     label_9 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Favority Tab on Startup"));
     const wxString m_listFavoriteTab_choices[] = {
@@ -173,11 +184,16 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_labelInfo = new wxStaticText(this, wxID_ANY, wxT("Ready.."));
     m_btnHook = new wxToggleButton(this, CIID_BUTTON_HOOK, wxT("Hook"));
 
-    SetIcon(wxICON(ICON32));
+    //SetIcon(wxICON(ICON_MAIN));
     
     set_properties();
     do_layout();
     // end wxGlade
+}
+
+LingosHookFrame::~LingosHookFrame()
+{
+    delete _objTrayIcon, _objTrayIcon = NULL;
 }
 
 
@@ -193,6 +209,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_NOTEBOOK_PAGE_CHANGED(CIID_PAGE_INDEX, LingosHookFrame::OnNoteIndexChanged)
     EVT_CHECKBOX(CIID_CHECKBOX_HOTKEY, LingosHookFrame::OnCheckBoxHotkey)
     EVT_BUTTON(CIID_BUTTON_APPLY, LingosHookFrame::OnBtnSetApply)
+    EVT_BUTTON(CIID_BUTTON_SETLGSBROWSE, LingosHookFrame::OnBtnSetLgsBrowse)
     EVT_LIST_ITEM_DESELECTED(CIID_LIST_TAGMGNT, LingosHookFrame::OnListTagMgntDeselect)
     EVT_LIST_ITEM_SELECTED(CIID_LIST_TAGMGNT, LingosHookFrame::OnListTagMgntSelect)
     EVT_BUTTON(CIID_BUTTON_TAGSETDEFAULT, LingosHookFrame::OnBtnTagSetDefault)
@@ -230,10 +247,12 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
 
     EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, LingosHookFrame::OnMemTypeKeyDown)
     EVT_TEXT(CIID_TEXT_MEMTYPE, LingosHookFrame::OnMemTypeText)
-
+	EVT_COMMAND_SCROLL_ENDSCROLL(wxID_ANY, LingosHookFrame::OnScrollSetDelayEnd)
 //    EVT_MENU_RANGE(IMID_TAGMOVE_START, IMID_TAGMOVE_END, OnMenuIndexTagMove)
 
     EVT_BUTTON(CIID_BUTTON_DEBUG, LingosHookFrame::OnBtnDebug)
+
+    EVT_CLOSE(LingosHookFrame::OnClose)
    // end wxGlade
 END_EVENT_TABLE();
 
@@ -275,9 +294,9 @@ void LingosHookFrame::set_properties()
     m_comboxExpandDict->SetSelection(0);
 
     //m_checkSkipHtml->Enable(false);
-    m_checkSetUseTidy->Enable(false);
-    m_checkHTMLSave->Enable(false);
-    m_checkHTMLLoad->Enable(false);
+    //m_checkSetUseTidy->Enable(false);
+    //m_checkHTMLSave->Enable(false);
+    //m_checkHTMLLoad->Enable(false);
 
 	if(CreateObjects() != 0)
     {
@@ -324,12 +343,15 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_43 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_38 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_47 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_53 = new wxBoxSizer(wxHORIZONTAL);
+
     wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
 
     wxBoxSizer* sizer_19 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_23 = new wxBoxSizer(wxHORIZONTAL);
-    wxStaticBoxSizer* sizer_15 = new wxStaticBoxSizer(sizer_15_staticbox, wxHORIZONTAL);
+    wxStaticBoxSizer* sizer_15 = new wxStaticBoxSizer(sizer_15_staticbox, wxVERTICAL);
+    wxBoxSizer* sizer_52 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_10 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_8 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_4 = new wxBoxSizer(wxVERTICAL);
@@ -396,44 +418,52 @@ void LingosHookFrame::do_layout()
     notebook_2_pane_1->SetSizer(sizer_8);
     sizer_10->Add(m_winHTML, 1, wxEXPAND, 0);
     m_noteContext_pane_2->SetSizer(sizer_10);
-    sizer_15->Add(m_radioIfLang, 0, 0, 0);
+    sizer_15->Add(m_radioIfLang, 0, wxTOP|wxBOTTOM, 4);
+    sizer_52->Add(label_11, 0, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_52->Add(m_textSetLgsLocal, 1, wxLEFT|wxRIGHT|wxEXPAND, 4);
+    sizer_52->Add(m_btnSetLgsBrowse, 0, 0, 0);
+    sizer_15->Add(sizer_52, 1, wxRIGHT|wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_14->Add(sizer_15, 0, wxEXPAND, 0);
     sizer_23->Add(m_checkAutoHook, 0, wxEXPAND |wxALIGN_CENTER_VERTICAL, 2);
     sizer_23->Add(48, 8, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
     sizer_19->Add(m_checkHotkey, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
     sizer_19->Add(m_listHotkey, 0, wxLEFT|wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2);
     sizer_23->Add(sizer_19, 0, wxEXPAND, 0);
-    sizer_16->Add(sizer_23, 1, wxEXPAND, 0);
+    sizer_16->Add(sizer_23, 0, wxEXPAND, 0);
     sizer_45->Add(m_checkAutoSpeak, 0, wxTOP|wxBOTTOM|wxEXPAND|wxALIGN_CENTER_VERTICAL, 2);
-    sizer_16->Add(sizer_45, 1, wxEXPAND, 0);
+    sizer_16->Add(sizer_45, 0, wxEXPAND, 0);
     sizer_37->Add(label_1, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_37->Add(m_checkSetTagSync, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
     sizer_37->Add(m_checkSetMemSync, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_16->Add(sizer_37, 1, wxEXPAND, 0);
-    sizer_47->Add(label_7, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_47->Add(m_checkSetUseTidy, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_16->Add(sizer_47, 1, wxEXPAND, 0);
-    sizer_38->Add(label_2, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_38->Add(m_checkHTMLSave, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_38->Add(m_checkHTMLLoad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_16->Add(sizer_38, 1, wxEXPAND, 0);
-    sizer_16->Add(static_line_6, 0, wxALL|wxEXPAND, 8);
+    sizer_16->Add(sizer_37, 0, wxEXPAND, 0);
+    sizer_53->Add(label_12, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_53->Add(m_sliderSetDelay, 1, wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_53->Add(m_labelSetDelay, 0, wxALL|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_16->Add(sizer_53, 1, wxEXPAND, 0);
+    //sizer_47->Add(label_7, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    //sizer_47->Add(m_checkSetUseTidy, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
+    //sizer_16->Add(sizer_47, 1, wxEXPAND, 0);
+    //sizer_38->Add(label_2, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    //sizer_38->Add(m_checkHTMLSave, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
+    //sizer_38->Add(m_checkHTMLLoad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
+    //sizer_16->Add(sizer_38, 1, wxEXPAND, 0);
+    sizer_16->Add(static_line_6, 0, wxALL|wxEXPAND, 4);
     sizer_44->Add(m_checkIgnoreDict, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_44->Add(m_checkSkipDict, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_44->Add(m_checkSkipHtml, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_16->Add(sizer_44, 0, wxEXPAND, 0);
-    sizer_16->Add(static_line_5, 0, wxALL|wxEXPAND, 8);
-    sizer_43->Add(label_4, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_43->Add(m_comboxExpandDict, 0, wxLEFT|wxTOP|wxBOTTOM, 4);
+    sizer_16->Add(static_line_5, 0, wxALL|wxEXPAND, 4);
+    sizer_43->Add(label_4, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_43->Add(m_comboxExpandDict, 0, wxLEFT|wxTOP|wxBOTTOM, 2);
     sizer_16->Add(sizer_43, 0, wxEXPAND, 0);
-    sizer_51->Add(label_10, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_51->Add(m_btnSetDictChoice, 0, wxLEFT|wxTOP|wxBOTTOM, 4);
-    sizer_16->Add(sizer_51, 1, wxEXPAND, 0);
-    sizer_49->Add(label_9, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_49->Add(m_listFavoriteTab, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
-    sizer_16->Add(sizer_49, 1, wxEXPAND, 0);
+    sizer_51->Add(label_10, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_51->Add(m_btnSetDictChoice, 0, wxLEFT|wxTOP|wxBOTTOM, 2);
+    sizer_16->Add(sizer_51, 0, wxEXPAND, 0);
+    sizer_49->Add(label_9, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_49->Add(m_listFavoriteTab, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
+    sizer_16->Add(sizer_49, 0, wxEXPAND, 0);
     sizer_14->Add(sizer_16, 0, wxEXPAND, 0);
-    sizer_18->Add(m_checkTrace, 0, wxTOP|wxBOTTOM, 4);
+    sizer_18->Add(m_checkTrace, 0, wxTOP|wxBOTTOM, 2);
     sizer_14->Add(sizer_18, 0, wxEXPAND, 0);
 #ifndef __LH_DEBUG__
     sizer_18->Show(false);
@@ -519,6 +549,8 @@ int LingosHookFrame::CreateObjects()
     _objSpeak.reset(new CSpeakObject());
     _objFilterShow.reset(new CFilterShowObject(_objDB, m_treeFilter));
 
+    _objTrayIcon = new CTrayIconObject(this, _dataConfig.get());
+
     g_objTrigger.AttachConfigData(_dataConfig.get());
     g_objTrigger.AttachDictObject(_objDict.get());
     g_objTrigger.AttachDisplayObject(_objDisplay.get());
@@ -551,6 +583,8 @@ int LingosHookFrame::InitObjects()
 
     if(_objSpeak->Init() != 0)
         return -1;
+
+    _objTrayIcon->Init();
 
 	return 0;
 }
@@ -585,14 +619,19 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
     if(retrieve)
     {
         _dataConfig->m_iIfLanguage = m_radioIfLang->GetSelection();
+
+        _dataConfig->GetLingoesParam(m_textSetLgsLocal->GetValue().c_str());
+
         _dataConfig->m_iOpenHotkey = m_checkHotkey->IsChecked() ? 1 : 0;
         _dataConfig->m_iHotkey = m_listHotkey->GetSelection();
         _dataConfig->m_iOpenTrace = m_checkTrace->IsChecked() ? 1 : 0;
         _dataConfig->m_iAutoHook = m_checkAutoHook->IsChecked() ? 1 : 0;
         _dataConfig->m_iDataSyncTag = m_checkSetTagSync->IsChecked() ? 1 : 0;
         _dataConfig->m_iDataSyncMem = m_checkSetMemSync->IsChecked() ? 1 : 0;
-        _dataConfig->m_iHTMLSave = m_checkHTMLSave->IsChecked() ? 1 : 0;
-        _dataConfig->m_iHTMLLoad = m_checkHTMLLoad->IsChecked() ? 1 : 0;
+        _dataConfig->m_iHTMLSave = 1;//m_checkHTMLSave->IsChecked() ? 1 : 0;
+        _dataConfig->m_iHTMLLoad = 1;//m_checkHTMLLoad->IsChecked() ? 1 : 0;
+
+        _dataConfig->m_iRetrieveDelay = m_sliderSetDelay->GetValue() * 200;
 
         _dataConfig->m_iSkipError = m_checkIgnoreDict->IsChecked() ? 1 : 0;
         _dataConfig->m_iSkipDict = m_checkSkipDict->IsChecked() ? 1 : 0;
@@ -610,7 +649,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         }
 
         _dataConfig->m_iAutoSpeak = m_checkAutoSpeak->IsChecked() ? 1 : 0;
-        _dataConfig->m_iUseTidy = m_checkSetUseTidy->IsChecked() ? 1 : 0;
+        _dataConfig->m_iUseTidy = 1;//m_checkSetUseTidy->IsChecked() ? 1 : 0;
         
         _dataConfig->m_iFavoriteTab = m_listFavoriteTab->GetSelection();
 
@@ -627,6 +666,9 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
     else
     {
         m_radioIfLang->SetSelection(_dataConfig->m_iIfLanguage);
+
+        m_textSetLgsLocal->SetValue(_dataConfig->m_strLingoesExec);
+
         m_checkAutoHook->SetValue(_dataConfig->m_iAutoHook == 1);
 
         if(_dataConfig->m_iOpenHotkey == 1)
@@ -644,8 +686,10 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
 
         m_checkSetTagSync->SetValue(_dataConfig->m_iDataSyncTag == 1 ? true : false);
         m_checkSetMemSync->SetValue(_dataConfig->m_iDataSyncMem == 1 ? true : false);
-        m_checkHTMLSave->SetValue(_dataConfig->m_iHTMLSave == 1 ? true : false);
-        m_checkHTMLLoad->SetValue(_dataConfig->m_iHTMLLoad == 1 ? true : false);
+//        m_checkHTMLSave->SetValue(_dataConfig->m_iHTMLSave == 1 ? true : false);
+        //m_checkHTMLLoad->SetValue(_dataConfig->m_iHTMLLoad == 1 ? true : false);
+        m_sliderSetDelay->SetValue(_dataConfig->m_iRetrieveDelay / 200);
+        m_labelSetDelay->SetLabel(wxString::Format(wxT("%d ms"), _dataConfig->m_iRetrieveDelay));
 
         m_checkTrace->SetValue(_dataConfig->m_iOpenTrace == 1 ? true : false);
 
@@ -672,7 +716,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         m_checkSkipHtml->SetValue(_dataConfig->m_iSkipHtml == 1);
 
         m_checkAutoSpeak->SetValue(_dataConfig->m_iAutoSpeak == 1);
-        m_checkSetUseTidy->SetValue(_dataConfig->m_iUseTidy == 1);
+        //m_checkSetUseTidy->SetValue(_dataConfig->m_iUseTidy == 1);
 
         m_listFavoriteTab->SetSelection(_dataConfig->m_iFavoriteTab);
 
@@ -729,6 +773,18 @@ wxMenu* LingosHookFrame::MakeTagSubMenu(int baseid)
     return menu;
 }
 
+int LingosHookFrame::CallHook(bool hook)
+{
+    if(hook)
+    {
+        _objHook->SetHook();
+    }
+    else
+    {
+        _objHook->SetUnhook();
+    }
+    return 0;
+}
 
 void LingosHookFrame::HookTextProc(const wxString &text)
 {
@@ -755,6 +811,9 @@ void LingosHookFrame::SetHookButton(bool checked)
 {
     if(checked)
     {
+        if(_objTrayIcon != NULL)
+            _objTrayIcon->SetStatus(CTrayIconObject::TS_HOOK);
+
         ShowHint(_("Set unhook..."));
         m_btnHook->SetValue(true);
         m_btnHook->SetLabel(_("Unhook"));
@@ -762,11 +821,19 @@ void LingosHookFrame::SetHookButton(bool checked)
     }
     else
     {
+        if(_objTrayIcon != NULL)
+            _objTrayIcon->SetStatus(CTrayIconObject::TS_NORMAL);
+
         ShowHint(_("Set hook..."));
         m_btnHook->SetValue(false);
         m_btnHook->SetLabel(_("Hook"));
         ShowHint(_("Ready..."));
     }
+}
+
+void LingosHookFrame::SetCloseFlag(bool canclose)
+{
+    _bSysCanClose = canclose;
 }
 
 void LingosHookFrame::ShowHint(const wxString& hint)
@@ -828,6 +895,10 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
         InitObjects();
         LoadObjects();
     }
+    else if(message == WM_SET_HOOK)
+    {
+        CallHook(wParam == 1);
+    }
     else
     {
 	    if(_objHook.get() != NULL)
@@ -838,6 +909,14 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
     }
 
 	return wxFrame::MSWWindowProc(message, wParam, lParam);
+}
+
+void LingosHookFrame::OnClose(wxCloseEvent& event)
+{
+    if(!_bSysCanClose)
+        Show(false);
+    else
+        event.Skip();
 }
 
 void LingosHookFrame::OnWordIndexEnter(wxCommandEvent &event)
@@ -934,14 +1013,7 @@ void LingosHookFrame::OnBtnHook(wxCommandEvent &event)
 
     m_btnHook->SetValue(!check);
 
-    if(check)
-    {
-        _objHook->SetHook();
-    }
-    else
-    {
-        _objHook->SetUnhook();
-    }
+    CallHook(check);
 }
 
 void LingosHookFrame::OnCheckBoxHotkey(wxCommandEvent &event)
@@ -954,6 +1026,15 @@ void LingosHookFrame::OnBtnSetApply(wxCommandEvent &event)
     if(UpdateConfigData(true) != 0)
     {
         UpdateConfigData(false);
+    }
+}
+
+void LingosHookFrame::OnBtnSetLgsBrowse(wxCommandEvent &event)
+{
+    wxFileDialog dlg(this, wxT("Select Lingoes location.."), wxEmptyString, wxEmptyString, wxT("Execute Files(*.exe)|*.exe|All Files(*.*)|*.*"), wxFD_OPEN);
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        m_textSetLgsLocal->SetValue(dlg.GetPath());
     }
 }
 
@@ -1211,7 +1292,7 @@ void LingosHookFrame::OnCheckIgnoreDict(wxCommandEvent &event)
 {
     if(event.IsChecked())
     {
-        m_checkSkipDict->SetValue(false);
+        //m_checkSkipDict->SetValue(false);
         //m_checkSkipHtml->SetValue(false);
         //m_checkHTMLSave->SetValue(true);
         //m_checkHTMLLoad->SetValue(true);
@@ -1233,7 +1314,7 @@ void LingosHookFrame::OnCheckSkipDict(wxCommandEvent &event)
 {
     if(event.IsChecked())
     {
-        m_checkIgnoreDict->SetValue(false);
+        //m_checkIgnoreDict->SetValue(false);
         //m_checkSkipHtml->SetValue(false);
         //m_checkHTMLSave->SetValue(true);
         //m_checkHTMLLoad->SetValue(true);
@@ -1307,6 +1388,12 @@ void LingosHookFrame::OnBtnSetDictChoice(wxCommandEvent &event)
     {
         _objDict->GetHtmlDictInfo(dlg);
     }
+}
+
+void LingosHookFrame::OnScrollSetDelayEnd(wxScrollEvent& event)
+{
+    //event.GetInt();
+    m_labelSetDelay->SetLabel(wxString::Format(wxT("%d ms"), event.GetInt() * 200));
 }
 
 void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)

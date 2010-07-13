@@ -28,6 +28,7 @@ class CTagObject;
 class CDisplayObject;
 class CSpeakObject;
 class CFilterShowObject;
+class CTrayIconObject;
 
 class LingosHookFrame: public wxFrame {
 public:
@@ -39,7 +40,7 @@ public:
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
-            , CIID_BUTTON_SETDICTCHOICE };
+            , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -50,7 +51,10 @@ public:
 
     LingosHookFrame(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_FRAME_STYLE);
 
+    virtual ~LingosHookFrame();
+
     void SetHookButton(bool checked);
+    void SetCloseFlag(bool canclose);
     void ShowHint(const wxString& hint);
 private:
     // begin wxGlade: LingosHookFrame::methods
@@ -102,6 +106,9 @@ protected:
     CLHHtmlWindow* m_winHTML;
     wxPanel* m_noteContext_pane_2;
     wxRadioBox* m_radioIfLang;
+    wxStaticText* label_11;
+    wxTextCtrl* m_textSetLgsLocal;
+    wxButton* m_btnSetLgsBrowse;
 	wxCheckBox* m_checkAutoHook;
     wxCheckBox* m_checkHotkey;
     wxComboBox* m_listHotkey;
@@ -109,11 +116,14 @@ protected:
     wxStaticText* label_1;
     wxCheckBox* m_checkSetTagSync;
     wxCheckBox* m_checkSetMemSync;
-    wxStaticText* label_7;
-    wxCheckBox* m_checkSetUseTidy;
-    wxStaticText* label_2;
-    wxCheckBox* m_checkHTMLSave;
-    wxCheckBox* m_checkHTMLLoad;
+    wxStaticText* label_12;
+    wxSlider* m_sliderSetDelay;
+    wxStaticText* m_labelSetDelay;
+    //wxStaticText* label_7;
+    //wxCheckBox* m_checkSetUseTidy;
+    //wxStaticText* label_2;
+    //wxCheckBox* m_checkHTMLSave;
+    //wxCheckBox* m_checkHTMLLoad;
     wxStaticLine* static_line_6;
     wxCheckBox* m_checkIgnoreDict;
     wxCheckBox* m_checkSkipDict;
@@ -174,6 +184,7 @@ public:
     virtual void OnNoteIndexChanged(wxNotebookEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckBoxHotkey(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetApply(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnSetLgsBrowse(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntDeselect(wxListEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntSelect(wxListEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnTagSetDefault(wxCommandEvent &event); // wxGlade: <event_handler>
@@ -205,20 +216,18 @@ public:
     virtual void OnTreeResultContextMenu(wxCommandEvent& event);
     virtual void OnMemTypeKeyDown(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnMemTypeText(wxCommandEvent &event); // wxGlade: <event_handler>
-
     virtual void OnBtnDebug(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetDictChoice(wxCommandEvent &event); // wxGlade: <event_handler>
-
+    virtual void OnScrollSetDelayEnd(wxScrollEvent &event); // wxGlade: <event_handler>
 
 	virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
+    virtual void OnClose(wxCloseEvent& event);
 public:
 	void HookTextProc(const wxString& text);
 	void HookHTMLProc(const wxString& html);
     void HookCDProc(const wxString& str);
-	//void ResultProc(bool result, const wxString& index);
-	//void SearchIndex(const wxString& index);
-//	void SearchResult(const CDBAccess::TSearchData& data);
+
 private:
     int CreateObjects();
 	int InitObjects();
@@ -226,6 +235,8 @@ private:
     int UpdateConfigData(bool retrieve);
     int MakeContextMenu(const wxString& title, int orig, const wxPoint& pos);
     wxMenu* MakeTagSubMenu(int baseid);
+
+    int CallHook(bool hook);
 private:
     int CopyWord(const wxString& word);
     int SpeakWord(const wxString& word);
@@ -244,6 +255,10 @@ private:
     std::auto_ptr<MemoryDaily::CManageObject> _objMemoryDaily;
     std::auto_ptr<CSpeakObject> _objSpeak;
     std::auto_ptr<CFilterShowObject> _objFilterShow;
+
+    CTrayIconObject* _objTrayIcon;
+private:
+    bool _bSysCanClose;
 }; // wxGlade: end class
 
 

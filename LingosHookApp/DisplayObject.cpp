@@ -57,6 +57,7 @@ void CDisplayObject::ShowSpecialDictResult(const SpecialDictParser::CDictParser*
 
 void CDisplayObject::ShowHtmlDictResult(const wxString& html)
 {
+//    _frame->m_winHTML->SetCharset(wxT("utf-8"));
     _frame->m_winHTML->LoadString(html);
 }
 
