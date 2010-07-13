@@ -219,7 +219,7 @@ void CHtmlDictChoiceDialog::OnRadioDictAuto(wxCommandEvent &event)
 void CHtmlDictChoiceDialog::set_properties()
 {
     // begin wxGlade: CHtmlDictChoiceDialog::set_properties
-    SetTitle(wxT("Dictionary Choice.."));
+    SetTitle(wxT("Dictionary Chooser.."));
     m_listDict->SetMinSize(wxSize(378, 214));
     // end wxGlade
 }

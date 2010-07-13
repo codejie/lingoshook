@@ -17,8 +17,8 @@
 #include "HookObject.h"
 
 
-typedef BOOL (*CreateHookThreadPtr)(HWND, LPCTSTR, LPCTSTR, UINT*);
-typedef BOOL (*CreateHookThreadByHWNDPtr)(HWND, HWND, UINT, UINT*);
+typedef BOOL (*CreateHookThreadPtr)(HWND, LPCTSTR, LPCTSTR, UINT, UINT*);
+typedef BOOL (*CreateHookThreadByHWNDPtr)(HWND, HWND, UINT, UINT, UINT*);
 typedef BOOL (*RemoveHookThreadPtr)(void);
 
 
@@ -33,7 +33,7 @@ CDllHookObject::~CDllHookObject()
 	Unhook();
 }
 
-int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT& msgid)
+int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT delay, UINT& msgid)
 {
 	if(frame == NULL || lgs == NULL)
 		return -1;
@@ -44,7 +44,7 @@ int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT& msgid)
 		CreateHookThreadByHWNDPtr pch = (CreateHookThreadByHWNDPtr)GetProcAddress(_hDll, "CreateHookThreadByHWND");
 		if(pch != NULL)
 		{
-			if(pch(frame, lgs, param, &msgid) != TRUE)
+			if(pch(frame, lgs, param, delay, &msgid) != TRUE)
 			{
 				wxLogDebug(_("call CreateHookThread() failed."));
 				::FreeLibrary(_hDll);
@@ -454,7 +454,8 @@ int CHookObject::Init(const CConfigData &conf)
     _bAutoHook = conf.m_iAutoHook == 1 ? true : false;
     _iIfLanguage = conf.m_iIfLanguage;
     _bOpenHotkey = conf.m_iOpenHotkey == 1 ? true : false;
-    _bHookCD = true;//(conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
+    _bHookCD = (conf.m_iSkipError == 1 || (conf.m_iSkipDict == 1 && conf.m_iSkipHtml == 1));//  true;//(conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
+    _nDelay = conf.m_iRetrieveDelay;
 
     if(_bOpenHotkey)
     {
@@ -760,7 +761,7 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 
 int CHookObject::Hook(HWND hwnd)
 {
-    if(_objHook.Hook(_hwndFrame, hwnd, (_bHookCD ? 1 : 0), _nHookMsgID) != 0)
+    if(_objHook.Hook(_hwndFrame, hwnd, (_bHookCD ? 1 : 0), _nDelay, _nHookMsgID) != 0)
     {
         ShowInfo(_("Hook hook failed."));
         return -1;

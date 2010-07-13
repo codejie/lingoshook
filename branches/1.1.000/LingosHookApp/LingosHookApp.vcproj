@@ -55,6 +55,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;_WINDOWS;NOPCH"
+				AdditionalIncludeDirectories="$(WX_ROOT)\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -65,6 +67,8 @@
 				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				IgnoreEmbeddedIDL="false"
+				TypeLibraryResourceID="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -74,6 +78,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -326,6 +331,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\HookObject.h"
+				>
 			</File>
 			<File
 				RelativePath=".\HtmlDictParser.h"

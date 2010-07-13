@@ -18,7 +18,7 @@ public:
 	CDllHookObject();
 	virtual ~CDllHookObject();
 
-    int Hook(HWND frame, HWND lgs, UINT param, UINT& msgid);
+    int Hook(HWND frame, HWND lgs, UINT param, UINT delay, UINT& msgid);
 	int Unhook();
 	
 //	int MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam);
@@ -99,6 +99,7 @@ private:
     static int _iIfLanguage;
     bool _bOpenHotkey;
     bool _bHookCD;
+    UINT _nDelay;
     UINT _nControlKey;
     UINT _nHotKey;
 private:

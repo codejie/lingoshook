@@ -26,6 +26,9 @@ CConfigData::CConfigData(CDBAccess& db)
 //, m_iDataProcFlag(1)
 , m_iSkipError(1)
 , m_iLoadHtmlDict(2)
+, m_strLingoesExec(_(""))
+, m_strLingoesPath(_(""))
+, m_iRetrieveDelay(0)
 {
 }
 
@@ -73,7 +76,7 @@ int CConfigData::GetData(int attr, int& value)
 	return 0;
 }
 
-int CConfigData::GetData(int attr, wxString& value)
+int CConfigData::GetData(int attr, std::wstring& value)
 {
     try
     {
@@ -133,11 +136,11 @@ int CConfigData::SetData(int attr, int &value)
     return 0;
 }
 
-int CConfigData::SetData(int attr, wxString &value)
+int CConfigData::SetData(int attr, const std::wstring &value)
 {
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT COOUNT(*) FROM ConfigTable WHERE Attr = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT StrVal FROM ConfigTable WHERE Attr = ?");
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
@@ -210,6 +213,14 @@ int CConfigData::Load()
         m_iSkipError = 1;
     if(GetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
         m_iLoadHtmlDict = 2;
+
+    if(GetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
+        m_strLingoesExec = _("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe");
+    if(GetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
+        m_strLingoesPath = _("C:\\Program Files\\Lingoes\\Translator2");
+
+    if(GetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
+        m_iRetrieveDelay = 0;
     return 0;
 }
 
@@ -255,6 +266,15 @@ int CConfigData::Save()
         return -1;
     if(SetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
         return -1;
+
+    if(SetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
+        return -1;
+    if(SetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
+        return -1;
+
+    if(SetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
+        return -1;
+
     return 0;
 }
 
@@ -292,3 +312,18 @@ unsigned int CConfigData::GetHotKey() const
         return VK_F10;
     }
 }
+
+int CConfigData::GetLingoesParam(const std::wstring &local)
+{
+    m_strLingoesExec = local;
+    std::wstring::size_type pos = local.find_last_of(_("\\"));
+    if(pos != std::wstring::npos)
+        m_strLingoesPath = local.substr(0, pos);
+    else
+        m_strLingoesPath = _("");
+
+    return 0;
+}
+
+
+

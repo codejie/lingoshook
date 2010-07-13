@@ -159,6 +159,9 @@ int CDictObject::ParserHTML(const std::wstring& html)
         pe = doc.FindNextElement();
     }
 
+    if(result.size() == 0)
+        return -1;
+
     if(SaveResult(html, result) == 0)
     {
         //g_objTrigger.OnResultSave(result);
