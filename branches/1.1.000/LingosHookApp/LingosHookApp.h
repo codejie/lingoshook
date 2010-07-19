@@ -40,7 +40,7 @@ public:
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
-            , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY };
+            , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -92,7 +92,7 @@ protected:
     wxPanel* panel_5;
     wxButton* m_btnMemNext;
     wxPanel* panel_6;
-    wxTextCtrl* m_textMemType;
+    CLHTextCtrl* m_textMemType;
     wxPanel* panel_10;
     wxStaticLine* static_line_3;
     wxPanel* panel_7;
@@ -181,6 +181,7 @@ public:
     virtual void OnIndexDelete(wxCommandEvent& event);
     virtual void OnIndexFindItem(wxCommandEvent& event);
     virtual void OnIndexContextMenu(wxCommandEvent& event);
+    virtual void OnIndexFocus(wxCommandEvent& event);
     virtual void OnNoteIndexChanged(wxNotebookEvent &event); // wxGlade: <event_handler>
     virtual void OnCheckBoxHotkey(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetApply(wxCommandEvent &event); // wxGlade: <event_handler>
@@ -215,6 +216,7 @@ public:
     virtual void OnCheckSkipDict(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnTreeResultContextMenu(wxCommandEvent& event);
     virtual void OnMemTypeKeyDown(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnMemTypeFocus(wxCommandEvent& event);
     virtual void OnMemTypeText(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnDebug(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetDictChoice(wxCommandEvent &event); // wxGlade: <event_handler>

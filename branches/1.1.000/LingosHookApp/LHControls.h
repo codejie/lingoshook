@@ -26,6 +26,10 @@ protected:
     virtual void OnKeyUp(wxKeyEvent& event);
     virtual void OnContextMenu(wxContextMenuEvent& event);
     virtual void OnMouseRightUp(wxMouseEvent& event);
+
+    virtual void OnSetFocus(wxFocusEvent& event);
+    virtual void OnKillFocus(wxFocusEvent& event);
+    virtual void OnMouseLeave(wxMouseEvent& event);
 private:
     void SendEvent(wxEventType cmdtype, int selected);
 private:
@@ -35,6 +39,7 @@ private:
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_DELETE, -1)
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_FINDITEM, -1)
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_CONTEXTMENU, -1)
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_FOCUS, -1)
 
 //
 class CLHTreeCtrl : public wxTreeCtrl
@@ -159,17 +164,24 @@ protected:
 class CLHTextCtrl : public wxTextCtrl
 {
 public:
-    CLHTextCtrl(wxWindow *parent, wxWindowID id, const wxString& value)
-        : wxTextCtrl(parent, id, value)
-    {
-    }
+    CLHTextCtrl(wxWindow *parent, wxWindowID id,
+               const wxString& value = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxTextCtrlNameStr);
 protected:
+    virtual void OnSetFocus(wxFocusEvent& event);
+    virtual void OnKillFocus(wxFocusEvent& event);
+    virtual void OnMouseLeave(wxMouseEvent& event);
     virtual void OnKeyDown(wxKeyEvent& event);
 private:
     DECLARE_EVENT_TABLE()
 };
 
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, -1)
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_FOCUS, -1)
 
 ///
 
@@ -202,6 +214,11 @@ public:
         return true;
     }
     void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
+//public:
+//    void OnMouseEnter(wxMouseEvent& event);
+//    void OnMouseLeave(wxMouseEvent& event);
+//private:
+//    DECLARE_EVENT_TABLE()
 };
 
 #else
@@ -248,5 +265,22 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+
+#include "wx/panel.h"
+
+class CLHPanel : public wxPanel
+{
+public:
+    CLHPanel(wxWindow *parent, wxWindowID winid = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL | wxNO_BORDER, const wxString& name = wxPanelNameStr)
+        : wxPanel(parent, winid, pos, size, style, name)
+//        , _winChild(NULL)
+    {
+    }
+
+    void OnMouseEnter(wxMouseEvent& event);
+    void OnMouseLeave(wxMouseEvent& event);
+private:
+    DECLARE_EVENT_TABLE()
+};
 
 #endif

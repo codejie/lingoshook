@@ -202,7 +202,7 @@ int CConfigData::Load()
     //if(GetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
     //    m_iSaveUseTidy = 0;
     if(GetData(CA_SKIPDICT, m_iSkipDict) != 0)
-        m_iSkipDict = 1;
+        m_iSkipDict = 0;
     if(GetData(CA_SKIPHTML, m_iSkipHtml) != 0)
         m_iSkipHtml = 0;
     if(GetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)

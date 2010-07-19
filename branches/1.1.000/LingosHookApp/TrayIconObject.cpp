@@ -4,6 +4,7 @@
 
 #include "Consts.h"
 #include "ConfigData.h"
+#include "HookObject.h"
 #include "LingosHookApp.h"
 #include "TrayIconObject.h"
 
@@ -78,7 +79,9 @@ wxMenu* CTrayIconObject::CreatePopupMenu()
     menu->Append(CMIID_SHOW, wxT("Show LingosHook"));
     menu->Append(CMIID_RUNLINGOS, wxT("Run Lingoes"));
 
-    if(_dataConfig->m_strLingoesExec.empty() || _dataConfig->m_strLingoesPath.empty())
+    HWND hwnd = CHookObject::GetLingoesHandle(0);
+
+    if(_dataConfig->m_strLingoesExec.empty() || _dataConfig->m_strLingoesPath.empty() || hwnd != NULL)
     {
         menu->Enable(CMIID_RUNLINGOS, false);
     }

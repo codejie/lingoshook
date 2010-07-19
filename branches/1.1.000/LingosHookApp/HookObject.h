@@ -79,6 +79,8 @@ public:
     int SetUnhook();
 
 	int MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam);
+
+    static HWND GetLingoesHandle(int lang, bool strick = false);
 protected:
     int Hook(HWND hwnd);
     int Unhook();
@@ -91,7 +93,6 @@ private:
     int CreateCheckThread();
     void ClearCheckThread();
 
-    static HWND GetLingoesHandle(int lang, bool strick = false);
 private:
 	LingosHookFrame* _objFrame;
 

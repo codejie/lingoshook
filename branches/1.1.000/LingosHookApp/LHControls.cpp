@@ -7,11 +7,15 @@
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_DELETE)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_FINDITEM)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_CONTEXTMENU)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_FOCUS)
 
 BEGIN_EVENT_TABLE(CLHListBox, wxListBox)
     EVT_KEY_DOWN(CLHListBox::OnKeyDown)
     EVT_KEY_UP(CLHListBox::OnKeyUp)
     EVT_CONTEXT_MENU(CLHListBox::OnContextMenu)
+    EVT_SET_FOCUS(CLHListBox::OnSetFocus)
+    EVT_KILL_FOCUS(CLHListBox::OnKillFocus)
+    EVT_LEAVE_WINDOW(CLHListBox::OnMouseLeave)
 //    EVT_RIGHT_UP(CLHListBox::OnMouseRightUp)
 END_EVENT_TABLE()
 
@@ -125,7 +129,32 @@ void CLHListBox::OnMouseRightUp(wxMouseEvent &event)
     return;
 }
 
-///
+void CLHListBox::OnSetFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_LISTBOX_FOCUS,  GetId());
+    ev.SetInt(1);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHListBox::OnKillFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_LISTBOX_FOCUS,  GetId());
+    ev.SetInt(0);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHListBox::OnMouseLeave(wxMouseEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_LISTBOX_FOCUS,  GetId());
+    ev.SetInt(0);
+
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+/////////////////////
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU)
 
@@ -192,10 +221,45 @@ void CLHResultTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
 //////////////
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TEXTCTRL_FOCUS)
 
 BEGIN_EVENT_TABLE(CLHTextCtrl, wxTextCtrl)
     EVT_KEY_DOWN(CLHTextCtrl::OnKeyDown)
+
+    EVT_SET_FOCUS(CLHTextCtrl::OnSetFocus)
+    EVT_KILL_FOCUS(CLHTextCtrl::OnKillFocus)
+    EVT_LEAVE_WINDOW(CLHTextCtrl::OnMouseLeave)
 END_EVENT_TABLE()
+
+CLHTextCtrl::CLHTextCtrl(wxWindow *parent, wxWindowID id, const wxString &value, const wxPoint &pos, const wxSize &size, long style, const wxValidator &validator, const wxString &name)
+: wxTextCtrl(parent, id, value, pos, size, style, validator, name)
+{
+}
+
+void CLHTextCtrl::OnSetFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_FOCUS,  GetId());
+    ev.SetInt(1);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHTextCtrl::OnKillFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_FOCUS,  GetId());
+    ev.SetInt(0);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHTextCtrl::OnMouseLeave(wxMouseEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_FOCUS,  GetId());
+    ev.SetInt(0);
+
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
 
 void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
 {
@@ -217,7 +281,6 @@ void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
 }
 
 ////////////////////////////////////////////////////////
-
 
 //#include "res/checked.xpm"
 //#include "res/unchecked.xpm"
@@ -282,3 +345,36 @@ void CLHCheckBoxList::SetChecked(long item, bool checked)
 }
 //0-p-[pdfsdpp00000.00/.'0'/0[00.0'0[]
 ///[[[[[[...........[0'''''''''''''''''''''''0.0'[[[[[[,9;8p78m,o,oa9/99
+
+
+//BEGIN_EVENT_TABLE(CLHHtmlWindow, wxIEHtmlWin)
+//  EVT_ENTER_WINDOW(CLHHtmlWindow::OnMouseEnter)
+//  EVT_LEAVE_WINDOW(CLHHtmlWindow::OnMouseLeave)
+//END_EVENT_TABLE()
+//
+//void CLHHtmlWindow::OnMouseEnter(wxMouseEvent &event)
+//{
+//    this->Enable(true);
+//}
+//
+//void CLHHtmlWindow::OnMouseLeave(wxMouseEvent &event)
+//{
+//    this->Enable(false);
+//}
+
+/////////////////////////////////////////////
+BEGIN_EVENT_TABLE(CLHPanel, wxPanel)
+  EVT_ENTER_WINDOW(CLHPanel::OnMouseEnter)
+  EVT_LEAVE_WINDOW(CLHPanel::OnMouseLeave)
+END_EVENT_TABLE()
+
+void CLHPanel::OnMouseEnter(wxMouseEvent &event)
+{
+    int i = event.GetId();
+    this->Enable(true);
+}
+
+void CLHPanel::OnMouseLeave(wxMouseEvent &event)
+{
+    this->Enable(false);
+}
