@@ -62,8 +62,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_noteContext_pane_6 = new wxPanel(m_noteContext, wxID_ANY);
     m_noteContext_pane_5 = new wxPanel(m_noteContext, wxID_ANY);
     m_noteContext_pane_3 = new wxPanel(m_noteContext, wxID_ANY);
-    m_noteContext_pane_4 = new wxScrolledWindow(m_noteContext, wxID_ANY, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
-    m_noteContext_pane_2 = new wxPanel(m_noteContext, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+    m_noteContext_pane_4 = new wxScrolledWindow(m_noteContext, wxID_ANY);//, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
+    m_noteContext_pane_2 = new wxPanel(m_noteContext, CIID_PANEL_HTML);//, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
     notebook_2_pane_1 = new wxPanel(m_noteContext, wxID_ANY);
     window_1_pane_1 = new wxPanel(m_splitWindow, wxID_ANY);
     m_noteIndex = new wxNotebook(window_1_pane_1, CIID_PAGE_INDEX, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
@@ -206,6 +206,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_COMMAND(CIID_LIST_INDEX, wxEVT_COMMAND_LH_LISTBOX_DELETE, LingosHookFrame::OnIndexDelete)
     EVT_COMMAND(CIID_LIST_INDEX, wxEVT_COMMAND_LH_LISTBOX_FINDITEM, LingosHookFrame::OnIndexFindItem)
     EVT_COMMAND(CIID_LIST_INDEX, wxEVT_COMMAND_LH_LISTBOX_CONTEXTMENU, LingosHookFrame::OnIndexContextMenu)
+    EVT_COMMAND(CIID_LIST_INDEX, wxEVT_COMMAND_LH_LISTBOX_FOCUS, LingosHookFrame::OnIndexFocus)
     EVT_NOTEBOOK_PAGE_CHANGED(CIID_PAGE_INDEX, LingosHookFrame::OnNoteIndexChanged)
     EVT_CHECKBOX(CIID_CHECKBOX_HOTKEY, LingosHookFrame::OnCheckBoxHotkey)
     EVT_BUTTON(CIID_BUTTON_APPLY, LingosHookFrame::OnBtnSetApply)
@@ -246,6 +247,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_COMMAND(CIID_TREE_RESULT, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeResultContextMenu)
 
     EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, LingosHookFrame::OnMemTypeKeyDown)
+    EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_FOCUS, LingosHookFrame::OnMemTypeFocus)
     EVT_TEXT(CIID_TEXT_MEMTYPE, LingosHookFrame::OnMemTypeText)
 	EVT_COMMAND_SCROLL_ENDSCROLL(wxID_ANY, LingosHookFrame::OnScrollSetDelayEnd)
 //    EVT_MENU_RANGE(IMID_TAGMOVE_START, IMID_TAGMOVE_END, OnMenuIndexTagMove)
@@ -297,6 +299,9 @@ void LingosHookFrame::set_properties()
     //m_checkSetUseTidy->Enable(false);
     //m_checkHTMLSave->Enable(false);
     //m_checkHTMLLoad->Enable(false);
+
+    //m_noteContext_pane_2->Enable(false);
+    //m_winHTML->Enable(false);
 
 	if(CreateObjects() != 0)
     {
@@ -606,7 +611,7 @@ int LingosHookFrame::LoadObjects()
         g_objTrigger.OnSortShow(CLHFilterTreeCtrl::FilterType(FMID_CLOSE - FMID_BEGIN));        
     }
 
-    m_cbWordIndex->SetFocus();
+//    m_cbWordIndex->SetFocus();
 
     ShowHint(_("Ready.."));
 
@@ -979,6 +984,14 @@ void LingosHookFrame::OnIndexContextMenu(wxCommandEvent& event)
     MakeContextMenu(event.GetString(), 0, pos);
 }
 
+void LingosHookFrame::OnIndexFocus(wxCommandEvent& event)
+{
+    if(event.GetInt() == 1)
+        m_winHTML->Enable(false);
+    else
+        m_winHTML->Enable(true);
+}
+
 void LingosHookFrame::OnNoteIndexChanged(wxNotebookEvent &event)
 {
     int oldpos = event.GetOldSelection();
@@ -1321,6 +1334,14 @@ void LingosHookFrame::OnCheckSkipDict(wxCommandEvent &event)
     }
 }
 
+void LingosHookFrame::OnMemTypeFocus(wxCommandEvent& event)
+{
+    if(event.GetInt() == 1)
+        m_winHTML->Enable(false);
+    else
+        m_winHTML->Enable(true);
+}
+
 void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
 {
     int key = event.GetInt();// - 48;
@@ -1363,6 +1384,7 @@ void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
         m_btnMemRemove->Enable(true);
         m_btnMemNext->Enable(true);
     }
+//    m_textMemType->SetFocus();
 }
 
 void LingosHookFrame::OnMemTypeText(wxCommandEvent &event)
