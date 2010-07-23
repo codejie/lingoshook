@@ -1,0 +1,20 @@
+/*********************************************************/
+// LingosHook by Jie.(codejie@gmail.com), 2010 - 
+/*********************************************************/
+
+aProgramICON ICON "res/lh_logo_main.ico"
+
+ICON_MAIN ICON "res/lh_logo_main.ico"
+
+ICON_CHECKED ICON "res/checked.ico"
+ICON_UNCHECKED ICON "res/unchecked.ico"
+
+ICON_NORMAL ICON "res/lh_normal.ico"
+ICON_HOOK ICON "res/lh_hook.ico"
+
+ICON32 ICON "res/lh_logo32.ico"
+ICON16 ICON "res/lh_logo16.ico"
+
+//#define wxUSE_NO_MANIFEST 1
+//
+//#include "wx/msw/wx.rc"
