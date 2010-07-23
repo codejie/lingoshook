@@ -25,9 +25,9 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iFavoriteTab(1)
 //, m_iDataProcFlag(1)
 , m_iSkipError(1)
-, m_iLoadHtmlDict(2)
-, m_strLingoesExec(_(""))
-, m_strLingoesPath(_(""))
+, m_iLoadHtmlDict(0)
+, m_strLingoesExec(_("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"))
+, m_strLingoesPath(_("C:\\Program Files\\Lingoes\\Translator2"))
 , m_iRetrieveDelay(0)
 {
 }
@@ -212,7 +212,7 @@ int CConfigData::Load()
     if(GetData(CA_SKIPERROR, m_iSkipError) != 0)
         m_iSkipError = 1;
     if(GetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
-        m_iLoadHtmlDict = 2;
+        m_iLoadHtmlDict = 0;
 
     if(GetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
         m_strLingoesExec = _("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe");

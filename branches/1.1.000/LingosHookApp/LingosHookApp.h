@@ -72,7 +72,7 @@ protected:
     wxStaticBox* sizer_44_staticbox;
     wxStaticBox* sizer_15_staticbox;
 	wxStaticBox* sizer_27_staticbox;
-    wxComboBox* m_cbWordIndex;
+    CLHComboBox* m_cbWordIndex;
     CLHListBox* m_listIndex;
     wxPanel* notebook_1_pane_1;
     wxButton* m_btnFilter;
@@ -176,6 +176,8 @@ protected:
 public:
     virtual void OnWordIndexEnter(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnWordIndexText(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnWordIndexFocus(wxCommandEvent& event);
+
     virtual void OnIndexDClick(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexSelected(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexDelete(wxCommandEvent& event);

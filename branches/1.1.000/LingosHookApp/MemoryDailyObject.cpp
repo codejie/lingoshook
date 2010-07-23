@@ -56,10 +56,10 @@ int CManageObject::LoadWords()
 {
     try
     {
-        if(!_db.TableExists(_("DictTable")))
-            return -1;
+        //if(!_db.TableExists(_("DictTable")))
+        //    return -1;
 
-        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, Word, Counter, CheckinTime, UpdateTime FROM WordTable");
+        CDBAccess::TResult res = _db.ExecuteQuery("SELECT WordTable.WordID, WordTable.Word, WordTable.Counter, WordTable.UpdateTime, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordTable.SrcID = SrcDataTable.SrcID");
         if(!res.IsOk())
             return -1;
         while(res.NextRow())
@@ -180,7 +180,7 @@ int CManageObject::PushWord(int score, const TRecord& rec, int offset)
         //else 
         //if(offset != 0)
         //{
-            CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE ID = ?");
+            CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE WordID = ?");
             query.Bind(1, score);
             query.Bind(2, _stCacheRec.m_iID);
             query.ExecuteUpdate();
@@ -251,7 +251,7 @@ int CManageObject::WordInsert(int wordid)
 
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res =  query.ExecuteQuery();
         if(!res.IsOk())
@@ -329,10 +329,10 @@ int CManageObject::WordUpdate(int wordid)
 
     try
     {
-        if(!_db.TableExists(_("DictTable")))
-            return -1;
+        //if(!_db.TableExists(_("DictTable")))
+        //    return -1;
 
-        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, Word, Counter, CheckinTime, UpdateTime FROM WordTable");
+        CDBAccess::TResult res = _db.ExecuteQuery("SELECT WordID, Word, Counter, CheckinTime, UpdateTime FROM WordTable");
         if(!res.IsOk())
             return -1;
         while(res.NextRow())

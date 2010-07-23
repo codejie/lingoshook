@@ -40,7 +40,7 @@ int CDictObject::Init()
     {
         if(!_db.TableExists(wxT("DictTable")))
         {
-		    const char* dicttable = "CREATE TABLE DictTable (ID INTEGER PRIMARY KEY AUTOINCREMENT,DictID VARCHAR(64), Title VARCHAR(128),CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))";
+		    const char* dicttable = "CREATE TABLE DictTable (DictIndex INTEGER PRIMARY KEY AUTOINCREMENT,DictID VARCHAR(64), Title VARCHAR(128),CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))";
 		    _db.ExecuteUpdate(dicttable);
         }
 
@@ -49,10 +49,18 @@ int CDictObject::Init()
 		    const char* dicttable = "CREATE TABLE DictConfigTable (DictIndex INTEGER, LoadParam INTEGER, StoreParam INTEGER)";
 		    _db.ExecuteUpdate(dicttable);
         }
- 
-		const char* wordtable = "CREATE TABLE IF NOT EXISTS WordTable (ID INTEGER PRIMARY KEY AUTOINCREMENT,Word VARCHAR(32) UNIQUE,Counter INTEGER, CheckinTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), UpdateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')),HTML TEXT)";
-		_db.ExecuteUpdate(wordtable);
-
+        
+        if(!_db.TableExists(wxT("SrcDataTable")))
+        {
+		    const char* datatable = "CREATE TABLE SrcDataTable (SrcID INTEGER PRIMARY KEY AUTOINCREMENT, CheckinTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), HTML TEXT)";
+    		_db.ExecuteUpdate(datatable);
+        }        
+        
+        if(!_db.TableExists(wxT("WordTable")))
+        {
+		    const char* wordtable = "CREATE TABLE WordTable (WordID INTEGER PRIMARY KEY AUTOINCREMENT, SrcID INTEGER, Word VARCHAR(32) UNIQUE,Counter INTEGER, UpdateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))";
+    		_db.ExecuteUpdate(wordtable);
+        }
     }
     catch(const CDBAccess::TException& e)
     {
@@ -175,14 +183,26 @@ int CDictObject::ForceSaveHTML(const std::wstring& html)
 {
     if(_strCacheWord.empty())
         return -1;
-    int wordid = -1;
 
-    bool isexist = false;
-    int ret = SaveWord(html, _strCacheWord, wordid, isexist);
+    int wordid = -1;
+    int count = 0;
+
+    if(CheckWord(_strCacheWord, wordid, count) != 0)
+        return -1;
+
+    if(wordid != -1)
+        return 0;
+
+    int srcid = -1;
+    
+    if(SaveSrcData(html, srcid) != 0)
+        return -1;
+    if(SaveWord(srcid, _strCacheWord, wordid) != 0)
+        return -1;
 
     _strCacheWord = wxEmptyString;
 
-    return ret;
+    return 0;
 }
 
 int CDictObject::ParserSpecialDict(const std::wstring& html, const std::wstring& dictid, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result)
@@ -195,17 +215,145 @@ int CDictObject::ParserHtmlDict(const std::wstring &html, const std::wstring& di
     return _objHtmlDictParser->ParserHTML(_db, html, dictid, doc, dict, result);
 }
 
-int CDictObject::SaveResult(const std::wstring& html, const TResultMap& result)
+int CDictObject::CheckWord(const std::wstring &word, int &wordid, int &count)
 {
     try
     {
-        int wordid = -1;
-        bool isexist = false; 
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordID, Counter FROM WordTable WHERE Word = ?");
+        query.Bind(1, word);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            throw CDBAccess::TException(255, _("SELECT WordID of WordTable FAILED."));
+        if(res.Eof())
+        {
+            wordid = -1;
+            count = 0;
+        }
+        else
+        {
+            wordid = res.GetInt(0);
+            count = res.GetInt(1);
+        }
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::FilterResult(TResultMap& result)
+{
+    int wordid = -1, count = 0;
+    TResultMap::iterator it = result.begin();
+    while(it != result.end())
+    {
+        if(CheckWord(it->first, wordid, count) != 0)
+            return -1;
+        if(wordid == -1)
+        {
+            ++ it;
+        }
+        else
+        {
+            UpdateWordData(wordid, count + 1);
+
+            g_objTrigger.OnWordUpdate(wordid, it->first);
+
+            result.erase(it ++);
+            continue;
+        }
+    }
+    return 0;
+}
+
+int CDictObject::SaveSrcData(const std::wstring& html, int& srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO SrcDataTable (HTML) VALUES (?)");
+        query.Bind(1, html);
+
+        if(query.ExecuteUpdate() == 0)
+            return -1;
+        
+        srcid = _db.GetLastRowId().ToLong();
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::RemoveSrcData(int srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT COUNT(*) FROM WordTable WHERE SrcID = ?");
+        query.Bind(1, srcid);
+        
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(res.Eof())
+            return -1;
+        int count = res.GetInt(0);
+        if(count == 0)
+        {
+            query.Reset();
+            query = _db.PrepareStatement("DELETE FROM SrcDataTable WHERE SrcID = ?");
+            query.Bind(1, srcid);
+
+            if(query.ExecuteUpdate() == 0)
+                return -1;
+        }
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::SaveWord(int srcid, const std::wstring& word, int& wordid)
+{
+    try
+    {
+	    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (SrcID, Word, Counter) VALUES(?, ?, 1)");
+        query.Bind(1, srcid);
+        query.Bind(2, word);
+	    if(query.ExecuteUpdate() == 0)
+            return -1;
+
+	    wordid = _db.GetLastRowId().ToLong();
+
+        g_objTrigger.OnWordSave(wordid, word);
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::RemoveWord(const wxString& word)
+{
+    int wordid = -1, srcid = -1;
+    if(GetWordID(word.c_str(), wordid, srcid) != 0)
+        return -1;
+    return RemoveWord(wordid, srcid);
+}
+
+int CDictObject::SaveResult(int srcid, const TResultMap &result)
+{
+    try
+    {
         for(TResultMap::const_iterator it = result.begin(); it != result.end(); ++ it)
         {
-            SaveWord(html, it->first, wordid, isexist);
-            if(isexist)
-                continue;
+            int wordid = -1;
+            if(SaveWord(srcid, it->first, wordid) != 0)
+                return -1;
             if(_objSpecialDictParser->SaveResult(_db, wordid, it->second.m_resultDict) != 0)
                 return -1;
             if(_objHtmlDictParser->SaveResult(_db, wordid, it->second.m_resultHtml) != 0)
@@ -216,58 +364,99 @@ int CDictObject::SaveResult(const std::wstring& html, const TResultMap& result)
     {
         return -1;
     }
-
     return 0;
 }
 
-int CDictObject::SaveWord(const std::wstring& html, const std::wstring& word, int& wordid, bool& isexist)
+int CDictObject::SaveResult(const std::wstring& html, TResultMap& result)
 {
-    CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter FROM WordTable WHERE Word = ?");
-	query.Bind(1, word);
-    CDBAccess::TResult res = query.ExecuteQuery();
-	if(!res.IsOk())
-        throw CDBAccess::TException(255, _("SELECT ID of WordTable FAILED."));
-
-    isexist = !res.Eof();
-
-	if(!res.Eof())
-	{
-		wordid = res.GetInt(0);
-        int counter = res.GetInt(1);
-
-        UpdateWordData(wordid, counter + 1);
-
-        g_objTrigger.OnWordUpdate(wordid, word);
-	}
-	else
-	{
-        if(_config.m_iHTMLSave == 1)
-        {
-		    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (Word, Counter, HTML) VALUES(?, 1, ?)");
-            query.Bind(1, word.c_str());
-            query.Bind(2, html.c_str());
-		    query.ExecuteUpdate();
-
-		    wordid = _db.GetLastRowId().ToLong();
-        }
-        else
-        {
-		    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (Word, Counter) VALUES(?, 1)");
-            query.Bind(1, word.c_str());
-		    query.ExecuteUpdate();
-
-		    wordid = _db.GetLastRowId().ToLong();
-        }
-
-        g_objTrigger.OnWordSave(wordid, word);
- 	}
-
-	return 0;    
+    if(FilterResult(result) != 0)
+        return -1;
+    int srcid = -1;
+    if(SaveSrcData(html, srcid) != 0)
+        return -1;
+    if(SaveResult(srcid, result) != 0)
+    {
+        RemoveSrcData(srcid);
+        return -1;
+    }
+    return 0;
 }
+
+////
+
+//int CDictObject::SaveResult(const std::wstring& html, const TResultMap& result)
+//{
+//    try
+//    {
+//        int wordid = -1;
+//        bool isexist = false; 
+//        for(TResultMap::const_iterator it = result.begin(); it != result.end(); ++ it)
+//        {
+//            SaveWord(html, it->first, wordid, isexist);
+//            if(isexist)
+//                continue;
+//            if(_objSpecialDictParser->SaveResult(_db, wordid, it->second.m_resultDict) != 0)
+//                return -1;
+//            if(_objHtmlDictParser->SaveResult(_db, wordid, it->second.m_resultHtml) != 0)
+//                return -1;
+//        }
+//    }
+//    catch(CDBAccess::TException& e)
+//    {
+//        return -1;
+//    }
+//
+//    return 0;
+//}
+//
+//int CDictObject::SaveWord(const std::wstring& html, const std::wstring& word, int& wordid, bool& isexist)
+//{
+//    CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter FROM WordTable WHERE Word = ?");
+//	query.Bind(1, word);
+//    CDBAccess::TResult res = query.ExecuteQuery();
+//	if(!res.IsOk())
+//        throw CDBAccess::TException(255, _("SELECT ID of WordTable FAILED."));
+//
+//    isexist = !res.Eof();
+//
+//	if(!res.Eof())
+//	{
+//		wordid = res.GetInt(0);
+//        int counter = res.GetInt(1);
+//
+//        UpdateWordData(wordid, counter + 1);
+//
+//        g_objTrigger.OnWordUpdate(wordid, word);
+//	}
+//	else
+//	{
+//        if(_config.m_iHTMLSave == 1)
+//        {
+//		    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (Word, Counter, HTML) VALUES(?, 1, ?)");
+//            query.Bind(1, word.c_str());
+//            query.Bind(2, html.c_str());
+//		    query.ExecuteUpdate();
+//
+//		    wordid = _db.GetLastRowId().ToLong();
+//        }
+//        else
+//        {
+//		    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (Word, Counter) VALUES(?, 1)");
+//            query.Bind(1, word.c_str());
+//		    query.ExecuteUpdate();
+//
+//		    wordid = _db.GetLastRowId().ToLong();
+//        }
+//
+//        g_objTrigger.OnWordSave(wordid, word);
+// 	}
+//
+//	return 0;    
+//}
 
 int CDictObject::UpdateWordData(int wordid, int counter)
 {
-    CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE ID = ?");
+    CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE WordID = ?");
     query.Bind(1, counter);
     query.Bind(2, wordid);
     query.ExecuteUpdate();
@@ -279,7 +468,7 @@ int CDictObject::GetAllWords()
 {
     try
     {
-        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, Word FROM WordTable");
+        CDBAccess::TResult res = _db.ExecuteQuery("SELECT WordID, Word FROM WordTable");
         if(!res.IsOk())
             return -1;
         while(res.NextRow())
@@ -321,51 +510,24 @@ int CDictObject::GetWordData(int wordid, TWordData& data)
 {
     try
     {
-        if(_config.m_iHTMLLoad == 1)
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordTable.SrcID, WordTable.Word, WordTable.Counter, WordTable.UpdateTime, SrcDataTable.CheckinTime, SrcDataTable.HTML FROM WordTable, SrcDataTable WHERE WordTable.WordID = ? and WordTable.SrcID = SrcDataTable.SrcID");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+	        return -1;
+        if(!res.Eof())
         {
-	        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter, CheckinTime, UpdateTime, HTML FROM WordTable WHERE ID = ?");
-	        query.Bind(1, wordid);
-	        CDBAccess::TResult res = query.ExecuteQuery();
-	        if(!res.IsOk())
-		        return -1;
-	        if(!res.Eof())
-	        {
-                data.m_iID = wordid;
-                data.m_strWord = res.GetString(0).c_str();
-                data.m_iCounter = res.GetInt(1);
-                data.m_dtCheckin = res.GetDateTime(2);
-                data.m_dtUpdate = res.GetDateTime(3);
-                data.m_strHTML = res.GetString(4).c_str();
-
-//                g_objTrigger.OnWordDataGet(data);
-            }
-            else
-            {
-                return -1;
-            }
+            data.m_iWordID = wordid;
+            data.m_iSrcID = res.GetInt(0);
+            data.m_strWord = res.GetString(1);
+            data.m_iCounter = res.GetInt(2);
+            data.m_dtUpdate = res.GetDateTime(3);
+            data.m_dtCheckin = res.GetDateTime(4);
+            data.m_strHTML = res.GetString(5);
         }
         else
         {
-	        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter, CheckinTime, UpdateTime FROM WordTable WHERE ID = ?");
-	        query.Bind(1, wordid);
-	        CDBAccess::TResult res = query.ExecuteQuery();
-	        if(!res.IsOk())
-		        return -1;
-	        if(!res.Eof())
-	        {
-                data.m_iID = wordid;
-                data.m_strWord = res.GetString(0).c_str();
-                data.m_iCounter = res.GetInt(1);
-                data.m_dtCheckin = res.GetDateTime(2);
-                data.m_dtUpdate = res.GetDateTime(3);
-                data.m_strHTML = _("<HTML></HTML>");
-
-//                g_objTrigger.OnWordDataGet(data);
-            }
-            else
-            {
-                return -1;
-            }
+            return -1;
         }
     }
     catch(CDBAccess::TException& e)
@@ -378,7 +540,7 @@ int CDictObject::GetWordData(int wordid, TWordData& data)
 int CDictObject::GetSpecialDictResult(const TWordData& data)
 {
     SpecialDictParser::TDictResultMap dictresult;
-    if(_objSpecialDictParser->GetResult(_db, data.m_iID, dictresult) != 0)
+    if(_objSpecialDictParser->GetResult(_db, data.m_iWordID, dictresult) != 0)
         return -1;
 
     for(SpecialDictParser::TDictResultMap::const_iterator it = dictresult.begin(); it != dictresult.end(); ++ it)
@@ -386,7 +548,7 @@ int CDictObject::GetSpecialDictResult(const TWordData& data)
         const SpecialDictParser::CDictParser* parser = _objSpecialDictParser->GetParser(it->first);
         if(parser != NULL)
         {
-            g_objTrigger.OnResultSpecialDictGet(data.m_iID, parser, it->second);
+            g_objTrigger.OnResultSpecialDictGet(data.m_iWordID, parser, it->second);
         }
     }
 
@@ -397,36 +559,47 @@ int CDictObject::GetHtmlDictResult(const TWordData& data)
 {
     if(_config.m_iLoadHtmlDict == 0)
     {
-        g_objTrigger.OnResultHtmlDictGet(data.m_iID, data.m_strHTML);
+        g_objTrigger.OnResultHtmlDictGet(data.m_iWordID, data.m_strHTML);
     }
     else
     {
         HtmlDictParser::TDictResultMap htmlresult;
-        if(_objHtmlDictParser->GetResult(_db, data.m_iID, htmlresult) != 0)
+        if(_objHtmlDictParser->GetResult(_db, data.m_iWordID, htmlresult) != 0)
             return -1;
 
         std::wstring html;
         if(_objHtmlDictParser->GenHtmlResult(htmlresult, data.m_strHTML, html) != 0)
             return -1;
         if(!html.empty())
-            g_objTrigger.OnResultHtmlDictGet(data.m_iID, html.c_str());
+            g_objTrigger.OnResultHtmlDictGet(data.m_iWordID, html.c_str());
         else if(_config.m_iLoadHtmlDict == 2)
-            g_objTrigger.OnResultHtmlDictGet(data.m_iID, data.m_strHTML);
+            g_objTrigger.OnResultHtmlDictGet(data.m_iWordID, data.m_strHTML);
     }
     return 0;
 }
 
 int CDictObject::RemoveWord(int wordid)
 {
+    int srcid = -1;
+    if(GetWordSrcID(wordid, srcid) != 0)
+        return -1;
+    return RemoveWord(wordid, srcid);
+}
+
+int CDictObject::RemoveWord(int wordid, int srcid)
+{
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("DELETE FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("DELETE FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         if(query.ExecuteUpdate() != 0)
         {
             _objSpecialDictParser->RemoveResult(_db, wordid);
             _objHtmlDictParser->RemoveResult(_db, wordid);
         }
+
+        RemoveSrcData(srcid);
+
         g_objTrigger.OnWordRemove(wordid);
     }
     catch(CDBAccess::TException& e)
@@ -441,7 +614,7 @@ int CDictObject::GetWordID(const std::wstring& word, int& wordid)
 {
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID FROM WordTable WHERE Word = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordID FROM WordTable WHERE Word = ?");
         query.Bind(1, word.c_str());
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -449,6 +622,47 @@ int CDictObject::GetWordID(const std::wstring& word, int& wordid)
         if(res.Eof())
             return -1;
         wordid = res.GetInt(0);
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::GetWordSrcID(int wordid, int& srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT SrcID FROM WordTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(res.Eof())
+            return -1;
+        srcid = res.GetInt(0);
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::GetWordID(const std::wstring& word, int& wordid, int& srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordID, SrcID FROM WordTable WHERE Word = ?");
+        query.Bind(1, word);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(res.Eof())
+            return -1;
+        wordid = res.GetInt(0);
+        srcid = res.GetInt(1);
     }
     catch(CDBAccess::TException& e)
     {

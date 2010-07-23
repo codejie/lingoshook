@@ -20,7 +20,7 @@ int CDictInfoObject::Init(CDBAccess::TDatabase &db)
 		    db.ExecuteUpdate(dicttable);
         }
 
-        CDBAccess::TQuery query = db.PrepareStatement(wxT("SELECT DictTable.ID, DictTable.DictID, DictTable.Title, DictConfigTable.LoadParam, DictConfigTable.StoreParam FROM DictTable, DictConfigTable WHERE DictTable.ID = DictConfigTable.DictIndex"));
+        CDBAccess::TQuery query = db.PrepareStatement(wxT("SELECT DictTable.DictIndex, DictTable.DictID, DictTable.Title, DictConfigTable.LoadParam, DictConfigTable.StoreParam FROM DictTable, DictConfigTable WHERE DictTable.DictIndex = DictConfigTable.DictIndex"));
         CDBAccess::TResult res = query.ExecuteQuery();
         while(res.NextRow())
         {

@@ -154,6 +154,45 @@ void CLHListBox::OnMouseLeave(wxMouseEvent &event)
     event.Skip();
 }
 
+///////////////////////
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_COMBOBOX_FOCUS)
+
+BEGIN_EVENT_TABLE(CLHComboBox, wxComboBox)
+    EVT_SET_FOCUS(CLHComboBox::OnSetFocus)
+    EVT_KILL_FOCUS(CLHComboBox::OnKillFocus)
+    EVT_LEAVE_WINDOW(CLHComboBox::OnMouseLeave)
+END_EVENT_TABLE()
+
+CLHComboBox::CLHComboBox(wxWindow *parent, wxWindowID id, const wxString &value, const wxPoint& pos, const wxSize &size , int n, const wxString choices[], long style, const wxValidator &validator, const wxString &name)
+: wxComboBox(parent, id, value, pos, size, n, choices, style, validator, name)
+{
+}
+
+void CLHComboBox::OnSetFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_COMBOBOX_FOCUS,  GetId());
+    ev.SetInt(1);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHComboBox::OnKillFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_COMBOBOX_FOCUS,  GetId());
+    ev.SetInt(0);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHComboBox::OnMouseLeave(wxMouseEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_COMBOBOX_FOCUS,  GetId());
+    ev.SetInt(0);
+
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
 /////////////////////
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU)

@@ -76,7 +76,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     sizer_13_staticbox = new wxStaticBox(m_noteContext_pane_3, -1, wxT("Tags Management"));
     notebook_1_pane_1 = new wxPanel(m_noteIndex, wxID_ANY);
     const wxString *m_cbWordIndex_choices = NULL;
-    m_cbWordIndex = new wxComboBox(notebook_1_pane_1, CIID_TEXT_INDEX, wxT(""), wxDefaultPosition, wxDefaultSize, 0, m_cbWordIndex_choices, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
+    m_cbWordIndex = new CLHComboBox(notebook_1_pane_1, CIID_TEXT_INDEX, wxT(""), wxDefaultPosition, wxDefaultSize, 0, m_cbWordIndex_choices, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
     const wxString *m_listIndex_choices = NULL;
     m_listIndex = new CLHListBox(notebook_1_pane_1, CIID_LIST_INDEX, wxDefaultPosition, wxDefaultSize, 0, m_listIndex_choices, wxLB_SINGLE|wxLB_SORT);
     m_btnFilter = new wxButton(m_noteIndex_pane_2, XIID_BUTTON_FILTER, wxT("Tag"), wxDefaultPosition, wxDefaultSize, wxBU_LEFT|wxNO_BORDER);
@@ -201,6 +201,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     // begin wxGlade: LingosHookFrame::event_table
     EVT_TEXT_ENTER(CIID_TEXT_INDEX, LingosHookFrame::OnWordIndexEnter)
     EVT_TEXT(CIID_TEXT_INDEX, LingosHookFrame::OnWordIndexText)
+    EVT_COMMAND(CIID_TEXT_INDEX, wxEVT_COMMAND_LH_COMBOBOX_FOCUS, LingosHookFrame::OnWordIndexFocus)
     EVT_LISTBOX_DCLICK(CIID_LIST_INDEX, LingosHookFrame::OnIndexDClick)
     EVT_LISTBOX(CIID_LIST_INDEX, LingosHookFrame::OnIndexSelected)
     EVT_COMMAND(CIID_LIST_INDEX, wxEVT_COMMAND_LH_LISTBOX_DELETE, LingosHookFrame::OnIndexDelete)
@@ -864,10 +865,11 @@ int LingosHookFrame::SpeakWord(const wxString& word)
 
 int LingosHookFrame::RemoveWord(const wxString& word)
 {
-    int wordid = -1;
-    if(_objDict->GetWordID(word.c_str(), wordid) != 0)
-        return -1;
-    return RemoveWord(wordid);
+    return _objDict->RemoveWord(word);
+    //int wordid = -1;
+    //if(_objDict->GetWordID(word.c_str(), wordid) != 0)
+    //    return -1;
+    //return RemoveWord(wordid);
 }
 
 int LingosHookFrame::RemoveWord(int wordid)
@@ -897,7 +899,11 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
 {
     if(message == WM_OBJECT_INIT)
     {
-        InitObjects();
+        if(InitObjects() != 0)
+        {
+            _bSysCanClose = true;
+            wxMessageBox(wxT("Sorry, initial process failed !"));
+        }
         LoadObjects();
     }
     else if(message == WM_SET_HOOK)
@@ -943,6 +949,13 @@ void LingosHookFrame::OnWordIndexText(wxCommandEvent &event)
     //m_cbWordIndex->SetValue(event.GetString());
 }
 
+void LingosHookFrame::OnWordIndexFocus(wxCommandEvent& event)
+{
+    if(event.GetInt() == 1)
+        m_winHTML->Enable(false);
+    else
+        m_winHTML->Enable(true);
+}
 
 void LingosHookFrame::OnIndexDClick(wxCommandEvent &event)
 {
