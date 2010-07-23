@@ -15,11 +15,12 @@
 
 struct TWordData
 {
-    int m_iID;
+    int m_iWordID;
+    int m_iSrcID;
     std::wstring m_strWord;
     int m_iCounter;
-    wxDateTime m_dtCheckin;
     wxDateTime m_dtUpdate;
+    wxDateTime m_dtCheckin;
     std::wstring m_strHTML;
 };
 

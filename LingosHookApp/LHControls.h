@@ -42,6 +42,28 @@ DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_CONTEXTMENU, -1)
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_LISTBOX_FOCUS, -1)
 
 //
+class CLHComboBox : public wxComboBox
+{
+public:
+    CLHComboBox(wxWindow *parent, wxWindowID id,
+            const wxString& value = wxEmptyString,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxComboBoxNameStr);
+protected:
+    virtual void OnSetFocus(wxFocusEvent& event);
+    virtual void OnKillFocus(wxFocusEvent& event);
+    virtual void OnMouseLeave(wxMouseEvent& event);
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_COMBOBOX_FOCUS, -1)
+
+//
 class CLHTreeCtrl : public wxTreeCtrl
 {
 public:

@@ -40,7 +40,7 @@ int CDateMode::LoadWords(CDBAccess::TDatabase &db, CLHFilterTreeCtrl* tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT ID, Word, CheckinTime FROM WordTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordID, Word, CheckinTime FROM WordTable");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -244,7 +244,7 @@ int CDateMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word,
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, CheckinTime, CheckinTime FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, CheckinTime, CheckinTime FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -274,7 +274,7 @@ int CTagMode::LoadWords(CDBAccess::TDatabase &db, CLHFilterTreeCtrl *tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT TagIndexTable.WordID, TagIndexTable.TagID, WordTable.Word FROM WordTable, TagIndexTable WHERE WordTable.ID = TagIndexTable.WordID");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT TagIndexTable.WordID, TagIndexTable.TagID, WordTable.Word FROM WordTable, TagIndexTable WHERE WordTable.WordID = TagIndexTable.WordID");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -325,7 +325,7 @@ int CTagMode::PreLoad(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT ID, Title FROM TagTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT TagID, Title FROM TagTable");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -538,7 +538,7 @@ int CTagMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word, 
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -576,7 +576,7 @@ int CTagMode::GetTagData(CDBAccess::TDatabase &db, int tagid, wxString &title) c
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Title FROM TagTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Title FROM TagTable WHERE TagID = ?");
         query.Bind(1, tagid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -603,7 +603,7 @@ int CScoreMode::LoadWords(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT ID, Word, Counter FROM WordTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordID, Word, Counter FROM WordTable");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -781,7 +781,7 @@ int CScoreMode::GetWordData(CDBAccess::TDatabase &db, int wordid, wxString &word
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, Counter, CheckinTime FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, Counter, CheckinTime FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())

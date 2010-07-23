@@ -75,7 +75,7 @@ int CSpecialDictParser::LoadParser(CDBAccess::TDatabase& db)
 {
     try
     {
-        CDBAccess::TResult res = db.ExecuteQuery("SELECT ID, DictID, Title, CreateTime FROM DictTable");
+        CDBAccess::TResult res = db.ExecuteQuery("SELECT DictIndex, DictID, Title, CreateTime FROM DictTable");
         if(!res.IsOk())
             return -1;
         while(res.NextRow())
