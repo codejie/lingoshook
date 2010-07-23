@@ -16,8 +16,19 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iHTMLSave(1)
 , m_iHTMLLoad(1)
 , m_iExpandDict(-1)
-, m_iIgnoreDict(0)
+//, m_iIgnoreDict(0)
 , m_iAutoSpeak(0)
+, m_iUseTidy(1)
+//, m_iSaveUseTidy(0)
+, m_iSkipDict(0)
+, m_iSkipHtml(0)
+, m_iFavoriteTab(1)
+//, m_iDataProcFlag(1)
+, m_iSkipError(1)
+, m_iLoadHtmlDict(0)
+, m_strLingoesExec(_("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"))
+, m_strLingoesPath(_("C:\\Program Files\\Lingoes\\Translator2"))
+, m_iRetrieveDelay(0)
 {
 }
 
@@ -65,7 +76,7 @@ int CConfigData::GetData(int attr, int& value)
 	return 0;
 }
 
-int CConfigData::GetData(int attr, wxString& value)
+int CConfigData::GetData(int attr, std::wstring& value)
 {
     try
     {
@@ -125,11 +136,11 @@ int CConfigData::SetData(int attr, int &value)
     return 0;
 }
 
-int CConfigData::SetData(int attr, wxString &value)
+int CConfigData::SetData(int attr, const std::wstring &value)
 {
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT COOUNT(*) FROM ConfigTable WHERE Attr = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT StrVal FROM ConfigTable WHERE Attr = ?");
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
@@ -182,10 +193,34 @@ int CConfigData::Load()
         m_iHTMLLoad = 1;
     if(GetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         m_iExpandDict = -1;
-    if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
-        m_iIgnoreDict = 0;
+    //if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+    //    m_iIgnoreDict = 0;
     if(GetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         m_iAutoSpeak = 0;
+    if(GetData(CA_USETIDY, m_iUseTidy) != 0)
+        m_iUseTidy = 1;
+    //if(GetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    m_iSaveUseTidy = 0;
+    if(GetData(CA_SKIPDICT, m_iSkipDict) != 0)
+        m_iSkipDict = 0;
+    if(GetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+        m_iSkipHtml = 0;
+    if(GetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
+        m_iFavoriteTab = 0;
+    //if(GetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //    m_iDataProcFlag = 1;
+    if(GetData(CA_SKIPERROR, m_iSkipError) != 0)
+        m_iSkipError = 1;
+    if(GetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
+        m_iLoadHtmlDict = 0;
+
+    if(GetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
+        m_strLingoesExec = _("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe");
+    if(GetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
+        m_strLingoesPath = _("C:\\Program Files\\Lingoes\\Translator2");
+
+    if(GetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
+        m_iRetrieveDelay = 0;
     return 0;
 }
 
@@ -211,10 +246,35 @@ int CConfigData::Save()
         return -1;
     if(SetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         return -1;
-    if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
-        return -1;
+    //if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+    //    return -1;
     if(SetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         return -1;
+    if(SetData(CA_USETIDY, m_iUseTidy) != 0)
+        return -1;
+    //if(SetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    return -1;
+    if(SetData(CA_SKIPDICT, m_iSkipDict) != 0)
+        return -1;
+    if(SetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+        return -1;
+    if(SetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
+        return -1;
+    //if(SetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //    return -1;
+    if(SetData(CA_SKIPERROR, m_iSkipError) != 0)
+        return -1;
+    if(SetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
+        return -1;
+
+    if(SetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
+        return -1;
+    if(SetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
+        return -1;
+
+    if(SetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
+        return -1;
+
     return 0;
 }
 
@@ -252,3 +312,18 @@ unsigned int CConfigData::GetHotKey() const
         return VK_F10;
     }
 }
+
+int CConfigData::GetLingoesParam(const std::wstring &local)
+{
+    m_strLingoesExec = local;
+    std::wstring::size_type pos = local.find_last_of(_("\\"));
+    if(pos != std::wstring::npos)
+        m_strLingoesPath = local.substr(0, pos);
+    else
+        m_strLingoesPath = _("");
+
+    return 0;
+}
+
+
+
