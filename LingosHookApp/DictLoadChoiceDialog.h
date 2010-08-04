@@ -17,26 +17,27 @@
 
 #include "LHControls.h"
 
+class CDictObject;
 
-class CHtmlDictChoiceDialog: public wxDialog {
+class CHtmlDictLoadChoiceDialog: public wxDialog {
 public:
-    // begin wxGlade: CHtmlDictChoiceDialog::ids
+    // begin wxGlade: CHtmlDictLoadChoiceDialog::ids
     // end wxGlade
 
-    CHtmlDictChoiceDialog(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
+    CHtmlDictLoadChoiceDialog(CDictObject* parser, wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
 
     CLHCheckBoxList& ListCtrl() { return *m_listDict; }
     const CLHCheckBoxList& ListCtrl() const { return *m_listDict; }
     void SetUseDictRadio(int usedict);
     int GetUseDictRadio(int& usedict) const;
 private:
-    // begin wxGlade: CHtmlDictChoiceDialog::methods
+    // begin wxGlade: CHtmlDictLoadChoiceDialog::methods
     void set_properties();
     void do_layout();
     // end wxGlade
 
 protected:
-    // begin wxGlade: CHtmlDictChoiceDialog::attributes
+    // begin wxGlade: CHtmlDictLoadChoiceDialog::attributes
     wxStaticBox* sizer_1_staticbox;
 
     wxRadioButton* m_radioDictChoose;
@@ -67,6 +68,8 @@ public:
     virtual void OnRadioDict(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnRadioNoDict(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnRadioDictAuto(wxCommandEvent &event); // wxGlade: <event_handler>
+private:
+    CDictObject* _objParser;
 
 }; // wxGlade: end class
 

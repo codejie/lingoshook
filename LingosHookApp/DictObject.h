@@ -13,9 +13,12 @@
 #include "DictStructure.h"
 
 
+class wxListItem;
+
 class CSpecialDictParser;
 class CHtmlDictParser;
-class CHtmlDictChoiceDialog;
+class CHtmlDictLoadChoiceDialog;
+class CHtmlDictStoreChoiceDialog;
 
 class CDictObject
 {
@@ -36,8 +39,15 @@ public:
 
     int GetWordID(const std::wstring& word, int& wordid);
 
-    void ShowHtmlDictInfo(CHtmlDictChoiceDialog& dlg) const;
-    int GetHtmlDictInfo(const CHtmlDictChoiceDialog& dlg);
+    void ShowHtmlDictLoadInfo(CHtmlDictLoadChoiceDialog& dlg) const;
+    int GetHtmlDictLoadInfo(const CHtmlDictLoadChoiceDialog& dlg);
+
+    void ShowHtmlDictStoreInfo(CHtmlDictStoreChoiceDialog& dlg) const;
+    int GetHtmlDictStoreInfo(const CHtmlDictStoreChoiceDialog& dlg);
+    int ResetDictStoreInfo(CHtmlDictStoreChoiceDialog& dlg);
+    void ShowDictStoreInfoItemContextMenu(const CHtmlDictStoreChoiceDialog& dlg, long item, int menubase, wxMenu* submenu) const;
+    void RefreshDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg, long item, int type) const;
+    int UpdateDictStoreInfoDefType(CHtmlDictStoreChoiceDialog &dlg, long item);
 private:
     int ParserHTML(const std::wstring& html);
     int ForceSaveHTML(const std::wstring& html);

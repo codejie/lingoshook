@@ -28,16 +28,16 @@ int CSpecialDictParser::Init(CDBAccess::TDatabase &db)
 
 int CSpecialDictParser::AddKnownParser(CDBAccess::TDatabase& db)
 {
-    if(RegisterParser(db, SpecialDictParser::VICON::CECParser::ID, SpecialDictParser::VICON::CECParser::TITLE) != 0)
+    if(RegisterParser(db, SpecialDictParser::VICON::CECParser::ID, SpecialDictParser::VICON::CECParser::TITLE, 0, HtmlDictParser::HTMLDATATYPE_1) != 0)
         return -1;
-    if(RegisterParser(db, SpecialDictParser::LANGDAO::CECParser::ID, SpecialDictParser::LANGDAO::CECParser::TITLE) != 0)
+    if(RegisterParser(db, SpecialDictParser::LANGDAO::CECParser::ID, SpecialDictParser::LANGDAO::CECParser::TITLE, 1, HtmlDictParser::HTMLDATATYPE_1) != 0)
         return -1;
-    if(RegisterParser(db, SpecialDictParser::FUNDSET::CDCParser::ID, SpecialDictParser::FUNDSET::CDCParser::TITLE) != 0)
+    if(RegisterParser(db, SpecialDictParser::FUNDSET::CDCParser::ID, SpecialDictParser::FUNDSET::CDCParser::TITLE, 2, HtmlDictParser::HTMLDATATYPE_1) != 0)
         return -1;
     return 0;
 }
 
-int CSpecialDictParser::RegisterParser(CDBAccess::TDatabase& db, const wstring& id, const wstring& title)
+int CSpecialDictParser::RegisterParser(CDBAccess::TDatabase& db, const wstring& id, const wstring& title, int loadparam, int storeparam)
 {
     try
     {
@@ -59,8 +59,8 @@ int CSpecialDictParser::RegisterParser(CDBAccess::TDatabase& db, const wstring& 
         query.Reset();
         query = db.PrepareStatement("INSERT INTO DictConfigTable (DictIndex, LoadParam, StoreParam) VALUES(?, ?, ?)");
         query.Bind(1, index);
-        query.Bind(2, 0);
-        query.Bind(3, 0);
+        query.Bind(2, loadparam);
+        query.Bind(3, (storeparam << 16));
         if(query.ExecuteUpdate() == 0)
             return -1;
     }

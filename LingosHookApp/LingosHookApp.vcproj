@@ -67,7 +67,7 @@
 				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
-				GenerateManifest="false"
+				GenerateManifest="true"
 				IgnoreEmbeddedIDL="false"
 				TypeLibraryResourceID="1"
 				GenerateDebugInformation="true"
@@ -196,11 +196,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DictChoiceDialog.cpp"
+				RelativePath=".\DictLoadChoiceDialog.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\DictObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DictStoreChoiceDialog.cpp"
 				>
 			</File>
 			<File
@@ -302,11 +306,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DictChoiceDialog.h"
+				RelativePath=".\DictLoadChoiceDialog.h"
 				>
 			</File>
 			<File
 				RelativePath=".\DictObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DictStoreChoiceDialog.h"
 				>
 			</File>
 			<File

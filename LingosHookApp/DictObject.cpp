@@ -5,15 +5,17 @@
 #include <string>
 #include <memory>
 
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
+#include "wx/listctrl.h"
 
 #include "ConfigData.h"
 #include "HtmlTidyObject.h"
 #include "TriggerObject.h"
 #include "SpecialDictParser.h"
 #include "HtmlDictParser.h"
-#include "DictChoiceDialog.h"
+#include "DictLoadChoiceDialog.h"
+#include "DictStoreChoiceDialog.h"
 #include "DictObject.h"
 
 ////////////////////////////////////////
@@ -144,28 +146,79 @@ int CDictObject::ParserHTML(const std::wstring& html)
 
     TResultMap result;
 
-    const TinyHtmlParser::CElementObject* pe = doc.FindFirstElement(L"DIV");
-    while(pe != NULL)
+    const TinyHtmlParser::CElementObject* pdiv = doc.FindFirstElement(L"DIV");
+    const TinyHtmlParser::CAttributeObject* pa = NULL;
+
+
+    while(pdiv != NULL)
     {
-        const TinyHtmlParser::CAttributeObject* pa = pe->FindAttribute(L"dictid");
-        if(pa != NULL)
+        pa = pdiv->FindAttribute(L"id");
+        if(pa != NULL && pa->value == L"\"lingoes_dictarea\"")
         {
-            std::wstring dictid = pa->value;//, pa->value.size());//, wxConvISO8859_1);
+            pdiv = pdiv->sibling;
+            if(pdiv == NULL)
+                break;
+            pa = pdiv->FindAttribute(L"dictid");
+            if(pa == NULL)
+                break;
+
+            std::wstring dictid = pa->value;
             dictid = dictid.substr(1, dictid.size() - 2);
 
             if(_config.m_iSkipDict != 1)
             {
-                if(ParserSpecialDict(html, dictid, doc, pe, result) != 0)
+                if(ParserSpecialDict(html, dictid, doc, pdiv, result) != 0)
                     return -1;
             }
             if(_config.m_iSkipHtml != 1)
             {
-                if(ParserHtmlDict(html, dictid, doc, pe, result) != 0)
+                if(ParserHtmlDict(html, dictid, doc, pdiv, result) != 0)
                     return -1;
             }
         }
-        pe = doc.FindNextElement();
+        pdiv = doc.FindNextElement();
     }
+
+//It will be faster by the below way
+
+    //while(pdiv != NULL)
+    //{
+    //    pa = pdiv->FindAttribute(L"id");
+    //    if(pa != NULL && pa->value == L"\"lingoes_dictarea\"")
+    //        break;
+    //    pdiv = doc.FindNextElement();
+    //}
+
+    //while(pdiv != NULL)
+    //{
+    //    pdiv = pdiv->sibling;
+    //    if(pdiv == NULL)
+    //        break;
+    //    pa = pdiv->FindAttribute(L"dictid");
+    //    if(pa == NULL)
+    //        break;
+
+    //    std::wstring dictid = pa->value;
+    //    dictid = dictid.substr(1, dictid.size() - 2);
+
+    //    if(_config.m_iSkipDict != 1)
+    //    {
+    //        if(ParserSpecialDict(html, dictid, doc, pdiv, result) != 0)
+    //            return -1;
+    //    }
+    //    if(_config.m_iSkipHtml != 1)
+    //    {
+    //        if(ParserHtmlDict(html, dictid, doc, pdiv, result) != 0)
+    //            return -1;
+    //    }
+
+    //    pdiv = pdiv->sibling;
+    //    if(pdiv == NULL)
+    //        break;
+    //    pa = pdiv->FindAttribute(L"id");
+    //    if(pa == NULL || pa->value != L"\"lingoes_dictarea\"")
+    //        break;
+    //}
 
     if(result.size() == 0)
         return -1;
@@ -672,13 +725,43 @@ int CDictObject::GetWordID(const std::wstring& word, int& wordid, int& srcid)
 }
 
 ////////////////////////////////////////////
-void CDictObject::ShowHtmlDictInfo(CHtmlDictChoiceDialog &dlg) const
+void CDictObject::ShowHtmlDictLoadInfo(CHtmlDictLoadChoiceDialog &dlg) const
 {
-    _objHtmlDictParser->ShowDictInfo(_config.m_iLoadHtmlDict, dlg);
+    _objHtmlDictParser->ShowDictLoadInfo(_config.m_iLoadHtmlDict, dlg);
 }
 
-int CDictObject::GetHtmlDictInfo(const CHtmlDictChoiceDialog& dlg)
+int CDictObject::GetHtmlDictLoadInfo(const CHtmlDictLoadChoiceDialog& dlg)
 {
-    return _objHtmlDictParser->GetDictInfo(_db, _config.m_iLoadHtmlDict, dlg);
+    return _objHtmlDictParser->GetDictLoadInfo(_db, _config.m_iLoadHtmlDict, dlg);
+}
+
+void CDictObject::ShowHtmlDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg) const
+{
+    _objHtmlDictParser->ShowDictStoreInfo(dlg);
+}
+
+int CDictObject::GetHtmlDictStoreInfo(const CHtmlDictStoreChoiceDialog& dlg)
+{
+    return _objHtmlDictParser->GetDictStoreInfo(_db, dlg);
+}
+
+int CDictObject::ResetDictStoreInfo(CHtmlDictStoreChoiceDialog& dlg)
+{
+    return _objHtmlDictParser->ResetDictStoreInfo(_db, dlg);
+}
+
+void CDictObject::ShowDictStoreInfoItemContextMenu(const CHtmlDictStoreChoiceDialog &dlg, long item, int menubase, wxMenu* submenu) const
+{
+    _objHtmlDictParser->ShowDictStoreInfoItemContextMenu(dlg, item, menubase, submenu);
+}
+
+void CDictObject::RefreshDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg, long item, int type) const
+{
+    _objHtmlDictParser->RefreshDictStoreInfo(dlg, item, type);
+}
+
+int CDictObject::UpdateDictStoreInfoDefType(CHtmlDictStoreChoiceDialog &dlg, long item)
+{
+    return _objHtmlDictParser->UpdateDictStoreInfoDefType(_db, dlg, item);
 }
 
