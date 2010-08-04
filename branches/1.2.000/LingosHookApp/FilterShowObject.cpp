@@ -40,7 +40,7 @@ int CDateMode::LoadWords(CDBAccess::TDatabase &db, CLHFilterTreeCtrl* tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordID, Word, CheckinTime FROM WordTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordTable.WordID, WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordTable.SrcID = SrcDataTable.SrcID");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -244,7 +244,7 @@ int CDateMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word,
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, CheckinTime, CheckinTime FROM WordTable WHERE WordID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordTable.WordID, WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordID = ? AND WordTable.SrcID = SrcDataTable.SrcID");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())

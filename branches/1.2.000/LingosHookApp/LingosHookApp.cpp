@@ -17,7 +17,8 @@
 #include "TagInputDialog.h"
 #include "SpeakObject.h"
 #include "FilterShowObject.h"
-#include "DictChoiceDialog.h"
+#include "DictLoadChoiceDialog.h"
+#include "DictStoreChoiceDialog.h"
 #include "TrayIconObject.h"
 
 #include "LingosHookApp.h"
@@ -140,6 +141,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_checkIgnoreDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_IGNOREDICT, wxT("Ignore HTML Data Analysis Error"));
     m_checkSkipDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_SKIPDICT, wxT("Skip Dictionary Analysis Process"));
     m_checkSkipHtml = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_SKIPHTML, wxT("Skip HTML Data  Analysis Process"));
+    m_btnSetDictStoreChoice = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETDICTSTORECHOICE, wxT("Dictionary Chooser.."));
     static_line_5 = new wxStaticLine(m_noteContext_pane_4, wxID_ANY);
     label_4 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Expanded Dictionary on Result"));
     const wxString m_comboxExpandDict_choices[] = {
@@ -223,7 +225,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_TREE_SEL_CHANGED(CIID_TREE_FILTER, LingosHookFrame::OnTreeFilterChange)
     EVT_MENU_RANGE(FMID_BEGIN, FMID_END, LingosHookFrame::OnMenuFilter)
     EVT_BUTTON(CIID_BUTTON_SETDICTCHOICE, LingosHookFrame::OnBtnSetDictChoice)
-
+    EVT_BUTTON(CIID_BUTTON_SETDICTSTORECHOICE, LingosHookFrame::OnBtnSetDictStoreChoice)
     EVT_BUTTON(CIID_BUTTON_MEMREMOVE, LingosHookFrame::OnBtnMemRemove)
     EVT_BUTTON(CIID_BUTTON_MEMNEXT, LingosHookFrame::OnBtnMemNext)
     EVT_RADIOBUTTON(CIID_RADIO_MEMLEVEL1, LingosHookFrame::OnRadioMemLevel)
@@ -346,6 +348,8 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_51 = new wxBoxSizer(wxHORIZONTAL);
 
     wxBoxSizer* sizer_44 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer_54 = new wxBoxSizer(wxHORIZONTAL);
+
     wxBoxSizer* sizer_43 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_38 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_47 = new wxBoxSizer(wxHORIZONTAL);
@@ -456,7 +460,10 @@ void LingosHookFrame::do_layout()
     sizer_16->Add(static_line_6, 0, wxALL|wxEXPAND, 4);
     sizer_44->Add(m_checkIgnoreDict, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_44->Add(m_checkSkipDict, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
-    sizer_44->Add(m_checkSkipHtml, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
+    sizer_54->Add(m_checkSkipHtml, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
+    sizer_54->Add(m_btnSetDictStoreChoice, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_44->Add(sizer_54, 1, wxEXPAND, 0);
+//    sizer_44->Add(m_checkSkipHtml, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_16->Add(sizer_44, 0, wxEXPAND, 0);
     sizer_16->Add(static_line_5, 0, wxALL|wxEXPAND, 4);
     sizer_43->Add(label_4, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
@@ -924,6 +931,10 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
 
 void LingosHookFrame::OnClose(wxCloseEvent& event)
 {
+#ifdef __LH_USE_WXIE__
+    event.Skip();
+    return;
+#endif
     if(!_bSysCanClose)
         Show(false);
     else
@@ -1316,35 +1327,36 @@ void LingosHookFrame::OnTreeResultContextMenu(wxCommandEvent& event)
 
 void LingosHookFrame::OnCheckIgnoreDict(wxCommandEvent &event)
 {
-    if(event.IsChecked())
-    {
-        //m_checkSkipDict->SetValue(false);
-        //m_checkSkipHtml->SetValue(false);
-        //m_checkHTMLSave->SetValue(true);
-        //m_checkHTMLLoad->SetValue(true);
-    }
+    //if(event.IsChecked())
+    //{
+    //    //m_checkSkipDict->SetValue(false);
+    //    //m_checkSkipHtml->SetValue(false);
+    //    //m_checkHTMLSave->SetValue(true);
+    //    //m_checkHTMLLoad->SetValue(true);
+    //}
 }
 
 void LingosHookFrame::OnCheckSkipHTML(wxCommandEvent &event)
 {
-    if(event.IsChecked())
-    {
-        //m_checkIgnoreDict->SetValue(false);
-        //m_checkSkipDict->SetValue(false);
-        //m_checkHTMLSave->SetValue(true);
-        //m_checkHTMLLoad->SetValue(true);
-    }
+    m_btnSetDictStoreChoice->Enable(!event.IsChecked());
+    //if(event.IsChecked())
+    //{
+    //    //m_checkIgnoreDict->SetValue(false);
+    //    //m_checkSkipDict->SetValue(false);
+    //    //m_checkHTMLSave->SetValue(true);
+    //    //m_checkHTMLLoad->SetValue(true);
+    //}
 }
 
 void LingosHookFrame::OnCheckSkipDict(wxCommandEvent &event)
 {
-    if(event.IsChecked())
-    {
-        //m_checkIgnoreDict->SetValue(false);
-        //m_checkSkipHtml->SetValue(false);
-        //m_checkHTMLSave->SetValue(true);
-        //m_checkHTMLLoad->SetValue(true);
-    }
+    //if(event.IsChecked())
+    //{
+    //    //m_checkIgnoreDict->SetValue(false);
+    //    //m_checkSkipHtml->SetValue(false);
+    //    //m_checkHTMLSave->SetValue(true);
+    //    //m_checkHTMLLoad->SetValue(true);
+    //}
 }
 
 void LingosHookFrame::OnMemTypeFocus(wxCommandEvent& event)
@@ -1415,13 +1427,26 @@ void LingosHookFrame::OnMemTypeText(wxCommandEvent &event)
 
 void LingosHookFrame::OnBtnSetDictChoice(wxCommandEvent &event)
 {
-    CHtmlDictChoiceDialog dlg(this, wxID_ANY, wxEmptyString);
+    CHtmlDictLoadChoiceDialog dlg(_objDict.get(), this, wxID_ANY, wxEmptyString);
     
-    _objDict->ShowHtmlDictInfo(dlg);
+//    _objDict->ShowHtmlDictLoadInfo(dlg);
 
     if(dlg.ShowModal() == wxID_OK)
     {
-        _objDict->GetHtmlDictInfo(dlg);
+        _objDict->GetHtmlDictLoadInfo(dlg);
+        _dataConfig->SetLoadHtmlDict(_dataConfig->m_iLoadHtmlDict);
+    }
+}
+
+void LingosHookFrame::OnBtnSetDictStoreChoice(wxCommandEvent &event)
+{
+    CHtmlDictStoreChoiceDialog dlg(_objDict.get(), this, wxID_ANY, wxEmptyString);
+
+//    _objDict->ShowHtmlDictStoreInfo(dlg);
+
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        _objDict->GetHtmlDictStoreInfo(dlg);
     }
 }
 
@@ -1436,9 +1461,9 @@ void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
 #ifndef __LH_DEBUG__
     return;
 #endif
-    wxString str = wxT("<HTML>жа</HTML>");
+    //wxString str = wxT("<HTML>жа</HTML>");
 
-    size_t sz = strlen(str.mb_str());
+    //size_t sz = strlen(str.mb_str());
 
     wxFileDialog dlg(this, wxT("Select a HTML File.."), wxEmptyString, wxEmptyString, wxT("HTML Files(*.html;*.htm)|*.html;*.htm|All Files(*.*)|*.*"), wxFD_OPEN);
     if(dlg.ShowModal() == wxID_OK)
@@ -1452,6 +1477,7 @@ void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
         {
             str += ifs.ReadLine();
         }
+        //str.erase(0, 3);
         m_textTrace->SetValue(str); 
         HookHTMLProc(str);
     }

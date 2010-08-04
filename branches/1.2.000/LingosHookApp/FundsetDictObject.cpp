@@ -67,7 +67,7 @@ int CDCParser::ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocum
 
 int CDCParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const
 {
-    std::wstring word;
+    std::wstring word = L"";
     std::auto_ptr<CDCResult> res(new CDCResult);
 
     TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
@@ -78,45 +78,87 @@ int CDCParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
         if(pa == NULL)
             return -1;
 
-        if(pa->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
-        {//word
-            if(p->child == NULL)
-                return -1;
-            if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
-                return -1;
-            word = p->child->child->value;//.c_str());//, wxConvISO8859_1);
-        }
-        else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
-        {//result
-            if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
-                return -1;
-            res->m_vctRecord.push_back(p->child->value);//.c_str()));//, wxConvISO8859_1);
-
-            if(p->child->child != NULL)
+        if(pa->value == L"\"OVERFLOW-X: hidden; WIDTH: 100%\"")
+        {
+            if(p->child != NULL)
             {
-                const TinyHtmlParser::CElementObject* pc = p->child->child;
-                while(pc != NULL)
+                if(p->child->child != NULL && p->child->child->child != NULL)
                 {
-                    if(pc->tag == L"FONT")
-                    {
-                        res->m_strKasus = pc->value;//.c_str());//, wxConvISO8859_1);
-                    }
-                    else
-                    {
-                        res->m_vctRecord.push_back(pc->value);//.c_str()));//, wxConvISO8859_1);
-                    }
-                   
-                    pc = pc->sibling;
+                    //word
+                    const TinyHtmlParser::CElementObject* pw = p->child->child->child;
+                    word =  pw->value;
                 }
-            }      
+                if(p->child->sibling != NULL && p->child->sibling->child != NULL)
+                {
+                    //result
+                    const TinyHtmlParser::CElementObject* pt = p->child->sibling->child;
+                    if(pt == NULL || pt->type != TinyHtmlParser::ET_ELEMENT)
+                        return -1;
+                    res->m_vctRecord.push_back(pt->value);//.c_str()));//, wxConvISO8859_1);
+
+                    if(pt->child != NULL)
+                    {
+                        const TinyHtmlParser::CElementObject* pc = pt->child;
+                        while(pc != NULL)
+                        {
+                            if(pc->tag == L"FONT")
+                            {
+                                res->m_strKasus = pc->value;//.c_str());//, wxConvISO8859_1);
+                            }
+                            else
+                            {
+                                res->m_vctRecord.push_back(pc->value);//.c_str()));//, wxConvISO8859_1);
+                            }
+                           
+                            pc = pc->sibling;
+                        }
+                    }
+                }
+            }
+
         }
+
+        //if(pa->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
+        //{//word
+        //    if(p->child == NULL)
+        //        return -1;
+        //    if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
+        //        return -1;
+        //    word = p->child->child->value;//.c_str());//, wxConvISO8859_1);
+        //}
+        //else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
+        //{//result
+        //    if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
+        //        return -1;
+        //    res->m_vctRecord.push_back(p->child->value);//.c_str()));//, wxConvISO8859_1);
+
+        //    if(p->child->child != NULL)
+        //    {
+        //        const TinyHtmlParser::CElementObject* pc = p->child->child;
+        //        while(pc != NULL)
+        //        {
+        //            if(pc->tag == L"FONT")
+        //            {
+        //                res->m_strKasus = pc->value;//.c_str());//, wxConvISO8859_1);
+        //            }
+        //            else
+        //            {
+        //                res->m_vctRecord.push_back(pc->value);//.c_str()));//, wxConvISO8859_1);
+        //            }
+        //           
+        //            pc = pc->sibling;
+        //        }
+        //    }      
+        //}
         
         p = doc->FindNextElement(pr, L"DIV", tmpstack);
     }
-
-    TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
-    it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
-
+    
+    if(!word.empty())
+    {
+        TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
+        it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
+    }
     return 0;
 }
 

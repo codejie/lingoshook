@@ -332,17 +332,17 @@ END_EVENT_TABLE()
  
 CLHCheckBoxList::CLHCheckBoxList(wxWindow* parent, wxWindowID id, const wxPoint& pt, const wxSize& sz, long style)
 : wxListCtrl(parent, id, pt, sz, style)
-, m_imageList(32, 32, true)
+, m_imageList(16, 16, true)
 {
    //m_imageList.Add(wxICON(checked), wxBITMAP_TYPE_ICO_RESOURCE);
-    m_imageList.Add(wxIcon(wxT("ICON_CHECKED")), wxBITMAP_TYPE_ICO_RESOURCE);
-    m_imageList.Add(wxIcon(wxT("ICON_UNCHECKED")), wxBITMAP_TYPE_ICO_RESOURCE);
+    m_imageList.Add(wxIcon(wxT("ICON_ALLINON")), wxBITMAP_TYPE_ICO_RESOURCE);
+    //m_imageList.Add(wxIcon(wxT("ICON_UNCHECKED")), wxBITMAP_TYPE_ICO_RESOURCE);
 
     //SetImageList(&m_imageList, wxIMAGE_LIST_NORMAL);
     SetImageList(&m_imageList, wxIMAGE_LIST_SMALL);
 
-    InsertColumn(0, wxT("Title"), wxLIST_FORMAT_LEFT, 250);
-    InsertColumn(1, wxT("ID"), wxLIST_FORMAT_LEFT, 200);
+    //InsertColumn(0, wxT("Title"), wxLIST_FORMAT_LEFT, 250);
+    //InsertColumn(1, wxT("ID"), wxLIST_FORMAT_LEFT, 200);
 }
 
 void CLHCheckBoxList::OnMouseEvent(wxMouseEvent& event)

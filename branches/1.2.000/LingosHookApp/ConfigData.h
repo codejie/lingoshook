@@ -52,6 +52,7 @@ public:
 
     int GetLingoesParam(const std::wstring& local);
 
+    int SetLoadHtmlDict(int value);
 protected:
     int GetData(int attr, int& value);
     int GetData(int attr, std::wstring& value);

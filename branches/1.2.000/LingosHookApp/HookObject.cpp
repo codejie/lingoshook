@@ -9,8 +9,8 @@
 #include <comutil.h>
 #include <commctrl.h>
 
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
 
 #include "LingosHookApp.h"
 #include "ConfigData.h"

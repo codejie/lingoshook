@@ -67,7 +67,7 @@ public:
 protected:
     int AddKnownParser(CDBAccess::TDatabase& db);
     int LoadParser(CDBAccess::TDatabase& db);
-    int RegisterParser(CDBAccess::TDatabase& db, const std::wstring& id, const std::wstring& title);
+    int RegisterParser(CDBAccess::TDatabase& db, const std::wstring& id, const std::wstring& title, int loadparam, int storeparam);
     void FreeParser();
 
 private:

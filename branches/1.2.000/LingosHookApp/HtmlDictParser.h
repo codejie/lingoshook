@@ -49,6 +49,8 @@ public:
 
     int Insert(int index, const TDictInfo& info);
     int GetDictIndex(const std::wstring& id) const;
+    int GetDictID(int index, std::wstring& id) const;
+    int GetDictStoreParam(int index) const;
 
     size_t Size() const { return _mapDictID.size(); }
 protected:
@@ -56,7 +58,30 @@ protected:
     TDictIDMap _mapDictID;
     TDictIndexMap _mapDictIndex;
 };
+
+class CDictKnownAttrObject
+{
+protected:
+    typedef std::map<std::wstring, int> TDefTypeMap;//dictid + deftype
+public:
+    CDictKnownAttrObject() {}
+
+    int Init(CDBAccess::TDatabase& db);
+
+    int GetDefType(const std::wstring& dictid) const;
+    int SetDefType(CDBAccess::TDatabase& db, const std::wstring& dictid, int type);
+private:
+    int LoadDefType(CDBAccess::TDatabase& db);
+    int UpdateDefType(CDBAccess::TDatabase& db, const std::wstring& dictid, int type) const;
+    int InsertDefType(CDBAccess::TDatabase& db, const std::wstring& dictid, int type) const;
+private:
+    TDefTypeMap _mapDefType;
+};
+
 }
+
+class CHtmlDictLoadChoiceDialog;
+class CHtmlDictStoreChoiceDialog;
 
 class CHtmlDictParser
 {
@@ -72,18 +97,37 @@ public:
     virtual int GetResult(CDBAccess::TDatabase& db, int wordid, HtmlDictParser::TDictResultMap& result);
     virtual int RemoveResult(CDBAccess::TDatabase& db, int wordid);
 
-    const HtmlDictParser::TDictInfo* GetDictInfo(int dictindex) const;
+    //const HtmlDictParser::TDictInfo* GetDictInfo(int dictindex) const;
     virtual int GenHtmlResult(const HtmlDictParser::TDictResultMap& dictresult, const std::wstring& html, std::wstring& htmlresult) const;
 
-    void ShowDictInfo(int usehtmldict, CHtmlDictChoiceDialog &dlg) const;
-    int GetDictInfo(CDBAccess::TDatabase &db, int& usehtmldict, const CHtmlDictChoiceDialog& dlg);
+    void ShowDictLoadInfo(int usehtmldict, CHtmlDictLoadChoiceDialog &dlg) const;
+    int GetDictLoadInfo(CDBAccess::TDatabase &db, int& usehtmldict, const CHtmlDictLoadChoiceDialog& dlg);
+
+    void ShowDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg) const;
+    int GetDictStoreInfo(CDBAccess::TDatabase &db, const CHtmlDictStoreChoiceDialog& dlg);
+    int ResetDictStoreInfo(CDBAccess::TDatabase &db, CHtmlDictStoreChoiceDialog& dlg);
+    void ShowDictStoreInfoItemContextMenu(const CHtmlDictStoreChoiceDialog& dlg, long item, int menubase, wxMenu* submenu) const;
+    void RefreshDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg, long item, int type) const;
+    int UpdateDictStoreInfoDefType(CDBAccess::TDatabase &db, CHtmlDictStoreChoiceDialog &dlg, long item);
 protected:
     int CheckDictHtml();
     int UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring& dictid, const std::wstring& html, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict);
-    int InsertDictInfo(CDBAccess::TDatabase &db, const std::wstring& dictid, const std::wstring& title);
+    int InsertDictInfo(CDBAccess::TDatabase &db, const std::wstring& dictid, const std::wstring& title, int load, int store);
     int UpdateDictConfig(CDBAccess::TDatabase &db, int dictindex, int loadparam, int storeparam);
+
+    //int GetWord(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, int storeparam, std::wstring& word) const;
+
+    void AppendDictStoreInfoTypeMenu(wxMenu* menu, int menuid, int dictindex, int type, int deftype) const;
+private:
+    int PushResult(const std::wstring& word, const HtmlDictParser::TDictResult& res, TResultMap &result) const;
+
+    int HtmlDataType1Proc(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
+    int HtmlDataType2Proc(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
+    int HtmlDataType3Proc(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
 protected:
     HtmlDictParser::CDictInfoObject _objDictInfo;
+private:
+    HtmlDictParser::CDictKnownAttrObject _objDictKnownAttr;
 };
 
 

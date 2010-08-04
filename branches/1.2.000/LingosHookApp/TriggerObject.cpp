@@ -1,8 +1,8 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
 
 
 #include "DisplayObject.h"

@@ -325,5 +325,8 @@ int CConfigData::GetLingoesParam(const std::wstring &local)
     return 0;
 }
 
-
+int CConfigData::SetLoadHtmlDict(int value)
+{
+    return SetData(CA_LOADHTMLDICT, value);
+}
 

@@ -1,6 +1,7 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
+
 #ifndef __DICTSTRUCTURE_H__
 #define __DICTSTRUCTURE_H__
 
@@ -67,6 +68,20 @@ struct TDictResult
 //typedef std::map<int, TDictResult> TDictResultMap;//order + result
 typedef std::vector<TDictResult> TDictResultMap;//order + result
 
+//HTML Data Type
+//const int HTMLDATATYPE_0    =   0;
+const int HTMLDATATYPE_1    =   0;
+const int HTMLDATATYPE_2    =   1;
+const int HTMLDATATYPE_3    =   2;
+
+const int MAX_HTMLDATATYPE  =   3;
+
+struct TDictDefAttr
+{
+    const std::wstring dictid;
+    int deftype;
+};
+
 }
 
 struct TResult
@@ -77,6 +92,9 @@ struct TResult
 
 typedef std::map<std::wstring, TResult> TResultMap;//word + result
 
+///////////////////
+const int SIZE_DICTDEFATTR  =   10;
+extern HtmlDictParser::TDictDefAttr g_stSysDictDefAttr[SIZE_DICTDEFATTR];
 
 #endif
 
