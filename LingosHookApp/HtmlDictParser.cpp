@@ -198,11 +198,6 @@ int CHtmlDictParser::Init(CDBAccess::TDatabase &db)
     return _objDictKnownAttr.Init(db);
 }
 
-//int CHtmlDictParser::ParserHTML(const std::wstring &html, HtmlDictParser::TDictResultVector &result)
-//{
-//    return -1;        
-//}
-
 int CHtmlDictParser::ParserHTML(CDBAccess::TDatabase &db, const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TResultMap &result)
 {
     HtmlDictParser::TDictResult res;
@@ -223,20 +218,6 @@ int CHtmlDictParser::ParserHTML(CDBAccess::TDatabase &db, const std::wstring& ht
     res.m_iDictStart = dict->start;
     res.m_iDictEnd = dict->end;
 
-    //std::wstring strdict = L"\"dict_body_" + dictid + L"\"";
-    //
-    //TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
-    //const TinyHtmlParser::CElementObject* pdiv = doc.FindFirstElement(dict, L"DIV", tmpstack);
-    //const TinyHtmlParser::CAttributeObject* pa = NULL;
-
-    //while(pdiv != NULL)
-    //{
-    //    pa = pdiv->FindAttribute(L"id");
-    //    if(pa != NULL && pa->value == strdict)
-    //        break;
-    //    pdiv = doc.FindNextElement(dict, L"DIV", tmpstack);
-    //}
-
     const TinyHtmlParser::CElementObject* pdiv = dict->child->sibling;
 
     if(pdiv == NULL)
@@ -256,116 +237,6 @@ int CHtmlDictParser::ParserHTML(CDBAccess::TDatabase &db, const std::wstring& ht
     }
     return 0;
 }
-
-    
-
-
-////////////////
-//    TResultMap::iterator it = result.end();
-//    bool find = false;
-//    std::wstring word;
-//    TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
-//    const TinyHtmlParser::CElementObject* pdiv = doc.FindFirstElement(dict, L"DIV", tmpstack);
-//    while(pdiv != NULL)
-//    {
-//        const TinyHtmlParser::CAttributeObject* pstyle = pdiv->FindAttribute(L"style");
-//        if(pstyle != NULL && pstyle->value == L"\"OVERFLOW-X: hidden; WIDTH: 100%\"")
-//        {            
-//            if(GetWord(html, dictid, doc, dict, pdiv, store, word) == 0)
-//            {
-//                if(!word.empty())
-//                {
-//                    it = result.find(word);
-//                    if(it == result.end())
-//                    {
-//                        it = result.insert(std::make_pair(word, TResult())).first;
-//                        it->second.m_resultHtml.push_back(res);
-//                    }
-//                    else
-//                    {
-//                        find = false;
-//                        for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
-//                        {
-//                            if(i->m_iDictIndex == res.m_iDictIndex)
-//                            {
-//                                find = true;
-//                                break;
-//                            }
-//                        }
-//                        if(!find)
-//                        {
-//                            it->second.m_resultHtml.push_back(res);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            //if(pdiv->child != NULL && pdiv->child->child != NULL && pdiv->child->child->child != NULL)
-//            //{
-//            //    std::wstring word = pdiv->child->child->child->child->value;
-//            //    if(!word.empty())
-//            //    {
-//            //        it = result.find(word);
-//            //        if(it == result.end())
-//            //        {
-//            //            it = result.insert(std::make_pair(word, TResult())).first;
-//            //            it->second.m_resultHtml.push_back(res);
-//            //        }
-//            //        else
-//            //        {
-//            //            find = false;
-//            //            for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
-//            //            {
-//            //                if(i->m_iDictIndex == res.m_iDictIndex)
-//            //                {
-//            //                    find = true;
-//            //                    break;
-//            //                }
-//            //            }
-//            //            if(!find)
-//            //            {
-//            //                it->second.m_resultHtml.push_back(res);
-//            //            }
-//            //        }
-//            //    }
-//            //}
-//        }
-//
-//
-//
-//        //if(pstyle != NULL && pstyle->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
-//        //{
-//        //    if(pdiv->child != NULL && pdiv->child->child != NULL)
-//        //    {
-//        //        it = result.find(pdiv->child->child->value);
-//        //        if(it == result.end())
-//        //        {
-//        //            it = result.insert(std::make_pair(pdiv->child->child->value, TResult())).first;
-//        //            it->second.m_resultHtml.push_back(res);
-//        //        }
-//        //        else
-//        //        {
-//        //            find = false;
-//        //            for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
-//        //            {
-//        //                if(i->m_iDictIndex == res.m_iDictIndex)
-//        //                {
-//        //                    find = true;
-//        //                    break;
-//        //                }
-//        //            }
-//        //            if(!find)
-//        //            {
-//        //                it->second.m_resultHtml.push_back(res);
-//        //            }
-//        //        }
-//        //    }
-//        //}
-//        pdiv = doc.FindNextElement(dict, L"DIV", tmpstack);
-//    }
-//
-//    return 0;
-//}
 
 int CHtmlDictParser::PushResult(const std::wstring& word, const HtmlDictParser::TDictResult& res, TResultMap &result) const
 {
@@ -392,39 +263,6 @@ int CHtmlDictParser::PushResult(const std::wstring& word, const HtmlDictParser::
     return 0;
 }
 
-
-//int CHtmlDictParser::GetWord(const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, int storeparam, std::wstring &word) const
-//{
-//    int type = (storeparam & 0xFFFF0000) >> 16;
-//    switch(type)
-//    {
-//    case HtmlDictParser::HTMLDATATYPE_1:
-//        if(pdiv->child != NULL && pdiv->child->child != NULL && pdiv->child->child->child != NULL)
-//        {
-//            word = pdiv->child->child->child->value;
-//        }
-//        else
-//        {
-//            return -1;
-//        }
-//        break;
-//    case HtmlDictParser::HTMLDATATYPE_2:
-//        if(pdiv->child != NULL && pdiv->child->child != NULL && pdiv->child->child->child != NULL && pdiv->child->child->child->child != NULL)
-//        {
-//            word = pdiv->child->child->child->child->value;
-//        }
-//        else
-//        {
-//            return -1;
-//        }
-//        break;
-//    default:
-//        return -1;
-//    }
-//
-//    return 0;
-//}
-
 ///
 int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring &dictid, const std::wstring &html, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict)
 {
@@ -441,33 +279,6 @@ int CHtmlDictParser::UpdateDictInfo(CDBAccess::TDatabase &db, const std::wstring
         store = 1;
 
     return InsertDictInfo(db, dictid, pdiv->value, _objDictInfo.Size(), store << 16);
-
-    //TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
-    //const TinyHtmlParser::CElementObject* pdiv = doc.FindFirstElement(dict, L"DIV", tmpstack);
-    //while(pdiv != NULL)
-    //{
-    //    std::wstring strdict = L"\"dict_title_" + dictid + L"\"";
-    //    const TinyHtmlParser::CAttributeObject* pstyle = pdiv->FindAttribute(L"id");
-    //    if(pstyle != NULL && pstyle->value == strdict)
-    //    {
-    //        if(pdiv->child != NULL && pdiv->child->sibling != NULL)
-    //        {
-    //            return InsertDictInfo(db, dictid, pdiv->child->sibling->value);
-    //        }
-    //    }
-
-    //    //const TinyHtmlParser::CAttributeObject* pstyle = pdiv->FindAttribute(L"style");
-    //    //if(pstyle != NULL && pstyle->value == L"\"MARGIN: 0px 3px 1px 0px; CURSOR: default\"")
-    //    //{
-    //    //    if(pdiv->child != NULL && pdiv->child->sibling != NULL)
-    //    //    {
-    //    //        return InsertDictInfo(db, dictid, pdiv->child->sibling->value);
-    //    //    }
-    //    //}
-
-    //    pdiv = doc.FindNextElement(dict, L"DIV", tmpstack);
-    //}
-    //return -1;
 }
 
 int CHtmlDictParser::InsertDictInfo(CDBAccess::TDatabase &db, const std::wstring &dictid, const std::wstring &title, int load, int store)

@@ -75,12 +75,16 @@ public:
                const wxString& name = wxTreeCtrlNameStr);
 protected:
     virtual void OnContextMenu(wxContextMenuEvent& event) {};
+
+    virtual void OnSetFocus(wxFocusEvent& event);
+    virtual void OnKillFocus(wxFocusEvent& event);
+    virtual void OnMouseLeave(wxMouseEvent& event);
 private:
     DECLARE_EVENT_TABLE()
 };
 
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, -1)
-
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_TREECTRL_FOCUS, -1)
 
 class CLHFilterTreeCtrl : public CLHTreeCtrl
 {
@@ -236,11 +240,6 @@ public:
         return true;
     }
     void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
-//public:
-//    void OnMouseEnter(wxMouseEvent& event);
-//    void OnMouseLeave(wxMouseEvent& event);
-//private:
-//    DECLARE_EVENT_TABLE()
 };
 
 #else
@@ -304,5 +303,29 @@ public:
 private:
     DECLARE_EVENT_TABLE()
 };
+
+///
+#include "wx/radiobut.h"
+
+class CLHRadioButton : public wxRadioButton
+{
+public:
+    CLHRadioButton(wxWindow *parent,
+                  wxWindowID id,
+                  const wxString& label,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = 0,
+                  const wxValidator& validator = wxDefaultValidator,
+                  const wxString& name = wxRadioButtonNameStr); 
+protected:
+    virtual void OnSetFocus(wxFocusEvent& event);
+    virtual void OnKillFocus(wxFocusEvent& event);
+    virtual void OnMouseLeave(wxMouseEvent& event);
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS, -1)
 
 #endif

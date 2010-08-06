@@ -442,51 +442,6 @@ int CTagMode::UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int
     return 0;
 }
 
-//int CTagMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)
-//{
-//    wxString word;
-//    TIntSet settag;
-//
-//    if(GetWordData(db, wordid, word, settag) != 0)
-//        return -1;
-//
-//    for(TIntSet::const_iterator it = settag.begin(); it != settag.end(); ++ it)
-//    {
-//        TTagMap::const_iterator i = _mapTag.find((*it));
-//        if(i == _mapTag.end())
-//            return -1;
-//
-//        CLHFilterTreeItemData* cd = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_WORD, wordid, (*it));
-//        tree->AppendItem(i->second.second, word, -1, -1, cd);
-//
-//        UpdateItemText(tree, (*it), i->second);
-//    }
-//
-//    return 0; 
-//}
-
-//int CTagMode::RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
-//{
-//    for(TTagMap::const_iterator::const_iterator it = _mapTag.begin(); it != _mapTag.end(); ++ it)
-//    {
-//        wxTreeItemIdValue cookie;
-//        wxTreeItemId itemid = tree->GetFirstChild(it->second.second, cookie);
-//        while(itemid.IsOk())
-//        {
-//            const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)tree->GetItemData(itemid);
-//            if(cd->ID() == wordid)
-//            {
-//                tree->Delete(itemid);
-//                UpdateItemText(tree, it->first, it->second);
-//
-//                break;
-//            }
-//            itemid = tree->GetNextChild(it->second.second, cookie);
-//        }
-//    }
-//    return 0;
-//}
-
 int CTagMode::UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
 {
     wxString word;

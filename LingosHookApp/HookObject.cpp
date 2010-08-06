@@ -89,37 +89,6 @@ int CDllHookObject::Unhook()
 	return 0;
 }
 
-//int CDllHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
-//{
-//	if(msg == _nMsgID)
-//	{
-//		const struct _HookData_t* hd = (reinterpret_cast<const struct _HookData_t*>(lparam));
-//		wxString str;
-//		if(hd != NULL && hd->data != NULL)
-//		{
-//			str.append(hd->data, hd->size);
-//		}		
-//
-//		if(wparam == HKT_RESULT_TEXT)
-//		{
-//			wxLogDebug(_T("get RESULT_TEXT message."));
-//			
-//			if(_objFrame != NULL)
-//				_objFrame->HookTextProc(str);
-//		}
-//		else if(wparam == HKT_RESULT_HTML)
-//		{
-//			wxLogDebug(_T("get RESULT_HTLM message."));
-//			if(_objFrame != NULL)
-//				_objFrame->HookHTMLProc(str);
-//		}
-//		else
-//		{
-//			wxLogDebug(_T("get UNKNOWN message."));
-//		}
-//	}
-//	return 0;
-//}
 /////////////////////////////////////////////////////////
 int CHotkeyObject::_wincount = 0;
 
@@ -167,13 +136,6 @@ void CHotkeyObject::Unhook()
         _id = 0;
     }
 }
-
-//int CHotkeyObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
-//{
-//    GetResult(wparam, lparam);
-//
-//    return 0;
-//}
 
 int CHotkeyObject::GetResult(WXWPARAM wparam, WXLPARAM lparam)
 {

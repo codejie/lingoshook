@@ -196,14 +196,43 @@ void CLHComboBox::OnMouseLeave(wxMouseEvent &event)
 /////////////////////
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_TREECTRL_FOCUS)
 
 BEGIN_EVENT_TABLE(CLHTreeCtrl, wxTreeCtrl)
     EVT_CONTEXT_MENU(CLHTreeCtrl::OnContextMenu)
+    EVT_SET_FOCUS(CLHTreeCtrl::OnSetFocus)
+    EVT_KILL_FOCUS(CLHTreeCtrl::OnKillFocus)
+    EVT_LEAVE_WINDOW(CLHTreeCtrl::OnMouseLeave)
 END_EVENT_TABLE()
 
 CLHTreeCtrl::CLHTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style, const wxValidator &validator, const wxString &name)
 : wxTreeCtrl(parent, id, pos, size, style, validator, name)
 {
+}
+
+void CLHTreeCtrl::OnSetFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_TREECTRL_FOCUS,  GetId());
+    ev.SetInt(1);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHTreeCtrl::OnKillFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_TREECTRL_FOCUS,  GetId());
+    ev.SetInt(0);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHTreeCtrl::OnMouseLeave(wxMouseEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_TREECTRL_FOCUS,  GetId());
+    ev.SetInt(0);
+
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
 }
 
 ///////////
@@ -340,9 +369,6 @@ CLHCheckBoxList::CLHCheckBoxList(wxWindow* parent, wxWindowID id, const wxPoint&
 
     //SetImageList(&m_imageList, wxIMAGE_LIST_NORMAL);
     SetImageList(&m_imageList, wxIMAGE_LIST_SMALL);
-
-    //InsertColumn(0, wxT("Title"), wxLIST_FORMAT_LEFT, 250);
-    //InsertColumn(1, wxT("ID"), wxLIST_FORMAT_LEFT, 200);
 }
 
 void CLHCheckBoxList::OnMouseEvent(wxMouseEvent& event)
@@ -386,21 +412,6 @@ void CLHCheckBoxList::SetChecked(long item, bool checked)
 ///[[[[[[...........[0'''''''''''''''''''''''0.0'[[[[[[,9;8p78m,o,oa9/99
 
 
-//BEGIN_EVENT_TABLE(CLHHtmlWindow, wxIEHtmlWin)
-//  EVT_ENTER_WINDOW(CLHHtmlWindow::OnMouseEnter)
-//  EVT_LEAVE_WINDOW(CLHHtmlWindow::OnMouseLeave)
-//END_EVENT_TABLE()
-//
-//void CLHHtmlWindow::OnMouseEnter(wxMouseEvent &event)
-//{
-//    this->Enable(true);
-//}
-//
-//void CLHHtmlWindow::OnMouseLeave(wxMouseEvent &event)
-//{
-//    this->Enable(false);
-//}
-
 /////////////////////////////////////////////
 BEGIN_EVENT_TABLE(CLHPanel, wxPanel)
   EVT_ENTER_WINDOW(CLHPanel::OnMouseEnter)
@@ -417,3 +428,44 @@ void CLHPanel::OnMouseLeave(wxMouseEvent &event)
 {
     this->Enable(false);
 }
+
+///////////////////////////////////////////////
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS)
+
+BEGIN_EVENT_TABLE(CLHRadioButton, wxRadioButton)
+    EVT_SET_FOCUS(CLHRadioButton::OnSetFocus)
+    EVT_KILL_FOCUS(CLHRadioButton::OnKillFocus)
+    EVT_LEAVE_WINDOW(CLHRadioButton::OnMouseLeave)
+END_EVENT_TABLE()
+
+CLHRadioButton::CLHRadioButton(wxWindow *parent, wxWindowID id, const wxString &value, const wxPoint &pos, const wxSize &size, long style, const wxValidator &validator, const wxString &name)
+: wxRadioButton(parent, id, value, pos, size, style, validator, name)
+{
+}
+
+void CLHRadioButton::OnSetFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS,  GetId());
+    ev.SetInt(1);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHRadioButton::OnKillFocus(wxFocusEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS,  GetId());
+    ev.SetInt(0);
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
+void CLHRadioButton::OnMouseLeave(wxMouseEvent &event)
+{
+    wxCommandEvent ev(wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS,  GetId());
+    ev.SetInt(0);
+
+    GetEventHandler()->ProcessEvent(ev);
+    event.Skip();
+}
+
