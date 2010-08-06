@@ -87,10 +87,10 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     static_line_1 = new wxStaticLine(m_noteIndex_pane_3, wxID_ANY);
     label_5 = new wxStaticText(m_noteIndex_pane_3, wxID_ANY, wxT("After seeing the above word, "));
     label_6 = new wxStaticText(m_noteIndex_pane_3, wxID_ANY, wxT("what are you feeling?"));
-    m_radioMemLevel0 = new wxRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL1, wxT("Very easy!"));
-    m_radioMemLevel1 = new wxRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL2, wxT("Know it.."));
-    m_radioMemLevel2 = new wxRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL3, wxT("Fuzzy.."));
-    m_radioMemLevel3 = new wxRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL4, wxT("What's it?!"));
+    m_radioMemLevel0 = new CLHRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL1, wxT("Very easy!"));
+    m_radioMemLevel1 = new CLHRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL2, wxT("Know it.."));
+    m_radioMemLevel2 = new CLHRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL3, wxT("Fuzzy.."));
+    m_radioMemLevel3 = new CLHRadioButton(m_noteIndex_pane_3, CIID_RADIO_MEMLEVEL4, wxT("What's it?!"));
     static_line_2 = new wxStaticLine(m_noteIndex_pane_3, wxID_ANY);
     m_btnMemRemove = new wxButton(m_noteIndex_pane_3, CIID_BUTTON_MEMREMOVE, wxT("Delete"));
     panel_5 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
@@ -223,6 +223,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_TOGGLEBUTTON(CIID_BUTTON_HOOK, LingosHookFrame::OnBtnHook)
     EVT_BUTTON(XIID_BUTTON_FILTER, LingosHookFrame::OnBtnFilter)
     EVT_TREE_SEL_CHANGED(CIID_TREE_FILTER, LingosHookFrame::OnTreeFilterChange)
+    EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_FOCUS, LingosHookFrame::OnTreeFilterFocus)
     EVT_MENU_RANGE(FMID_BEGIN, FMID_END, LingosHookFrame::OnMenuFilter)
     EVT_BUTTON(CIID_BUTTON_SETDICTCHOICE, LingosHookFrame::OnBtnSetDictChoice)
     EVT_BUTTON(CIID_BUTTON_SETDICTSTORECHOICE, LingosHookFrame::OnBtnSetDictStoreChoice)
@@ -232,6 +233,10 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_RADIOBUTTON(CIID_RADIO_MEMLEVEL2, LingosHookFrame::OnRadioMemLevel)
     EVT_RADIOBUTTON(CIID_RADIO_MEMLEVEL3, LingosHookFrame::OnRadioMemLevel)
     EVT_RADIOBUTTON(CIID_RADIO_MEMLEVEL4, LingosHookFrame::OnRadioMemLevel)
+    EVT_COMMAND(CIID_RADIO_MEMLEVEL1, wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS, LingosHookFrame::OnRadioMemLevelFocus)
+    EVT_COMMAND(CIID_RADIO_MEMLEVEL2, wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS, LingosHookFrame::OnRadioMemLevelFocus)
+    EVT_COMMAND(CIID_RADIO_MEMLEVEL3, wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS, LingosHookFrame::OnRadioMemLevelFocus)
+    EVT_COMMAND(CIID_RADIO_MEMLEVEL4, wxEVT_COMMAND_LH_RADIOBUTTON_FOCUS, LingosHookFrame::OnRadioMemLevelFocus)
     EVT_BUTTON(CIID_BUTTON_MEMREGEN, LingosHookFrame::OnBtnMemRegen)
     EVT_BUTTON(CIID_BUTTON_ABOUTHELP, LingosHookFrame::OnBtnAboutHelp)
     EVT_BUTTON(CIID_BUTTON_ABOUTSEND, LingosHookFrame::OnBtnAboutSend)
@@ -931,7 +936,7 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
 
 void LingosHookFrame::OnClose(wxCloseEvent& event)
 {
-#ifdef __LH_USE_WXIE__
+#ifdef __LH_DEBUG__
     event.Skip();
     return;
 #endif
@@ -1152,6 +1157,14 @@ void LingosHookFrame::OnTreeFilterChange(wxTreeEvent &event)
     }
 }
 
+void LingosHookFrame::OnTreeFilterFocus(wxCommandEvent& event)
+{
+    if(event.GetInt() == 1)
+        m_winHTML->Enable(false);
+    else
+        m_winHTML->Enable(true);
+}
+
 void LingosHookFrame::OnMenuFilter(wxCommandEvent& event)
 {
     g_objTrigger.OnSortShow(CLHFilterTreeCtrl::FilterType(event.GetId() - FMID_BEGIN));
@@ -1196,6 +1209,14 @@ void LingosHookFrame::OnRadioMemLevel(wxCommandEvent &event)
         m_btnMemRemove->Enable(true);
         m_btnMemNext->Enable(true);
     }
+}
+
+void LingosHookFrame::OnRadioMemLevelFocus(wxCommandEvent& event)
+{
+    if(event.GetInt() == 1)
+        m_winHTML->Enable(false);
+    else
+        m_winHTML->Enable(true);
 }
 
 void LingosHookFrame::OnBtnMemRegen(wxCommandEvent &event)

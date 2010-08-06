@@ -117,39 +117,6 @@ int CDCParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
             }
 
         }
-
-        //if(pa->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
-        //{//word
-        //    if(p->child == NULL)
-        //        return -1;
-        //    if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
-        //        return -1;
-        //    word = p->child->child->value;//.c_str());//, wxConvISO8859_1);
-        //}
-        //else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
-        //{//result
-        //    if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
-        //        return -1;
-        //    res->m_vctRecord.push_back(p->child->value);//.c_str()));//, wxConvISO8859_1);
-
-        //    if(p->child->child != NULL)
-        //    {
-        //        const TinyHtmlParser::CElementObject* pc = p->child->child;
-        //        while(pc != NULL)
-        //        {
-        //            if(pc->tag == L"FONT")
-        //            {
-        //                res->m_strKasus = pc->value;//.c_str());//, wxConvISO8859_1);
-        //            }
-        //            else
-        //            {
-        //                res->m_vctRecord.push_back(pc->value);//.c_str()));//, wxConvISO8859_1);
-        //            }
-        //           
-        //            pc = pc->sibling;
-        //        }
-        //    }      
-        //}
         
         p = doc->FindNextElement(pr, L"DIV", tmpstack);
     }

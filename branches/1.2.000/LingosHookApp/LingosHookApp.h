@@ -83,10 +83,10 @@ protected:
     wxStaticLine* static_line_1;
     wxStaticText* label_5;
     wxStaticText* label_6;
-    wxRadioButton* m_radioMemLevel0;
-    wxRadioButton* m_radioMemLevel1;
-    wxRadioButton* m_radioMemLevel2;
-    wxRadioButton* m_radioMemLevel3;
+    CLHRadioButton* m_radioMemLevel0;
+    CLHRadioButton* m_radioMemLevel1;
+    CLHRadioButton* m_radioMemLevel2;
+    CLHRadioButton* m_radioMemLevel3;
     wxStaticLine* static_line_2;
     wxButton* m_btnMemRemove;
     wxPanel* panel_5;
@@ -198,10 +198,12 @@ public:
     virtual void OnBtnHook(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnFilter(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnTreeFilterChange(wxTreeEvent &event); // wxGlade: <event_handler>
+    virtual void OnTreeFilterFocus(wxCommandEvent& event);
     virtual void OnMenuFilter(wxCommandEvent& event);
     virtual void OnBtnMemRemove(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnMemNext(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnRadioMemLevel(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnRadioMemLevelFocus(wxCommandEvent& event);
     virtual void OnBtnMemRegen(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutHelp(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutSend(wxCommandEvent &event); // wxGlade: <event_handler>

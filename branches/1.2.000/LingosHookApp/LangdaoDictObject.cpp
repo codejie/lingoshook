@@ -169,42 +169,6 @@ int CECParser::GetResult(const TinyHtmlParser::CDocumentObject* doc, const TinyH
         pdiv = pdiv->sibling;
     }
 
-
-
-    //TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
-    //const TinyHtmlParser::CElementObject* pdiv = doc->FindFirstElement(pr, L"DIV", tmpstack);
-    //while(pdiv != NULL)
-    //{
-    //    if(pdiv->type == TinyHtmlParser::ET_ELEMENT)
-    //    {
-    //        //if(pdiv->child == NULL)
-    //        //    return -1;
-    //        if(pdiv->child->tag == L"SPAN")
-    //        {//result
-    //            CECResult::_result_t res;
-    //            if(pdiv->child->child == NULL || pdiv->child->child->type != TinyHtmlParser::ET_ELEMENT)
-    //                return -1;
-    //            res.m_eClass = StrToWC(pdiv->child->child->value);//.c_str()));//, wxConvISO8859_1);
-    //            if(pdiv->child->sibling == NULL || pdiv->child->sibling->type != TinyHtmlParser::ET_ELEMENT)
-    //                return -1;
-    //            res.m_strResult = pdiv->child->sibling->value;//.c_str());//,wxConvISO8859_1);
-
-    //            result.m_stRecord.m_vctResult.push_back(res);
-    //        }
-    //        else if(pdiv->child->tag == L"FONT")
-    //        {//special
-    //            CECResult::_special_t res;
-    //            if(pdiv->child->type != TinyHtmlParser::ET_ELEMENT)
-    //                return -1;
-    //            res.m_strSpecial = pdiv->child->value;//.c_str());//, wxConvISO8859_1);
-    //            res.m_strResult = pdiv->value.c_str();//);//, wxConvISO8859_1);
-
-    //            result.m_stRecord.m_vctSpecial.push_back(res);
-    //        }
-    //    }
-
-    //    pdiv = doc->FindNextElement(pr, L"DIV", tmpstack);
-    //}
     return 0;
 }
 
