@@ -80,6 +80,7 @@ private:
 
 }
 
+class CConfigData;
 class CHtmlDictLoadChoiceDialog;
 class CHtmlDictStoreChoiceDialog;
 
@@ -91,7 +92,7 @@ public:
 
     virtual int Init(CDBAccess::TDatabase& db);
     //virtual int ParserHTML(const std::wstring& html, TDictResultVector& result);
-    virtual int ParserHTML(CDBAccess::TDatabase &db, const std::wstring& html, const std::wstring& dictid, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result);
+    virtual int ParserHTML(const CConfigData& config, CDBAccess::TDatabase &db, const std::wstring& html, const std::wstring& dictid, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result);
 
     virtual int SaveResult(CDBAccess::TDatabase& db, int wordid, const HtmlDictParser::TDictResultMap& result);
     virtual int GetResult(CDBAccess::TDatabase& db, int wordid, HtmlDictParser::TDictResultMap& result);
@@ -119,11 +120,13 @@ protected:
 
     void AppendDictStoreInfoTypeMenu(wxMenu* menu, int menuid, int dictindex, int type, int deftype) const;
 private:
-    int PushResult(const std::wstring& word, const HtmlDictParser::TDictResult& res, TResultMap &result) const;
+    int PushResult(const CConfigData& config, const std::wstring& word, const HtmlDictParser::TDictResult& res, TResultMap &result) const;
 
-    int HtmlDataType1Proc(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
-    int HtmlDataType2Proc(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
-    int HtmlDataType3Proc(const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
+    int HtmlDataType1Proc(const CConfigData& config, const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
+    int HtmlDataType2Proc(const CConfigData& config, const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
+    int HtmlDataType3Proc(const CConfigData& config, const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject* pdiv, const HtmlDictParser::TDictResult& res, TResultMap& result) const;
+
+    bool WordIsEqual(int uppercase, const std::wstring& left, const std::wstring& right) const;
 protected:
     HtmlDictParser::CDictInfoObject _objDictInfo;
 private:

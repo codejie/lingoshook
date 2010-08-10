@@ -265,7 +265,7 @@ int CDictObject::ParserSpecialDict(const std::wstring& html, const std::wstring&
 
 int CDictObject::ParserHtmlDict(const std::wstring &html, const std::wstring& dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TResultMap &result)
 {
-    return _objHtmlDictParser->ParserHTML(_db, html, dictid, doc, dict, result);
+    return _objHtmlDictParser->ParserHTML(_config, _db, html, dictid, doc, dict, result);
 }
 
 int CDictObject::CheckWord(const std::wstring &word, int &wordid, int &count)

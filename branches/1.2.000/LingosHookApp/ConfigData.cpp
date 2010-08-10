@@ -29,6 +29,9 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_strLingoesExec(_("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"))
 , m_strLingoesPath(_("C:\\Program Files\\Lingoes\\Translator2"))
 , m_iRetrieveDelay(0)
+, m_iAFCaseInsensitive(0)
+, m_iAFOneWordEachDict(0)
+, m_iAFOneWordAllDict(0)
 {
 }
 
@@ -221,6 +224,13 @@ int CConfigData::Load()
 
     if(GetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
         m_iRetrieveDelay = 0;
+
+    if(GetData(CA_AF_CASEINSENSITIVE, m_iAFCaseInsensitive) != 0)
+        m_iAFCaseInsensitive = 0;
+    if(GetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
+        m_iAFOneWordEachDict = 0;
+    if(GetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        m_iAFOneWordAllDict = 0;
     return 0;
 }
 
@@ -275,6 +285,12 @@ int CConfigData::Save()
     if(SetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
         return -1;
 
+    if(SetData(CA_AF_CASEINSENSITIVE, m_iAFCaseInsensitive) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        return -1;
     return 0;
 }
 
@@ -330,3 +346,13 @@ int CConfigData::SetLoadHtmlDict(int value)
     return SetData(CA_LOADHTMLDICT, value);
 }
 
+int CConfigData::SetAnalysisFilter()
+{
+    if(SetData(CA_AF_CASEINSENSITIVE, m_iAFCaseInsensitive) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        return -1;
+    return 0;
+}
