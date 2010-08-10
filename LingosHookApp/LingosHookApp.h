@@ -7,6 +7,9 @@
 #include <wx/image.h>
 // begin wxGlade: ::dependencies
 
+
+
+
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/tglbtn.h>
@@ -14,6 +17,12 @@
 #include <wx/listctrl.h>
 #include <wx/statline.h>
 // end wxGlade
+
+
+
+
+
+
 // begin wxGlade: ::extracode
 // end wxGlade
 
@@ -40,7 +49,8 @@ public:
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
-            , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE };
+            , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE
+			, CIID_BUTTON_SETANALYSISFILTER };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -129,6 +139,7 @@ protected:
     wxCheckBox* m_checkSkipDict;
     wxCheckBox* m_checkSkipHtml;
     wxButton* m_btnSetDictStoreChoice;
+    wxButton* m_btnSetAnalysisFilter;
     wxStaticLine* static_line_5;
     wxStaticText* label_4;
     wxComboBox* m_comboxExpandDict;
@@ -141,6 +152,7 @@ protected:
     wxPanel* panel_2;
     wxButton* m_btnSetApply;
 
+
     wxPanel* m_noteContext_pane_3;
     wxStaticText* label_3;
     wxTextCtrl* m_textDefTag;
@@ -150,6 +162,7 @@ protected:
     wxButton* m_btnTagAdd;
     wxPanel* panel_4;
     wxButton* m_btnTagRemove;
+
 
     wxStaticText* label_8;
     wxStaticLine* static_line_4;
@@ -178,7 +191,6 @@ public:
     virtual void OnWordIndexEnter(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnWordIndexText(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnWordIndexFocus(wxCommandEvent& event);
-
     virtual void OnIndexDClick(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexSelected(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnIndexDelete(wxCommandEvent& event);
@@ -224,7 +236,9 @@ public:
     virtual void OnMemTypeFocus(wxCommandEvent& event);
     virtual void OnMemTypeText(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnDebug(wxCommandEvent &event); // wxGlade: <event_handler>
+
     virtual void OnBtnSetDictStoreChoice(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnSetAnalysisFilter(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetDictChoice(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnScrollSetDelayEnd(wxScrollEvent &event); // wxGlade: <event_handler>
 

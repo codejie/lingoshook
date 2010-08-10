@@ -38,6 +38,9 @@ public:
     static const int CA_LINGOESEXEC     =   22;
     static const int CA_LINGOESPATH     =   23;
     static const int CA_RETRIEVEDELAY   =   24;
+    static const int CA_AF_CASEINSENSITIVE  =   25;
+    static const int CA_AF_ONEWORDEACHDICT  =   26;
+    static const int CA_AF_ONEWORDALLDICT   =   27;
 public:
     CConfigData(CDBAccess& db);
 	virtual ~CConfigData() {}
@@ -53,6 +56,7 @@ public:
     int GetLingoesParam(const std::wstring& local);
 
     int SetLoadHtmlDict(int value);
+    int SetAnalysisFilter();
 protected:
     int GetData(int attr, int& value);
     int GetData(int attr, std::wstring& value);
@@ -84,6 +88,9 @@ public:
     std::wstring m_strLingoesExec;
     std::wstring m_strLingoesPath;
     int m_iRetrieveDelay;
+    int m_iAFCaseInsensitive;
+    int m_iAFOneWordEachDict;
+    int m_iAFOneWordAllDict;
 };
 
 

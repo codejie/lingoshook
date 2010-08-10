@@ -4,6 +4,7 @@
 
 #include "wx/wx.h"
 
+#include "ConfigData.h"
 #include "DictLoadChoiceDialog.h"
 #include "DictStoreChoiceDialog.h"
 #include "HtmlDictParser.h"
@@ -198,7 +199,7 @@ int CHtmlDictParser::Init(CDBAccess::TDatabase &db)
     return _objDictKnownAttr.Init(db);
 }
 
-int CHtmlDictParser::ParserHTML(CDBAccess::TDatabase &db, const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TResultMap &result)
+int CHtmlDictParser::ParserHTML(const CConfigData& config, CDBAccess::TDatabase &db, const std::wstring& html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TResultMap &result)
 {
     HtmlDictParser::TDictResult res;
     res.m_iDictIndex = _objDictInfo.GetDictIndex(dictid);
@@ -208,6 +209,9 @@ int CHtmlDictParser::ParserHTML(CDBAccess::TDatabase &db, const std::wstring& ht
         if(res.m_iDictIndex == -1)
             return -1;
     }
+
+    if(config.m_iAFOneWordAllDict == 1 && result.size() > 0)
+        return 0;
 
     int store = _objDictInfo.GetDictStoreParam(res.m_iDictIndex);
     if(store == -1)
@@ -227,39 +231,100 @@ int CHtmlDictParser::ParserHTML(CDBAccess::TDatabase &db, const std::wstring& ht
     switch(type)
     {
     case HtmlDictParser::HTMLDATATYPE_1:
-        return HtmlDataType1Proc(html, dictid, doc, dict, pdiv, res, result);
+        return HtmlDataType1Proc(config, html, dictid, doc, dict, pdiv, res, result);
     case HtmlDictParser::HTMLDATATYPE_2:
-        return HtmlDataType2Proc(html, dictid, doc, dict, pdiv, res, result);
+        return HtmlDataType2Proc(config, html, dictid, doc, dict, pdiv, res, result);
     case HtmlDictParser::HTMLDATATYPE_3:
-        return HtmlDataType3Proc(html, dictid, doc, dict, pdiv, res, result);
+        return HtmlDataType3Proc(config, html, dictid, doc, dict, pdiv, res, result);
     default:
         return -1;
     }
     return 0;
 }
 
-int CHtmlDictParser::PushResult(const std::wstring& word, const HtmlDictParser::TDictResult& res, TResultMap &result) const
+bool CHtmlDictParser::WordIsEqual(int uppercase, const std::wstring& left, const std::wstring& right) const
+{
+    if(left.size() != right.size())
+        return false;
+    if(left == right)
+        return true;
+    if(uppercase == 1)
+    {
+        std::wstring l = left, r = right;
+        std::transform(left.begin(), left.end(), l.begin(), ::towupper);
+        std::transform(right.begin(), right.end(), r.begin(), ::towupper);
+        if(l == r)
+            return true;
+    }
+
+    return false;
+}
+
+int CHtmlDictParser::PushResult(const CConfigData& config, const std::wstring& word, const HtmlDictParser::TDictResult& res, TResultMap &result) const
 {
     if(word.empty())
         return 0;
 
-    TResultMap::iterator it = result.find(word);
+    if(config.m_iAFOneWordAllDict == 1 && result.size() > 0)
+        return 0;
+
+    if(config.m_iAFOneWordEachDict == 1)
+    {
+        for(TResultMap::const_iterator it = result.begin(); it != result.end(); ++ it)
+        {
+            for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
+            {
+                if(i->m_iDictIndex == res.m_iDictIndex)
+                {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    TResultMap::iterator it = result.begin();
+    while(it != result.end())
+    {
+        if(WordIsEqual(config.m_iAFCaseInsensitive, it->first, word))
+        {
+            for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
+            {
+                if(i->m_iDictIndex == res.m_iDictIndex)
+                {
+                    return 0;
+                }
+            }
+            break;
+        }
+        ++ it;
+    }
+
     if(it == result.end())
     {
         it = result.insert(std::make_pair(word, TResult())).first;
-        it->second.m_resultHtml.push_back(res);
     }
-    else
-    {
-        for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
-        {
-            if(i->m_iDictIndex == res.m_iDictIndex)
-            {
-                return 0;
-            }
-        }
-        it->second.m_resultHtml.push_back(res);
-    }
+
+    it->second.m_resultHtml.push_back(res);
+
+///////
+//    TResultMap::iterator it = result.find(word);
+//    if(it == result.end())
+//    {
+//        it = result.insert(std::make_pair(word, TResult())).first;
+//        it->second.m_resultHtml.push_back(res);
+//    }
+//    else
+//    {
+//        for(HtmlDictParser::TDictResultMap::const_iterator i = it->second.m_resultHtml.begin(); i != it->second.m_resultHtml.end(); ++ i)
+//        {
+//            if(i->m_iDictIndex == res.m_iDictIndex)
+//            {
+//                return 0;
+//            }
+//        }
+//        it->second.m_resultHtml.push_back(res);
+//    }
+
     return 0;
 }
 
@@ -650,7 +715,7 @@ int CHtmlDictParser::UpdateDictStoreInfoDefType(CDBAccess::TDatabase &db, CHtmlD
 }
 
 //////////////////////////////////////////////////
-int CHtmlDictParser::HtmlDataType1Proc(const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject *pdiv, const HtmlDictParser::TDictResult &res, TResultMap &result) const
+int CHtmlDictParser::HtmlDataType1Proc(const CConfigData& config, const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject *pdiv, const HtmlDictParser::TDictResult &res, TResultMap &result) const
 {
     const TinyHtmlParser::CElementObject *p = pdiv->child;
     if(p == NULL)
@@ -664,7 +729,7 @@ int CHtmlDictParser::HtmlDataType1Proc(const std::wstring &html, const std::wstr
             || p->child->child->sibling->child->child->child == NULL)
             return 0;
         std::wstring word = p->child->child->sibling->child->child->child->value;
-        if(PushResult(word, res, result) != 0)
+        if(PushResult(config, word, res, result) != 0)
             return -1;
 
         if(p->sibling == NULL || p->sibling->sibling == NULL)
@@ -674,7 +739,7 @@ int CHtmlDictParser::HtmlDataType1Proc(const std::wstring &html, const std::wstr
     return 0;
 }
 
-int CHtmlDictParser::HtmlDataType2Proc(const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject *pdiv, const HtmlDictParser::TDictResult &res, TResultMap &result) const
+int CHtmlDictParser::HtmlDataType2Proc(const CConfigData& config, const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject *pdiv, const HtmlDictParser::TDictResult &res, TResultMap &result) const
 {
     const TinyHtmlParser::CElementObject *p = pdiv->child;
     if(p == NULL)
@@ -688,7 +753,7 @@ int CHtmlDictParser::HtmlDataType2Proc(const std::wstring &html, const std::wstr
             || p->child->child->sibling->child->child->child == NULL || p->child->child->sibling->child->child->child->child == NULL)
             return 0;
         std::wstring word = p->child->child->sibling->child->child->child->child->value;
-        if(PushResult(word, res, result) != 0)
+        if(PushResult(config, word, res, result) != 0)
             return -1;
 
         if(p->sibling == NULL || p->sibling->sibling == NULL)
@@ -697,7 +762,7 @@ int CHtmlDictParser::HtmlDataType2Proc(const std::wstring &html, const std::wstr
     }
     return 0;
 }
-int CHtmlDictParser::HtmlDataType3Proc(const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject *pdiv, const HtmlDictParser::TDictResult &res, TResultMap &result) const
+int CHtmlDictParser::HtmlDataType3Proc(const CConfigData& config, const std::wstring &html, const std::wstring &dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, const TinyHtmlParser::CElementObject *pdiv, const HtmlDictParser::TDictResult &res, TResultMap &result) const
 {
     const TinyHtmlParser::CElementObject *p = pdiv->child;
     if(p == NULL)
@@ -712,7 +777,7 @@ int CHtmlDictParser::HtmlDataType3Proc(const std::wstring &html, const std::wstr
         if(p->child == NULL)
             return 0;
         std::wstring word = p->child->value;
-        if(PushResult(word, res, result) != 0)
+        if(PushResult(config, word, res, result) != 0)
             return -1;
 
         if(p->sibling == NULL)
