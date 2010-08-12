@@ -5,6 +5,7 @@
 #include "Consts.h"
 #include "ConfigData.h"
 #include "HookObject.h"
+#include "TagObject.h"
 #include "LingosHookApp.h"
 #include "TrayIconObject.h"
 
@@ -14,13 +15,15 @@ BEGIN_EVENT_TABLE(CTrayIconObject, wxTaskBarIcon)
     EVT_MENU(CTrayIconObject::CMIID_SHOW, CTrayIconObject::OnMenuShow)
     EVT_MENU(CTrayIconObject::CMIID_SETHOOK, CTrayIconObject::OnMenuSetHook)
     EVT_MENU(CTrayIconObject::CMIID_RUNLINGOS, CTrayIconObject::OnMenuRunLingos)
+    EVT_MENU_RANGE(CMIID_TAGBASE, CMIID_TAGBASE + 1024, CTrayIconObject::OnSubMenuTag)
     EVT_TASKBAR_LEFT_DCLICK(CTrayIconObject::OnLeftButtonDClick)
 END_EVENT_TABLE()
 
-CTrayIconObject::CTrayIconObject(LingosHookFrame *frame, const CConfigData* conf)
+CTrayIconObject::CTrayIconObject(LingosHookFrame *frame, const CConfigData* conf, CTagObject* tag)
 : _frame(frame)
 , _bIsHook(false)
 , _dataConfig(conf)
+, _objTag(tag)
 {
 }
 
@@ -100,6 +103,15 @@ wxMenu* CTrayIconObject::CreatePopupMenu()
     {
         menu->Append(CMIID_SETHOOK, wxT("Hook"));
     }
+    wxMenu* tagmenu = NULL;
+    if(_objTag != NULL)
+    {
+        if(_objTag->ShowTagSubMenu(CMIID_TAGBASE, tagmenu) == 0)
+        {
+            menu->AppendSeparator();
+            menu->AppendSubMenu(tagmenu, wxT("Tags"));
+        }
+    }
     menu->AppendSeparator();
     menu->Append(CMIID_EXIT, wxT("Exit"));
 
@@ -142,4 +154,13 @@ void CTrayIconObject::OnMenuSetHook(wxCommandEvent &event)
 void CTrayIconObject::OnMenuRunLingos(wxCommandEvent &event)
 {
     ::ShellExecute(NULL, _("open"), _dataConfig->m_strLingoesExec.c_str(), NULL, _dataConfig->m_strLingoesPath.c_str(), SW_SHOWNORMAL);
+}
+
+void CTrayIconObject::OnSubMenuTag(wxCommandEvent &event)
+{
+    int tagid = event.GetId() - CMIID_TAGBASE;
+    if(_objTag != NULL)
+    {
+        _objTag->UpdateDefaultTag(tagid);
+    }
 }

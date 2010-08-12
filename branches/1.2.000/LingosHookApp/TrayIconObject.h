@@ -10,15 +10,16 @@
 
 
 class CConfigData;
+class CTagObject;
 class LingosHookFrame;
 
 class CTrayIconObject : public wxTaskBarIcon
 {
 public:
     enum TrayStatus { TS_UNKNOWN = -1, TS_HOOK = 0, TS_NORMAL };
-    enum ContextMenuItemID { CMIID_EXIT = 15000, CMIID_SHOW, CMIID_SETHOOK, CMIID_RUNLINGOS };
+    enum ContextMenuItemID { CMIID_EXIT = 15000, CMIID_SHOW, CMIID_SETHOOK, CMIID_RUNLINGOS, CMIID_TAGBASE = 15100 };
 public:
-    CTrayIconObject(LingosHookFrame* frame, const CConfigData* conf);
+    CTrayIconObject(LingosHookFrame* frame, const CConfigData* conf, CTagObject* tag);
     virtual ~CTrayIconObject();
 
     int Init();
@@ -33,10 +34,12 @@ protected:
     void OnMenuShow(wxCommandEvent& event);
     void OnMenuSetHook(wxCommandEvent& event);
     void OnMenuRunLingos(wxCommandEvent& event);
+    void OnSubMenuTag(wxCommandEvent& event);
 private:
     LingosHookFrame* _frame;
     bool _bIsHook;
     const CConfigData* _dataConfig;
+    CTagObject* _objTag;
 DECLARE_EVENT_TABLE()
 };
 

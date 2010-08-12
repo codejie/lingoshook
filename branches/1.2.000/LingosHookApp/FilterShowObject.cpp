@@ -244,7 +244,7 @@ int CDateMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word,
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordTable.WordID, WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordID = ? AND WordTable.SrcID = SrcDataTable.SrcID");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordTable.WordID = ? AND WordTable.SrcID = SrcDataTable.SrcID");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -736,7 +736,7 @@ int CScoreMode::GetWordData(CDBAccess::TDatabase &db, int wordid, wxString &word
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, Counter, CheckinTime FROM WordTable WHERE WordID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, Counter FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())

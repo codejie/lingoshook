@@ -476,4 +476,20 @@ const wxString CTagObject::GetTitle(int tagid) const
     return _("Undefined");
 }
 
+int CTagObject::ShowTagSubMenu(int menubase, wxMenu*& submenu) const
+{
+    submenu = new wxMenu;
+    for(TRecordMap::const_iterator it = _mapRecord.begin(); it != _mapRecord.end(); ++ it)
+    {
+        if(it->first != _iDefaultTag)
+        {
+            submenu->Append(menubase + it->first, it->second.m_strTitle);
+        }
+        else
+        {
+            submenu->AppendRadioItem(menubase + it->first, it->second.m_strTitle);
+        }
+    }
 
+    return 0;
+}
