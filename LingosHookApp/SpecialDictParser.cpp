@@ -37,7 +37,7 @@ int CSpecialDictParser::AddKnownParser(CDBAccess::TDatabase& db)
     return 0;
 }
 
-int CSpecialDictParser::RegisterParser(CDBAccess::TDatabase& db, const wstring& id, const wstring& title, int loadparam, int storeparam)
+int CSpecialDictParser::RegisterParser(CDBAccess::TDatabase& db, const std::wstring& id, const std::wstring& title, int loadparam, int storeparam)
 {
     try
     {

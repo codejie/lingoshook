@@ -199,209 +199,12 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     set_properties();
     do_layout();
     // end wxGlade
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
 
 LingosHookFrame::~LingosHookFrame()
 {
-
-
     delete _objTrayIcon, _objTrayIcon = NULL;
 }
-
-
-
-
-
-
-
 
 BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     // begin wxGlade: LingosHookFrame::event_table
@@ -459,11 +262,6 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeFilterContextMenu)
     EVT_COMMAND(CIID_TREE_RESULT, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeResultContextMenu)
 
-
-
-
-
-
     EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN, LingosHookFrame::OnMemTypeKeyDown)
     EVT_COMMAND(CIID_TEXT_MEMTYPE, wxEVT_COMMAND_LH_TEXTCTRL_FOCUS, LingosHookFrame::OnMemTypeFocus)
     EVT_TEXT(CIID_TEXT_MEMTYPE, LingosHookFrame::OnMemTypeText)
@@ -472,30 +270,15 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
 
     EVT_BUTTON(CIID_BUTTON_DEBUG, LingosHookFrame::OnBtnDebug)
 
-
-
-
-
-
     EVT_CLOSE(LingosHookFrame::OnClose)
    // end wxGlade
 END_EVENT_TABLE();
 
-
-
-
-
-
-
 // wxGlade: add LingosHookFrame event handlers
-
 
 
 void LingosHookFrame::set_properties()
 {
-
-
-
     // begin wxGlade: LingosHookFrame::set_properties
     SetTitle(APP_TITLE);
     SetSize(wxSize(674, 550));
@@ -514,11 +297,6 @@ void LingosHookFrame::set_properties()
 
     m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
 
-
-
-
-
-
     m_noteContext_pane_4->SetScrollRate(10, 10);
 
     m_btnMemNext->SetDefault();
@@ -527,20 +305,10 @@ void LingosHookFrame::set_properties()
     m_listTagMgnt->InsertColumn(2, _("CreateTime"));
     m_listTagMgnt->InsertColumn(3, _("Description"));
 
-
-
-
-
-
     m_btnTagRemove->Enable(false);
     m_btnTagDefault->Enable(false);
 
     m_comboxExpandDict->SetSelection(0);
-
-
-
-
-
 
     //m_checkSkipHtml->Enable(false);
     //m_checkSetUseTidy->Enable(false);
@@ -553,36 +321,11 @@ void LingosHookFrame::set_properties()
 
 	if(CreateObjects() != 0)
     {
-
-
         wxMessageBox(_("Init failed."));
         exit(0);
     }
 
-
-
-
     ::PostMessage((HWND)this->GetHWND(), WM_OBJECT_INIT, 0, 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // end wxGlade
 }
@@ -838,7 +581,7 @@ int LingosHookFrame::CreateObjects()
     _objSpeak.reset(new CSpeakObject());
     _objFilterShow.reset(new CFilterShowObject(_objDB, m_treeFilter));
 
-    _objTrayIcon = new CTrayIconObject(this, _dataConfig.get());
+    _objTrayIcon = new CTrayIconObject(this, _dataConfig.get(), _objTag.get());
 
     g_objTrigger.AttachConfigData(_dataConfig.get());
     g_objTrigger.AttachDictObject(_objDict.get());
