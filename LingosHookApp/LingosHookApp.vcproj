@@ -67,7 +67,7 @@
 				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
-				GenerateManifest="false"
+				GenerateManifest="true"
 				IgnoreEmbeddedIDL="false"
 				TypeLibraryResourceID="1"
 				GenerateDebugInformation="true"
