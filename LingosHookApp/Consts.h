@@ -13,12 +13,12 @@
 //#define __LH_DEBUG__
 
 //App
-const wxString APP_TITLE        = _("LingosHook"); 
+const wxString APP_TITLE        = wxT("LingosHook"); 
 
 #ifdef __LH_DEBUG__
-const wxString APP_VERSION      = _("1.2.004(Debug)");
+const wxString APP_VERSION      = wxT("1.2.005(Debug)");
 #else
-const wxString APP_VERSION      = _("1.2.004");
+const wxString APP_VERSION      = wxT("1.2.005");
 #endif
 
 //App message
@@ -27,5 +27,7 @@ const wxString APP_VERSION      = _("1.2.004");
 
 //wxHtmlWindow or wxIE
 #define __LH_USE_WXIE__
+
+const wxString APP_DEFAULT_DBFILE = wxT("LingosHook.db3");
 
 #endif

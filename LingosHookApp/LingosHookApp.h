@@ -6,22 +6,14 @@
 #include <wx/wx.h>
 #include <wx/image.h>
 // begin wxGlade: ::dependencies
-
-
-
-
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/tglbtn.h>
 #include <wx/treectrl.h>
 #include <wx/listctrl.h>
 #include <wx/statline.h>
+#include <wx/cmdline.h>
 // end wxGlade
-
-
-
-
-
 
 // begin wxGlade: ::extracode
 // end wxGlade
@@ -283,5 +275,14 @@ private:
     bool _bSysCanClose;
 }; // wxGlade: end class
 
+
+class MyApp: public wxApp {
+public:
+    bool OnInit();
+protected:
+    static const wxCmdLineEntryDesc _cmdLineDesc[3];
+};
+
+DECLARE_APP(MyApp)
 
 #endif // LINGOSHOOKAPP_H
