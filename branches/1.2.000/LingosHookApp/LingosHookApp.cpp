@@ -28,22 +28,47 @@
 // begin wxGlade: ::extracode
 // end wxGlade
 
-class MyApp: public wxApp {
-public:
-    bool OnInit();
-};
+//class MyApp: public wxApp {
+//public:
+//    bool OnInit();
+//
+//    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+//    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+//};
 
 IMPLEMENT_APP(MyApp)
+
+const wxCmdLineEntryDesc MyApp::_cmdLineDesc[3] = 
+    {
+        { wxCMD_LINE_OPTION, wxT("f"), NULL, wxT("LingosHook database file(default is 'LingosHook.db3')."), wxCMD_LINE_VAL_STRING },
+        { wxCMD_LINE_OPTION, wxT("F"), NULL, wxT("LingosHook database file(default is 'LingosHook.db3')."), wxCMD_LINE_VAL_STRING },
+        { wxCMD_LINE_NONE }
+    };
 
 bool MyApp::OnInit()
 {
     wxInitAllImageHandlers();
+
+    wxCmdLineParser parser (_cmdLineDesc, argc, argv);
+
+    if(parser.Parse() == 0)
+    {
+        wxString str = wxEmptyString;
+        if(parser.Found(wxT("f"), &str) || parser.Found(wxT("F"), &str))
+        {
+            CConfigData::m_strDBFile = str;
+        }    
+    }
+
     LingosHookFrame* MainFrame = new LingosHookFrame(NULL, wxID_ANY, wxEmptyString);
     MainFrame->SetIcon(wxICON(ICON_MAIN));
     SetTopWindow(MainFrame);
     MainFrame->Show();
+
     return true;
 }
+
+////////////////////
 
 LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
     wxFrame(parent, id, title, pos, size, wxDEFAULT_FRAME_STYLE)
@@ -188,9 +213,6 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnAboutOpenSource = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTOPENSOURCE, wxT("Welcome to LingosHook Open Source Site"));
     panel_9 = new wxPanel(m_noteContext_pane_5, wxID_ANY);
 
-
-
-
     m_labelInfo = new wxStaticText(this, wxID_ANY, wxT("Ready.."));
     m_btnHook = new wxToggleButton(this, CIID_BUTTON_HOOK, wxT("Hook"));
 
@@ -280,7 +302,10 @@ END_EVENT_TABLE();
 void LingosHookFrame::set_properties()
 {
     // begin wxGlade: LingosHookFrame::set_properties
-    SetTitle(APP_TITLE);
+    if(CConfigData::m_strDBFile == APP_DEFAULT_DBFILE)
+        SetTitle(APP_TITLE);
+    else
+        SetTitle(APP_TITLE + wxT(" - ") + CConfigData::m_strDBFile);
     SetSize(wxSize(674, 550));
 	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     m_cbWordIndex->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
@@ -569,7 +594,8 @@ void LingosHookFrame::do_layout()
 
 int LingosHookFrame::CreateObjects()
 {
-	if(_objDB.Init(_("lingosHook.db3")) != 0)
+	//if(_objDB.Init(_("LingosHook.db3")) != 0)
+    if(_objDB.Init(CConfigData::m_strDBFile) != 0)
         return -1;
     
     _dataConfig.reset(new CConfigData(_objDB));

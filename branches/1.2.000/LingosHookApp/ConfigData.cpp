@@ -2,7 +2,10 @@
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
 
+#include "Consts.h"
 #include "ConfigData.h"
+
+std::wstring CConfigData::m_strDBFile = APP_DEFAULT_DBFILE;
 
 CConfigData::CConfigData(CDBAccess& db)
 : _db(db.Database())

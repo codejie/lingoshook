@@ -65,6 +65,8 @@ protected:
 protected:
     CDBAccess::TDatabase& _db;
 public:
+    static std::wstring m_strDBFile;
+
 	int m_iIfLanguage;
     int m_iAutoHook;
 	int m_iOpenTrace;
