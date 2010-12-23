@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LingosHookApp", "LingosHookApp\LingosHookApp.vcproj", "{F8F1F769-DE72-4747-9690-9F594B9983BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097} = {144B3C27-0DB8-4DB2-A3F3-E005A5E57097}
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093} = {5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}
+		{7E16A598-F9DB-46BB-968D-516430798E86} = {7E16A598-F9DB-46BB-968D-516430798E86}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HtmlTest", "HtmlTest\HtmlTest.vcproj", "{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LHSpeak", "LHSpeak\LHSpeak.vcproj", "{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LingosHook", "LingosHook\LingosHook.vcproj", "{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tidylib", "Tidy\tidylib\tidylib.vcproj", "{7E16A598-F9DB-46BB-968D-516430798E86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release - dll (fast)|Win32 = Release - dll (fast)|Win32
+		Release - dll|Win32 = Release - dll|Win32
+		Release (fast)|Win32 = Release (fast)|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Debug|Win32.Build.0 = Debug|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release - dll|Win32.Build.0 = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release (fast)|Win32.Build.0 = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release|Win32.ActiveCfg = Release|Win32
+		{F8F1F769-DE72-4747-9690-9F594B9983BC}.Release|Win32.Build.0 = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Debug|Win32.Build.0 = Debug|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release - dll|Win32.Build.0 = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release (fast)|Win32.Build.0 = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release|Win32.ActiveCfg = Release|Win32
+		{1ECCC9E6-3B4D-4A97-B7A1-DA60A851DE4D}.Release|Win32.Build.0 = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Debug|Win32.ActiveCfg = Debug|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Debug|Win32.Build.0 = Debug|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release - dll|Win32.Build.0 = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release (fast)|Win32.Build.0 = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release|Win32.ActiveCfg = Release|Win32
+		{144B3C27-0DB8-4DB2-A3F3-E005A5E57097}.Release|Win32.Build.0 = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Debug|Win32.Build.0 = Debug|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release - dll|Win32.Build.0 = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release (fast)|Win32.Build.0 = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release|Win32.ActiveCfg = Release|Win32
+		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release|Win32.Build.0 = Release|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Debug|Win32.ActiveCfg = Release - dll (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Debug|Win32.Build.0 = Release - dll (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll (fast)|Win32.ActiveCfg = Release - dll (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll (fast)|Win32.Build.0 = Release - dll (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll|Win32.ActiveCfg = Release - dll|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll|Win32.Build.0 = Release - dll|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release (fast)|Win32.ActiveCfg = Release (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release (fast)|Win32.Build.0 = Release (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release|Win32.ActiveCfg = Release - dll (fast)|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Release|Win32.Build.0 = Release - dll (fast)|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
