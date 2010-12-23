@@ -34,7 +34,7 @@ class CTrayIconObject;
 class LingosHookFrame: public wxFrame {
 public:
     enum IndexNoteID { INID_INDEX = 0, INID_FILTER, INID_MEMORY };
-    enum ContextNoteID { CNID_RESULT = 0, CNID_HTML, CNID_TAGS, CNID_SETTING, CNID_PLUGINS, CNID_ABOUT, CNID_TRACE };
+    enum ContextNoteID { CNID_RESULT = 0, CNID_HTML, CNID_TAGS, CNID_SETTING, CNID_PLUGINS, CNID_ABOUT, CNID_TRACE, CNID_MAX_PAGES };
 
     enum ControlID { CIID_PAGE_INDEX = 10000, CIID_PAGE_CONTEXT, CIID_TEXT_INDEX, CIID_LIST_INDEX, CIID_CHECKBOX_HOTKEY
             , CIID_BUTTON_APPLY, CIID_LIST_TAGMGNT, CIID_BUTTON_TAGSETDEFAULT, CIID_BUTTON_TAGADD, CIID_TREE_RESULT
@@ -77,6 +77,9 @@ protected:
 	wxStaticBox* sizer_27_staticbox;
     CLHComboBox* m_cbWordIndex;
     CLHListBox* m_listIndex;
+
+    wxPanel* notebook_context_panel[CNID_MAX_PAGES];
+
     wxPanel* notebook_1_pane_1;
     wxButton* m_btnFilter;
     CLHFilterTreeCtrl* m_treeFilter;
@@ -105,9 +108,9 @@ protected:
     wxNotebook* m_noteIndex;
     wxPanel* window_1_pane_1;
     CLHResultTreeCtrl* m_treeResult;
-    wxPanel* notebook_2_pane_1;
+//    wxPanel* notebook_context_panel[CNID_RESULT];
     CLHHtmlWindow* m_winHTML;
-    wxPanel* m_noteContext_pane_2;
+//    wxPanel* notebook_context_panel[CNID_HTML];
     wxRadioBox* m_radioIfLang;
     wxStaticText* label_11;
     wxTextCtrl* m_textSetLgsLocal;
@@ -146,7 +149,7 @@ protected:
     wxButton* m_btnSetApply;
 
 
-    wxPanel* m_noteContext_pane_3;
+//    wxPanel* notebook_context_panel[CNID_TAGS];
     wxStaticText* label_3;
     wxTextCtrl* m_textDefTag;
     wxListCtrl* m_listTagMgnt;
@@ -165,12 +168,12 @@ protected:
     wxButton* m_btnAboutOpenSource;
     wxPanel* panel_9;
 	
-    wxScrolledWindow* m_noteContext_pane_4;
-    wxPanel* m_noteContext_pane_5;
+//    wxScrolledWindow* notebook_context_panel[CNID_SETTING];
+//    wxPanel* notebook_context_panel[CNID_ABOUT];
     wxTextCtrl* m_textDebug;
     wxButton* m_btnDebug;
     wxTextCtrl* m_textTrace;
-    wxPanel* m_noteContext_pane_6;
+//    wxPanel* notebook_context_panel[CNID_TRACE];
     wxNotebook* m_noteContext;
     wxPanel* window_1_pane_2;
     wxSplitterWindow* m_splitWindow;
