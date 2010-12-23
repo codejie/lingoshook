@@ -14,8 +14,8 @@ extern "C"
 {
 #endif
 
-DllExport BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT param, UINT* msgid);
-DllExport BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT param, UINT* msgid);
+DllExport BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT param, UINT delay, UINT* msgid);
+DllExport BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT param, UINT delay, UINT* msgid);
 DllExport BOOL RemoveHookThread();
 
 #if defined(__cplusplus)

@@ -28,7 +28,7 @@ int CTagObject::Init()
         //tags table
         if(!_db.TableExists(_("TagTable")))
         {
-            const char* tagstable = "CREATE TABLE TagTable (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title VARCHAR(32), CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), Description VARCHAR(255))";
+            const char* tagstable = "CREATE TABLE TagTable (TagID INTEGER PRIMARY KEY AUTOINCREMENT, Title VARCHAR(32), CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), Description VARCHAR(255))";
             _db.ExecuteUpdate(tagstable);
             const char* deftag = "INSERT INTO TagTable (Title, Description) VALUES ('Default', 'This is default system tag.')";
             _db.ExecuteUpdate(deftag);
@@ -56,7 +56,7 @@ int CTagObject::Load()
 
     try
     {
-        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, Title, CreateTime, Description FROM TagTable");
+        CDBAccess::TResult res = _db.ExecuteQuery("SELECT TagID, Title, CreateTime, Description FROM TagTable");
         if(!res.IsOk())
             return -1;
         while(res.NextRow())
@@ -160,7 +160,7 @@ int CTagObject::RemoveTag(int id)
     }
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("DELETE FROM TagTable WHERE ID = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("DELETE FROM TagTable WHERE TagID = ?");
         query.Bind(1, id);
         if(query.ExecuteUpdate() != 0)
         {
@@ -476,4 +476,20 @@ const wxString CTagObject::GetTitle(int tagid) const
     return _("Undefined");
 }
 
+int CTagObject::ShowTagSubMenu(int menubase, wxMenu*& submenu) const
+{
+    submenu = new wxMenu;
+    for(TRecordMap::const_iterator it = _mapRecord.begin(); it != _mapRecord.end(); ++ it)
+    {
+        if(it->first != _iDefaultTag)
+        {
+            submenu->Append(menubase + it->first, it->second.m_strTitle);
+        }
+        else
+        {
+            submenu->AppendRadioItem(menubase + it->first, it->second.m_strTitle);
+        }
+    }
 
+    return 0;
+}

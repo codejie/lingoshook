@@ -1,7 +1,13 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
 
+
+#include "DisplayObject.h"
+#include "FilterShowObject.h"
+#include "SpeakObject.h"
 #include "TriggerObject.h"
 
 class CTriggerObject g_objTrigger;
@@ -111,17 +117,18 @@ void CTriggerObject::OnWordFound(int wordid, const wxString &word)
     _objDisplay->ShowWord(wordid, word);
 }
 
-void CTriggerObject::OnResultSave(const TWordResultMap &result)
+//void CTriggerObject::OnResultSave(int wordid, const SpecialDictParser::CDictParser *dict, const TResultMap& &result)
+//{
+//}
+
+void CTriggerObject::OnResultSpecialDictGet(int wordid, const SpecialDictParser::CDictParser *dict, const SpecialDictParser::CDictResult &result)
 {
+    _objDisplay->ShowSpecialDictResult(dict, result, (_dataConfig->m_iExpandDict == -1 || _dataConfig->m_iExpandDict == dict->GetIndex()));
 }
 
-void CTriggerObject::OnResultSave(int wordid, const CDictParser *dict, const CDictResult &result)
+void CTriggerObject::OnResultHtmlDictGet(int wordid, const wxString& html)
 {
-}
-
-void CTriggerObject::OnResultGet(int wordid, const CDictParser *dict, const CDictResult &result)
-{
-    _objDisplay->ShowResult(dict, result, (_dataConfig->m_iExpandDict == -1 || _dataConfig->m_iExpandDict == dict->GetIndex()));
+    _objDisplay->ShowHtmlDictResult(html);
 }
 
 void CTriggerObject::OnWordRemove(int wordid)
@@ -146,6 +153,11 @@ void CTriggerObject::OnWordResultGetOver(int wordid, const TWordData& data)
         _objSpeak->Speak(data.m_strWord);
 
     _objTag->GetTagByWord(wordid);
+
+    //wxFileOutputStream output(wxT("C:\\T.html"));
+    //wxTextOutputStream ofs(output);
+    //ofs.WriteString(data.m_strHTML);
+
     _objDisplay->ShowWordData(data);
 }
 
@@ -157,6 +169,11 @@ void CTriggerObject::OnTagLoad(int tagid, const CTagObject::TRecord &record)
 void CTriggerObject::OnTagDefLoad(int tagid, const CTagObject::TRecord &record)
 {
     _objDisplay->ShowDefaultTag(tagid, record);
+
+    if(_dataConfig->m_iDataSyncTag == 1)
+    {
+        _objFilterShow->UpdateTitle(tagid);
+    }
 }
 
 void CTriggerObject::OnTagInsert(int tagid, const CTagObject::TRecord& record)

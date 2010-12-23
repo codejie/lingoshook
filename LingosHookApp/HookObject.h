@@ -18,7 +18,7 @@ public:
 	CDllHookObject();
 	virtual ~CDllHookObject();
 
-    int Hook(HWND frame, HWND lgs, UINT param, UINT& msgid);
+    int Hook(HWND frame, HWND lgs, UINT param, UINT delay, UINT& msgid);
 	int Unhook();
 	
 //	int MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam);
@@ -79,6 +79,8 @@ public:
     int SetUnhook();
 
 	int MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam);
+
+    static HWND GetLingoesHandle(int lang, bool strick = false);
 protected:
     int Hook(HWND hwnd);
     int Unhook();
@@ -91,7 +93,6 @@ private:
     int CreateCheckThread();
     void ClearCheckThread();
 
-    static HWND GetLingoesHandle(int lang, bool strick = false);
 private:
 	LingosHookFrame* _objFrame;
 
@@ -99,6 +100,7 @@ private:
     static int _iIfLanguage;
     bool _bOpenHotkey;
     bool _bHookCD;
+    UINT _nDelay;
     UINT _nControlKey;
     UINT _nHotKey;
 private:
