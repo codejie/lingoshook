@@ -154,8 +154,6 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_checkAutoHook = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Auto-Hook"));
     m_checkHotkey = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_HOTKEY, wxT("Use Hotkey"));
     const wxString m_listHotkey_choices[] = {
-
-
         wxT("Ctrl+F10"),
         wxT("Alt+Ctrl+F10"),
         wxT("Ctrl+F11"),
@@ -575,10 +573,9 @@ void LingosHookFrame::do_layout()
     notebook_context_panel[CNID_TRACE]->SetSizer(sizer_26);
     m_noteContext->AddPage(notebook_context_panel[CNID_RESULT], wxT("Result"));
     m_noteContext->AddPage(notebook_context_panel[CNID_HTML], wxT("HTML"));
-
-
     m_noteContext->AddPage(notebook_context_panel[CNID_TAGS], wxT("Tags"));
     m_noteContext->AddPage(notebook_context_panel[CNID_SETTING], wxT("Setting"));
+	m_noteContext->AddPage(notebook_context_panel[CNID_PLUGINS], wxT("Plugins"));
     m_noteContext->AddPage(notebook_context_panel[CNID_ABOUT], wxT("About"));	
 #ifdef __LH_DEBUG__
     m_noteContext->AddPage(notebook_context_panel[CNID_TRACE], wxT("Debug"));
