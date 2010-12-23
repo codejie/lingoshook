@@ -87,22 +87,32 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_splitWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_BORDER);
     window_1_pane_2 = new wxPanel(m_splitWindow, wxID_ANY);
     m_noteContext = new wxNotebook(window_1_pane_2, CIID_PAGE_CONTEXT, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
-    m_noteContext_pane_6 = new wxPanel(m_noteContext, wxID_ANY);
-    m_noteContext_pane_5 = new wxPanel(m_noteContext, wxID_ANY);
-    m_noteContext_pane_3 = new wxPanel(m_noteContext, wxID_ANY);
-    m_noteContext_pane_4 = new wxScrolledWindow(m_noteContext, wxID_ANY);//, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
 
-    m_noteContext_pane_2 = new wxPanel(m_noteContext, CIID_PANEL_HTML);//, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
-    notebook_2_pane_1 = new wxPanel(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_RESULT] = new wxPanel(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_HTML] = new wxPanel(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_TAGS] = new wxPanel(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_SETTING] = new wxScrolledWindow(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_PLUGINS] = new wxPanel(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_ABOUT] = new wxPanel(m_noteContext, wxID_ANY);
+    notebook_context_panel[CNID_TRACE] = new wxPanel(m_noteContext, wxID_ANY);
+
+    //notebook_context_panel[CNID_TRACE] = new wxPanel(m_noteContext, wxID_ANY);
+    //notebook_context_panel[CNID_ABOUT] = new wxPanel(m_noteContext, wxID_ANY);
+    //notebook_context_panel[CNID_TAGS] = new wxPanel(m_noteContext, wxID_ANY);
+    //notebook_context_panel[CNID_SETTING] = new wxScrolledWindow(m_noteContext, wxID_ANY);//, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
+
+    //notebook_context_panel[CNID_HTML] = new wxPanel(m_noteContext, CIID_PANEL_HTML);//, wxDefaultPosition, wxDefaultSize/*, wxTAB_TRAVERSAL*/);
+    //notebook_context_panel[CNID_RESULT] = new wxPanel(m_noteContext, wxID_ANY);
+
     window_1_pane_1 = new wxPanel(m_splitWindow, wxID_ANY);
     m_noteIndex = new wxNotebook(window_1_pane_1, CIID_PAGE_INDEX, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 	m_noteIndex_pane_3 = new wxPanel(m_noteIndex, wxID_ANY);
     m_noteIndex_pane_2 = new wxPanel(m_noteIndex, wxID_ANY);
     sizer_27_staticbox = new wxStaticBox(m_noteIndex_pane_3, -1, wxT("Memory Daily"));
-    sizer_15_staticbox = new wxStaticBox(m_noteContext_pane_4, -1, wxT("Lingoes Configuration"));
-    sizer_16_staticbox = new wxStaticBox(m_noteContext_pane_4, -1, wxT("Application Configuration"));
-    sizer_18_staticbox = new wxStaticBox(m_noteContext_pane_4, -1, wxT("Debug Configuration"));
-    sizer_13_staticbox = new wxStaticBox(m_noteContext_pane_3, -1, wxT("Tags Management"));
+    sizer_15_staticbox = new wxStaticBox(notebook_context_panel[CNID_SETTING], -1, wxT("Lingoes Configuration"));
+    sizer_16_staticbox = new wxStaticBox(notebook_context_panel[CNID_SETTING], -1, wxT("Application Configuration"));
+    sizer_18_staticbox = new wxStaticBox(notebook_context_panel[CNID_SETTING], -1, wxT("Debug Configuration"));
+    sizer_13_staticbox = new wxStaticBox(notebook_context_panel[CNID_TAGS], -1, wxT("Tags Management"));
     notebook_1_pane_1 = new wxPanel(m_noteIndex, wxID_ANY);
     const wxString *m_cbWordIndex_choices = NULL;
     m_cbWordIndex = new CLHComboBox(notebook_1_pane_1, CIID_TEXT_INDEX, wxT(""), wxDefaultPosition, wxDefaultSize, 0, m_cbWordIndex_choices, wxCB_DROPDOWN | wxTE_PROCESS_ENTER);
@@ -130,19 +140,19 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     panel_7 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
     m_btnMemRegen = new wxButton(m_noteIndex_pane_3, CIID_BUTTON_MEMREGEN, wxT("Re-Generate"));
     panel_8 = new wxPanel(m_noteIndex_pane_3, wxID_ANY);
-    m_treeResult = new CLHResultTreeCtrl(notebook_2_pane_1, CIID_TREE_RESULT, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER);
-    m_winHTML = new CLHHtmlWindow(m_noteContext_pane_2, CIID_CONTROL_HTMLWINDOW);
+    m_treeResult = new CLHResultTreeCtrl(notebook_context_panel[CNID_RESULT], CIID_TREE_RESULT, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER);
+    m_winHTML = new CLHHtmlWindow(notebook_context_panel[CNID_HTML], CIID_CONTROL_HTMLWINDOW);
     const wxString m_radioIfLang_choices[] = {
         wxT("Auto-Detection"),
         wxT("English"),
         wxT("Chinese")
     };
-    m_radioIfLang = new wxRadioBox(m_noteContext_pane_4, wxID_ANY, wxT("User Interface Language"), wxDefaultPosition, wxDefaultSize, 3, m_radioIfLang_choices, 0, wxRA_SPECIFY_COLS);
-    label_11 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Lingoes Location"));
-    m_textSetLgsLocal = new wxTextCtrl(m_noteContext_pane_4, wxID_ANY, wxEmptyString);
-    m_btnSetLgsBrowse = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETLGSBROWSE, wxT("Browse.."));
-    m_checkAutoHook = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Auto-Hook"));
-    m_checkHotkey = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_HOTKEY, wxT("Use Hotkey"));
+    m_radioIfLang = new wxRadioBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("User Interface Language"), wxDefaultPosition, wxDefaultSize, 3, m_radioIfLang_choices, 0, wxRA_SPECIFY_COLS);
+    label_11 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Lingoes Location"));
+    m_textSetLgsLocal = new wxTextCtrl(notebook_context_panel[CNID_SETTING], wxID_ANY, wxEmptyString);
+    m_btnSetLgsBrowse = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETLGSBROWSE, wxT("Browse.."));
+    m_checkAutoHook = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Auto-Hook"));
+    m_checkHotkey = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_HOTKEY, wxT("Use Hotkey"));
     const wxString m_listHotkey_choices[] = {
 
 
@@ -153,35 +163,35 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
         wxT("Ctrl+F12"),
         wxT("Alt+Ctrl+F12")		
     };
-	m_listHotkey = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 6, m_listHotkey_choices, wxCB_DROPDOWN|wxCB_READONLY);
-    m_checkAutoSpeak = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Auto Speak"));
-    label_1 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Synchronization"));
-    m_checkSetTagSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Classifications"));
-    m_checkSetMemSync = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Memory Daily"));
-    label_12 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Data Retrieve Delay"));
-    m_sliderSetDelay = new wxSlider(m_noteContext_pane_4, CIID_SLIDER_SETDELAY, 0, 0, 20, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_AUTOTICKS);
-    m_labelSetDelay = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("0000 ms"));
-    //label_7 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Pre-Analyse"));
-    //m_checkSetUseTidy = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Uses Tidy"));
-    //label_2 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("HTML Data Process"));
-//    m_checkHTMLSave = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Storage"));
-//    m_checkHTMLLoad = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Loading"));
-    static_line_6 = new wxStaticLine(m_noteContext_pane_4, wxID_ANY);
-    m_checkIgnoreDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_IGNOREDICT, wxT("Ignore HTML Data Analysis Error"));
-    m_checkSkipDict = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_SKIPDICT, wxT("Skip Dictionary Analysis Process"));
-    m_checkSkipHtml = new wxCheckBox(m_noteContext_pane_4, CIID_CHECKBOX_SKIPHTML, wxT("Skip HTML Data  Analysis Process"));
-    m_btnSetDictStoreChoice = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETDICTSTORECHOICE, wxT("Dictionary Chooser.."));
-    m_btnSetAnalysisFilter = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETANALYSISFILTER, wxT("Analysis Filter.."));
-    static_line_5 = new wxStaticLine(m_noteContext_pane_4, wxID_ANY);
-    label_4 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Expanded Dictionary on Result"));
+	m_listHotkey = new wxComboBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 6, m_listHotkey_choices, wxCB_DROPDOWN|wxCB_READONLY);
+    m_checkAutoSpeak = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Auto Speak"));
+    label_1 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Data Synchronization"));
+    m_checkSetTagSync = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Classifications"));
+    m_checkSetMemSync = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Memory Daily"));
+    label_12 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Data Retrieve Delay"));
+    m_sliderSetDelay = new wxSlider(notebook_context_panel[CNID_SETTING], CIID_SLIDER_SETDELAY, 0, 0, 20, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_AUTOTICKS);
+    m_labelSetDelay = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("0000 ms"));
+    //label_7 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("HTML Data Pre-Analyse"));
+    //m_checkSetUseTidy = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Uses Tidy"));
+    //label_2 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("HTML Data Process"));
+//    m_checkHTMLSave = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Storage"));
+//    m_checkHTMLLoad = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Loading"));
+    static_line_6 = new wxStaticLine(notebook_context_panel[CNID_SETTING], wxID_ANY);
+    m_checkIgnoreDict = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_IGNOREDICT, wxT("Ignore HTML Data Analysis Error"));
+    m_checkSkipDict = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_SKIPDICT, wxT("Skip Dictionary Analysis Process"));
+    m_checkSkipHtml = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_SKIPHTML, wxT("Skip HTML Data  Analysis Process"));
+    m_btnSetDictStoreChoice = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETDICTSTORECHOICE, wxT("Dictionary Chooser.."));
+    m_btnSetAnalysisFilter = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETANALYSISFILTER, wxT("Analysis Filter.."));
+    static_line_5 = new wxStaticLine(notebook_context_panel[CNID_SETTING], wxID_ANY);
+    label_4 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Expanded Dictionary on Result"));
     const wxString m_comboxExpandDict_choices[] = {
         wxT("All Dictionaries")
     };
-    m_comboxExpandDict = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 1, m_comboxExpandDict_choices, wxCB_DROPDOWN|wxCB_READONLY);
-    label_10 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Expanded HTML Data on Result"));
-    m_btnSetDictChoice = new wxButton(m_noteContext_pane_4, CIID_BUTTON_SETDICTCHOICE, wxT("Dictionary Chooser.."));
+    m_comboxExpandDict = new wxComboBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 1, m_comboxExpandDict_choices, wxCB_DROPDOWN|wxCB_READONLY);
+    label_10 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Expanded HTML Data on Result"));
+    m_btnSetDictChoice = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETDICTCHOICE, wxT("Dictionary Chooser.."));
 
-    label_9 = new wxStaticText(m_noteContext_pane_4, wxID_ANY, wxT("Favority Tab on Startup"));
+    label_9 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Favority Tab on Startup"));
     const wxString m_listFavoriteTab_choices[] = {
         wxT("Result"),
         wxT("HTML"),
@@ -189,29 +199,29 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
         wxT("Setting"),
         wxT("About")
     };//NULL;
-    m_listFavoriteTab = new wxComboBox(m_noteContext_pane_4, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 5, m_listFavoriteTab_choices, wxCB_DROPDOWN|wxCB_READONLY);
-    m_checkTrace = new wxCheckBox(m_noteContext_pane_4, wxID_ANY, wxT("Open Trace"));
-    panel_1 = new wxPanel(m_noteContext_pane_4, wxID_ANY);
-    panel_2 = new wxPanel(m_noteContext_pane_4, wxID_ANY);
-    m_btnSetApply = new wxButton(m_noteContext_pane_4, CIID_BUTTON_APPLY, wxT("Apply"));
-    label_3 = new wxStaticText(m_noteContext_pane_3, wxID_ANY, wxT("Default Tag"));
-    m_textDefTag = new wxTextCtrl(m_noteContext_pane_3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-    m_listTagMgnt = new wxListCtrl(m_noteContext_pane_3, CIID_LIST_TAGMGNT, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_NO_SORT_HEADER|wxSUNKEN_BORDER);
-    m_btnTagDefault = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGSETDEFAULT, wxT("Set as Default"));
-    panel_3 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
-    m_btnTagAdd = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGADD, wxT("Add.."));
-    panel_4 = new wxPanel(m_noteContext_pane_3, wxID_ANY);
-    m_btnTagRemove = new wxButton(m_noteContext_pane_3, CIID_BUTTON_TAGREMOVE, wxT("Delete"));
-    m_textDebug = new wxTextCtrl(m_noteContext_pane_6, wxID_ANY, wxEmptyString);
-    m_btnDebug = new wxButton(m_noteContext_pane_6, CIID_BUTTON_DEBUG, wxT("Debug"));
-    m_textTrace = new wxTextCtrl(m_noteContext_pane_6, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
-    label_8 = new wxStaticText(m_noteContext_pane_5, wxID_ANY, wxString::Format(_("%s v%s by Jie."), APP_TITLE, APP_VERSION), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
-    static_line_4 = new wxStaticLine(m_noteContext_pane_5, wxID_ANY);
-    m_btnAboutHelp = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTHELP, wxT("Welcome to online help.."));
-    m_btnAboutSend = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
-    m_btnAboutPost = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTPOST, wxT("Post a comment to me. (www.cppblog.com/codejie)"));
-    m_btnAboutOpenSource = new wxButton(m_noteContext_pane_5, CIID_BUTTON_ABOUTOPENSOURCE, wxT("Welcome to LingosHook Open Source Site"));
-    panel_9 = new wxPanel(m_noteContext_pane_5, wxID_ANY);
+    m_listFavoriteTab = new wxComboBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 5, m_listFavoriteTab_choices, wxCB_DROPDOWN|wxCB_READONLY);
+    m_checkTrace = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Open Trace"));
+    panel_1 = new wxPanel(notebook_context_panel[CNID_SETTING], wxID_ANY);
+    panel_2 = new wxPanel(notebook_context_panel[CNID_SETTING], wxID_ANY);
+    m_btnSetApply = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_APPLY, wxT("Apply"));
+    label_3 = new wxStaticText(notebook_context_panel[CNID_TAGS], wxID_ANY, wxT("Default Tag"));
+    m_textDefTag = new wxTextCtrl(notebook_context_panel[CNID_TAGS], wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+    m_listTagMgnt = new wxListCtrl(notebook_context_panel[CNID_TAGS], CIID_LIST_TAGMGNT, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_NO_SORT_HEADER|wxSUNKEN_BORDER);
+    m_btnTagDefault = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGSETDEFAULT, wxT("Set as Default"));
+    panel_3 = new wxPanel(notebook_context_panel[CNID_TAGS], wxID_ANY);
+    m_btnTagAdd = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGADD, wxT("Add.."));
+    panel_4 = new wxPanel(notebook_context_panel[CNID_TAGS], wxID_ANY);
+    m_btnTagRemove = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGREMOVE, wxT("Delete"));
+    m_textDebug = new wxTextCtrl(notebook_context_panel[CNID_TRACE], wxID_ANY, wxEmptyString);
+    m_btnDebug = new wxButton(notebook_context_panel[CNID_TRACE], CIID_BUTTON_DEBUG, wxT("Debug"));
+    m_textTrace = new wxTextCtrl(notebook_context_panel[CNID_TRACE], wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
+    label_8 = new wxStaticText(notebook_context_panel[CNID_ABOUT], wxID_ANY, wxString::Format(_("%s v%s by Jie."), APP_TITLE, APP_VERSION), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE);
+    static_line_4 = new wxStaticLine(notebook_context_panel[CNID_ABOUT], wxID_ANY);
+    m_btnAboutHelp = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTHELP, wxT("Welcome to online help.."));
+    m_btnAboutSend = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
+    m_btnAboutPost = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTPOST, wxT("Post a comment to me. (www.cppblog.com/codejie)"));
+    m_btnAboutOpenSource = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTOPENSOURCE, wxT("Welcome to LingosHook Open Source Site"));
+    panel_9 = new wxPanel(notebook_context_panel[CNID_ABOUT], wxID_ANY);
 
     m_labelInfo = new wxStaticText(this, wxID_ANY, wxT("Ready.."));
     m_btnHook = new wxToggleButton(this, CIID_BUTTON_HOOK, wxT("Hook"));
@@ -322,7 +332,7 @@ void LingosHookFrame::set_properties()
 
     m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
 
-    m_noteContext_pane_4->SetScrollRate(10, 10);
+    ((wxScrolledWindow*)notebook_context_panel[CNID_SETTING])->SetScrollRate(10, 10);
 
     m_btnMemNext->SetDefault();
     m_listTagMgnt->InsertColumn(0, _("Tag"));
@@ -340,7 +350,7 @@ void LingosHookFrame::set_properties()
     //m_checkHTMLSave->Enable(false);
     //m_checkHTMLLoad->Enable(false);
 
-    //m_noteContext_pane_2->Enable(false);
+    //notebook_context_panel[CNID_HTML]->Enable(false);
     //m_winHTML->Enable(false);
 
 
@@ -466,9 +476,9 @@ void LingosHookFrame::do_layout()
     sizer_4->Add(m_noteIndex, 1, wxEXPAND, 0);
     window_1_pane_1->SetSizer(sizer_4);
     sizer_8->Add(m_treeResult, 1, wxEXPAND, 0);
-    notebook_2_pane_1->SetSizer(sizer_8);
+    notebook_context_panel[CNID_RESULT]->SetSizer(sizer_8);
     sizer_10->Add(m_winHTML, 1, wxEXPAND, 0);
-    m_noteContext_pane_2->SetSizer(sizer_10);
+    notebook_context_panel[CNID_HTML]->SetSizer(sizer_10);
     sizer_15->Add(m_radioIfLang, 0, wxTOP|wxBOTTOM, 4);
     sizer_52->Add(label_11, 0, wxALIGN_CENTER_VERTICAL, 0);
     sizer_52->Add(m_textSetLgsLocal, 1, wxLEFT|wxRIGHT|wxEXPAND, 4);
@@ -529,7 +539,7 @@ void LingosHookFrame::do_layout()
     sizer_17->Add(m_btnSetApply, 0, 0, 0);
     sizer_14->Add(sizer_17, 0, wxEXPAND, 0);
     sizer_11->Add(sizer_14, 1, wxEXPAND, 0);
-    m_noteContext_pane_4->SetSizer(sizer_11);
+    notebook_context_panel[CNID_SETTING]->SetSizer(sizer_11);
     sizer_22->Add(label_3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
     sizer_22->Add(m_textDefTag, 1, wxALL|wxEXPAND, 4);
     sizer_21->Add(sizer_22, 0, wxEXPAND, 0);
@@ -542,7 +552,7 @@ void LingosHookFrame::do_layout()
     sizer_13->Add(sizer_25, 0, wxALL|wxEXPAND, 4);
     sizer_24->Add(sizer_13, 1, wxEXPAND, 0);
     sizer_21->Add(sizer_24, 1, wxEXPAND, 0);
-    m_noteContext_pane_3->SetSizer(sizer_21);
+    notebook_context_panel[CNID_TAGS]->SetSizer(sizer_21);
     sizer_12->Add(label_8, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(static_line_4, 0, wxLEFT|wxRIGHT|wxEXPAND, 4);
     sizer_42->Add(m_btnAboutHelp, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
@@ -557,23 +567,23 @@ void LingosHookFrame::do_layout()
     sizer_39->Add(sizer_46, 1, wxALL|wxEXPAND, 8);
     sizer_12->Add(sizer_39, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(panel_9, 1, wxEXPAND, 0);
-	m_noteContext_pane_5->SetSizer(sizer_12);	
+	notebook_context_panel[CNID_ABOUT]->SetSizer(sizer_12);	
     sizer_48->Add(m_textDebug, 1, wxEXPAND, 0);
     sizer_48->Add(m_btnDebug, 0, 0, 0);
     sizer_26->Add(sizer_48, 0, wxEXPAND, 0);
     sizer_26->Add(m_textTrace, 1, wxEXPAND, 0);
-    m_noteContext_pane_6->SetSizer(sizer_26);
-    m_noteContext->AddPage(notebook_2_pane_1, wxT("Result"));
-    m_noteContext->AddPage(m_noteContext_pane_2, wxT("HTML"));
+    notebook_context_panel[CNID_TRACE]->SetSizer(sizer_26);
+    m_noteContext->AddPage(notebook_context_panel[CNID_RESULT], wxT("Result"));
+    m_noteContext->AddPage(notebook_context_panel[CNID_HTML], wxT("HTML"));
 
 
-    m_noteContext->AddPage(m_noteContext_pane_3, wxT("Tags"));
-    m_noteContext->AddPage(m_noteContext_pane_4, wxT("Setting"));
-    m_noteContext->AddPage(m_noteContext_pane_5, wxT("About"));	
+    m_noteContext->AddPage(notebook_context_panel[CNID_TAGS], wxT("Tags"));
+    m_noteContext->AddPage(notebook_context_panel[CNID_SETTING], wxT("Setting"));
+    m_noteContext->AddPage(notebook_context_panel[CNID_ABOUT], wxT("About"));	
 #ifdef __LH_DEBUG__
-    m_noteContext->AddPage(m_noteContext_pane_6, wxT("Debug"));
+    m_noteContext->AddPage(notebook_context_panel[CNID_TRACE], wxT("Debug"));
 #else
-    m_noteContext_pane_6->Hide();
+    notebook_context_panel[CNID_TRACE]->Hide();
 #endif
     sizer_7->Add(m_noteContext, 1, wxEXPAND, 0);
     sizer_6->Add(sizer_7, 1, wxEXPAND, 0);
@@ -1030,7 +1040,7 @@ void LingosHookFrame::OnIndexDClick(wxCommandEvent &event)
 void LingosHookFrame::OnIndexSelected(wxCommandEvent &event)
 {
     int pos = m_noteIndex->GetSelection();
-    if(pos == NID_INDEX)
+    if(pos == INID_INDEX)
     {
         if(event.IsSelection())
         {
@@ -1074,14 +1084,14 @@ void LingosHookFrame::OnIndexFocus(wxCommandEvent& event)
 void LingosHookFrame::OnNoteIndexChanged(wxNotebookEvent &event)
 {
     int oldpos = event.GetOldSelection();
-    if(oldpos == NID_FILTER)
+    if(oldpos == INID_FILTER)
     {//tag
         if(_dataConfig->m_iDataSyncTag != 1)
             g_objTrigger.OnSortShow(CLHFilterTreeCtrl::FilterType(FMID_CLOSE - FMID_BEGIN));        
     }
 
     int pos = event.GetSelection();
-    if(pos == NID_MEMORY)
+    if(pos == INID_MEMORY)
     {//Memory Daily
         if(_dataConfig->m_iDataSyncMem != 1 || _objMemoryDaily->IsBuilt() == false)
         {
