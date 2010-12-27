@@ -22,6 +22,7 @@
 #include "DictStoreChoiceDialog.h"
 #include "AnalysisFilterSettingDialog.h"
 #include "TrayIconObject.h"
+#include "PluginObject.h"
 
 #include "LingosHookApp.h"
 
@@ -80,6 +81,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
 , _objMemoryDaily(NULL)
 , _objSpeak(NULL)
 , _objFilterShow(NULL)
+, _objPlugin(NULL)
 , _objTrayIcon(NULL)
 , _bSysCanClose(false)
 {
@@ -613,6 +615,7 @@ int LingosHookFrame::CreateObjects()
     _objDisplay.reset(new CDisplayObject(this));
     _objSpeak.reset(new CSpeakObject());
     _objFilterShow.reset(new CFilterShowObject(_objDB, m_treeFilter));
+    _objPlugin.reset(new CPluginObject());
 
     _objTrayIcon = new CTrayIconObject(this, _dataConfig.get(), _objTag.get());
 
@@ -640,9 +643,6 @@ int LingosHookFrame::InitObjects()
     if(_objTag->Init() != 0)
         return -1;
 
-
-
-
     if(_objMemoryDaily->Init() != 0)
         return -1;
 
@@ -653,6 +653,8 @@ int LingosHookFrame::InitObjects()
         return -1;
 
     _objTrayIcon->Init();
+
+    _objPlugin->Init();
 
 	return 0;
 }
@@ -675,6 +677,9 @@ int LingosHookFrame::LoadObjects()
     }
 
 //    m_cbWordIndex->SetFocus();
+
+    _objPlugin->Load();
+
 
     ShowHint(_("Ready.."));
 
