@@ -188,6 +188,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ActivityObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\AnalysisFilterSettingDialog.cpp"
 				>
 			</File>
@@ -260,6 +264,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PluginObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SpeakObject.cpp"
 				>
 			</File>
@@ -297,6 +305,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\ActivityObject.h"
+				>
+			</File>
 			<File
 				RelativePath=".\AnalysisFilterSettingDialog.h"
 				>
@@ -392,6 +404,10 @@
 			</File>
 			<File
 				RelativePath=".\MemoryDailyObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PluginObject.h"
 				>
 			</File>
 			<File
