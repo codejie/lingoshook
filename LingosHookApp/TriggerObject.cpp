@@ -296,3 +296,8 @@ void CTriggerObject::OnParserLoad(int index, const wxString &id, const wxString 
     _objDisplay->ParserLoad(index, id, title);
 }
 
+void CTriggerObject::OnPluginLoad(const ActivityObject::PropertyData &data)
+{
+    
+}
+

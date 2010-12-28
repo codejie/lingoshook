@@ -10,13 +10,14 @@ public:
     virtual ~WordExport();
 
     virtual int Init(int fparam = 0, int sparam = 0) { return 0; }
+    virtual void Final() {}
+
+    virtual int LoadProperty(PropertyData& data) const;
 
     virtual int Run();
 
     virtual bool NeedDBAccess() const { return true; }
-protected:
-    virtual void InitProperty();
-    virtual void Final() {}
+
 };
 
 extern WordExport* _theActivity;

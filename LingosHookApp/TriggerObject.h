@@ -16,6 +16,7 @@
 //#include "FilterShowObject.h"
 #include "DictStructure.h"
 #include "SpecialDictParser.h"
+#include "ActivityObject.h"
 
 
 class CConfigData;
@@ -80,6 +81,8 @@ public:
     void OnParserUnknown(const wxString& id, const wxString& title);
     void OnParserInitFail(const wxString& id, const wxString& title);
     void OnParserLoad(int index, const wxString& id, const wxString& title);
+
+    void OnPluginLoad(const ActivityObject::PropertyData& data);
 protected:
     CConfigData* _dataConfig;
     CDictObject* _objDict;
