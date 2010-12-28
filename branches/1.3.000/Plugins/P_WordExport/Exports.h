@@ -6,7 +6,9 @@
 #endif
 
 #include "ActivityObject.h"
-
+extern "C"
+{
 LINGOSHOOK_PLUGINS_API ActivityObject* GetActivity();
+}
 
 #endif

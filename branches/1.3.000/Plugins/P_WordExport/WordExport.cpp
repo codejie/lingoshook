@@ -33,9 +33,9 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD uCallReason, LPVOID pReserved)
 	case DLL_THREAD_ATTACH:
         break;
 	case DLL_THREAD_DETACH:
-        DLLFinal();
         break;
 	case DLL_PROCESS_DETACH:
+        DLLFinal();
         break;
     default:
         return FALSE;
@@ -58,13 +58,15 @@ WordExport::~WordExport()
 {
 }
 
-void WordExport::InitProperty()
+int WordExport::LoadProperty(PropertyData& data) const
 {
-    _strLabel = "WordExport";
-    _strName = "Word Export";
-    _strVersion = "0.1";
-    _strAuthor = "codejie(codejie@gmail.com";
-    _strDescription = "Export words from LingosHook to a Text file.";
+    data.m_Label = "WordExport";
+    data.m_Name = "Word Export";
+    data.m_Version = "0.1";
+    data.m_Author = "codejie(codejie@gmail.com)";
+    data.m_Description = "Export words from LingosHook to a Text file.";
+
+    return 0;
 }
 
 int WordExport::Run()

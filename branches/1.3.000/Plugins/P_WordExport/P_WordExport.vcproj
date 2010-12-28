@@ -62,6 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxbase28ud.lib"
+				OutputFile="$(SolutionDir)\Output\plugins\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(WX_ROOT)\lib\vc_lib"
 				GenerateDebugInformation="true"

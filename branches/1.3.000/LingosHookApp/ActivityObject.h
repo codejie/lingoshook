@@ -8,10 +8,22 @@ class CDBAccess;
 class ActivityObject
 {
 public:
+    struct PropertyData
+    {
+        std::string m_strLabel;
+        std::string m_strName;
+        std::string m_strVersion;
+        std::string m_strAuthor;
+        std::string m_strDescription;
+    };
+public:
     ActivityObject();
     virtual ~ActivityObject();
 
-    virtual int Init(int fparam = 0, int sparam = 0) = 0;
+    virtual int Init(int fparam = 0, int sparam = 0) { return 0; }
+    virtual void Final() {}
+
+    virtual int LoadProperty(PropertyData& data) const = 0;
 
     virtual int Run() = 0;
 
@@ -19,23 +31,8 @@ public:
     virtual bool NeedTagAccess() const { return false; }
 
     void SetDBObject(CDBAccess* obj);
-
-    const std::string& Label() const { return _strLabel; }
-    const std::string& Name() const { return _strName; }
-    const std::string& Version() const { return _strVersion; }
-    const std::string& Author() const { return _strAuthor; }
-    const std::string& Description() const { return _strDescription; }
-protected:
-    virtual void InitProperty() {};
-    virtual void Final() {};
 protected:
     CDBAccess* _objDBAccess;
-protected:
-    std::string _strLabel;
-    std::string _strName;
-    std::string _strVersion;
-    std::string _strAuthor;
-    std::string _strDescription;
 };
 
 #endif
