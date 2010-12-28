@@ -44,7 +44,7 @@ public:
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
             , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE
-			, CIID_BUTTON_SETANALYSISFILTER };
+			, CIID_BUTTON_SETANALYSISFILTER, CIID_LIST_PLUGINS, CIID_BUTTON_PLUGINSDETAIL, CIID_BUTTON_PLUGINSRUN };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
@@ -149,8 +149,6 @@ protected:
     wxPanel* panel_2;
     wxButton* m_btnSetApply;
 
-
-//    wxPanel* notebook_context_panel[CNID_TAGS];
     wxStaticText* label_3;
     wxTextCtrl* m_textDefTag;
     wxListCtrl* m_listTagMgnt;
@@ -159,7 +157,13 @@ protected:
     wxButton* m_btnTagAdd;
     wxPanel* panel_4;
     wxButton* m_btnTagRemove;
-
+    //wxPanel* m_noteContext_pane_3;
+	
+    wxListCtrl* m_listPlugins;
+    wxStaticLine* static_line_7;
+    wxButton* m_btnPluginsDetail;
+    wxPanel* panel_11;
+    wxButton* m_btnPluginsRun;
 
     wxStaticText* label_8;
     wxStaticLine* static_line_4;
@@ -169,12 +173,10 @@ protected:
     wxButton* m_btnAboutOpenSource;
     wxPanel* panel_9;
 	
-//    wxScrolledWindow* notebook_context_panel[CNID_SETTING];
-//    wxPanel* notebook_context_panel[CNID_ABOUT];
     wxTextCtrl* m_textDebug;
     wxButton* m_btnDebug;
     wxTextCtrl* m_textTrace;
-//    wxPanel* notebook_context_panel[CNID_TRACE];
+
     wxNotebook* m_noteContext;
     wxPanel* window_1_pane_2;
     wxSplitterWindow* m_splitWindow;
@@ -239,6 +241,11 @@ public:
     virtual void OnBtnSetDictChoice(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnScrollSetDelayEnd(wxScrollEvent &event); // wxGlade: <event_handler>
 
+    virtual void OnListPluginsDeselected(wxListEvent &event); // wxGlade: <event_handler>
+    virtual void OnListPluginsSelected(wxListEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnPluginsDetail(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnPluginsRun(wxCommandEvent &event); // wxGlade: <event_handler>
+	
 	virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual void OnClose(wxCloseEvent& event);

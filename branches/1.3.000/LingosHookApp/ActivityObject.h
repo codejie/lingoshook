@@ -1,7 +1,7 @@
 #ifndef __ACTIVITYOBJECT_H__
 #define __ACTIVITYOBJECT_H__
 
-#include <string>
+#include "wx/wx.h"
 
 class CDBAccess;
 
@@ -10,11 +10,12 @@ class ActivityObject
 public:
     struct PropertyData
     {
-        std::string m_strLabel;
-        std::string m_strName;
-        std::string m_strVersion;
-        std::string m_strAuthor;
-        std::string m_strDescription;
+        wxString m_strLabel;
+        wxString m_strName;
+        wxString m_strVersion;
+        wxString m_strAuthor;
+        wxString m_strDescription;
+        wxString m_strDetail;
     };
 public:
     ActivityObject();

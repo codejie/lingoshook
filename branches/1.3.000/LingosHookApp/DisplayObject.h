@@ -12,6 +12,7 @@
 #include "DictStructure.h"//Object.h"
 #include "SpecialDictParser.h"
 #include "TagObject.h"
+#include "ActivityObject.h"
 
 class wxTreeItemId;
 class LingosHookFrame;
@@ -48,6 +49,8 @@ public:
     void ExceptionRaised(const wxString& html, const TinyHtmlParser::CExceptionObject& e);
 
     void ParserLoad(int index, const wxString& id, const wxString& title);
+
+    void AppendPluginsData(int index, const ActivityObject::PropertyData& data);
 protected:
     void ShowDictResult(wxTreeItemId& item, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result, bool expand);
     void ShowSortTagMode();

@@ -312,3 +312,12 @@ void CDisplayObject::ParserLoad(int index, const wxString &id, const wxString &t
     _frame->m_comboxExpandDict->Append(title, data);
 }
 
+void CDisplayObject::AppendPluginsData(int index, const ActivityObject::PropertyData& data)
+{
+    long pos = _frame->m_listPlugins->GetItemCount();
+    long l = _frame->m_listPlugins->InsertItem(pos, data.m_strName);
+    _frame->m_listPlugins->SetItemData(l, index);
+    _frame->m_listPlugins->SetItem(l, 1, data.m_strVersion);
+    _frame->m_listPlugins->SetItem(l, 2, data.m_strAuthor);
+    _frame->m_listPlugins->SetItem(l, 3, data.m_strDescription);
+}
