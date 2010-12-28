@@ -1,6 +1,5 @@
 #include <windows.h>
 
-
 #include "Exports.h"
 #include "WordExport.h"
 
@@ -60,11 +59,12 @@ WordExport::~WordExport()
 
 int WordExport::LoadProperty(PropertyData& data) const
 {
-    data.m_Label = "WordExport";
-    data.m_Name = "Word Export";
-    data.m_Version = "0.1";
-    data.m_Author = "codejie(codejie@gmail.com)";
-    data.m_Description = "Export words from LingosHook to a Text file.";
+    data.m_strLabel = wxT("WordExport");
+    data.m_strName = wxT("Word Export");
+    data.m_strVersion = wxT("0.0.1");
+    data.m_strAuthor = wxT("codejie");
+    data.m_strDescription = wxT("Export words from LingosHook to a Text file.");
+    data.m_strDetail = wxT("NONE.");
 
     return 0;
 }

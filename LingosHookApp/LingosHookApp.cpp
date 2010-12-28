@@ -212,6 +212,12 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnTagAdd = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGADD, wxT("Add.."));
     panel_4 = new wxPanel(notebook_context_panel[CNID_TAGS], wxID_ANY);
     m_btnTagRemove = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGREMOVE, wxT("Delete"));
+
+    m_listPlugins = new wxListCtrl(notebook_context_panel[CNID_PLUGINS], CIID_LIST_PLUGINS, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_NO_SORT_HEADER|wxSUNKEN_BORDER);
+    static_line_7 = new wxStaticLine(notebook_context_panel[CNID_PLUGINS], wxID_ANY);
+    m_btnPluginsDetail = new wxButton(notebook_context_panel[CNID_PLUGINS], CIID_BUTTON_PLUGINSDETAIL, wxT("Detail.."));
+    panel_11 = new wxPanel(notebook_context_panel[CNID_PLUGINS], wxID_ANY);
+    m_btnPluginsRun = new wxButton(notebook_context_panel[CNID_PLUGINS], CIID_BUTTON_PLUGINSRUN, wxT("Run!"));
     m_textDebug = new wxTextCtrl(notebook_context_panel[CNID_TRACE], wxID_ANY, wxEmptyString);
     m_btnDebug = new wxButton(notebook_context_panel[CNID_TRACE], CIID_BUTTON_DEBUG, wxT("Debug"));
     m_textTrace = new wxTextCtrl(notebook_context_panel[CNID_TRACE], wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
@@ -258,6 +264,10 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_BUTTON(CIID_BUTTON_TAGSETDEFAULT, LingosHookFrame::OnBtnTagSetDefault)
     EVT_BUTTON(CIID_BUTTON_TAGADD, LingosHookFrame::OnBtnTagAdd)
     EVT_BUTTON(CIID_BUTTON_TAGREMOVE, LingosHookFrame::OnBtnTagRemove)
+    EVT_LIST_ITEM_DESELECTED(CIID_LIST_PLUGINS, LingosHookFrame::OnListPluginsDeselected)
+    EVT_LIST_ITEM_SELECTED(CIID_LIST_PLUGINS, LingosHookFrame::OnListPluginsSelected)
+    EVT_BUTTON(CIID_BUTTON_PLUGINSDETAIL, LingosHookFrame::OnBtnPluginsDetail)
+    EVT_BUTTON(CIID_BUTTON_PLUGINSRUN, LingosHookFrame::OnBtnPluginsRun)	
     EVT_NOTEBOOK_PAGE_CHANGED(CIID_PAGE_CONTEXT, LingosHookFrame::OnNoteContextChanged)
     EVT_TOGGLEBUTTON(CIID_BUTTON_HOOK, LingosHookFrame::OnBtnHook)
     EVT_BUTTON(XIID_BUTTON_FILTER, LingosHookFrame::OnBtnFilter)
@@ -342,6 +352,14 @@ void LingosHookFrame::set_properties()
 
     m_btnTagRemove->Enable(false);
     m_btnTagDefault->Enable(false);
+	
+    m_listPlugins->InsertColumn(0, wxT("Name"));
+    m_listPlugins->InsertColumn(1, wxT("Version"));
+    m_listPlugins->InsertColumn(2, wxT("Author"));
+    m_listPlugins->InsertColumn(3, wxT("Description"));
+
+    m_btnPluginsDetail->Enable(false);
+    m_btnPluginsRun->Enable(false);
 
     m_comboxExpandDict->SetSelection(0);
 
@@ -429,6 +447,9 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_9 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_5 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_20 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer_55 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer_56 = new wxBoxSizer(wxHORIZONTAL);
+	
     sizer_20->Add(m_cbWordIndex, 0, wxEXPAND, 0);
     sizer_20->Add(m_listIndex, 1, wxEXPAND, 0);
     sizer_5->Add(sizer_20, 1, wxEXPAND, 0);
@@ -540,6 +561,7 @@ void LingosHookFrame::do_layout()
     sizer_14->Add(sizer_17, 0, wxEXPAND, 0);
     sizer_11->Add(sizer_14, 1, wxEXPAND, 0);
     notebook_context_panel[CNID_SETTING]->SetSizer(sizer_11);
+
     sizer_22->Add(label_3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
     sizer_22->Add(m_textDefTag, 1, wxALL|wxEXPAND, 4);
     sizer_21->Add(sizer_22, 0, wxEXPAND, 0);
@@ -553,6 +575,15 @@ void LingosHookFrame::do_layout()
     sizer_24->Add(sizer_13, 1, wxEXPAND, 0);
     sizer_21->Add(sizer_24, 1, wxEXPAND, 0);
     notebook_context_panel[CNID_TAGS]->SetSizer(sizer_21);
+	
+    sizer_55->Add(m_listPlugins, 1, wxEXPAND, 0);
+    sizer_55->Add(static_line_7, 0, wxALL|wxEXPAND, 16);
+    sizer_56->Add(m_btnPluginsDetail, 0, wxLEFT, 16);
+    sizer_56->Add(panel_11, 1, wxEXPAND, 0);
+    sizer_56->Add(m_btnPluginsRun, 0, wxRIGHT, 16);
+    sizer_55->Add(sizer_56, 0, wxLEFT|wxRIGHT|wxBOTTOM|wxEXPAND, 16);
+    notebook_context_panel[CNID_PLUGINS]->SetSizer(sizer_55);	
+	
     sizer_12->Add(label_8, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(static_line_4, 0, wxLEFT|wxRIGHT|wxEXPAND, 4);
     sizer_42->Add(m_btnAboutHelp, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
@@ -1577,4 +1608,32 @@ void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
         m_textTrace->SetValue(str); 
         HookHTMLProc(str);
     }
+}
+
+void LingosHookFrame::OnListPluginsDeselected(wxListEvent &event)
+{
+    event.Skip();
+    wxLogDebug(wxT("Event handler (LingosHookFrame::OnListPluginsDeselected) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+}
+
+
+void LingosHookFrame::OnListPluginsSelected(wxListEvent &event)
+
+{
+    event.Skip();
+    wxLogDebug(wxT("Event handler (LingosHookFrame::OnListPluginsSelected) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+
+}
+
+
+void LingosHookFrame::OnBtnPluginsDetail(wxCommandEvent &event)
+{
+    event.Skip();
+    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnPluginsDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+}
+
+void LingosHookFrame::OnBtnPluginsRun(wxCommandEvent &event)
+{
+    event.Skip();
+    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnPluginsDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
