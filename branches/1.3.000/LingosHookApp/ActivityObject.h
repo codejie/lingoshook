@@ -26,12 +26,14 @@ public:
 
     virtual int LoadProperty(PropertyData& data) const = 0;
 
-    virtual int Run() = 0;
+    virtual int Active(wxApp* app, wxWindow* parent);
 
     virtual bool NeedDBAccess() const { return false; }
     virtual bool NeedTagAccess() const { return false; }
 
     void SetDBObject(CDBAccess* obj);
+protected:
+    virtual int Run(wxApp* app, wxWindow* parent) { return 0; }
 protected:
     CDBAccess* _objDBAccess;
 };

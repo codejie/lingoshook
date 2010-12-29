@@ -69,7 +69,11 @@ int WordExport::LoadProperty(PropertyData& data) const
     return 0;
 }
 
-int WordExport::Run()
-{
-    return -1;
+int WordExport::Run(wxApp* app, wxWindow* parent)
+{    
+    wxMessageDialog dlg(parent, wxT("Hello Plugins."));
+    //app->SetTopWindow(&dlg);
+    dlg.ShowModal();
+
+    return 0;
 }

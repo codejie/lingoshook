@@ -646,7 +646,7 @@ int LingosHookFrame::CreateObjects()
     _objDisplay.reset(new CDisplayObject(this));
     _objSpeak.reset(new CSpeakObject());
     _objFilterShow.reset(new CFilterShowObject(_objDB, m_treeFilter));
-    _objPlugin.reset(new CPluginObject());
+    _objPlugin.reset(new CPluginObject(this));
 
     _objTrayIcon = new CTrayIconObject(this, _dataConfig.get(), _objTag.get());
 
@@ -709,7 +709,7 @@ int LingosHookFrame::LoadObjects()
 
 //    m_cbWordIndex->SetFocus();
 
-    _objPlugin->Load();
+//    _objPlugin->Load();
 
 
     ShowHint(_("Ready.."));
@@ -1138,6 +1138,12 @@ void LingosHookFrame::OnNoteIndexChanged(wxNotebookEvent &event)
 
 void LingosHookFrame::OnNoteContextChanged(wxNotebookEvent &event)
 {
+    int pos = event.GetSelection();
+    if(pos == CNID_PLUGINS)
+    {
+        _objPlugin->Load();
+    }
+
     event.Skip();
     wxLogDebug(wxT("Event handler (LingosHookFrame::OnNoteContextChanged) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
@@ -1583,6 +1589,35 @@ void LingosHookFrame::OnScrollSetDelayEnd(wxScrollEvent& event)
     m_labelSetDelay->SetLabel(wxString::Format(wxT("%d ms"), event.GetInt() * 200));
 }
 
+void LingosHookFrame::OnListPluginsDeselected(wxListEvent &event)
+{
+    m_btnPluginsDetail->Enable(false);
+    m_btnPluginsRun->Enable(false);
+}
+
+void LingosHookFrame::OnListPluginsSelected(wxListEvent &event)
+{
+    m_btnPluginsDetail->Enable(true);
+    m_btnPluginsRun->Enable(true);
+}
+
+void LingosHookFrame::OnBtnPluginsDetail(wxCommandEvent &event)
+{
+    event.Skip();
+    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnPluginsDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+}
+
+void LingosHookFrame::OnBtnPluginsRun(wxCommandEvent &event)
+{
+    long item = m_listPlugins->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if(item != -1)
+    {
+        _objPlugin->ActivePlugin(m_listPlugins->GetItemData(item));
+    }
+}
+
+
+////
 void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
 {
 #ifndef __LH_DEBUG__
@@ -1608,32 +1643,4 @@ void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
         m_textTrace->SetValue(str); 
         HookHTMLProc(str);
     }
-}
-
-void LingosHookFrame::OnListPluginsDeselected(wxListEvent &event)
-{
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnListPluginsDeselected) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
-}
-
-
-void LingosHookFrame::OnListPluginsSelected(wxListEvent &event)
-
-{
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnListPluginsSelected) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
-
-}
-
-
-void LingosHookFrame::OnBtnPluginsDetail(wxCommandEvent &event)
-{
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnPluginsDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
-}
-
-void LingosHookFrame::OnBtnPluginsRun(wxCommandEvent &event)
-{
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnPluginsDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }

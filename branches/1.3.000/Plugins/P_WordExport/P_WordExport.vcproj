@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28ud.lib"
+				AdditionalDependencies="wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(SolutionDir)\Output\plugins\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(WX_ROOT)\lib\vc_lib"
