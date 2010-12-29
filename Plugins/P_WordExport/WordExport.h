@@ -14,7 +14,7 @@ public:
 
     virtual int LoadProperty(PropertyData& data) const;
 
-    virtual int Run();
+    virtual int Run(wxApp* app, wxWindow* parent);
 
     virtual bool NeedDBAccess() const { return true; }
 
