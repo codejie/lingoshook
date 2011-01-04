@@ -3,7 +3,9 @@
 
 #include "wx/wx.h"
 
+#ifndef __TEST_PLUGINS__
 class CDBAccess;
+#endif
 
 class ActivityObject
 {
@@ -28,14 +30,21 @@ public:
 
     virtual int Active(wxApp* app, wxWindow* parent);
 
+#ifndef __TEST_PLUGINS__
     virtual bool NeedDBAccess() const { return false; }
     virtual bool NeedTagAccess() const { return false; }
 
     void SetDBObject(CDBAccess* obj);
+#endif
+
 protected:
     virtual int Run(wxApp* app, wxWindow* parent) { return 0; }
 protected:
+
+#ifndef __TEST_PLUGINS__
     CDBAccess* _objDBAccess;
+#endif
+
 };
 
 #endif
