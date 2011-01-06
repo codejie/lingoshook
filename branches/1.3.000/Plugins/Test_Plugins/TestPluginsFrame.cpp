@@ -43,10 +43,7 @@ END_EVENT_TABLE();
 
 void TestFrame::OnListDeselected(wxListEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (TestFrame::OnListDeselected) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
-
 
 void TestFrame::OnListSelected(wxListEvent &event)
 {
@@ -64,8 +61,11 @@ void TestFrame::OnBtnDetail(wxCommandEvent &event)
 
 void TestFrame::OnBtnRun(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (TestFrame::OnBtnRun) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+    long item = m_listPlugins->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if(item != -1)
+    {
+        _objTestPlugins->ActivePlugin(m_listPlugins->GetItemData(item));
+    }
 }
 
 
@@ -124,11 +124,6 @@ void TestFrame::do_layout()
 }
 
 
-
-class MyApp: public wxApp {
-public:
-    bool OnInit();
-};
 
 IMPLEMENT_APP(MyApp)
 
