@@ -19,6 +19,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_WordExport", "Plugins\P_WordExport\P_WordExport.vcproj", "{7D7CF6AA-2FA7-409F-9C6D-C244547F5D78}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_Plugins", "Plugins\Test_Plugins\Test_Plugins.vcproj", "{576AB589-A647-49C5-A639-57D7920566AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7D7CF6AA-2FA7-409F-9C6D-C244547F5D78} = {7D7CF6AA-2FA7-409F-9C6D-C244547F5D78}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

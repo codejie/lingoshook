@@ -33,3 +33,5 @@ private:
 typedef ActivityObject* (*GetActivityPtr)(void);
 
 #endif
+
+//http://wxforum.shadonet.com/viewtopic.php?t=13178&highlight=plugin

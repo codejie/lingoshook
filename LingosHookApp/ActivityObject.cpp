@@ -18,13 +18,20 @@ ActivityObject::~ActivityObject()
 
 int ActivityObject::Active(wxApp *app, wxWindow *parent)
 {
-    wxAppConsole* old = wxAppConsole::GetInstance();
-    wxAppConsole::SetInstance(app);
-    int ret = Run(app, parent);
-    wxAppConsole::SetInstance(old);
+    //wxMessageDialog dlg(parent, wxT("Hello Plugins."));
 
-    app->SetTopWindow(parent);
-    parent->Show();
+    //app->SetTopWindow(&dlg);
+    //dlg.ShowModal();
+
+    //wxAppConsole* old = wxAppConsole::GetInstance();
+    //wxAppConsole::SetInstance(app);
+
+    int ret = Run(app, parent);
+
+    //wxAppConsole::SetInstance(old);
+
+    //app->SetTopWindow(parent);
+    //parent->Show();
 
     return ret;
 }

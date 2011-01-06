@@ -58,4 +58,13 @@ private:
 }; // wxGlade: end class
 
 
+
+class MyApp: public wxApp {
+public:
+    bool OnInit();
+};
+
+
+DECLARE_APP(MyApp)
+
 #endif // TESTPLUGINSFRAME_H

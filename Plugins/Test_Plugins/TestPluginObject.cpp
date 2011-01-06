@@ -88,15 +88,17 @@ int CTestPluginObject::ActivePlugin(int index)
     if(!lib.IsLoaded())
         return -1;
 
+
     int ret = -1;
     GetActivityPtr ptr = (GetActivityPtr)lib.GetSymbol(wxT("GetActivity"));
     ActivityObject* act = ptr();
     if(act != NULL)
     {
+        lib.Detach();
         if(act->Init() == 0)
         {
-            //if(act->Active(&wxGetApp(), _frame) == 0)
-            //    ret = 0;
+            if(act->Active(&wxGetApp(), _frame) == 0)
+                ret = 0;
             act->Final();
         }
     }

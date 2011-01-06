@@ -1,5 +1,8 @@
 #include <windows.h>
 
+#include "wx/wx.h"
+#include <wx/msw/private.h>
+
 #include "Exports.h"
 #include "WordExport.h"
 
@@ -26,6 +29,14 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD uCallReason, LPVOID pReserved)
     switch(uCallReason)
     {
 	case DLL_PROCESS_ATTACH:
+				{       wxSetInstance((HINSTANCE)hModule);							
+                        int argc = 0;												
+                        char **argv = NULL;											
+                        wxEntryStart(argc, argv);									
+						if ( !wxTheApp || !wxTheApp->CallOnInit() )					
+							return FALSE;											
+						return TRUE;												
+                }	
         if(DLLInit() != 0)
             return FALSE;
         break;
@@ -34,6 +45,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD uCallReason, LPVOID pReserved)
 	case DLL_THREAD_DETACH:
         break;
 	case DLL_PROCESS_DETACH:
+        wxEntryCleanup();	
         DLLFinal();
         break;
     default:
@@ -70,10 +82,14 @@ int WordExport::LoadProperty(PropertyData& data) const
 }
 
 int WordExport::Run(wxApp* app, wxWindow* parent)
-{    
+{
+    parent->Enable(false);
     wxMessageDialog dlg(parent, wxT("Hello Plugins."));
+
     //app->SetTopWindow(&dlg);
     dlg.ShowModal();
+
+    parent->SetFocus();
 
     return 0;
 }
