@@ -1,6 +1,7 @@
 #ifndef __WORDEXPORT_H__
 #define __WORDEXPORT_H__
 
+#include "Exports.h"
 #include "ActivityObject.h"
 
 class WordExport : public ActivityObject
@@ -14,7 +15,7 @@ public:
 
     virtual int LoadProperty(PropertyData& data) const;
 
-    virtual int Run(wxApp* app, wxWindow* parent);
+    virtual int Active(wxApp* papp, wxWindow* pwindow);
 
     virtual bool NeedDBAccess() const { return true; }
 

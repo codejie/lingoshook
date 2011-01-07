@@ -28,7 +28,7 @@ public:
 
     virtual int LoadProperty(PropertyData& data) const = 0;
 
-    virtual int Active(wxApp* app, wxWindow* parent);
+    virtual int Active(wxApp* papp, wxWindow* pwindow) = 0;
 
 #ifndef __TEST_PLUGINS__
     virtual bool NeedDBAccess() const { return false; }
@@ -37,8 +37,6 @@ public:
     void SetDBObject(CDBAccess* obj);
 #endif
 
-protected:
-    virtual int Run(wxApp* app, wxWindow* parent) { return 0; }
 protected:
 
 #ifndef __TEST_PLUGINS__
