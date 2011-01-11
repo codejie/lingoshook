@@ -646,7 +646,7 @@ int LingosHookFrame::CreateObjects()
     _objDisplay.reset(new CDisplayObject(this));
     _objSpeak.reset(new CSpeakObject());
     _objFilterShow.reset(new CFilterShowObject(_objDB, m_treeFilter));
-    _objPlugin.reset(new CPluginObject(this));
+    _objPlugin.reset(new CPluginObject(this, &_objDB));
 
     _objTrayIcon = new CTrayIconObject(this, _dataConfig.get(), _objTag.get());
 
