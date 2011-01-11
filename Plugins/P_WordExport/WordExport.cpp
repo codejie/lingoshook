@@ -1,4 +1,7 @@
 
+
+#include "WordExportDialog.h"
+
 #include "WordExport.h"
 
 IMPLEMENT_PLUGIN(WordExport)
@@ -26,7 +29,9 @@ int WordExport::LoadProperty(PropertyData& data) const
 
 int WordExport::Active(wxApp* papp, wxWindow* pwindow)
 {
-    wxMessageDialog dlg(NULL, wxT("Hello Plugins."));
+    wxMessageBox(_objDBAccess->Database().GetVersion());
+
+    WordExportDialog dlg(pwindow, wxID_ANY, wxEmptyString);
 
     dlg.ShowModal();
 

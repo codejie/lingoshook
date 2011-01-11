@@ -4,10 +4,10 @@
 #include "wx/wx.h"
 
 #ifndef __TEST_PLUGINS__
-class CDBAccess;
+#include "DBAccess.h"
 #endif
 
-class ActivityObject
+class ActivityObject //: public wxEvtHandler
 {
 public:
     struct PropertyData
