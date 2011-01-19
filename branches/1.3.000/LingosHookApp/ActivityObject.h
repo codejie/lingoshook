@@ -32,7 +32,7 @@ public:
 
 #ifndef __TEST_PLUGINS__
     virtual bool NeedDBAccess() const { return false; }
-    virtual bool NeedTagAccess() const { return false; }
+//    virtual bool NeedTagAccess() const { return false; }
 
     void SetDBObject(CDBAccess* obj);
 #endif
