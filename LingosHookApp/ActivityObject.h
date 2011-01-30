@@ -3,6 +3,8 @@
 
 #include "wx/wx.h"
 
+#include "Consts.h"
+
 #ifndef __TEST_PLUGINS__
 #include "DBAccess.h"
 #endif
@@ -12,6 +14,7 @@ class ActivityObject //: public wxEvtHandler
 public:
     struct PropertyData
     {
+        unsigned int m_iInterfaceVersion;
         wxString m_strLabel;
         wxString m_strName;
         wxString m_strVersion;
@@ -46,3 +49,5 @@ protected:
 };
 
 #endif
+
+
