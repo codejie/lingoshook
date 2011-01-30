@@ -1,5 +1,4 @@
 
-
 #include "WordExportDialog.h"
 
 #include "WordExport.h"
@@ -17,6 +16,7 @@ WordExport::~WordExport()
 
 int WordExport::LoadProperty(PropertyData& data) const
 {
+    data.m_iInterfaceVersion = __LH_PLUGINS_INTERFACE__;
     data.m_strLabel = wxT("WordExport");
     data.m_strName = wxT("Word Export");
     data.m_strVersion = wxT("0.0.1");
@@ -31,8 +31,7 @@ int WordExport::Active(wxApp* papp, wxWindow* pwindow)
 {
     //wxMessageBox(_objDBAccess->Database().GetVersion());
 
-    WordExportDialog dlg(pwindow, wxID_ANY, wxEmptyString);
-
+    WordExportDialog dlg(_objDBAccess, pwindow, wxID_ANY, wxEmptyString);
     dlg.ShowModal();
 
     return 0;

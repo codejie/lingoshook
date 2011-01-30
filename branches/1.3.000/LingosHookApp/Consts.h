@@ -30,4 +30,6 @@ const wxString APP_VERSION      = wxT("1.3.000");
 
 const wxString APP_DEFAULT_DBFILE = wxT("LingosHook.db3");
 
+const unsigned int __LH_PLUGINS_INTERFACE__    =   1;
+
 #endif
