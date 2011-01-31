@@ -312,7 +312,7 @@ void CDisplayObject::ParserLoad(int index, const wxString &id, const wxString &t
     _frame->m_comboxExpandDict->Append(title, data);
 }
 
-void CDisplayObject::AppendPluginsData(int index, const ActivityObject::PropertyData& data)
+void CDisplayObject::AppendPluginsData(int index, const ActivityObject::PropertyData& data, bool imcompatible)
 {
     long pos = _frame->m_listPlugins->GetItemCount();
     long l = _frame->m_listPlugins->InsertItem(pos, data.m_strName);
@@ -320,4 +320,12 @@ void CDisplayObject::AppendPluginsData(int index, const ActivityObject::Property
     _frame->m_listPlugins->SetItem(l, 1, data.m_strVersion);
     _frame->m_listPlugins->SetItem(l, 2, data.m_strAuthor);
     _frame->m_listPlugins->SetItem(l, 3, data.m_strDescription);
+
+    if(imcompatible)
+    {
+        wxFont& font = _frame->m_listPlugins->GetItemFont(l);
+        font.SetStyle(wxFONTSTYLE_SLANT);
+        _frame->m_listPlugins->SetItemFont(l, font);
+
+    }
 }

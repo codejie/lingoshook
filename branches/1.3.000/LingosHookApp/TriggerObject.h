@@ -82,7 +82,7 @@ public:
     void OnParserInitFail(const wxString& id, const wxString& title);
     void OnParserLoad(int index, const wxString& id, const wxString& title);
 
-    void OnPluginLoad(int index, const ActivityObject::PropertyData& data);
+    void OnPluginLoad(int index, const ActivityObject::PropertyData& data, bool imcompatible = false);
 protected:
     CConfigData* _dataConfig;
     CDictObject* _objDict;

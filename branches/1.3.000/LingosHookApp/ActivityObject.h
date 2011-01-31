@@ -14,13 +14,12 @@ class ActivityObject //: public wxEvtHandler
 public:
     struct PropertyData
     {
-        unsigned int m_iInterfaceVersion;
         wxString m_strLabel;
         wxString m_strName;
         wxString m_strVersion;
         wxString m_strAuthor;
         wxString m_strDescription;
-        wxString m_strDetail;
+//        wxString m_strDetail;
     };
 public:
     ActivityObject();
@@ -30,6 +29,7 @@ public:
     virtual void Final() {}
 
     virtual int LoadProperty(PropertyData& data) const = 0;
+    unsigned int GetInterfaceVersion() const { return _iInterfaceVersion; }
 
     virtual int Active(wxApp* papp, wxWindow* pwindow) = 0;
 
@@ -45,7 +45,8 @@ protected:
 #ifndef __TEST_PLUGINS__
     CDBAccess* _objDBAccess;
 #endif
-
+protected:
+    unsigned int _iInterfaceVersion;
 };
 
 #endif
