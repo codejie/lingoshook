@@ -264,6 +264,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PluginDetailDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PluginObject.cpp"
 				>
 			</File>
@@ -404,6 +408,10 @@
 			</File>
 			<File
 				RelativePath=".\MemoryDailyObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PluginDetailDialog.h"
 				>
 			</File>
 			<File

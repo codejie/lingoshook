@@ -296,8 +296,8 @@ void CTriggerObject::OnParserLoad(int index, const wxString &id, const wxString 
     _objDisplay->ParserLoad(index, id, title);
 }
 
-void CTriggerObject::OnPluginLoad(int index, const ActivityObject::PropertyData &data)
+void CTriggerObject::OnPluginLoad(int index, const ActivityObject::PropertyData &data, bool imcompatible)
 {
-    _objDisplay->AppendPluginsData(index, data);    
+    _objDisplay->AppendPluginsData(index, data, imcompatible);    
 }
 

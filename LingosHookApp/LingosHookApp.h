@@ -41,7 +41,7 @@ public:
             , CIID_BUTTON_APPLY, CIID_LIST_TAGMGNT, CIID_BUTTON_TAGSETDEFAULT, CIID_BUTTON_TAGADD, CIID_TREE_RESULT
             , CIID_BUTTON_TAGREMOVE, CIID_BUTTON_HOOK, XIID_BUTTON_FILTER, CIID_TREE_FILTER, CIID_BUTTON_MEMREMOVE
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
-            , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE
+            , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE, CIID_BUTTON_ABOUTDONATE
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
             , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE
 			, CIID_BUTTON_SETANALYSISFILTER, CIID_LIST_PLUGINS, CIID_BUTTON_PLUGINSDETAIL, CIID_BUTTON_PLUGINSRUN };
@@ -171,6 +171,7 @@ protected:
     wxButton* m_btnAboutSend;
     wxButton* m_btnAboutPost;
     wxButton* m_btnAboutOpenSource;
+    wxButton* m_btnAboutDonate;
     wxPanel* panel_9;
 	
     wxTextCtrl* m_textDebug;
@@ -220,6 +221,7 @@ public:
     virtual void OnBtnAboutSend(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAboutPost(wxCommandEvent &event); // wxGlade: <event_handler>	
     virtual void OnBtnAboutOpenSource(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnAboutDonate(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnMenuIndexSpeak(wxCommandEvent& event);
     virtual void OnMenuIndexCopy(wxCommandEvent& event);
     virtual void OnMenuIndexDelete(wxCommandEvent& event);

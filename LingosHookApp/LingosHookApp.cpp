@@ -227,6 +227,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnAboutSend = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTSEND, wxT("Send a mail to me. (codejie@gmail.com)"));
     m_btnAboutPost = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTPOST, wxT("Post a comment to me. (www.cppblog.com/codejie)"));
     m_btnAboutOpenSource = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTOPENSOURCE, wxT("Welcome to LingosHook Open Source Site"));
+    m_btnAboutDonate = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTDONATE, wxT("Please DONATE to LingosHook"));
     panel_9 = new wxPanel(notebook_context_panel[CNID_ABOUT], wxID_ANY);
 
     m_labelInfo = new wxStaticText(this, wxID_ANY, wxT("Ready.."));
@@ -292,6 +293,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_BUTTON(CIID_BUTTON_ABOUTSEND, LingosHookFrame::OnBtnAboutSend)
     EVT_BUTTON(CIID_BUTTON_ABOUTPOST, LingosHookFrame::OnBtnAboutPost)
 	EVT_BUTTON(CIID_BUTTON_ABOUTOPENSOURCE, LingosHookFrame::OnBtnAboutOpenSource)
+    EVT_BUTTON(CIID_BUTTON_ABOUTDONATE, LingosHookFrame::OnBtnAboutDonate)
 	EVT_CHECKBOX(CIID_CHECKBOX_IGNOREDICT, LingosHookFrame::OnCheckIgnoreDict)
     EVT_CHECKBOX(CIID_CHECKBOX_SKIPDICT, LingosHookFrame::OnCheckSkipDict)	
     EVT_CHECKBOX(CIID_CHECKBOX_SKIPHTML, LingosHookFrame::OnCheckSkipHTML)	
@@ -339,7 +341,7 @@ void LingosHookFrame::set_properties()
     m_radioMemLevel1->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel2->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel3->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
-
+    m_btnAboutDonate->SetFont(wxFont(8, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
 
     ((wxScrolledWindow*)notebook_context_panel[CNID_SETTING])->SetScrollRate(10, 10);
@@ -356,7 +358,7 @@ void LingosHookFrame::set_properties()
     m_listPlugins->InsertColumn(0, wxT("Name"));
     m_listPlugins->InsertColumn(1, wxT("Version"));
     m_listPlugins->InsertColumn(2, wxT("Author"));
-    m_listPlugins->InsertColumn(3, wxT("Description"));
+    m_listPlugins->InsertColumn(3, wxT("Description"),wxLIST_FORMAT_LEFT, 200);
 
     m_btnPluginsDetail->Enable(false);
     m_btnPluginsRun->Enable(false);
@@ -396,6 +398,7 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_48 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_12 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_39 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer_57 = new wxBoxSizer(wxHORIZONTAL);
 	wxBoxSizer* sizer_46 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_41 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_40 = new wxBoxSizer(wxHORIZONTAL);
@@ -596,6 +599,9 @@ void LingosHookFrame::do_layout()
     sizer_39->Add(32, 32, 0, 0, 0);
     sizer_46->Add(m_btnAboutOpenSource, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
     sizer_39->Add(sizer_46, 1, wxALL|wxEXPAND, 8);
+    sizer_39->Add(32, 32, 0, 0, 0);
+    sizer_57->Add(m_btnAboutDonate, 1, wxLEFT|wxRIGHT, 4);
+    sizer_39->Add(sizer_57, 1, wxALL|wxEXPAND, 8);
     sizer_12->Add(sizer_39, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(panel_9, 1, wxEXPAND, 0);
 	notebook_context_panel[CNID_ABOUT]->SetSizer(sizer_12);	
@@ -1350,6 +1356,12 @@ void LingosHookFrame::OnBtnAboutOpenSource(wxCommandEvent &event)
     ::wxLaunchDefaultBrowser(cmd);
 }
 
+void LingosHookFrame::OnBtnAboutDonate(wxCommandEvent &event)
+{
+    event.Skip();
+    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnAboutOpenSource) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+}
+
 void LingosHookFrame::OnMenuIndexSpeak(wxCommandEvent& event)
 {
     wxMenu* menu = (wxMenu*)event.GetEventObject();
@@ -1603,8 +1615,11 @@ void LingosHookFrame::OnListPluginsSelected(wxListEvent &event)
 
 void LingosHookFrame::OnBtnPluginsDetail(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnPluginsDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+    long item = m_listPlugins->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if(item != -1)
+    {
+        _objPlugin->ShowPlugin(m_listPlugins->GetItemData(item));
+    }
 }
 
 void LingosHookFrame::OnBtnPluginsRun(wxCommandEvent &event)

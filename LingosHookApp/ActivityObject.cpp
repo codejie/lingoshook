@@ -10,6 +10,7 @@ ActivityObject::ActivityObject()
 : _objDBAccess(NULL)
 #endif
 {
+    _iInterfaceVersion = __LH_PLUGINS_INTERFACEVERSION__;
 }
 
 ActivityObject::~ActivityObject()

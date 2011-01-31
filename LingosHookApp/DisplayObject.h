@@ -50,7 +50,7 @@ public:
 
     void ParserLoad(int index, const wxString& id, const wxString& title);
 
-    void AppendPluginsData(int index, const ActivityObject::PropertyData& data);
+    void AppendPluginsData(int index, const ActivityObject::PropertyData& data, bool imcompatible = false);
 protected:
     void ShowDictResult(wxTreeItemId& item, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result, bool expand);
     void ShowSortTagMode();
