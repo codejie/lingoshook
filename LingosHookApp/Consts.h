@@ -24,6 +24,7 @@ const wxString APP_VERSION      = wxT("1.3.000");
 //App message
 #define WM_OBJECT_INIT      WM_USER + 1000
 #define WM_SET_HOOK         WM_USER + 1001
+#define WM_SET_AUTORETRIEVE WM_USER + 1002
 
 //wxHtmlWindow or wxIE
 #define __LH_USE_WXIE__

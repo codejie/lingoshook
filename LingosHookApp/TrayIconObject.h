@@ -17,7 +17,7 @@ class CTrayIconObject : public wxTaskBarIcon
 {
 public:
     enum TrayStatus { TS_UNKNOWN = -1, TS_HOOK = 0, TS_NORMAL };
-    enum ContextMenuItemID { CMIID_EXIT = 15000, CMIID_SHOW, CMIID_SETHOOK, CMIID_RUNLINGOS, CMIID_TAGBASE = 15100 };
+    enum ContextMenuItemID { CMIID_EXIT = 15000, CMIID_SHOW, CMIID_SETHOOK, CMIID_RUNLINGOS, CMIID_AUTORETRIEVE, CMIID_TAGBASE = 15100 };
 public:
     CTrayIconObject(LingosHookFrame* frame, const CConfigData* conf, CTagObject* tag);
     virtual ~CTrayIconObject();
@@ -33,6 +33,7 @@ protected:
     void OnMenuExit(wxCommandEvent& event);
     void OnMenuShow(wxCommandEvent& event);
     void OnMenuSetHook(wxCommandEvent& event);
+    void OnMenuAutoRetrieve(wxCommandEvent& event);
     void OnMenuRunLingos(wxCommandEvent& event);
     void OnSubMenuTag(wxCommandEvent& event);
 private:

@@ -78,6 +78,8 @@ public:
     int SetHook();
     int SetUnhook();
 
+    void SetStopRetrieve(bool stop);
+
 	int MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam);
 
     static HWND GetLingoesHandle(int lang, bool strick = false);
@@ -98,6 +100,7 @@ private:
 
     bool _bAutoHook;
     static int _iIfLanguage;
+    bool _bStopRetrieve;
     bool _bOpenHotkey;
     bool _bHookCD;
     UINT _nDelay;

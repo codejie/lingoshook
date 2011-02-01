@@ -415,6 +415,7 @@ int CHookObject::Init(const CConfigData &conf)
 {
     _bAutoHook = conf.m_iAutoHook == 1 ? true : false;
     _iIfLanguage = conf.m_iIfLanguage;
+    _bStopRetrieve = conf.m_iStopAutoRetrieve == 1 ? true : false;
     _bOpenHotkey = conf.m_iOpenHotkey == 1 ? true : false;
     _bHookCD = (conf.m_iSkipError == 1 || (conf.m_iSkipDict == 1 && conf.m_iSkipHtml == 1));//  true;//(conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
     _nDelay = conf.m_iRetrieveDelay;
@@ -638,6 +639,9 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 {
     if(msg == _nHookMsgID)
     {
+        if(_bStopRetrieve == true)
+            return 0;
+
 		const struct _HookData_t* hd = (reinterpret_cast<const struct _HookData_t*>(lparam));
 		wxString str;
 		if(hd != NULL && hd->data != NULL)
@@ -799,4 +803,9 @@ void CHookObject::ShowInfo(const wxString& info)
 {
     if(_objFrame != NULL)
         _objFrame->ShowHint(info);
+}
+
+void CHookObject::SetStopRetrieve(bool stop)
+{
+    _bStopRetrieve = stop;
 }

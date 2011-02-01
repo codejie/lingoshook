@@ -41,6 +41,7 @@ public:
     static const int CA_AF_CASEINSENSITIVE  =   25;
     static const int CA_AF_ONEWORDEACHDICT  =   26;
     static const int CA_AF_ONEWORDALLDICT   =   27;
+    static const int CA_STOPAUTORETRIEVE =   28;
 public:
     CConfigData(CDBAccess& db);
 	virtual ~CConfigData() {}
@@ -93,6 +94,7 @@ public:
     int m_iAFCaseInsensitive;
     int m_iAFOneWordEachDict;
     int m_iAFOneWordAllDict;
+    int m_iStopAutoRetrieve;
 };
 
 

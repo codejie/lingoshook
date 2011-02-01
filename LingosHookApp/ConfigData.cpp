@@ -35,6 +35,7 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iAFCaseInsensitive(0)
 , m_iAFOneWordEachDict(0)
 , m_iAFOneWordAllDict(0)
+, m_iStopAutoRetrieve(0)
 {
 }
 
@@ -234,6 +235,9 @@ int CConfigData::Load()
         m_iAFOneWordEachDict = 0;
     if(GetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
         m_iAFOneWordAllDict = 0;
+
+    if(GetData(CA_STOPAUTORETRIEVE, m_iStopAutoRetrieve) != 0)
+        m_iStopAutoRetrieve = 0;
     return 0;
 }
 
@@ -293,6 +297,9 @@ int CConfigData::Save()
     if(SetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
         return -1;
     if(SetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        return -1;
+
+    if(SetData(CA_STOPAUTORETRIEVE, m_iStopAutoRetrieve) != 0)
         return -1;
     return 0;
 }
