@@ -14,6 +14,7 @@ BEGIN_EVENT_TABLE(CTrayIconObject, wxTaskBarIcon)
     EVT_MENU(CTrayIconObject::CMIID_EXIT, CTrayIconObject::OnMenuExit)
     EVT_MENU(CTrayIconObject::CMIID_SHOW, CTrayIconObject::OnMenuShow)
     EVT_MENU(CTrayIconObject::CMIID_SETHOOK, CTrayIconObject::OnMenuSetHook)
+    EVT_MENU(CTrayIconObject::CMIID_AUTORETRIEVE, CTrayIconObject::OnMenuAutoRetrieve)
     EVT_MENU(CTrayIconObject::CMIID_RUNLINGOS, CTrayIconObject::OnMenuRunLingos)
     EVT_MENU_RANGE(CMIID_TAGBASE, CMIID_TAGBASE + 1024, CTrayIconObject::OnSubMenuTag)
     EVT_TASKBAR_LEFT_DCLICK(CTrayIconObject::OnLeftButtonDClick)
@@ -103,6 +104,12 @@ wxMenu* CTrayIconObject::CreatePopupMenu()
     {
         menu->Append(CMIID_SETHOOK, wxT("Hook"));
     }
+
+    menu->AppendSeparator();
+
+    wxMenuItem *subStopRetrieve = menu->AppendCheckItem(CMIID_AUTORETRIEVE, wxT("Auto Retrieve"));
+    subStopRetrieve->Check(_dataConfig->m_iStopAutoRetrieve == 1 ? false : true);
+
     wxMenu* tagmenu = NULL;
     if(_objTag != NULL)
     {
@@ -149,6 +156,11 @@ void CTrayIconObject::OnMenuSetHook(wxCommandEvent &event)
     {
         ::PostMessage((HWND)_frame->GetHWND(), WM_SET_HOOK, 1, 0);
     }
+}
+
+void CTrayIconObject::OnMenuAutoRetrieve(wxCommandEvent& event)
+{
+    ::PostMessage((HWND)_frame->GetHWND(), WM_SET_AUTORETRIEVE, event.IsChecked() ? 1 : 0, 0);  
 }
 
 void CTrayIconObject::OnMenuRunLingos(wxCommandEvent &event)

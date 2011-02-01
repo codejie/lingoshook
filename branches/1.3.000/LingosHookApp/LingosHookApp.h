@@ -37,7 +37,7 @@ public:
     enum IndexNoteID { INID_INDEX = 0, INID_FILTER, INID_MEMORY };
     enum ContextNoteID { CNID_RESULT = 0, CNID_HTML, CNID_TAGS, CNID_SETTING, CNID_PLUGINS, CNID_ABOUT, CNID_TRACE, CNID_MAX_PAGES };
 
-    enum ControlID { CIID_PAGE_INDEX = 10000, CIID_PAGE_CONTEXT, CIID_TEXT_INDEX, CIID_LIST_INDEX, CIID_CHECKBOX_HOTKEY
+    enum ControlID { CIID_PAGE_INDEX = 10000, CIID_PAGE_CONTEXT, CIID_TEXT_INDEX, CIID_LIST_INDEX, CIID_CHECKBOX_AUTOHOOK, CIID_CHECKBOX_USEHOTKEY, CIID_CHECKBOX_STOPRETRIEVE
             , CIID_BUTTON_APPLY, CIID_LIST_TAGMGNT, CIID_BUTTON_TAGSETDEFAULT, CIID_BUTTON_TAGADD, CIID_TREE_RESULT
             , CIID_BUTTON_TAGREMOVE, CIID_BUTTON_HOOK, XIID_BUTTON_FILTER, CIID_TREE_FILTER, CIID_BUTTON_MEMREMOVE
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
@@ -112,14 +112,22 @@ protected:
 //    wxPanel* notebook_context_panel[CNID_RESULT];
     CLHHtmlWindow* m_winHTML;
 //    wxPanel* notebook_context_panel[CNID_HTML];
-    wxRadioBox* m_radioIfLang;
+    wxStaticText* label_13;
+    wxRadioButton* m_rdSetUILAuto;
+    wxRadioButton* m_rdSetUILEnglish;
+    wxRadioButton* m_rdSetUILChinese;
+    wxPanel* panel_12;
+    wxCheckBox* m_cbSetAutoHook;
     wxStaticText* label_11;
     wxTextCtrl* m_textSetLgsLocal;
     wxButton* m_btnSetLgsBrowse;
-	wxCheckBox* m_checkAutoHook;
-    wxCheckBox* m_checkHotkey;
-    wxComboBox* m_listHotkey;
-    wxCheckBox* m_checkAutoSpeak;
+	
+    wxCheckBox* m_cbSetStopRetrieve;
+    wxCheckBox* m_cbSetUseHotkey;
+    wxComboBox* m_listSetHotkey;
+    wxPanel* panel_13;
+    wxCheckBox* m_cbSetAutoSpeak;	
+
     wxStaticText* label_1;
     wxCheckBox* m_checkSetTagSync;
     wxCheckBox* m_checkSetMemSync;
@@ -198,7 +206,8 @@ public:
     virtual void OnIndexContextMenu(wxCommandEvent& event);
     virtual void OnIndexFocus(wxCommandEvent& event);
     virtual void OnNoteIndexChanged(wxNotebookEvent &event); // wxGlade: <event_handler>
-    virtual void OnCheckBoxHotkey(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnCheckSetStopRetrieve(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnCheckSetUseHotkey(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetApply(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetLgsBrowse(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnListTagMgntDeselect(wxListEvent &event); // wxGlade: <event_handler>
