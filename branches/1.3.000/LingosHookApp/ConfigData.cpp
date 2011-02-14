@@ -311,6 +311,7 @@ unsigned int CConfigData::GetContolKey() const
     case 0:
     case 2:
     case 4:
+    case 6:
         return MOD_CONTROL;
     case 1:
     case 3:
@@ -334,6 +335,8 @@ unsigned int CConfigData::GetHotKey() const
     case 4:
     case 5:
         return VK_F11;
+    case 6:
+        return 0x31;
     default:
         return VK_F10;
     }

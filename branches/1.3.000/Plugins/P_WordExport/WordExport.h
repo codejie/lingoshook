@@ -21,7 +21,7 @@ public:
 
 };
 
-extern WordExport* _theActivity;
+//extern WordExport* _theActivity;
 
 
 

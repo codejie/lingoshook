@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../LingosHookApp;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="../P_Common;../../LingosHookApp;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LINGOSHOOK_PLUGINS_EXPORT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -197,7 +197,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Exports.h"
+				RelativePath="..\P_Common\Exports.h"
 				>
 			</File>
 			<File

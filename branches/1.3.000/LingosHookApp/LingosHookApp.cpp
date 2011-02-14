@@ -163,9 +163,10 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
         wxT("Ctrl+F11"),
         wxT("Alt+Ctrl+F11"),
         wxT("Ctrl+F12"),
-        wxT("Alt+Ctrl+F12")	
+        wxT("Alt+Ctrl+F12"),
+        wxT("Ctrl+1")
 	};
-    m_listSetHotkey = new wxComboBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 6, m_listSetHotkey_choices, wxCB_DROPDOWN|wxCB_READONLY);
+    m_listSetHotkey = new wxComboBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 7, m_listSetHotkey_choices, wxCB_DROPDOWN|wxCB_READONLY);
     panel_13 = new wxPanel(notebook_context_panel[CNID_SETTING], wxID_ANY);
     m_cbSetAutoSpeak = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("Auto Speak"));
 	
