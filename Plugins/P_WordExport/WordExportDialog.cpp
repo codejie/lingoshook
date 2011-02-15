@@ -151,11 +151,16 @@ void WordExportDialog::OnBtnBrowse(wxCommandEvent &event)
 
 void WordExportDialog::OnBtnExport(wxCommandEvent &event)
 {
-    if(Export() != 0)
+    m_btnClose->Enable(false);
+    if(Export() == 0)
     {
-
+        wxMessageBox(wxT("Export Complete."), wxT("WordExport"), wxCENTRE | wxOK | wxICON_INFORMATION);
     }
-
+    else
+    {
+        wxMessageBox(wxT("Export FAIL."), wxT("WordExport"), wxCENTRE | wxOK | wxICON_ERROR);
+    }
+    m_btnClose->Enable(true);
 }
 
 
@@ -305,7 +310,7 @@ int WordExportDialog::MakeSQL(wxString &sql) const
     }
     else if(m_rdRangeAlphabet->GetValue())
     {
-        sql = wxString::Format(wxT("select Word from WordTable where ((Word >= '%s' and Word < '%c') or (Word >= '%s' and Word < '%c'))")
+        sql = wxString::Format(wxT("select Word from WordTable where ((Word >= '%c' and Word < '%c') or (Word >= '%c' and Word < '%c'))")
             , m_listRangeLow->GetCurrentSelection() + 'A', m_listRangeHigh->GetCurrentSelection() + 1 + 'A', m_listRangeLow->GetCurrentSelection() + 'a', m_listRangeHigh->GetCurrentSelection() + 1 + 'a');
     }
     else if(m_rdRangePrefix->GetValue())
