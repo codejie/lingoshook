@@ -347,7 +347,7 @@ void LingosHookFrame::set_properties()
     m_radioMemLevel1->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel2->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
     m_radioMemLevel3->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
-    m_btnAboutDonate->SetFont(wxFont(8, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
+    m_btnAboutDonate->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("MS Shell Dlg 2")));
     m_textMemType->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
 
     ((wxScrolledWindow*)notebook_context_panel[CNID_SETTING])->SetScrollRate(10, 10);
@@ -618,7 +618,7 @@ void LingosHookFrame::do_layout()
     sizer_46->Add(m_btnAboutOpenSource, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
     sizer_39->Add(sizer_46, 1, wxALL|wxEXPAND, 8);
     sizer_39->Add(32, 32, 0, 0, 0);
-    sizer_57->Add(m_btnAboutDonate, 1, wxLEFT|wxRIGHT, 4);
+    sizer_57->Add(m_btnAboutDonate, 1, wxLEFT|wxRIGHT|wxEXPAND, 8);
     sizer_39->Add(sizer_57, 1, wxALL|wxEXPAND, 8);
     sizer_12->Add(sizer_39, 0, wxTOP|wxBOTTOM|wxEXPAND, 16);
     sizer_12->Add(panel_9, 1, wxEXPAND, 0);
@@ -1404,8 +1404,8 @@ void LingosHookFrame::OnBtnAboutOpenSource(wxCommandEvent &event)
 
 void LingosHookFrame::OnBtnAboutDonate(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (LingosHookFrame::OnBtnAboutOpenSource) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+    wxString cmd = _("http://shop64703519.taobao.com/");
+    ::wxLaunchDefaultBrowser(cmd);
 }
 
 void LingosHookFrame::OnMenuIndexSpeak(wxCommandEvent& event)
