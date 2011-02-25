@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="LHSpeak.lib tidy.lib sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
-				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
+				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName)d.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateManifest="true"
