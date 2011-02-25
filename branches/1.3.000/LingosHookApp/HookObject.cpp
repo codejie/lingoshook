@@ -718,7 +718,7 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
         }
         else
         {
-			wxLogDebug(_T("get UNKNOWN check message."));
+			wxLogDebug(_T("get UNKNOWN check message - %d."), msg);
         }
     }
 
