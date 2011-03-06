@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_Plugins", "Plugins\Tes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_ForDonator", "Plugins\P_ForDonator\P_ForDonator.vcproj", "{B5AD8F26-A7FD-4094-A4FC-799AA48E81E6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DonatorXMLGenerator", "Plugins\P_ForDonator\DonatorXMLGenerator\DonatorXMLGenerator.vcproj", "{E11C2A34-4520-469C-9865-FE7977524218}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -116,6 +118,16 @@ Global
 		{B5AD8F26-A7FD-4094-A4FC-799AA48E81E6}.Release (fast)|Win32.Build.0 = Release|Win32
 		{B5AD8F26-A7FD-4094-A4FC-799AA48E81E6}.Release|Win32.ActiveCfg = Release|Win32
 		{B5AD8F26-A7FD-4094-A4FC-799AA48E81E6}.Release|Win32.Build.0 = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Debug|Win32.Build.0 = Debug|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release - dll|Win32.Build.0 = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release (fast)|Win32.Build.0 = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release|Win32.ActiveCfg = Release|Win32
+		{E11C2A34-4520-469C-9865-FE7977524218}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
