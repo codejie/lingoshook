@@ -7,7 +7,9 @@
 
 #include <map>
 
-class CDBAccess;
+#include "DBAccess.h"
+
+//class CDBAccess;
 
 class CTagObject
 {
@@ -52,7 +54,9 @@ public:
 
     const wxString GetTitle(int tagid) const;
 
-    void GetAll();
+    //void GetAll();
+
+    int ShowTagSubMenu(int menubase, wxMenu*& submenu) const;
 protected:
     int IsIndexExist(int wordid, int tagid);
     int IsOnlySysDefTag(int wordid);

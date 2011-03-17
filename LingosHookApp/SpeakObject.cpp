@@ -100,6 +100,9 @@ int CSpeakObject::GetNextWord(wxString& word)
     if(_queWord.size() == 0)
         return -1;
 
+    while(_queWord.size() > 2)
+        _queWord.pop_front();
+
     word = *_queWord.begin();
     _queWord.pop_front();
 

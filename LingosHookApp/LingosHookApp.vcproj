@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;..\Tidy\tidylib\include;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__LH_DEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -55,16 +55,21 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;_WINDOWS;NOPCH"
+				AdditionalIncludeDirectories="$(WX_ROOT)\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="LHSpeak.lib sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
-				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
+				AdditionalDependencies="LHSpeak.lib tidy.lib sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
+				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName)d.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				GenerateManifest="true"
+				IgnoreEmbeddedIDL="false"
+				TypeLibraryResourceID="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -74,6 +79,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -118,7 +124,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;..\Tidy\tidylib\include;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -137,21 +143,24 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sqlite3.lib wxcode_msw28u_wxsqlite3.lib wxbase28u.lib wxmsw28u_core.lib comctl32.lib rpcrt4.lib"
+				AdditionalDependencies="tidy.lib sqlite3.lib wxcode_msw28u_wxsqlite3.lib wxbase28u.lib wxmsw28u_core.lib comctl32.lib rpcrt4.lib"
 				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_lib&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_lib&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
+				AllowIsolation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -179,6 +188,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ActivityObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AnalysisFilterSettingDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ConfigData.cpp"
 				>
 			</File>
@@ -187,28 +204,20 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DictLoadChoiceDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DictObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\DictResultParser.cpp"
+				RelativePath=".\DictStoreChoiceDialog.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\DictStructure.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\DisplayObject.cpp"
@@ -223,7 +232,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FundsetDictObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HookObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlDictParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlTidyObject.cpp"
 				>
 			</File>
 			<File
@@ -243,47 +264,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ResultProcObject.cpp"
+				RelativePath=".\PluginDetailDialog.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\SearchProcObject.cpp"
+				RelativePath=".\PluginObject.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\SpeakObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SpecialDictParser.cpp"
 				>
 			</File>
 			<File
@@ -296,6 +289,10 @@
 			</File>
 			<File
 				RelativePath=".\TinyHtmlParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TrayIconObject.cpp"
 				>
 			</File>
 			<File
@@ -313,6 +310,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\ActivityObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\AnalysisFilterSettingDialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ConfigData.h"
 				>
 			</File>
@@ -325,28 +330,20 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DictLoadChoiceDialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DictObject.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DictResultParser.h"
+				RelativePath=".\DictStoreChoiceDialog.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\DictStructure.h"
+				>
 			</File>
 			<File
 				RelativePath=".\DisplayObject.h"
@@ -361,12 +358,38 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FundsetDictObject.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\HookObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlDictParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlTidyObject.h"
 				>
 			</File>
 			<File
 				RelativePath=".\LangdaoDictObject.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LHControls.h"
@@ -388,47 +411,23 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ResultProcObject.h"
+				RelativePath=".\PluginDetailDialog.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\SearchProcObject.h"
+				RelativePath=".\PluginObject.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\SpeakObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SpecialDictParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SpecialDictParser.h.test"
 				>
 			</File>
 			<File
@@ -444,12 +443,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TrayIconObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TriggerObject.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ViconDictObject.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -459,6 +469,26 @@
 			>
 			<File
 				RelativePath=".\LingosHookApp.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="wxactivex"
+			>
+			<File
+				RelativePath="..\wxactivex\IEHtmlWin.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\IEHtmlWin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\wxactivex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\wxactivex\wxactivex.h"
 				>
 			</File>
 		</Filter>
