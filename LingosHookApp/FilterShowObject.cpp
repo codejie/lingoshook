@@ -85,19 +85,19 @@ void CDateMode::PreLoad(CLHFilterTreeCtrl *tree)
     for(int i = 3; i < MAX_DAY + 1; ++ i)
     {
         data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_DAY, i);
-        id = tree->AppendItem(root, wxString::Format(_("%d Days Ago"), i), -1, -1, data);
+        id = tree->AppendItem(root, wxString::Format(wxT("%d "), i) + _("Days Ago"), -1, -1, data);
         _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_DAY, i), id));
     }
     //Weeks
     for(int i = 1; i < MAX_WEEK; ++ i)
     {
         data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_WEEK, i);
-        id = tree->AppendItem(root, wxString::Format(_("%d Weeks Ago"), i), -1, -1, data);
+        id = tree->AppendItem(root, wxString::Format(wxT("%d "), i) + _(" Weeks Ago"), -1, -1, data);
         _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_WEEK, i), id));
     }
 
     data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_WEEK, MAX_WEEK);
-    id = tree->AppendItem(root, wxString::Format(_("More Than %d Weeks Ago"), MAX_WEEK - 1), -1, -1, data);
+    id = tree->AppendItem(root, _("More Than") + wxString::Format(wxT(" %d "), MAX_WEEK - 1) + _("Weeks Ago"), -1, -1, data);
     _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_WEEK, MAX_WEEK), id));
 
     ////Months
@@ -169,32 +169,32 @@ void CDateMode::UpdateItemText(CLHFilterTreeCtrl *tree, const wxTreeItemId& item
         {
             if(val == 0)
             {
-                tree->SetItemText(itemid, wxString::Format(_("Today [%d]"), count));
+                tree->SetItemText(itemid, _("Today") + wxString::Format(wxT(" [%d]"), count));
             }
             else if(val == 1)
             {
-                tree->SetItemText(itemid, wxString::Format(_("Yesterday [%d]"), count));
+                tree->SetItemText(itemid, _("Yesterday") + wxString::Format(wxT(" [%d]"), count));
             }
             else if(val == 2)
             {
-                tree->SetItemText(itemid, wxString::Format(_("Day before Yesterday [%d]"), count));
+                tree->SetItemText(itemid, _("Day before Yesterday") + wxString::Format(wxT(" [%d]"), count));
             }
             else
             {
-                tree->SetItemText(itemid, wxString::Format(_("%d Days Ago [%d]"), val, count));
+                tree->SetItemText(itemid, wxString::Format(wxT("%d "), val) + _("Days Ago") + wxString::Format(wxT(" [%d]"), count));
             }
         }
         break;
     case CLHFilterTreeItemData::IT_DATE_WEEK:
         {
             if(val != MAX_WEEK)
-                tree->SetItemText(itemid, wxString::Format(_("%d Weeks Ago [%d]"), val, count));
+                tree->SetItemText(itemid, wxString::Format(wxT("%d "), val) + _("Weeks Ago") + wxString::Format(wxT(" [%d]"), count));
             else
-                tree->SetItemText(itemid, wxString::Format(_("More Than %d Weeks Ago [%d]"), val - 1, count));
+                tree->SetItemText(itemid, _("More Than") + wxString::Format(wxT(" %d "), val - 1) + _("Weeks Ago") + wxString::Format(wxT(" [%d]"), count));
         }
         break;
     default:
-        tree->SetItemText(itemid, wxString::Format(_("%d Unknown Ago [%d]"), val, count));
+        tree->SetItemText(itemid, wxString::Format(wxT("%d "), val) + _("Unknown Ago") + wxString::Format(wxT(" [%d]"), count));
     }
 }
 
@@ -377,7 +377,7 @@ void CTagMode::UpdateItemText(CLHFilterTreeCtrl *tree, int tagid, const TTagValu
 {
     size_t count = tree->GetChildrenCount(tag.second);
     
-    tree->SetItemText(tag.second, wxString::Format(_("%s [%d]"), tag.first, count));
+    tree->SetItemText(tag.second, wxString::Format(wxT("%s [%d]"), tag.first, count));
 
     //g_objTrigger.OnTagUpdateCount(tagid, count);
 }
@@ -588,12 +588,12 @@ void CScoreMode::PreLoad(CLHFilterTreeCtrl* tree)
     for(int i = 1; i < MAX_SCORE; ++ i)
     {
         CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_SCORE, i);
-        wxTreeItemId id = tree->AppendItem(root, wxString::Format(_("Score : %d"), i), -1, -1, data);
+        wxTreeItemId id = tree->AppendItem(root, _("More Than") + wxString::Format(wxT(" : %d"), i), -1, -1, data);
         _mapScore.insert(std::make_pair(i, id));
     }
 
     CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_SCORE, MAX_SCORE);
-    wxTreeItemId id = tree->AppendItem(root, wxString::Format(_("Score More Than : %d"), MAX_SCORE - 1), -1, -1, data);
+    wxTreeItemId id = tree->AppendItem(root, _("Score More Than") + wxString::Format(wxT(" : %d"), MAX_SCORE - 1), -1, -1, data);
     _mapScore.insert(std::make_pair(MAX_SCORE, id));
 }
 
@@ -630,9 +630,9 @@ void CScoreMode::UpdateItemText(CLHFilterTreeCtrl* tree, int score, const wxTree
     size_t count = tree->GetChildrenCount(itemid);
 
     if(score != MAX_SCORE)
-        tree->SetItemText(itemid, wxString::Format(_("Score : %d [%d]"), score, count));
+        tree->SetItemText(itemid, _("Score") + wxString::Format(wxT(" : %d [%d]"), score, count));
     else
-        tree->SetItemText(itemid, wxString::Format(_("Score More Than : %d [%d]"), score, count));
+        tree->SetItemText(itemid, _("Score More Than") + wxString::Format(wxT(" : %d [%d]"), score, count));
 }
 
 int CScoreMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)

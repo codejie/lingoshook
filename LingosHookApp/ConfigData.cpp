@@ -29,13 +29,14 @@ CConfigData::CConfigData(CDBAccess& db)
 //, m_iDataProcFlag(1)
 , m_iSkipError(1)
 , m_iLoadHtmlDict(0)
-, m_strLingoesExec(_("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"))
-, m_strLingoesPath(_("C:\\Program Files\\Lingoes\\Translator2"))
+, m_strLingoesExec(wxT("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"))
+, m_strLingoesPath(wxT("C:\\Program Files\\Lingoes\\Translator2"))
 , m_iRetrieveDelay(0)
 , m_iAFCaseInsensitive(0)
 , m_iAFOneWordEachDict(0)
 , m_iAFOneWordAllDict(0)
 , m_iStopAutoRetrieve(0)
+, m_iHookLanguage(0)
 {
 }
 
@@ -43,7 +44,7 @@ int CConfigData::Init()
 {
     try
     {
-        if(!_db.TableExists(_("ConfigTable")))
+        if(!_db.TableExists(wxT("ConfigTable")))
         {
             const char* conftable = "CREATE TABLE ConfigTable (Attr INTEGER PRIMARY KEY, IntVal INTEGER, StrVal VARCHAR(255))";
             _db.ExecuteUpdate(conftable);
@@ -66,7 +67,7 @@ int CConfigData::GetData(int attr, int& value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
 	    if(!res.Eof())
 	    {
             value = res.GetInt(0);
@@ -91,7 +92,7 @@ int CConfigData::GetData(int attr, std::wstring& value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
 	    if(!res.Eof())
 	    {
             value = res.GetAsString(0);
@@ -116,7 +117,7 @@ int CConfigData::SetData(int attr, int &value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
         if(!res.Eof())
         {
             query.Reset();
@@ -151,7 +152,7 @@ int CConfigData::SetData(int attr, const std::wstring &value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
         if(!res.Eof())
         {
             query.Reset();
@@ -222,9 +223,9 @@ int CConfigData::Load()
         m_iLoadHtmlDict = 0;
 
     if(GetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
-        m_strLingoesExec = _("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe");
+        m_strLingoesExec = wxT("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe");
     if(GetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
-        m_strLingoesPath = _("C:\\Program Files\\Lingoes\\Translator2");
+        m_strLingoesPath = wxT("C:\\Program Files\\Lingoes\\Translator2");
 
     if(GetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
         m_iRetrieveDelay = 0;
@@ -238,6 +239,9 @@ int CConfigData::Load()
 
     if(GetData(CA_STOPAUTORETRIEVE, m_iStopAutoRetrieve) != 0)
         m_iStopAutoRetrieve = 0;
+
+    if(GetData(CA_HOOKLANGUAGE, m_iHookLanguage) != 0)
+        m_iHookLanguage = 0;
     return 0;
 }
 
@@ -301,6 +305,10 @@ int CConfigData::Save()
 
     if(SetData(CA_STOPAUTORETRIEVE, m_iStopAutoRetrieve) != 0)
         return -1;
+
+    if(SetData(CA_HOOKLANGUAGE, m_iHookLanguage) != 0)
+        return -1;
+
     return 0;
 }
 
@@ -345,11 +353,11 @@ unsigned int CConfigData::GetHotKey() const
 int CConfigData::GetLingoesParam(const std::wstring &local)
 {
     m_strLingoesExec = local;
-    std::wstring::size_type pos = local.find_last_of(_("\\"));
+    std::wstring::size_type pos = local.find_last_of(wxT("\\"));
     if(pos != std::wstring::npos)
         m_strLingoesPath = local.substr(0, pos);
     else
-        m_strLingoesPath = _("");
+        m_strLingoesPath = wxT("");
 
     return 0;
 }

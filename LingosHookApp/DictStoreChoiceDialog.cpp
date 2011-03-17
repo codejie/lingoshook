@@ -15,8 +15,8 @@ CHtmlDictStoreChoiceDialog::CHtmlDictStoreChoiceDialog(CDictObject* parser, wxWi
     // begin wxGlade: CHtmlDictStoreChoiceDialog::CHtmlDictStoreChoiceDialog
     sizer_1_staticbox = new wxStaticBox(this, -1, wxEmptyString);
     m_listDict = new CLHCheckBoxList(this, 9200, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxSUNKEN_BORDER);
-    m_btnReset = new wxButton(this, 9201, wxT("Reset the type of dictionary html data"));
-    label_1 = new wxStaticText(this, wxID_ANY, wxT("Tip : Click right key to set the type of dictionary html data."));
+    m_btnReset = new wxButton(this, 9201, _("Reset the type of dictionary html data"));
+    label_1 = new wxStaticText(this, wxID_ANY, _("Tip : Click right key to set the type of dictionary html data."));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
     button_1 = new wxButton(this, wxID_CANCEL, wxEmptyString);
     panel_1 = new wxPanel(this, wxID_ANY);
@@ -42,13 +42,13 @@ END_EVENT_TABLE();
 void CHtmlDictStoreChoiceDialog::set_properties()
 {
     // begin wxGlade: CHtmlDictStoreChoiceDialog::set_properties
-    SetTitle(wxT("Dictionary Chooser.."));
+    SetTitle(_("Dictionary Chooser.."));
     SetSize(wxSize(396, 425));
     m_listDict->SetMinSize(wxSize(378, 214));
 
-    m_listDict->InsertColumn(0, wxT("Type"), wxLIST_FORMAT_LEFT, 40);
-    m_listDict->InsertColumn(1, wxT("Title"), wxLIST_FORMAT_LEFT, 220);
-    m_listDict->InsertColumn(2, wxT("ID"), wxLIST_FORMAT_LEFT, 200);
+    m_listDict->InsertColumn(0, _("Type"), wxLIST_FORMAT_LEFT, 40);
+    m_listDict->InsertColumn(1, _("Title"), wxLIST_FORMAT_LEFT, 220);
+    m_listDict->InsertColumn(2, _("ID"), wxLIST_FORMAT_LEFT, 200);
     // end wxGlade
 
     if(_objParser != NULL)

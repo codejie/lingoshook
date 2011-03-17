@@ -46,21 +46,21 @@ int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT delay, UINT& msg
 		{
 			if(pch(frame, lgs, param, delay, &msgid) != TRUE)
 			{
-				wxLogDebug(_("call CreateHookThread() failed."));
+				wxLogDebug(wxT("call CreateHookThread() failed."));
 				::FreeLibrary(_hDll);
 				return -1;
 			}
 		}
 		else
 		{
-			wxLogDebug(_("Get CreateHookThread address failed."));
+			wxLogDebug(wxT("Get CreateHookThread address failed."));
 			::FreeLibrary(_hDll);
 			return -1;
 		}
 	}
 	else
 	{
-		wxLogDebug(_("Load LingosHook dll failed."));
+		wxLogDebug(wxT("Load LingosHook dll failed."));
 		return -1;
 	}
 	return 0;
@@ -75,13 +75,13 @@ int CDllHookObject::Unhook()
 		{
 			if(prh() != TRUE)
 			{
-				wxLogDebug(_("call RemoveHookThread() failed."));
+				wxLogDebug(wxT("call RemoveHookThread() failed."));
 				return -1;
 			}
 		}
 		else
 		{
-			wxLogDebug(_("Get RemoveHookThread address failed."));
+			wxLogDebug(wxT("Get RemoveHookThread address failed."));
 		}
 		::FreeLibrary(_hDll);
 		_hDll = NULL;

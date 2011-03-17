@@ -13,15 +13,15 @@ PluginDetailDialog::PluginDetailDialog(const ActivityObject::PropertyData& data,
 {
     // begin wxGlade: PluginDetailDialog::PluginDetailDialog
     sizer_3_staticbox = new wxStaticBox(this, -1, wxEmptyString);
-    label_1 = new wxStaticText(this, wxID_ANY, wxT("Name:"));
+    label_1 = new wxStaticText(this, wxID_ANY, _("Name:"));
     m_labelName = new wxStaticText(this, wxID_ANY, wxEmptyString);
-    label_3 = new wxStaticText(this, wxID_ANY, wxT("Label:"));
+    label_3 = new wxStaticText(this, wxID_ANY, _("Label:"));
     m_labelLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-    label_5 = new wxStaticText(this, wxID_ANY, wxT("Version:"));
+    label_5 = new wxStaticText(this, wxID_ANY, _("Version:"));
     m_labelVersion = new wxStaticText(this, wxID_ANY, wxEmptyString);
-    label_7 = new wxStaticText(this, wxID_ANY, wxT("Author:"));
+    label_7 = new wxStaticText(this, wxID_ANY, _("Author:"));
     m_labelAuthor = new wxStaticText(this, wxID_ANY, wxEmptyString);
-    label_10 = new wxStaticText(this, wxID_ANY, wxT("Description:"));
+    label_10 = new wxStaticText(this, wxID_ANY, _("Description:"));
     m_editDesc = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_LINEWRAP);
     panel_2 = new wxPanel(this, wxID_ANY);
     button_1 = new wxButton(this, wxID_CLOSE, wxEmptyString);
@@ -52,7 +52,7 @@ void PluginDetailDialog::OnBtnClose(wxCommandEvent &event)
 void PluginDetailDialog::set_properties()
 {
     // begin wxGlade: PluginDetailDialog::set_properties
-    SetTitle(wxT("Plugins  Description - ") + _data.m_strLabel);
+    SetTitle(_("Plugins  Description - ") + _data.m_strLabel);
     SetSize(wxSize(289, 330));
 
     m_labelName->SetLabel(_data.m_strName);

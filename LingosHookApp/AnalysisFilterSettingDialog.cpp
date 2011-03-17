@@ -15,9 +15,9 @@ CAnalysisFilterDialog::CAnalysisFilterDialog(const CConfigData* conf, wxWindow* 
 {
     // begin wxGlade: CAnalysisFilterDialog::CAnalysisFilterDialog
     sizer_1_staticbox = new wxStaticBox(this, -1, wxEmptyString);
-    m_cbCase = new wxCheckBox(this, wxID_ANY, wxT("Case Insensitive"));
-    m_cbOneWordEachDict = new wxCheckBox(this, wxID_ANY, wxT("One word in each dictionary"));
-    m_cbOneWordAllDict = new wxCheckBox(this, wxID_ANY, wxT("One word in all dictionaries"));
+    m_cbCase = new wxCheckBox(this, wxID_ANY, _("Case Insensitive"));
+    m_cbOneWordEachDict = new wxCheckBox(this, wxID_ANY, _("One word in each dictionary"));
+    m_cbOneWordAllDict = new wxCheckBox(this, wxID_ANY, _("One word in all dictionaries"));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
     button_1 = new wxButton(this, wxID_CANCEL, wxEmptyString);
     panel_1 = new wxPanel(this, wxID_ANY);
@@ -32,7 +32,7 @@ CAnalysisFilterDialog::CAnalysisFilterDialog(const CConfigData* conf, wxWindow* 
 void CAnalysisFilterDialog::set_properties()
 {
     // begin wxGlade: CAnalysisFilterDialog::set_properties
-    SetTitle(wxT("Analysis Filter Setting.."));
+    SetTitle(_("Analysis Filter Setting.."));
 
     m_cbCase->SetValue(_config->m_iAFCaseInsensitive == 1);
     m_cbOneWordEachDict->SetValue(_config->m_iAFOneWordEachDict == 1);

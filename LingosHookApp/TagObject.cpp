@@ -26,7 +26,7 @@ int CTagObject::Init()
     try
     {
         //tags table
-        if(!_db.TableExists(_("TagTable")))
+        if(!_db.TableExists(wxT("TagTable")))
         {
             const char* tagstable = "CREATE TABLE TagTable (TagID INTEGER PRIMARY KEY AUTOINCREMENT, Title VARCHAR(32), CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), Description VARCHAR(255))";
             _db.ExecuteUpdate(tagstable);

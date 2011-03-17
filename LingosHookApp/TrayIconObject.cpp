@@ -80,8 +80,8 @@ wxMenu* CTrayIconObject::CreatePopupMenu()
 {
     wxMenu* menu = new wxMenu;
 
-    menu->Append(CMIID_SHOW, wxT("Show LingosHook"));
-    menu->Append(CMIID_RUNLINGOS, wxT("Run Lingoes"));
+    menu->Append(CMIID_SHOW, _("Show LingosHook"));
+    menu->Append(CMIID_RUNLINGOS, _("Run Lingoes"));
 
     HWND hwnd = CHookObject::GetLingoesHandle(0);
 
@@ -98,16 +98,16 @@ wxMenu* CTrayIconObject::CreatePopupMenu()
 
     if(_bIsHook)
     {
-        menu->Append(CMIID_SETHOOK, wxT("Unhook"));        
+        menu->Append(CMIID_SETHOOK, _("Unhook"));        
     }
     else
     {
-        menu->Append(CMIID_SETHOOK, wxT("Hook"));
+        menu->Append(CMIID_SETHOOK, _("Hook"));
     }
 
     menu->AppendSeparator();
 
-    wxMenuItem *subStopRetrieve = menu->AppendCheckItem(CMIID_AUTORETRIEVE, wxT("Auto Retrieve"));
+    wxMenuItem *subStopRetrieve = menu->AppendCheckItem(CMIID_AUTORETRIEVE, _("Auto Retrieve"));
     subStopRetrieve->Check(_dataConfig->m_iStopAutoRetrieve == 1 ? false : true);
 
     wxMenu* tagmenu = NULL;
@@ -116,11 +116,11 @@ wxMenu* CTrayIconObject::CreatePopupMenu()
         if(_objTag->ShowTagSubMenu(CMIID_TAGBASE, tagmenu) == 0)
         {
             menu->AppendSeparator();
-            menu->AppendSubMenu(tagmenu, wxT("Tags"));
+            menu->AppendSubMenu(tagmenu, _("Tags"));
         }
     }
     menu->AppendSeparator();
-    menu->Append(CMIID_EXIT, wxT("Exit"));
+    menu->Append(CMIID_EXIT, _("Exit"));
 
     return menu;
 }
@@ -165,7 +165,7 @@ void CTrayIconObject::OnMenuAutoRetrieve(wxCommandEvent& event)
 
 void CTrayIconObject::OnMenuRunLingos(wxCommandEvent &event)
 {
-    ::ShellExecute(NULL, _("open"), _dataConfig->m_strLingoesExec.c_str(), NULL, _dataConfig->m_strLingoesPath.c_str(), SW_SHOWNORMAL);
+    ::ShellExecute(NULL, wxT("open"), _dataConfig->m_strLingoesExec.c_str(), NULL, _dataConfig->m_strLingoesPath.c_str(), SW_SHOWNORMAL);
 }
 
 void CTrayIconObject::OnSubMenuTag(wxCommandEvent &event)
