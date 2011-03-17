@@ -12,8 +12,8 @@ namespace SpecialDictParser
 namespace FUNDSET
 {
 
-const std::wstring CDCParser::ID        =   _("1E388F323A0BD943B30FC68598772814");
-const std::wstring CDCParser::TITLE     =   _("Fundset Deutsch2Chinese(S)");
+const std::wstring CDCParser::ID        =   wxT("1E388F323A0BD943B30FC68598772814");
+const std::wstring CDCParser::TITLE     =   wxT("Fundset Deutsch2Chinese(S)");
 
 CDCParser::CDCParser(int index, const std::wstring& id, const std::wstring& title, const wxDateTime& create)
 : CDictParser(index, id, title, create)

@@ -88,7 +88,7 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
 
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
-                res->m_strSymbol = _("null");
+                res->m_strSymbol = wxT("null");
                 //return -1;
             }
             else
@@ -130,21 +130,21 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
 WordClass CECParser::StrToWC(const std::wstring &str) const
 {
 	WordClass wc = WC_UNKNOWN;
-	if(str == _("n."))
+	if(str == wxT("n."))
 		return WC_NOUN;
-	else if(str == _("adj."))
+	else if(str == wxT("adj."))
 		return WC_ADJECTIVE;
-	else if(str == _("v."))
+	else if(str == wxT("v."))
 		return WC_VERB;
-	else if(str == _("adv."))
+	else if(str == wxT("adv."))
 		return WC_ADVERB;
-	else if(str == _("conj."))
+	else if(str == wxT("conj."))
 		return WC_CONJ;
-    else if(str == _("interj."))
+    else if(str == wxT("interj."))
         return WC_INTERJECTION;
-    else if(str == _("prep."))
+    else if(str == wxT("prep."))
         return WC_PREPOSITION;
-    else if(str == _("pron."))
+    else if(str == wxT("pron."))
         return WC_PRONOUN;
 	else
 		return WC_UNKNOWN;
@@ -155,23 +155,23 @@ const std::wstring CECParser::WCToStr(WordClass wc) const
 	switch(wc)
 	{
 	case WC_NOUN:
-		return _("n.");
+		return wxT("n.");
 	case WC_ADJECTIVE:
-		return _("adj.");
+		return wxT("adj.");
 	case WC_VERB:
-		return _("v.");
+		return wxT("v.");
 	case WC_ADVERB:
-		return _("adv.");
+		return wxT("adv.");
 	case WC_CONJ:
-		return _("conj.");
+		return wxT("conj.");
     case WC_INTERJECTION:
-        return _("interj.");
+        return wxT("interj.");
     case WC_PREPOSITION:
-        return _("prep.");
+        return wxT("prep.");
     case WC_PRONOUN:
-        return _("pron.");
+        return wxT("pron.");
 	default:
-		return _("unkn.");
+		return wxT("unkn.");
 	}
 }
 

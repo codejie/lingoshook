@@ -93,7 +93,7 @@ void CTriggerObject::OnWordSave(int wordid, const wxString& word)
         _objMemoryDaily->WordInsert(wordid);
     }
 
-    _objDisplay->ShowInfo(wxString::Format(_("Add a new word : %s."), word));
+    _objDisplay->ShowInfo(_("Add a new word") + wxString::Format(wxT(" : %s."), word));
 }
 
 void CTriggerObject::OnWordUpdate(int wordid, const wxString& word)
@@ -282,17 +282,17 @@ void CTriggerObject::OnMemoryDailyPopWordFail()
 
 void CTriggerObject::OnParserUnknown(const wxString &id, const wxString &title)
 {
-    _objDisplay->ShowInfo(wxString::Format(_("Unknown Dictionary Parser : %s"), title));
+    _objDisplay->ShowInfo(_("Unknown Dictionary Parser") + wxString::Format(wxT(" : %s"), title));
 }
 
 void CTriggerObject::OnParserInitFail(const wxString &id, const wxString &title)
 {
-    _objDisplay->ShowInfo(wxString::Format(_("Init Dictionary Parser Failed - Title : %s"), title));
+    _objDisplay->ShowInfo(_("Init Dictionary Parser Failed - Title") + wxString::Format(wxT(" : %s"), title));
 }
 
 void CTriggerObject::OnParserLoad(int index, const wxString &id, const wxString &title)
 {
-    _objDisplay->ShowInfo(wxString::Format(_("Load Dictionary Parser : %s"), title));
+    _objDisplay->ShowInfo(_("Load Dictionary Parser") + wxString::Format(wxT(" : %s"), title));
     _objDisplay->ParserLoad(index, id, title);
 }
 

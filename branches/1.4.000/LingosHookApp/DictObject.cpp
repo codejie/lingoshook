@@ -276,7 +276,7 @@ int CDictObject::CheckWord(const std::wstring &word, int &wordid, int &count)
         query.Bind(1, word);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT WordID of WordTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT WordID of WordTable FAILED."));
         if(res.Eof())
         {
             wordid = -1;

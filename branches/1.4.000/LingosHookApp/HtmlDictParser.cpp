@@ -659,7 +659,7 @@ void CHtmlDictParser::ShowDictStoreInfoItemContextMenu(const CHtmlDictStoreChoic
     if(type != deftype)
     {
         submenu->AppendSeparator();
-        submenu->Append(menubase + HtmlDictParser::MAX_HTMLDATATYPE, wxString::Format(wxT("set %d as default"), type));
+        submenu->Append(menubase + HtmlDictParser::MAX_HTMLDATATYPE, _("set") + wxString::Format(wxT(" %d "), type) + _("as default"));
     }
 }
 
@@ -667,11 +667,11 @@ void CHtmlDictParser::AppendDictStoreInfoTypeMenu(wxMenu* menu, int menuid, int 
 {
     if(deftype == type)
     {
-        menu->AppendRadioItem(menuid, wxString::Format(wxT("uses type %d"), type));
+        menu->AppendRadioItem(menuid, _("uses type") + wxString::Format(wxT(" %d"), type));
     }
     else
     {
-        menu->Append(menuid, wxString::Format(wxT("uses type %d"), type));
+        menu->Append(menuid, _("uses type") + wxString::Format(wxT(" %d"), type));
     }
 }
 

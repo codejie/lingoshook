@@ -11,10 +11,10 @@ TagInputDialog::TagInputDialog(wxWindow* parent, int id, const wxString& title, 
     wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE)
 {
     // begin wxGlade: TagInputDialog::TagInputDialog
-    sizer_2_staticbox = new wxStaticBox(this, -1, wxT("Title && Description"));
-    label_1 = new wxStaticText(this, wxID_ANY, wxT("Title:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+    sizer_2_staticbox = new wxStaticBox(this, -1, _("Title && Description"));
+    label_1 = new wxStaticText(this, wxID_ANY, _("Title:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     m_textTitle = new wxTextCtrl(this, 15000, wxEmptyString);
-    label_2 = new wxStaticText(this, wxID_ANY, wxT("Description:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+    label_2 = new wxStaticText(this, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     m_textDescription = new wxTextCtrl(this, 15001, wxEmptyString);
     button_1 = new wxButton(this, wxID_CANCEL, wxEmptyString);
     panel_1 = new wxPanel(this, wxID_ANY);
@@ -36,8 +36,8 @@ END_EVENT_TABLE();
 void TagInputDialog::OnTitleText(wxCommandEvent &event)
 {
     button_2->Enable((m_textTitle->GetValue().size() > 0));
-    event.Skip();
-    wxLogDebug(wxT("Event handler (TagInputDialog::OnTitleText) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+    //event.Skip();
+    //wxLogDebug(wxT("Event handler (TagInputDialog::OnTitleText) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
 }
 
 
@@ -47,7 +47,7 @@ void TagInputDialog::OnTitleText(wxCommandEvent &event)
 void TagInputDialog::set_properties()
 {
     // begin wxGlade: TagInputDialog::set_properties
-    SetTitle(wxT("Input Tag Info.."));
+    SetTitle(_("Input Tag Info.."));
     button_2->Enable(false);
     // end wxGlade
 }

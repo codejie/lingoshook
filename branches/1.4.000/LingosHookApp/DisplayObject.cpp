@@ -41,8 +41,8 @@ void CDisplayObject::ShowWordData(const TWordData &data)
 
     wxTreeItemId stats = _frame->m_treeResult->AppendItem(root, _("Stats."));
     _frame->m_treeResult->AppendItem(stats, wxString::Format(_("Score = %d"), data.m_iCounter));
-    _frame->m_treeResult->AppendItem(stats, wxString::Format(_("Update = %04d-%02d-%02d %02d:%02d:%02d"), data.m_dtUpdate.GetYear(), data.m_dtUpdate.GetMonth() + 1, data.m_dtUpdate.GetDay(), data.m_dtUpdate.GetHour(), data.m_dtUpdate.GetMinute(), data.m_dtUpdate.GetSecond()));
-    _frame->m_treeResult->AppendItem(stats, wxString::Format(_("Checkin = %04d-%02d-%02d %02d:%02d:%02d"), data.m_dtCheckin.GetYear(), data.m_dtCheckin.GetMonth() + 1, data.m_dtCheckin.GetDay(), data.m_dtCheckin.GetHour(), data.m_dtCheckin.GetMinute(), data.m_dtCheckin.GetSecond()));
+    _frame->m_treeResult->AppendItem(stats, _("Update") + wxString::Format(wxT(" = %04d-%02d-%02d %02d:%02d:%02d"), data.m_dtUpdate.GetYear(), data.m_dtUpdate.GetMonth() + 1, data.m_dtUpdate.GetDay(), data.m_dtUpdate.GetHour(), data.m_dtUpdate.GetMinute(), data.m_dtUpdate.GetSecond()));
+    _frame->m_treeResult->AppendItem(stats, _("Checkin") + wxString::Format(wxT(" = %04d-%02d-%02d %02d:%02d:%02d"), data.m_dtCheckin.GetYear(), data.m_dtCheckin.GetMonth() + 1, data.m_dtCheckin.GetDay(), data.m_dtCheckin.GetHour(), data.m_dtCheckin.GetMinute(), data.m_dtCheckin.GetSecond()));
     
     _frame->m_treeResult->Expand(root);
 }
@@ -72,7 +72,7 @@ void CDisplayObject::RemoveWord(int wordid)
 
 void CDisplayObject::TraceHTML(const wxString& html)
 {
-    _frame->m_textTrace->AppendText(_("\n----- HTML -----\n") + html);
+    _frame->m_textTrace->AppendText(wxT("\n----- HTML -----\n") + html);
 }
 
 void CDisplayObject::AppendTag(int tagid, const CTagObject::TRecord &record)
@@ -80,8 +80,8 @@ void CDisplayObject::AppendTag(int tagid, const CTagObject::TRecord &record)
     long index = _frame->m_listTagMgnt->GetItemCount();
     long l = _frame->m_listTagMgnt->InsertItem(index, record.m_strTitle);
     _frame->m_listTagMgnt->SetItemData(l, tagid);
-    _frame->m_listTagMgnt->SetItem(l, 1, wxString::Format(_("%d"), record.m_uiCounter));
-    _frame->m_listTagMgnt->SetItem(l, 2, wxString::Format(_("%04d-%02d-%02d %02d:%02d:%02d"), record.m_dtCreateTime.GetYear(), record.m_dtCreateTime.GetMonth() + 1, record.m_dtCreateTime.GetDay(), record.m_dtCreateTime.GetHour(), record.m_dtCreateTime.GetMinute(), record.m_dtCreateTime.GetSecond()));
+    _frame->m_listTagMgnt->SetItem(l, 1, wxString::Format(wxT("%d"), record.m_uiCounter));
+    _frame->m_listTagMgnt->SetItem(l, 2, wxString::Format(wxT("%04d-%02d-%02d %02d:%02d:%02d"), record.m_dtCreateTime.GetYear(), record.m_dtCreateTime.GetMonth() + 1, record.m_dtCreateTime.GetDay(), record.m_dtCreateTime.GetHour(), record.m_dtCreateTime.GetMinute(), record.m_dtCreateTime.GetSecond()));
     _frame->m_listTagMgnt->SetItem(l, 3, record.m_strDesc);
 }
 
@@ -95,7 +95,7 @@ void CDisplayObject::UpdateTag(int tagid, const CTagObject::TRecord &record)
     long index = _frame->m_listTagMgnt->FindItem(-1, tagid);
     if(index != -1)
     {
-        _frame->m_listTagMgnt->SetItem(index, 1, wxString::Format(_("%d"), record.m_uiCounter));
+        _frame->m_listTagMgnt->SetItem(index, 1, wxString::Format(wxT("%d"), record.m_uiCounter));
     }
 }
 
@@ -193,11 +193,11 @@ void CDisplayObject::ShowViconECDictResult(wxTreeCtrl* tree, wxTreeItemId& item,
 {
     const SpecialDictParser::VICON::CECParser* parser = dynamic_cast<const SpecialDictParser::VICON::CECParser*>(dict);
     const SpecialDictParser::VICON::CECResult* res = dynamic_cast<const SpecialDictParser::VICON::CECResult*>(result.Result());
-    tree->AppendItem(item, _("[") + res->m_strSymbol + _("]"));
+    tree->AppendItem(item, wxT("[") + res->m_strSymbol + wxT("]"));
     for(SpecialDictParser::VICON::CECResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
     {
         wxString str = parser->WCToStr(it->m_eClass);
-        str += _(" ") +  it->m_strResult;
+        str += wxT(" ") +  it->m_strResult;
         tree->AppendItem(item, str);
     }
 }
@@ -206,12 +206,12 @@ void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
 {
     const SpecialDictParser::LANGDAO::CECParser* parser = dynamic_cast<const SpecialDictParser::LANGDAO::CECParser*>(dict);
     const SpecialDictParser::LANGDAO::CECResult* res = dynamic_cast<const SpecialDictParser::LANGDAO::CECResult*>(result.Result());
-    tree->AppendItem(item, _("[") + res->m_strSymbol + _("]"));
+    tree->AppendItem(item, wxT("[") + res->m_strSymbol + wxT("]"));
 
     for(SpecialDictParser::LANGDAO::CECResult::TResultRecordVector::const_iterator it = res->m_stRecord.m_vctResult.begin(); it != res->m_stRecord.m_vctResult.end(); ++ it)
     {
         wxString str = parser->WCToStr(it->m_eClass);
-        str += _(" ") +  it->m_strResult;
+        str += wxT(" ") +  it->m_strResult;
         tree->AppendItem(item, str);
     }
 
@@ -220,7 +220,7 @@ void CDisplayObject::ShowLangdaoECDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
         wxTreeItemId special = tree->AppendItem(item, _("Special Words"));
         for(SpecialDictParser::LANGDAO::CECResult::TSpecialRecordVector::const_iterator it = res->m_stRecord.m_vctSpecial.begin(); it != res->m_stRecord.m_vctSpecial.end(); ++ it)
         {
-            tree->AppendItem(special, it->m_strSpecial + _(" ") + it->m_strResult);
+            tree->AppendItem(special, it->m_strSpecial + wxT(" ") + it->m_strResult);
         }
     }
 
@@ -252,7 +252,7 @@ void CDisplayObject::ShowFundsetDCDictResult(wxTreeCtrl* tree, wxTreeItemId& ite
 void CDisplayObject::MemoryDailyLoadWord(const wxString &word, int score)
 {
     _frame->m_textMemWord->SetLabel(word);
-    _frame->m_textMemScore->SetLabel(wxString::Format(_("Score:%d"), score));
+    _frame->m_textMemScore->SetLabel(_("Score") + wxString::Format(wxT(":%d"), score));
 }
 
 void CDisplayObject::MemoryDailyPopWord(const wxString &word, int score)
@@ -275,7 +275,7 @@ void CDisplayObject::MemoryDailyPopWord(const wxString &word, int score)
     _frame->m_winHTML->LoadBlankPage();
 
     _frame->m_textMemWord->SetLabel(word);
-    _frame->m_textMemScore->SetLabel(wxString::Format(_("Score:%d"), score));
+    _frame->m_textMemScore->SetLabel(_("Score") + wxString::Format(wxT(":%d"), score));
 
 }
 
@@ -290,7 +290,7 @@ void CDisplayObject::MemoryDailyPopWordFail()
     _frame->m_btnMemNext->Enable(false);
 
     _frame->m_textMemWord->SetLabel(_("No Word"));
-    _frame->m_textMemScore->SetLabel(_("Score:-1"));
+    _frame->m_textMemScore->SetLabel(_("Score") + wxString::Format(wxT(":%d"), -1));
 }
 
 void CDisplayObject::ExceptionRaised(const wxString &html, const TinyHtmlParser::CExceptionObject &e)
@@ -298,7 +298,7 @@ void CDisplayObject::ExceptionRaised(const wxString &html, const TinyHtmlParser:
     ShowInfo(_("Catches a EXCEPTION info.."));
 
     CExceptionRaisedDialog dlg(_frame);
-    wxString info = wxString::Format(_("%s v%s - Exception:[%d]%s\n---- HTML ----\n"), APP_TITLE, APP_VERSION, e.Number(), wxString(e.Info().c_str()));//);//, wxConvISO8859_1);
+    wxString info = wxString::Format(wxT("%s v%s - Exception:[%d]%s\n---- HTML ----\n"), APP_TITLE, APP_VERSION, e.Number(), wxString(e.Info().c_str()));//);//, wxConvISO8859_1);
     info += html;
 
     dlg.SetInfo(info);

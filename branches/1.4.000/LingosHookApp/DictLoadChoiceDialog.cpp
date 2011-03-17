@@ -17,14 +17,14 @@ CHtmlDictLoadChoiceDialog::CHtmlDictLoadChoiceDialog(CDictObject* parser, wxWind
     sizer_1_staticbox = new wxStaticBox(this, -1, wxEmptyString);
     m_listDict = new CLHCheckBoxList(this, 9000, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxSUNKEN_BORDER);
     panel_1 = new wxPanel(this, wxID_ANY);
-    m_btnDictTop = new wxButton(this, 9003, wxT("Move Top"));
-    m_btnDictUp = new wxButton(this, 9004, wxT("Move Up"));
-    m_btnDictDown = new wxButton(this, 9005, wxT("Move Down"));
-    m_btnDictBottom = new wxButton(this, 9006, wxT("Move Bottom"));
+    m_btnDictTop = new wxButton(this, 9003, _("Move Top"));
+    m_btnDictUp = new wxButton(this, 9004, _("Move Up"));
+    m_btnDictDown = new wxButton(this, 9005, _("Move Down"));
+    m_btnDictBottom = new wxButton(this, 9006, _("Move Bottom"));
     static_line_4 = new wxStaticLine(this, wxID_ANY);
-    m_radioDictChoose = new wxRadioButton(this, 9001, wxT("Show the Selected Dictionary Result Only."));
-    m_radioDictAuto = new wxRadioButton(this, 9007, wxT("Show HTML Data Result While the Selected Dictionary Result is Empty."));
-    m_radioDictNo = new wxRadioButton(this, 9002, wxT("Show HTML Data Result Directly."));
+    m_radioDictChoose = new wxRadioButton(this, 9001, _("Show the Selected Dictionary Result Only."));
+    m_radioDictAuto = new wxRadioButton(this, 9007, _("Show HTML Data Result While the Selected Dictionary Result is Empty."));
+    m_radioDictNo = new wxRadioButton(this, 9002, _("Show HTML Data Result Directly."));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
     m_btnDictCancel = new wxButton(this, wxID_CANCEL, wxEmptyString);
     panel_2 = new wxPanel(this, wxID_ANY);
@@ -222,11 +222,11 @@ void CHtmlDictLoadChoiceDialog::OnRadioDictAuto(wxCommandEvent &event)
 void CHtmlDictLoadChoiceDialog::set_properties()
 {
     // begin wxGlade: CHtmlDictLoadChoiceDialog::set_properties
-    SetTitle(wxT("Dictionary Chooser.."));
+    SetTitle(_("Dictionary Chooser.."));
     m_listDict->SetMinSize(wxSize(378, 214));
 
-    m_listDict->InsertColumn(0, wxT("Title"), wxLIST_FORMAT_LEFT, 220);
-    m_listDict->InsertColumn(1, wxT("ID"), wxLIST_FORMAT_LEFT, 200);
+    m_listDict->InsertColumn(0, _("Title"), wxLIST_FORMAT_LEFT, 220);
+    m_listDict->InsertColumn(1, _("ID"), wxLIST_FORMAT_LEFT, 200);
 
     // end wxGlade
 

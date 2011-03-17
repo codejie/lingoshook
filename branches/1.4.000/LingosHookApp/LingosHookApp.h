@@ -13,6 +13,7 @@
 #include <wx/listctrl.h>
 #include <wx/statline.h>
 #include <wx/cmdline.h>
+#include <wx/intl.h>
 // end wxGlade
 
 // begin wxGlade: ::extracode
@@ -267,6 +268,8 @@ public:
 
 private:
     int CreateObjects();
+    int InitConfigData();
+    int InitLocale();
 	int InitObjects();
     int LoadObjects();
     int UpdateConfigData(bool retrieve);
@@ -297,6 +300,7 @@ private:
     CTrayIconObject* _objTrayIcon;
 private:
     bool _bSysCanClose;
+    wxLocale _objLocale;
 }; // wxGlade: end class
 
 
