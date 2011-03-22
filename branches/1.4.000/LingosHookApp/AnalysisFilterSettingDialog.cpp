@@ -19,9 +19,9 @@ CAnalysisFilterDialog::CAnalysisFilterDialog(const CConfigData* conf, wxWindow* 
     m_cbOneWordEachDict = new wxCheckBox(this, wxID_ANY, _("One word in each dictionary"));
     m_cbOneWordAllDict = new wxCheckBox(this, wxID_ANY, _("One word in all dictionaries"));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
-    button_1 = new wxButton(this, wxID_CANCEL, wxEmptyString);
+    button_1 = new wxButton(this, wxID_CANCEL, _("Cancel"));
     panel_1 = new wxPanel(this, wxID_ANY);
-    button_2 = new wxButton(this, wxID_OK, wxEmptyString);
+    button_2 = new wxButton(this, wxID_OK, _("OK"));
 
     set_properties();
     do_layout();

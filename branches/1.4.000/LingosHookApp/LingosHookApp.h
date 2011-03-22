@@ -122,16 +122,18 @@ protected:
     wxStaticText* label_11;
     wxTextCtrl* m_textSetLgsLocal;
     wxButton* m_btnSetLgsBrowse;
-	
+
+    wxStaticText* label_14;
+    wxComboBox* m_listInfLang;	
     wxCheckBox* m_cbSetStopRetrieve;
     wxCheckBox* m_cbSetUseHotkey;
     wxComboBox* m_listSetHotkey;
     wxPanel* panel_13;
     wxCheckBox* m_cbSetAutoSpeak;	
 
-    wxStaticText* label_1;
-    wxCheckBox* m_checkSetTagSync;
-    wxCheckBox* m_checkSetMemSync;
+//    wxStaticText* label_1;
+//    wxCheckBox* m_checkSetTagSync;
+//    wxCheckBox* m_checkSetMemSync;
     wxStaticText* label_12;
     wxSlider* m_sliderSetDelay;
     wxStaticText* m_labelSetDelay;

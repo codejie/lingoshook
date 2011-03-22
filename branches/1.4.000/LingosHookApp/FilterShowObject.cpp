@@ -92,7 +92,7 @@ void CDateMode::PreLoad(CLHFilterTreeCtrl *tree)
     for(int i = 1; i < MAX_WEEK; ++ i)
     {
         data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_WEEK, i);
-        id = tree->AppendItem(root, wxString::Format(wxT("%d "), i) + _(" Weeks Ago"), -1, -1, data);
+        id = tree->AppendItem(root, wxString::Format(wxT("%d "), i) + _("Weeks Ago"), -1, -1, data);
         _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_WEEK, i), id));
     }
 

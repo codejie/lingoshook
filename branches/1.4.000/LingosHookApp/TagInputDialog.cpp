@@ -16,9 +16,9 @@ TagInputDialog::TagInputDialog(wxWindow* parent, int id, const wxString& title, 
     m_textTitle = new wxTextCtrl(this, 15000, wxEmptyString);
     label_2 = new wxStaticText(this, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     m_textDescription = new wxTextCtrl(this, 15001, wxEmptyString);
-    button_1 = new wxButton(this, wxID_CANCEL, wxEmptyString);
+    button_1 = new wxButton(this, wxID_CANCEL, _("Cancel"));
     panel_1 = new wxPanel(this, wxID_ANY);
-    button_2 = new wxButton(this, wxID_OK, wxEmptyString);
+    button_2 = new wxButton(this, wxID_OK, _("OK"));
 
     set_properties();
     do_layout();
