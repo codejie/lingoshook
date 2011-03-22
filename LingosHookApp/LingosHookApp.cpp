@@ -167,6 +167,13 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_textSetLgsLocal = new wxTextCtrl(notebook_context_panel[CNID_SETTING], wxID_ANY, wxEmptyString);
     m_btnSetLgsBrowse = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETLGSBROWSE, _("Browse.."));
 	
+    label_14 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Interface Language"));
+    const wxString m_listInfLang_choices[] = {
+        _("English"),
+        _("Chinese")
+    };
+    m_listInfLang = new wxComboBox(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 2, m_listInfLang_choices, wxCB_DROPDOWN|wxCB_READONLY);
+
     m_cbSetStopRetrieve = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_STOPRETRIEVE, _("Stop Auto Retrieve"));
     m_cbSetUseHotkey = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_USEHOTKEY, _("Use Hotkey"));
     const wxString m_listSetHotkey_choices[] = {
@@ -182,9 +189,9 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     panel_13 = new wxPanel(notebook_context_panel[CNID_SETTING], wxID_ANY);
     m_cbSetAutoSpeak = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Auto Speak"));
 	
-    label_1 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Data Synchronization"));
-    m_checkSetTagSync = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Classifications"));
-    m_checkSetMemSync = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Memory Daily"));
+//    label_1 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Data Synchronization"));
+//    m_checkSetTagSync = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Classifications"));
+//    m_checkSetMemSync = new wxCheckBox(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Memory Daily"));
     label_12 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Data Retrieve Delay"));
     m_sliderSetDelay = new wxSlider(notebook_context_panel[CNID_SETTING], CIID_SLIDER_SETDELAY, 0, 0, 20, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_AUTOTICKS);
     m_labelSetDelay = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, wxT("0000 ms"));
@@ -198,7 +205,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_checkSkipDict = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_SKIPDICT, _("Skip Dictionary Analysis Process"));
     m_checkSkipHtml = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_SKIPHTML, _("Skip HTML Data  Analysis Process"));
     m_btnSetDictStoreChoice = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETDICTSTORECHOICE, _("Dictionary Chooser.."));
-    m_btnSetAnalysisFilter = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETANALYSISFILTER, wxT("Analysis Filter.."));
+    m_btnSetAnalysisFilter = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETANALYSISFILTER, _("Analysis Filter.."));
     static_line_5 = new wxStaticLine(notebook_context_panel[CNID_SETTING], wxID_ANY);
     label_4 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Expanded Dictionary on Result"));
     const wxString m_comboxExpandDict_choices[] = {
@@ -353,6 +360,7 @@ void LingosHookFrame::set_properties()
     m_treeFilter->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_treeResult->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     label_8->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
+    m_listInfLang->SetSelection(0);
     m_textMemWord->SetFont(wxFont(16, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("")));
     m_textMemWord->SetAutoLayout(true);
     m_radioMemLevel0->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL, 0, wxT("MS Shell Dlg 2")));
@@ -423,6 +431,7 @@ void LingosHookFrame::do_layout()
     wxBoxSizer* sizer_21 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_24 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_59 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_23 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer* sizer_13 = new wxStaticBoxSizer(sizer_13_staticbox, wxVERTICAL);
     wxBoxSizer* sizer_25 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_22 = new wxBoxSizer(wxHORIZONTAL);
@@ -444,7 +453,7 @@ void LingosHookFrame::do_layout()
 //    wxBoxSizer* sizer_47 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_53 = new wxBoxSizer(wxHORIZONTAL);
 
-    wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
+//    wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
 //    wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
 
     wxBoxSizer* sizer_19 = new wxBoxSizer(wxHORIZONTAL);
@@ -534,7 +543,11 @@ void LingosHookFrame::do_layout()
     sizer_52->Add(m_btnSetLgsBrowse, 0, 0, 0);
     sizer_15->Add(sizer_52, 1, wxRIGHT|wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_14->Add(sizer_15, 0, wxEXPAND, 0);
-	
+
+    sizer_23->Add(label_14, 0, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_23->Add(m_listInfLang, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_16->Add(sizer_23, 0, wxBOTTOM|wxEXPAND, 4);
+
     sizer_59->Add(m_cbSetStopRetrieve, 0, wxALIGN_CENTER_VERTICAL, 0);
     sizer_59->Add(m_cbSetUseHotkey, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8);
     sizer_59->Add(m_listSetHotkey, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -544,10 +557,10 @@ void LingosHookFrame::do_layout()
     sizer_19->Add(m_cbSetAutoSpeak, 0, wxALIGN_CENTER_VERTICAL, 8);
     sizer_16->Add(sizer_19, 0, wxBOTTOM|wxEXPAND, 4);
 	
-    sizer_37->Add(label_1, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_37->Add(m_checkSetTagSync, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_37->Add(m_checkSetMemSync, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_16->Add(sizer_37, 0, wxBOTTOM|wxEXPAND, 4);
+//    sizer_37->Add(label_1, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+//    sizer_37->Add(m_checkSetTagSync, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
+//    sizer_37->Add(m_checkSetMemSync, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+//    sizer_16->Add(sizer_37, 0, wxBOTTOM|wxEXPAND, 4);
 	
     sizer_53->Add(label_12, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_53->Add(m_sliderSetDelay, 1, wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 4);
@@ -804,12 +817,14 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
 
         _dataConfig->GetLingoesParam(m_textSetLgsLocal->GetValue().c_str());
 
+        _dataConfig->m_iHookLanguage = m_listInfLang->GetSelection();
+
         _dataConfig->m_iStopAutoRetrieve = m_cbSetStopRetrieve->IsChecked() ? 1 : 0;
         _dataConfig->m_iOpenHotkey = m_cbSetUseHotkey->IsChecked() ? 1 : 0;
         _dataConfig->m_iHotkey = m_listSetHotkey->GetSelection();
         _dataConfig->m_iOpenTrace = m_checkTrace->IsChecked() ? 1 : 0;
-        _dataConfig->m_iDataSyncTag = m_checkSetTagSync->IsChecked() ? 1 : 0;
-        _dataConfig->m_iDataSyncMem = m_checkSetMemSync->IsChecked() ? 1 : 0;
+//        _dataConfig->m_iDataSyncTag = m_checkSetTagSync->IsChecked() ? 1 : 0;
+//        _dataConfig->m_iDataSyncMem = m_checkSetMemSync->IsChecked() ? 1 : 0;
         _dataConfig->m_iHTMLSave = 1;//m_checkHTMLSave->IsChecked() ? 1 : 0;
         _dataConfig->m_iHTMLLoad = 1;//m_checkHTMLLoad->IsChecked() ? 1 : 0;
 
@@ -869,6 +884,8 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
 
         m_cbSetAutoHook->SetValue(_dataConfig->m_iAutoHook == 1);
 
+        m_listInfLang->SetSelection(_dataConfig->m_iHookLanguage);
+
         m_cbSetStopRetrieve->SetValue(_dataConfig->m_iStopAutoRetrieve == 1 ? true : false);
         if(_dataConfig->m_iOpenHotkey == 1)
         {
@@ -883,8 +900,8 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
             m_listSetHotkey->SetSelection(_dataConfig->m_iHotkey);
         }
 
-        m_checkSetTagSync->SetValue(_dataConfig->m_iDataSyncTag == 1 ? true : false);
-        m_checkSetMemSync->SetValue(_dataConfig->m_iDataSyncMem == 1 ? true : false);
+//        m_checkSetTagSync->SetValue(_dataConfig->m_iDataSyncTag == 1 ? true : false);
+//        m_checkSetMemSync->SetValue(_dataConfig->m_iDataSyncMem == 1 ? true : false);
 //        m_checkHTMLSave->SetValue(_dataConfig->m_iHTMLSave == 1 ? true : false);
         //m_checkHTMLLoad->SetValue(_dataConfig->m_iHTMLLoad == 1 ? true : false);
         m_sliderSetDelay->SetValue(_dataConfig->m_iRetrieveDelay / 200);

@@ -18,9 +18,9 @@ CHtmlDictStoreChoiceDialog::CHtmlDictStoreChoiceDialog(CDictObject* parser, wxWi
     m_btnReset = new wxButton(this, 9201, _("Reset the type of dictionary html data"));
     label_1 = new wxStaticText(this, wxID_ANY, _("Tip : Click right key to set the type of dictionary html data."));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
-    button_1 = new wxButton(this, wxID_CANCEL, wxEmptyString);
+    button_1 = new wxButton(this, wxID_CANCEL, _("Cancel"));
     panel_1 = new wxPanel(this, wxID_ANY);
-    button_2 = new wxButton(this, wxID_OK, wxEmptyString);
+    button_2 = new wxButton(this, wxID_OK, _("OK"));
 
     set_properties();
     do_layout();

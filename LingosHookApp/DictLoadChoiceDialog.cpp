@@ -26,9 +26,9 @@ CHtmlDictLoadChoiceDialog::CHtmlDictLoadChoiceDialog(CDictObject* parser, wxWind
     m_radioDictAuto = new wxRadioButton(this, 9007, _("Show HTML Data Result While the Selected Dictionary Result is Empty."));
     m_radioDictNo = new wxRadioButton(this, 9002, _("Show HTML Data Result Directly."));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
-    m_btnDictCancel = new wxButton(this, wxID_CANCEL, wxEmptyString);
+    m_btnDictCancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
     panel_2 = new wxPanel(this, wxID_ANY);
-    m_btnDictOK = new wxButton(this, wxID_OK, wxEmptyString);
+    m_btnDictOK = new wxButton(this, wxID_OK, _("OK"));
 
     set_properties();
     do_layout();
