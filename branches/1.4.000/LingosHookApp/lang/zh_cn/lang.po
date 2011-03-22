@@ -1,0 +1,2006 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# codejie <codejie@gmail.com>, 2011.
+#
+#: .\LingosHookApp\ConfigData.cpp:360 .\LingosHookApp\FundsetDictObject.cpp:70
+#: .\LingosHookApp\HtmlDictParser.cpp:467
+#: .\LingosHookApp\LingosHookApp.cpp:132 .\LingosHookApp\LingosHookApp.cpp:181
+#: .\LingosHookApp\LingosHookApp.cpp:207 .\LingosHookApp\LingosHookApp.cpp:219
+#: .\LingosHookApp\LingosHookApp.cpp:351 .\LingosHookApp\LingosHookApp.cpp:352
+#: .\LingosHookApp\LingosHookApp.cpp:353 .\LingosHookApp\LingosHookApp.cpp:354
+#: .\LingosHookApp\LingosHookApp.cpp:355 .\LingosHookApp\LingosHookApp.cpp:356
+#: .\LingosHookApp\TinyHtmlParser.cpp:106
+#: .\LingosHookApp\TinyHtmlParser.cpp:130 .\LingosHookApp\LHControls.h:264
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-18 15:15+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jie <codejie@gmail.com>\n"
+"Language-Team: zh_cn <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\LingosHookApp\AnalysisFilterSettingDialog.cpp:18
+msgid "Case Insensitive"
+msgstr "大小写敏感"
+
+#: .\LingosHookApp\AnalysisFilterSettingDialog.cpp:19
+msgid "One word in each dictionary"
+msgstr "每个词典仅取一个单词"
+
+#: .\LingosHookApp\AnalysisFilterSettingDialog.cpp:20
+msgid "One word in all dictionaries"
+msgstr "所有词典仅取一个单词"
+
+#: .\LingosHookApp\AnalysisFilterSettingDialog.cpp:35
+msgid "Analysis Filter Setting.."
+msgstr "解析过滤设置.."
+
+#: .\LingosHookApp\ConfigData.cpp:32 .\LingosHookApp\ConfigData.cpp:226
+msgid "C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:33 .\LingosHookApp\ConfigData.cpp:228
+msgid "C:\\Program Files\\Lingoes\\Translator2"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:47
+msgid "ConfigTable"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:49
+msgid ""
+"CREATE TABLE ConfigTable (Attr INTEGER PRIMARY KEY, IntVal INTEGER, StrVal "
+"VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:66 .\LingosHookApp\ConfigData.cpp:116
+#: .\LingosHookApp\FilterShowObject.cpp:307
+#: .\LingosHookApp\FilterShowObject.cpp:417 .\LingosHookApp\TagObject.cpp:93
+msgid "SELECT IntVal FROM ConfigTable WHERE Attr = ?"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:70 .\LingosHookApp\ConfigData.cpp:95
+#: .\LingosHookApp\ConfigData.cpp:120 .\LingosHookApp\ConfigData.cpp:155
+msgid "SELECT Attr of ConfigTable FAILED."
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:91 .\LingosHookApp\ConfigData.cpp:151
+msgid "SELECT StrVal FROM ConfigTable WHERE Attr = ?"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:124 .\LingosHookApp\TagObject.cpp:202
+msgid "UPDATE ConfigTable SET IntVal = ? WHERE Attr = ?"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:133
+msgid "INSERT INTO ConfigTable (Attr, IntVal, StrVal) VALUES(?, ?, NULL)"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:159
+msgid "UPDATE ConfigTable SET StrVal = ? WHERE Attr = ?"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:168
+msgid "INSERT INTO ConfigTable (Attr, IntVal, StrVal) VALUES(?, -1, ?)"
+msgstr ""
+
+#: .\LingosHookApp\ConfigData.cpp:356 .\LingosHookApp\PluginObject.cpp:52
+msgid "\\"
+msgstr ""
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:20
+msgid "Move Top"
+msgstr "置顶"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:21
+msgid "Move Up"
+msgstr "上移"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:22
+msgid "Move Down"
+msgstr "下移"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:23
+msgid "Move Bottom"
+msgstr "置底"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:25
+msgid "Show the Selected Dictionary Result Only."
+msgstr "仅显示选中的词典结果"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:26
+msgid "Show HTML Data Result While the Selected Dictionary Result is Empty."
+msgstr "当选中的词典结果为空时，显示HTML数据"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:27
+msgid "Show HTML Data Result Directly."
+msgstr "显示HTML数据结果"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:225
+#: .\LingosHookApp\DictStoreChoiceDialog.cpp:45
+#: .\LingosHookApp\LingosHookApp.cpp:200 .\LingosHookApp\LingosHookApp.cpp:209
+msgid "Dictionary Chooser.."
+msgstr "词典选择.."
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:228
+#: .\LingosHookApp\DictStoreChoiceDialog.cpp:50
+msgid "Title"
+msgstr "名称"
+
+#: .\LingosHookApp\DictLoadChoiceDialog.cpp:229
+#: .\LingosHookApp\DictStoreChoiceDialog.cpp:51
+msgid "ID"
+msgstr "标识"
+
+#: .\LingosHookApp\DictObject.cpp:43
+msgid "DictTable"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:45
+msgid ""
+"CREATE TABLE DictTable (DictIndex INTEGER PRIMARY KEY AUTOINCREMENT,DictID "
+"VARCHAR(64), Title VARCHAR(128),CreateTime TIMESTAMP DEFAULT (DATETIME"
+"('now', 'localtime')))"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:49
+msgid "DictConfigTable"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:51
+msgid ""
+"CREATE TABLE DictConfigTable (DictIndex INTEGER, LoadParam INTEGER, "
+"StoreParam INTEGER)"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:55
+msgid "SrcDataTable"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:57
+msgid ""
+"CREATE TABLE SrcDataTable (SrcID INTEGER PRIMARY KEY AUTOINCREMENT, "
+"CheckinTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), HTML TEXT)"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:61
+msgid "WordTable"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:63
+msgid ""
+"CREATE TABLE WordTable (WordID INTEGER PRIMARY KEY AUTOINCREMENT, SrcID "
+"INTEGER, Word VARCHAR(32) UNIQUE,Counter INTEGER, UpdateTime TIMESTAMP "
+"DEFAULT (DATETIME('now', 'localtime')))"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:149 .\LingosHookApp\FundsetDictObject.cpp:53
+#: .\LingosHookApp\FundsetDictObject.cpp:62
+#: .\LingosHookApp\FundsetDictObject.cpp:74
+#: .\LingosHookApp\FundsetDictObject.cpp:121
+#: .\LingosHookApp\LangdaoDictObject.cpp:54
+#: .\LingosHookApp\LangdaoDictObject.cpp:63
+#: .\LingosHookApp\LangdaoDictObject.cpp:75
+#: .\LingosHookApp\LangdaoDictObject.cpp:113
+#: .\LingosHookApp\LangdaoDictObject.cpp:178
+#: .\LingosHookApp\LangdaoDictObject.cpp:186
+#: .\LingosHookApp\ViconDictObject.cpp:53
+#: .\LingosHookApp\ViconDictObject.cpp:62
+#: .\LingosHookApp\ViconDictObject.cpp:74
+#: .\LingosHookApp\ViconDictObject.cpp:120
+msgid "DIV"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:155
+msgid "id"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:156
+msgid "\"lingoes_dictarea\""
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:161
+msgid "dictid"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:275
+msgid "SELECT WordID, Counter FROM WordTable WHERE Word = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:279
+msgid "SELECT WordID of WordTable FAILED."
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:327
+msgid "INSERT INTO SrcDataTable (HTML) VALUES (?)"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:346
+msgid "SELECT COUNT(*) FROM WordTable WHERE SrcID = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:358
+msgid "DELETE FROM SrcDataTable WHERE SrcID = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:376
+msgid "INSERT INTO WordTable (SrcID, Word, Counter) VALUES(?, ?, 1)"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:440
+#: .\LingosHookApp\MemoryDailyObject.cpp:183
+msgid ""
+"UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') "
+"WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:452
+msgid "SELECT WordID, Word FROM WordTable"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:494
+msgid ""
+"SELECT WordTable.SrcID, WordTable.Word, WordTable.Counter, WordTable."
+"UpdateTime, SrcDataTable.CheckinTime, SrcDataTable.HTML FROM WordTable, "
+"SrcDataTable WHERE WordTable.WordID = ? and WordTable.SrcID = SrcDataTable."
+"SrcID"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:574
+msgid "DELETE FROM WordTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:598
+msgid "SELECT WordID FROM WordTable WHERE Word = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:618
+msgid "SELECT SrcID FROM WordTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictObject.cpp:638
+msgid "SELECT WordID, SrcID FROM WordTable WHERE Word = ?"
+msgstr ""
+
+#: .\LingosHookApp\DictStoreChoiceDialog.cpp:18
+msgid "Reset the type of dictionary html data"
+msgstr "恢复词典默认HTML数据类型"
+
+#: .\LingosHookApp\DictStoreChoiceDialog.cpp:19
+msgid "Tip : Click right key to set the type of dictionary html data."
+msgstr "提示：点击右键设置词典HTML数据类型"
+
+#: .\LingosHookApp\DictStoreChoiceDialog.cpp:49
+msgid "Type"
+msgstr "类型"
+
+#: .\LingosHookApp\DictStructure.cpp:47 .\LingosHookApp\ViconDictObject.cpp:15
+msgid "E1C27E806399D047822B6650194A3D32"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:48
+#: .\LingosHookApp\LangdaoDictObject.cpp:10
+msgid "7AB175CC5F622A44A0DECE976AF22A16"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:49
+#: .\LingosHookApp\FundsetDictObject.cpp:15
+msgid "1E388F323A0BD943B30FC68598772814"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:50
+msgid "0895DFE8DB67F9409DB285590D870EDD"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:51
+msgid "D4722835273E184582F2D24696A738EA"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:52
+msgid "25D62D261B9B6943BE86B7DCF8F9D255"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:53
+msgid "74BF7ECCE3A9AC43B5E8902261A19B29"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:54
+msgid "C68363F3F2F8F04997C0552720B30742"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:55
+msgid "3A259F0851B07D4AAA30FBFA43686AB3"
+msgstr ""
+
+#: .\LingosHookApp\DictStructure.cpp:56
+msgid "9455286C1F1BC84985523D2608B6A913"
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:42
+msgid "Stats."
+msgstr "统计"
+
+#: .\LingosHookApp\DisplayObject.cpp:44
+msgid "Update"
+msgstr "更新时间"
+
+#: .\LingosHookApp\DisplayObject.cpp:44 .\LingosHookApp\DisplayObject.cpp:45
+#, c-format
+msgid " = %04d-%02d-%02d %02d:%02d:%02d"
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:45
+msgid "Checkin"
+msgstr "录入时间"
+
+#: .\LingosHookApp\DisplayObject.cpp:83 .\LingosHookApp\DisplayObject.cpp:98
+#: .\LingosHookApp\HtmlDictParser.cpp:562
+#: .\LingosHookApp\HtmlDictParser.cpp:687
+#, c-format
+msgid "%d"
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:84
+#, c-format
+msgid "%04d-%02d-%02d %02d:%02d:%02d"
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:114 .\LingosHookApp\LingosHookApp.cpp:135
+#: .\LingosHookApp\LingosHookApp.cpp:368
+msgid "Tag"
+msgstr "标签"
+
+#: .\LingosHookApp\DisplayObject.cpp:134 .\LingosHookApp\DisplayObject.cpp:173
+#: .\LingosHookApp\LingosHookApp.cpp:1327
+msgid "Classification by Tag"
+msgstr "按照标签分类"
+
+#: .\LingosHookApp\DisplayObject.cpp:137 .\LingosHookApp\DisplayObject.cpp:178
+#: .\LingosHookApp\LingosHookApp.cpp:1328
+msgid "Classification by Date"
+msgstr "按照时间分类"
+
+#: .\LingosHookApp\DisplayObject.cpp:140 .\LingosHookApp\DisplayObject.cpp:183
+#: .\LingosHookApp\LingosHookApp.cpp:1329
+msgid "Classification by Score"
+msgstr "按照记分分类"
+
+#: .\LingosHookApp\DisplayObject.cpp:143 .\LingosHookApp\DisplayObject.cpp:188
+msgid "Closed"
+msgstr "关闭"
+
+#: .\LingosHookApp\DisplayObject.cpp:146
+msgid "Unknown"
+msgstr "未知"
+
+#: .\LingosHookApp\DisplayObject.cpp:196 .\LingosHookApp\DisplayObject.cpp:209
+#: .\LingosHookApp\TinyHtmlParser.cpp:193
+#: .\LingosHookApp\TinyHtmlParser.cpp:243
+#: .\LingosHookApp\TinyHtmlParser.cpp:246
+msgid "["
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:196 .\LingosHookApp\DisplayObject.cpp:209
+#: .\LingosHookApp\TinyHtmlParser.cpp:193
+#: .\LingosHookApp\TinyHtmlParser.cpp:243
+#: .\LingosHookApp\TinyHtmlParser.cpp:246
+msgid "]"
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:200 .\LingosHookApp\DisplayObject.cpp:214
+#: .\LingosHookApp\DisplayObject.cpp:223 .\LingosHookApp\TinyHtmlParser.cpp:56
+#: .\LingosHookApp\TinyHtmlParser.cpp:172
+#: .\LingosHookApp\TinyHtmlParser.cpp:213
+msgid " "
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:220
+msgid "Special Words"
+msgstr "特殊词语"
+
+#: .\LingosHookApp\DisplayObject.cpp:229
+msgid "Commonly Phrase"
+msgstr "常用短语"
+
+#: .\LingosHookApp\DisplayObject.cpp:255 .\LingosHookApp\DisplayObject.cpp:278
+#: .\LingosHookApp\DisplayObject.cpp:293
+#: .\LingosHookApp\FilterShowObject.cpp:633
+#: .\LingosHookApp\DisplayObject.cpp:43
+msgid "Score"
+msgstr "记分"
+
+#: .\LingosHookApp\DisplayObject.cpp:255 .\LingosHookApp\DisplayObject.cpp:278
+#: .\LingosHookApp\DisplayObject.cpp:293
+#, c-format
+msgid ":%d"
+msgstr ""
+
+#: .\LingosHookApp\DisplayObject.cpp:292 .\LingosHookApp\LingosHookApp.cpp:137
+msgid "No Word"
+msgstr "无单词"
+
+#: .\LingosHookApp\DisplayObject.cpp:298
+msgid "Catches a EXCEPTION info.."
+msgstr "捕捉到异常消息.."
+
+#: .\LingosHookApp\DisplayObject.cpp:301
+#, c-format
+msgid ""
+"%s v%s - Exception:[%d]%s\n"
+"---- HTML ----\n"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:14
+msgid ""
+"A...ah..EXCEPTION raised. Please copy the blew content and sent it to me."
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:15
+msgid "Thank you to help me to improve LingosHook!"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:19
+msgid "Copy it to Clipboard"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:20
+msgid "Send it by Email"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:21
+msgid "Post it to Blog"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:53
+#: .\LingosHookApp\LingosHookApp.cpp:1430
+msgid "mailto:codejie@gmail.com"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:62
+#: .\LingosHookApp\LingosHookApp.cpp:1424
+#: .\LingosHookApp\LingosHookApp.cpp:1436
+msgid "http://www.cppblog.com/codejie"
+msgstr ""
+
+#: .\LingosHookApp\ExceptionRaisedDialog.cpp:79
+msgid "LingosHook catches a Exception !"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:43
+msgid ""
+"SELECT WordTable.WordID, WordTable.Word, SrcDataTable.CheckinTime FROM "
+"WordTable, SrcDataTable WHERE WordTable.SrcID = SrcDataTable.SrcID"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:68
+msgid "DateMode"
+msgstr "时间分类"
+
+#: .\LingosHookApp\FilterShowObject.cpp:72
+#: .\LingosHookApp\FilterShowObject.cpp:172
+msgid "Today"
+msgstr "今天"
+
+#: .\LingosHookApp\FilterShowObject.cpp:76
+#: .\LingosHookApp\FilterShowObject.cpp:176
+msgid "Yesterday"
+msgstr "昨天"
+
+#: .\LingosHookApp\FilterShowObject.cpp:81
+#: .\LingosHookApp\FilterShowObject.cpp:180
+msgid "Day before Yesterday"
+msgstr "前天"
+
+#: .\LingosHookApp\FilterShowObject.cpp:88
+#: .\LingosHookApp\FilterShowObject.cpp:95
+#: .\LingosHookApp\FilterShowObject.cpp:184
+#: .\LingosHookApp\FilterShowObject.cpp:191
+#: .\LingosHookApp\FilterShowObject.cpp:197
+#, c-format
+msgid "%d "
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:88
+#: .\LingosHookApp\FilterShowObject.cpp:184
+msgid "Days Ago"
+msgstr "天前"
+
+#: .\LingosHookApp\FilterShowObject.cpp:100
+#: .\LingosHookApp\FilterShowObject.cpp:193
+#: .\LingosHookApp\FilterShowObject.cpp:591
+msgid "More Than"
+msgstr "超过"
+
+#: .\LingosHookApp\FilterShowObject.cpp:100
+#: .\LingosHookApp\FilterShowObject.cpp:193
+#: .\LingosHookApp\HtmlDictParser.cpp:662
+#, c-format
+msgid " %d "
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:100
+#: .\LingosHookApp\FilterShowObject.cpp:191
+#: .\LingosHookApp\FilterShowObject.cpp:193
+#: .\LingosHookApp\FilterShowObject.cpp:95
+msgid "Weeks Ago"
+msgstr "周前"
+
+#: .\LingosHookApp\FilterShowObject.cpp:172
+#: .\LingosHookApp\FilterShowObject.cpp:176
+#: .\LingosHookApp\FilterShowObject.cpp:180
+#: .\LingosHookApp\FilterShowObject.cpp:184
+#: .\LingosHookApp\FilterShowObject.cpp:191
+#: .\LingosHookApp\FilterShowObject.cpp:193
+#: .\LingosHookApp\FilterShowObject.cpp:197
+#, c-format
+msgid " [%d]"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:197
+msgid "Unknown Ago"
+msgstr "不知道多久"
+
+#: .\LingosHookApp\FilterShowObject.cpp:247
+msgid ""
+"SELECT WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable "
+"WHERE WordTable.WordID = ? AND WordTable.SrcID = SrcDataTable.SrcID"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:277
+msgid ""
+"SELECT TagIndexTable.WordID, TagIndexTable.TagID, WordTable.Word FROM "
+"WordTable, TagIndexTable WHERE WordTable.WordID = TagIndexTable.WordID"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:303
+#: .\LingosHookApp\LingosHookApp.cpp:215 .\LingosHookApp\LingosHookApp.cpp:644
+#: .\LingosHookApp\TrayIconObject.cpp:119
+msgid "Tags"
+msgstr "标签"
+
+#: .\LingosHookApp\FilterShowObject.cpp:328
+msgid "SELECT TagID, Title FROM TagTable"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:380
+#, c-format
+msgid "%s [%d]"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:496
+msgid "SELECT Word FROM WordTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:511 .\LingosHookApp\TagObject.cpp:399
+msgid "SELECT TagID FROM TagIndexTable WHERE WordID = ? ORDER BY WordID DESC"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:534
+msgid "SELECT Title FROM TagTable WHERE TagID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:561
+msgid "SELECT WordID, Word, Counter FROM WordTable"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:586
+msgid "ScoreMode"
+msgstr "记分分类"
+
+#: .\LingosHookApp\FilterShowObject.cpp:591
+#: .\LingosHookApp\FilterShowObject.cpp:596
+#: .\LingosHookApp\LingosHookApp.cpp:138
+#, c-format
+msgid " : %d"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:596
+#: .\LingosHookApp\FilterShowObject.cpp:635
+msgid "Score More Than"
+msgstr "记分超过"
+
+#: .\LingosHookApp\FilterShowObject.cpp:633
+#: .\LingosHookApp\FilterShowObject.cpp:635
+#, c-format
+msgid " : %d [%d]"
+msgstr ""
+
+#: .\LingosHookApp\FilterShowObject.cpp:739
+#: .\LingosHookApp\MemoryDailyObject.cpp:254
+msgid "SELECT Word, Counter FROM WordTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:16
+msgid "Fundset Deutsch2Chinese(S)"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:31
+msgid ""
+"CREATE TABLE IF NOT EXISTS FundsetDCKasusTable (WordID INTEGER PRIMARY KEY, "
+"Kasus VARCHAR(32))"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:34
+msgid ""
+"CREATE TABLE IF NOT EXISTS FundsetDCResultTable (WordID INTEGER, Result "
+"VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:56
+#: .\LingosHookApp\FundsetDictObject.cpp:77
+#: .\LingosHookApp\LangdaoDictObject.cpp:57
+#: .\LingosHookApp\LangdaoDictObject.cpp:78
+#: .\LingosHookApp\ViconDictObject.cpp:56
+#: .\LingosHookApp\ViconDictObject.cpp:77
+msgid "style"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:57
+#: .\LingosHookApp\LangdaoDictObject.cpp:58
+#: .\LingosHookApp\ViconDictObject.cpp:57
+msgid "\"MARGIN: 5px 0px\""
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:81
+msgid "\"OVERFLOW-X: hidden; WIDTH: 100%\""
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:104
+#: .\LingosHookApp\LangdaoDictObject.cpp:140
+msgid "FONT"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:134
+msgid "SELECT COUNT(*) FROM FundsetDCResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:150
+msgid "SELECT Result FROM FundsetDCResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:162
+msgid "SELECT Kasus FROM FundsetDCKasusTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:191
+msgid "INSERT INTO FundsetDCKasusTable VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:199
+msgid "INSERT INTO FundsetDCResultTable VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:217
+msgid "DELETE FROM FundsetDCKasusTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\FundsetDictObject.cpp:222
+msgid "DELETE FROM FundsetDCResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:41
+msgid "LingosHook.dll"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:44
+msgid "CreateHookThreadByHWND"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:49
+msgid "call CreateHookThread() failed."
+msgstr "调用CreateHookThread()失败."
+
+#: .\LingosHookApp\HookObject.cpp:56
+msgid "Get CreateHookThread address failed."
+msgstr "获取CreateHookThread地址失败."
+
+#: .\LingosHookApp\HookObject.cpp:63
+msgid "Load LingosHook dll failed."
+msgstr "加载LingosHook动态库失败."
+
+#: .\LingosHookApp\HookObject.cpp:73
+msgid "RemoveHookThread"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:78
+msgid "call RemoveHookThread() failed."
+msgstr "调用RemoveHookThread()失败."
+
+#: .\LingosHookApp\HookObject.cpp:84
+msgid "Get RemoveHookThread address failed."
+msgstr "获取RemoveHookThread地址失败."
+
+#: .\LingosHookApp\HookObject.cpp:113
+msgid "JIE_HOOKOBJECT_HOTKEY_MSG_DEF"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:118 .\LingosHookApp\HotkeyObject.cpp:26
+#: .\LingosHookApp\Consts.h:16
+msgid "LingosHook"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:167 .\LingosHookApp\HotkeyObject.cpp:82
+msgid "OLEACC.DLL"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:198 .\LingosHookApp\HookObject.cpp:319
+#: .\LingosHookApp\HotkeyObject.cpp:93
+msgid "WM_HTML_GETOBJECT"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:201 .\LingosHookApp\HookObject.cpp:322
+#: .\LingosHookApp\HotkeyObject.cpp:96
+msgid "ObjectFromLresult"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:241
+msgid "Edit"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:267
+msgid "Lingoes_ListKey"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:434
+msgid "JIE_HOOKOBJECT_CHECKTHREAD_MSG_DEF"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:547 .\LingosHookApp\HookObject.cpp:549
+#: .\LingosHookApp\HookObject.cpp:553 .\LingosHookApp\HookObject.cpp:557
+msgid "Afx:400000:0"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:547 .\LingosHookApp\HookObject.cpp:553
+#: .\LingosHookApp\HookObject.cpp:565 .\LingosHookApp\HookObject.cpp:571
+#: .\LingosHookApp\HookObject.cpp:580 .\LingosHookApp\HookObject.cpp:585
+#: .\LingosHookApp\HookObject.cpp:591 .\LingosHookApp\HookObject.cpp:602
+msgid "Lingoes"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:549 .\LingosHookApp\HookObject.cpp:557
+#: .\LingosHookApp\HookObject.cpp:574 .\LingosHookApp\HookObject.cpp:596
+msgid "Lingoes "
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:569 .\LingosHookApp\HookObject.cpp:578
+#: .\LingosHookApp\HookObject.cpp:589 .\LingosHookApp\HookObject.cpp:600
+msgid "Afx:400000"
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:657
+msgid "get HKT_CATCH message."
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:664
+msgid "get RESULT_TEXT message."
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:671
+msgid "get RESULT_HTLM message."
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:677
+msgid "get UNKNOWN hook message."
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:702
+msgid "get UNKNOWN hotkey message."
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:721
+#, c-format
+msgid "get UNKNOWN check message - %d."
+msgstr ""
+
+#: .\LingosHookApp\HookObject.cpp:732
+msgid "Hook hook failed."
+msgstr "设置Hook失败."
+
+#: .\LingosHookApp\HookObject.cpp:740
+msgid "Set Hotkey failed."
+msgstr "设置Hotkey失败."
+
+#: .\LingosHookApp\HtmlDictParser.cpp:19
+msgid "HtmlDictResultTable"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:21
+msgid ""
+"CREATE TABLE HtmlDictResultTable (WordID INTEGER,DictIndex INTEGER,DictStart "
+"INTEGER,DictEnd INTEGER)"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:25
+msgid ""
+"SELECT DictTable.DictIndex, DictTable.DictID, DictTable.Title, "
+"DictConfigTable.LoadParam, DictConfigTable.StoreParam FROM DictTable, "
+"DictConfigTable WHERE DictTable.DictIndex = DictConfigTable.DictIndex"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:88
+msgid "HtmlDictKnownAttrTable"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:92
+msgid ""
+"CREATE TABLE HtmlDictKnownAttrTable(DictID VARCHAR(64) PRIMARY KEY, DefType "
+"INTEGER)"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:113
+msgid "SELECT DictID, DefType FROM HtmlDictKnownAttrTable"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:160
+msgid "INSERT INTO HtmlDictKnownAttrTable (DictID, DefType) VALUES (?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:178
+msgid "UPDATE HtmlDictKnownAttrTable SET DefType = ? WHERE DictID = ?"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:359
+msgid "INSERT INTO DictTable (DictID, Title) VALUES (?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:368
+#: .\LingosHookApp\SpecialDictParser.cpp:60
+msgid ""
+"INSERT INTO DictConfigTable (DictIndex, LoadParam, StoreParam) VALUES"
+"(?, ?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:391
+msgid ""
+"UPDATE DictConfigTable SET LoadParam = ?, StoreParam = ? WHERE DictIndex = ?"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:411
+msgid ""
+"INSERT INTO HtmlDictResultTable (WordID, DictIndex, DictStart, DictEnd) "
+"VALUES (?, ?, ?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:431
+msgid ""
+"SELECT HtmlDictResultTable.DictIndex, DictStart, DictEnd FROM "
+"HtmlDictResultTable, DictConfigTable WHERE WordID=? AND (HtmlDictResultTable."
+"DictIndex = DictConfigTable.DictIndex) and DictConfigTable.LoadParam != "
+"65535 ORDER BY DictConfigTable.LoadParam"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:454
+msgid "DELETE FROM HtmlDictResultTable WHERE WordID=?"
+msgstr ""
+
+#: .\LingosHookApp\HtmlDictParser.cpp:662
+msgid "set"
+msgstr "设置"
+
+#: .\LingosHookApp\HtmlDictParser.cpp:662
+msgid "as default"
+msgstr "作为缺省"
+
+#: .\LingosHookApp\HtmlDictParser.cpp:670
+#: .\LingosHookApp\HtmlDictParser.cpp:674
+msgid "uses type"
+msgstr "用类型"
+
+#: .\LingosHookApp\HtmlDictParser.cpp:670
+#: .\LingosHookApp\HtmlDictParser.cpp:674
+#, c-format
+msgid " %d"
+msgstr ""
+
+#: .\LingosHookApp\HtmlTidyObject.cpp:37
+msgid "raw"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:11
+msgid "Langdao E-C Dictionary"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:26
+msgid ""
+"CREATE TABLE IF NOT EXISTS LangdaoECSymbolTable (WordID INTEGER PRIMARY KEY, "
+"Symbol VARCHAR(64))"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:29
+msgid ""
+"CREATE TABLE IF NOT EXISTS LangdaoECResultTable (WordID INTEGER, ClassID "
+"INTEGER,Result VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:32
+msgid ""
+"CREATE TABLE IF NOT EXISTS LangdaoECSpecialResultTable (WordID INTEGER, "
+"SpecialID VARCHAR(16),Result VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:35
+msgid ""
+"CREATE TABLE IF NOT EXISTS LangdaoECCommonlyPhraseTable (WordID INTEGER, "
+"Pattern VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:82
+#: .\LingosHookApp\ViconDictObject.cpp:81
+msgid "\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\""
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:91
+#: .\LingosHookApp\ViconDictObject.cpp:91
+msgid "null"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:99
+#: .\LingosHookApp\ViconDictObject.cpp:99
+msgid "\"MARGIN: 0px 0px 5px\""
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:101
+msgid "dir"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:124
+msgid "\"MARGIN: 4px 0px\""
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:128
+msgid "SPAN"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:142
+msgid "\"#000080\""
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:157
+msgid "noWrap"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:194
+#: .\LingosHookApp\LangdaoDictObject.cpp:223
+#: .\LingosHookApp\ViconDictObject.cpp:133
+#: .\LingosHookApp\ViconDictObject.cpp:158
+msgid "n."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:196
+#: .\LingosHookApp\LangdaoDictObject.cpp:225
+msgid "a."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:198
+#: .\LingosHookApp\LangdaoDictObject.cpp:227
+#: .\LingosHookApp\ViconDictObject.cpp:137
+#: .\LingosHookApp\ViconDictObject.cpp:162
+msgid "v."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:200
+#: .\LingosHookApp\LangdaoDictObject.cpp:229
+msgid "vt."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:202
+#: .\LingosHookApp\LangdaoDictObject.cpp:231
+msgid "vi."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:204
+#: .\LingosHookApp\LangdaoDictObject.cpp:233
+msgid "ad."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:206
+#: .\LingosHookApp\LangdaoDictObject.cpp:235
+#: .\LingosHookApp\ViconDictObject.cpp:141
+#: .\LingosHookApp\ViconDictObject.cpp:166
+msgid "conj."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:208
+#: .\LingosHookApp\LangdaoDictObject.cpp:237
+#: .\LingosHookApp\ViconDictObject.cpp:143
+#: .\LingosHookApp\ViconDictObject.cpp:168
+msgid "interj."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:210
+#: .\LingosHookApp\LangdaoDictObject.cpp:239
+#: .\LingosHookApp\ViconDictObject.cpp:145
+#: .\LingosHookApp\ViconDictObject.cpp:170
+msgid "prep."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:212
+#: .\LingosHookApp\LangdaoDictObject.cpp:241
+#: .\LingosHookApp\ViconDictObject.cpp:147
+#: .\LingosHookApp\ViconDictObject.cpp:172
+msgid "pron."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:243
+#: .\LingosHookApp\ViconDictObject.cpp:174
+msgid "unkn."
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:252
+msgid "SELECT Symbol FROM LangdaoECSymbolTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:263
+msgid "SELECT ClassID, Result FROM LangdaoECResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:276
+msgid ""
+"SELECT SpecialID, Result FROM LangdaoECSpecialResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:289
+msgid "SELECT Pattern FROM LangdaoECCommonlyPhraseTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:309
+msgid "SELECT COUNT(*) FROM LangdaoECSymbolTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:326
+msgid "INSERT INTO LangdaoECSymbolTable VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:335
+msgid "INSERT INTO LangdaoECResultTable VALUES(?, ?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:345
+msgid "INSERT INTO LangdaoECSpecialResultTable VALUES(?, ?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:355
+msgid "INSERT INTO LangdaoECCommonlyPhraseTable VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:373
+msgid "DELETE FROM LangdaoECSymbolTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:378
+msgid "DELETE FROM LangdaoECResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:383
+msgid "DELETE FROM LangdaoECSpecialResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LangdaoDictObject.cpp:388
+msgid "DELETE FROM LangdaoECCommonlyPhraseTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\LHControls.cpp:367
+msgid "ICON_ALLINON"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:44 .\LingosHookApp\LingosHookApp.cpp:58
+msgid "f"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:44 .\LingosHookApp\LingosHookApp.cpp:45
+msgid "LingosHook database file(default is 'LingosHook.db3')."
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:45 .\LingosHookApp\LingosHookApp.cpp:58
+msgid "F"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:90
+msgid "Init configuration data failed."
+msgstr "初始配置数据失败."
+
+#: .\LingosHookApp\LingosHookApp.cpp:96
+msgid "Init language data failed."
+msgstr "初始语言数据失败."
+
+#: .\LingosHookApp\LingosHookApp.cpp:125 .\LingosHookApp\LingosHookApp.cpp:187
+#: .\LingosHookApp\LingosHookApp.cpp:517
+msgid "Memory Daily"
+msgstr "天天背单词"
+
+#: .\LingosHookApp\LingosHookApp.cpp:126
+msgid "Lingoes Configuration"
+msgstr "Lingoes配置"
+
+#: .\LingosHookApp\LingosHookApp.cpp:127
+msgid "Application Configuration"
+msgstr "LingosHook配置"
+
+#: .\LingosHookApp\LingosHookApp.cpp:128
+msgid "Debug Configuration"
+msgstr "调试配置"
+
+#: .\LingosHookApp\LingosHookApp.cpp:129
+msgid "Tags Management"
+msgstr "标签管理"
+
+#: .\LingosHookApp\LingosHookApp.cpp:138
+msgid "Scroe"
+msgstr "记分"
+
+#: .\LingosHookApp\LingosHookApp.cpp:140
+msgid "After seeing the above word, "
+msgstr "看上面的单词,"
+
+#: .\LingosHookApp\LingosHookApp.cpp:141
+msgid "what are you feeling?"
+msgstr "你觉得如何?"
+
+#: .\LingosHookApp\LingosHookApp.cpp:142
+msgid "Very easy!"
+msgstr "太简单了!"
+
+#: .\LingosHookApp\LingosHookApp.cpp:143
+msgid "Know it.."
+msgstr "认识.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:144
+msgid "Fuzzy.."
+msgstr "有点晕.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:145
+msgid "What's it?!"
+msgstr "是啥?!没概念."
+
+#: .\LingosHookApp\LingosHookApp.cpp:147 .\LingosHookApp\LingosHookApp.cpp:231
+#: .\LingosHookApp\LingosHookApp.cpp:947
+msgid "Delete"
+msgstr "删除"
+
+#: .\LingosHookApp\LingosHookApp.cpp:149
+msgid "Next"
+msgstr "下一个"
+
+#: .\LingosHookApp\LingosHookApp.cpp:155
+msgid "Re-Generate"
+msgstr "重新开始"
+
+#: .\LingosHookApp\LingosHookApp.cpp:160
+msgid "User Interface Language"
+msgstr "界面语言"
+
+#: .\LingosHookApp\LingosHookApp.cpp:161
+msgid "Auto-Detection"
+msgstr "自动检测"
+
+#: .\LingosHookApp\LingosHookApp.cpp:162
+msgid "English"
+msgstr "英文"
+
+#: .\LingosHookApp\LingosHookApp.cpp:163
+msgid "Chinese"
+msgstr "中文"
+
+#: .\LingosHookApp\LingosHookApp.cpp:165
+msgid "Auto Check and Hook Lingoes"
+msgstr "自动检测并Hook"
+
+#: .\LingosHookApp\LingosHookApp.cpp:166
+msgid "Lingoes Location"
+msgstr "Lingoes路径"
+
+#: .\LingosHookApp\LingosHookApp.cpp:168
+msgid "Browse.."
+msgstr "查找.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:170
+msgid "Stop Auto Retrieve"
+msgstr "停止自动取词"
+
+#: .\LingosHookApp\LingosHookApp.cpp:171
+msgid "Use Hotkey"
+msgstr "使用快捷键"
+
+#: .\LingosHookApp\LingosHookApp.cpp:173
+msgid "Ctrl+F10"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:174
+msgid "Alt+Ctrl+F10"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:175
+msgid "Ctrl+F11"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:176
+msgid "Alt+Ctrl+F11"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:177
+msgid "Ctrl+F12"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:178
+msgid "Alt+Ctrl+F12"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:179
+msgid "Ctrl+1"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:183
+msgid "Auto Speak"
+msgstr "自动朗读"
+
+#: .\LingosHookApp\LingosHookApp.cpp:185
+msgid "Data Synchronization"
+msgstr "数据同步"
+
+#: .\LingosHookApp\LingosHookApp.cpp:186 .\LingosHookApp\LingosHookApp.cpp:516
+msgid "Classifications"
+msgstr "分类"
+
+#: .\LingosHookApp\LingosHookApp.cpp:188
+msgid "Data Retrieve Delay"
+msgstr "延迟取词"
+
+#: .\LingosHookApp\LingosHookApp.cpp:190
+msgid "0000 ms"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:197
+msgid "Ignore HTML Data Analysis Error"
+msgstr "忽略HTML数据解析错误"
+
+#: .\LingosHookApp\LingosHookApp.cpp:198
+msgid "Skip Dictionary Analysis Process"
+msgstr "跳过词典解析过程"
+
+#: .\LingosHookApp\LingosHookApp.cpp:199
+msgid "Skip HTML Data  Analysis Process"
+msgstr "跳过HTML数据解析过程"
+
+#: .\LingosHookApp\LingosHookApp.cpp:201
+msgid "Analysis Filter.."
+msgstr "解析过滤.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:203
+msgid "Expanded Dictionary on Result"
+msgstr "展开词典结果"
+
+#: .\LingosHookApp\LingosHookApp.cpp:205
+msgid "All Dictionaries"
+msgstr "全部词典"
+
+#: .\LingosHookApp\LingosHookApp.cpp:208
+msgid "Expanded HTML Data on Result"
+msgstr "展开HTML数据结果"
+
+#: .\LingosHookApp\LingosHookApp.cpp:211
+msgid "Favority Tab on Startup"
+msgstr "启动后跳转至"
+
+#: .\LingosHookApp\LingosHookApp.cpp:213 .\LingosHookApp\LingosHookApp.cpp:642
+msgid "Result"
+msgstr "结果"
+
+#: .\LingosHookApp\LingosHookApp.cpp:214 .\LingosHookApp\LingosHookApp.cpp:643
+msgid "HTML"
+msgstr "HTML数据"
+
+#: .\LingosHookApp\LingosHookApp.cpp:216 .\LingosHookApp\LingosHookApp.cpp:645
+msgid "Setting"
+msgstr "设置"
+
+#: .\LingosHookApp\LingosHookApp.cpp:217 .\LingosHookApp\LingosHookApp.cpp:647
+msgid "About"
+msgstr "关于"
+
+#: .\LingosHookApp\LingosHookApp.cpp:220
+msgid "Open Trace"
+msgstr "打开跟踪"
+
+#: .\LingosHookApp\LingosHookApp.cpp:223
+msgid "Apply"
+msgstr "应用"
+
+#: .\LingosHookApp\LingosHookApp.cpp:224
+msgid "Default Tag"
+msgstr "缺省标签"
+
+#: .\LingosHookApp\LingosHookApp.cpp:227
+msgid "Set as Default"
+msgstr "设置为缺省"
+
+#: .\LingosHookApp\LingosHookApp.cpp:229
+msgid "Add.."
+msgstr "添加.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:235
+msgid "Detail.."
+msgstr "详细.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:237
+msgid "Run!"
+msgstr "运行!"
+
+#: .\LingosHookApp\LingosHookApp.cpp:239 .\LingosHookApp\LingosHookApp.cpp:649
+msgid "Debug"
+msgstr "调试"
+
+#: .\LingosHookApp\LingosHookApp.cpp:241
+#, c-format
+msgid "%s v%s by Jie."
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:243
+msgid "Welcome to online help.."
+msgstr "欢迎访问在线文档"
+
+#: .\LingosHookApp\LingosHookApp.cpp:244
+msgid "Send a mail to me. (codejie@gmail.com)"
+msgstr "给我发mail(codejie@gmail.com)"
+
+#: .\LingosHookApp\LingosHookApp.cpp:245
+msgid "Post a comment to me. (www.cppblog.com/codejie)"
+msgstr "给我发帖子(www.cppblog.com/codejie)"
+
+#: .\LingosHookApp\LingosHookApp.cpp:246
+msgid "Welcome to LingosHook Open Source Site"
+msgstr "欢迎访问LingosHook开源站点"
+
+#: .\LingosHookApp\LingosHookApp.cpp:247
+msgid "Please DONATE to LingosHook"
+msgstr "请捐赠支持LingosHook"
+
+#: .\LingosHookApp\LingosHookApp.cpp:250 .\LingosHookApp\LingosHookApp.cpp:784
+msgid "Ready.."
+msgstr "就绪.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:251
+#: .\LingosHookApp\LingosHookApp.cpp:1033
+#: .\LingosHookApp\TrayIconObject.cpp:105
+msgid "Hook"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:348
+msgid " - "
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:358 .\LingosHookApp\LingosHookApp.cpp:359
+#: .\LingosHookApp\LingosHookApp.cpp:360 .\LingosHookApp\LingosHookApp.cpp:361
+#: .\LingosHookApp\LingosHookApp.cpp:362 .\LingosHookApp\LingosHookApp.cpp:363
+#: .\LingosHookApp\LingosHookApp.cpp:1640
+#: .\LingosHookApp\LingosHookApp.cpp:1644
+msgid "MS Shell Dlg 2"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:369
+msgid "Counter"
+msgstr "计数"
+
+#: .\LingosHookApp\LingosHookApp.cpp:370
+msgid "CreateTime"
+msgstr "创建时间"
+
+#: .\LingosHookApp\LingosHookApp.cpp:371 .\LingosHookApp\LingosHookApp.cpp:379
+msgid "Description"
+msgstr "描述"
+
+#: .\LingosHookApp\LingosHookApp.cpp:376
+msgid "Name"
+msgstr "名称"
+
+#: .\LingosHookApp\LingosHookApp.cpp:377
+msgid "Version"
+msgstr "版本"
+
+#: .\LingosHookApp\LingosHookApp.cpp:378
+msgid "Author"
+msgstr "作者"
+
+#: .\LingosHookApp\LingosHookApp.cpp:396
+msgid "Init failed."
+msgstr "初始失败"
+
+#: .\LingosHookApp\LingosHookApp.cpp:515
+msgid "Index"
+msgstr "索引"
+
+#: .\LingosHookApp\LingosHookApp.cpp:646
+msgid "Plugins"
+msgstr "插件"
+
+#: .\LingosHookApp\LingosHookApp.cpp:727
+msgid ".\\lang"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:728
+msgid "lang"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:843
+msgid "Some configuration data will be not valid until application restart."
+msgstr "部分配置需要重启生效."
+
+#: .\LingosHookApp\LingosHookApp.cpp:847
+msgid "Retrieve config data failed."
+msgstr "读取配置数据失败."
+
+#: .\LingosHookApp\LingosHookApp.cpp:893
+#: .\LingosHookApp\LingosHookApp.cpp:1688
+#, c-format
+msgid "%d ms"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:936
+msgid "Speak.."
+msgstr "朗读.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:938
+msgid "Copy to tag"
+msgstr "拷贝至"
+
+#: .\LingosHookApp\LingosHookApp.cpp:941
+msgid "Remove from this tag"
+msgstr "从当前标签删除"
+
+#: .\LingosHookApp\LingosHookApp.cpp:945
+msgid "Copy"
+msgstr "拷贝"
+
+#: .\LingosHookApp\LingosHookApp.cpp:951
+msgid "Set as default"
+msgstr "设置为缺省"
+
+#: .\LingosHookApp\LingosHookApp.cpp:996
+msgid ""
+"\n"
+"----- TEXT -----\n"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:1021
+msgid "Set unhook..."
+msgstr "取消Hook.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:1023
+#: .\LingosHookApp\TrayIconObject.cpp:101
+msgid "Unhook"
+msgstr "Unhook"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1024
+#: .\LingosHookApp\LingosHookApp.cpp:1034
+msgid "Ready..."
+msgstr "就绪.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:1031
+msgid "Set hook..."
+msgstr "设置Hook.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:1103
+msgid "Sorry, initial process failed !"
+msgstr "初始失败了!"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1231
+#: .\LingosHookApp\LingosHookApp.cpp:1418
+msgid "MemoryDaily Object load data failed."
+msgstr "加载单词数据失败."
+
+#: .\LingosHookApp\LingosHookApp.cpp:1268
+msgid "Select Lingoes location.."
+msgstr "选择Lingoes目录.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:1268
+msgid "Execute Files(*.exe)|*.exe|All Files(*.*)|*.*"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:1314
+msgid "Are you sure that remove '"
+msgstr "确定要删除 '"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1314
+msgid "' tag ?"
+msgstr "' 标签吗?"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1315
+msgid "LingosHookApp"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:1332
+msgid "Close"
+msgstr "关闭"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1442
+msgid "http://code.google.com/p/lingoshook"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:1448
+msgid "http://shop64703519.taobao.com/"
+msgstr ""
+
+#: .\LingosHookApp\LingosHookApp.cpp:1737
+msgid "Select a HTML File.."
+msgstr "现在HTML文件.."
+
+#: .\LingosHookApp\LingosHookApp.cpp:1737
+msgid "HTML Files(*.html;*.htm)|*.html;*.htm|All Files(*.*)|*.*"
+msgstr ""
+
+#: .\LingosHookApp\MemoryDailyObject.cpp:62
+msgid ""
+"SELECT WordTable.WordID, WordTable.Word, WordTable.Counter, WordTable."
+"UpdateTime, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE "
+"WordTable.SrcID = SrcDataTable.SrcID"
+msgstr ""
+
+#: .\LingosHookApp\MemoryDailyObject.cpp:335
+msgid "SELECT WordID, Word, Counter, CheckinTime, UpdateTime FROM WordTable"
+msgstr ""
+
+#: .\LingosHookApp\PluginDetailDialog.cpp:16
+msgid "Name:"
+msgstr "名称:"
+
+#: .\LingosHookApp\PluginDetailDialog.cpp:18
+msgid "Label:"
+msgstr "标识:"
+
+#: .\LingosHookApp\PluginDetailDialog.cpp:20
+msgid "Version:"
+msgstr "版本:"
+
+#: .\LingosHookApp\PluginDetailDialog.cpp:22
+msgid "Author:"
+msgstr "作者:"
+
+#: .\LingosHookApp\PluginDetailDialog.cpp:24
+#: .\LingosHookApp\TagInputDialog.cpp:17
+msgid "Description:"
+msgstr "描述:"
+
+#: .\LingosHookApp\PluginDetailDialog.cpp:55
+msgid "Plugins  Description - "
+msgstr "插件描述 - "
+
+#: .\LingosHookApp\PluginObject.cpp:37
+msgid "\\plugins"
+msgstr ""
+
+#: .\LingosHookApp\PluginObject.cpp:49
+msgid "*.dll"
+msgstr ""
+
+#: .\LingosHookApp\PluginObject.cpp:68 .\LingosHookApp\PluginObject.cpp:97
+#: .\LingosHookApp\PluginObject.cpp:136
+msgid "GetActivity"
+msgstr ""
+
+#: .\LingosHookApp\PluginObject.cpp:103
+msgid ""
+"This interface version of this plugin is imcompatible with current "
+"LingosHook application, are you sure to run it ?"
+msgstr ""
+
+#: .\LingosHookApp\PluginObject.cpp:103
+msgid "LingosHook Warning"
+msgstr ""
+
+#: .\LingosHookApp\SpecialDictParser.cpp:44
+msgid "SELECT COUNT(*) FROM DictTable WHERE DictID = ?"
+msgstr ""
+
+#: .\LingosHookApp\SpecialDictParser.cpp:51
+msgid "INSERT INTO DictTable (DictID, Title) VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\SpecialDictParser.cpp:78
+msgid "SELECT DictIndex, DictID, Title, CreateTime FROM DictTable"
+msgstr ""
+
+#: .\LingosHookApp\TagInputDialog.cpp:14
+msgid "Title && Description"
+msgstr "名称和描述"
+
+#: .\LingosHookApp\TagInputDialog.cpp:15
+msgid "Title:"
+msgstr "名称:"
+
+#: .\LingosHookApp\TagInputDialog.cpp:50
+msgid "Input Tag Info.."
+msgstr "输入标签信息.."
+
+#: .\LingosHookApp\TagObject.cpp:11
+msgid "Default"
+msgstr "缺省"
+
+#: .\LingosHookApp\TagObject.cpp:29
+msgid "TagTable"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:31
+msgid ""
+"CREATE TABLE TagTable (TagID INTEGER PRIMARY KEY AUTOINCREMENT, Title VARCHAR"
+"(32), CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), "
+"Description VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:33
+msgid ""
+"INSERT INTO TagTable (Title, Description) VALUES ('Default', 'This is "
+"default system tag.')"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:36
+msgid "INSERT INTO ConfigTable (Attr, IntVal) VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:43
+msgid ""
+"CREATE TABLE IF NOT EXISTS TagIndexTable (WordID INTEGER, TagID INTEGER, "
+"CheckinTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:59
+msgid "SELECT TagID, Title, CreateTime, Description FROM TagTable"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:79
+msgid "SELECT TagID, COUNT(*) FROM TagIndexTable GROUP BY TagID"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:130
+msgid "INSERT INTO TagTable (Title, Description) VALUES (?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:134
+msgid "Insert Tag Table failed."
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:163
+msgid "DELETE FROM TagTable WHERE TagID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:175
+msgid ""
+"DELETE FROM TagIndexTable where TagID=? AND WordID IN (SELECT WordID FROM "
+"TagIndexTable WHERE TagID=?)"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:180
+msgid "UPDATE TagIndexTable SET TagID = ? WHERE TagID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:259 .\LingosHookApp\TagObject.cpp:444
+msgid "SELECT TagID FROM TagIndexTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:284
+msgid "SELECT COUNT(*) FROM TagIndexTable WHERE WordID = ? AND TagID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:302
+msgid "SELECT COUNT(*) FROM TagIndexTable WHERE WordID = ? AND TagID != ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:320
+msgid "SELECT COUNT(*) FROM TagIndexTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:337
+msgid "INSERT INTO TagIndexTable (WordID, TagID) VALUES (? , ?)"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:357
+msgid "DELETE FROM TagIndexTable WHERE WordID = ? AND TagID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:378
+msgid "SELECT WordID FROM TagIndexTable WHERE TagID = ? ORDER BY TagID"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:423
+msgid "SELECT WordID FROM TagIndexTable WHERE TagID = ?"
+msgstr ""
+
+#: .\LingosHookApp\TagObject.cpp:476
+msgid "Undefined"
+msgstr "未指定"
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:34
+msgid "    attr : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:34
+#: .\LingosHookApp\TinyHtmlParser.cpp:195
+msgid " -- value = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:169
+#: .\LingosHookApp\TinyHtmlParser.cpp:173
+msgid "&nbsp;"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:193
+msgid "Tag : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:193
+msgid "("
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:193
+#: .\LingosHookApp\TinyHtmlParser.cpp:243
+#: .\LingosHookApp\TinyHtmlParser.cpp:246
+msgid ","
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:193
+msgid ")"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:230
+#: .\LingosHookApp\TinyHtmlParser.cpp:242
+msgid ""
+"\n"
+"Type = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:231
+msgid ""
+"\n"
+"Tag Start = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:231
+#: .\LingosHookApp\TinyHtmlParser.cpp:235
+msgid " - End = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:235
+msgid ""
+"\n"
+"Value Start = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:243
+msgid ""
+"\n"
+"Tag = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:246
+msgid ""
+"\n"
+"Value = "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:289
+msgid "Double '<'."
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:298
+msgid "Miss '<' before '>'."
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:325
+msgid "HTML is empty."
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:330
+msgid "First character of HTML is NOT '<' - pos : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:352
+#: .\LingosHookApp\TinyHtmlParser.cpp:382
+msgid "Tags do NOT match each other."
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:501
+msgid "Miss '<' before got value - pos : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:526
+msgid "Miss start-tag before end-tag - pos : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:578
+msgid "do NOT match tag : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:578
+msgid "(Non-Special) and "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:586
+msgid "Wrong tag type : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:586
+msgid " - pos : "
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:608
+msgid "IMG"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:610
+msgid "PARAM"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:612
+msgid "HR"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:614
+msgid "META"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:616
+msgid "EMBED"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:618
+msgid "P"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:620
+msgid "BR"
+msgstr ""
+
+#: .\LingosHookApp\TinyHtmlParser.cpp:622
+msgid "INPUT"
+msgstr ""
+
+#: .\LingosHookApp\TrayIconObject.cpp:64
+msgid " - HOOK"
+msgstr ""
+
+#: .\LingosHookApp\TrayIconObject.cpp:70
+msgid " - UNHOOK"
+msgstr ""
+
+#: .\LingosHookApp\TrayIconObject.cpp:83
+msgid "Show LingosHook"
+msgstr "显示LingosHook"
+
+#: .\LingosHookApp\TrayIconObject.cpp:84
+msgid "Run Lingoes"
+msgstr "启动Lingoes"
+
+#: .\LingosHookApp\TrayIconObject.cpp:110
+msgid "Auto Retrieve"
+msgstr "自动取词"
+
+#: .\LingosHookApp\TrayIconObject.cpp:123
+msgid "Exit"
+msgstr "退出"
+
+#: .\LingosHookApp\TrayIconObject.cpp:168
+msgid "open"
+msgstr ""
+
+#: .\LingosHookApp\TriggerObject.cpp:67
+msgid "HTML Parser Failed."
+msgstr "HTML数据解析失败."
+
+#: .\LingosHookApp\TriggerObject.cpp:96
+msgid "Add a new word"
+msgstr "加入新单词"
+
+#: .\LingosHookApp\TriggerObject.cpp:96
+#, c-format
+msgid " : %s."
+msgstr ""
+
+#: .\LingosHookApp\TriggerObject.cpp:285
+msgid "Unknown Dictionary Parser"
+msgstr "未知词典解析对象"
+
+#: .\LingosHookApp\TriggerObject.cpp:285 .\LingosHookApp\TriggerObject.cpp:290
+#: .\LingosHookApp\TriggerObject.cpp:295
+#, c-format
+msgid " : %s"
+msgstr ""
+
+#: .\LingosHookApp\TriggerObject.cpp:290
+msgid "Init Dictionary Parser Failed - Title"
+msgstr "初始词典解析对象失败 - 名称"
+
+#: .\LingosHookApp\TriggerObject.cpp:295
+msgid "Load Dictionary Parser"
+msgstr "加载词典解析对象"
+
+#: .\LingosHookApp\ViconDictObject.cpp:16
+msgid "Vicon English-Chinese(S) Dictionary"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:31
+msgid ""
+"CREATE TABLE IF NOT EXISTS ViconECSymbolTable (WordID INTEGER PRIMARY KEY, "
+"Symbol VARCHAR(64))"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:34
+msgid ""
+"CREATE TABLE IF NOT EXISTS ViconECResultTable (WordID INTEGER, ClassID "
+"INTEGER,Result VARCHAR(255))"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:135
+#: .\LingosHookApp\ViconDictObject.cpp:160
+msgid "adj."
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:139
+#: .\LingosHookApp\ViconDictObject.cpp:164
+msgid "adv."
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:180
+msgid "SELECT COUNT(*) FROM ViconECSymbolTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:192
+msgid "SELECT Symbol FROM ViconECSymbolTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:202
+msgid "SELECT ClassID, Result FROM ViconECResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:233
+msgid "INSERT INTO ViconECSymbolTable VALUES(?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:241
+msgid "INSERT INTO ViconECResultTable VALUES(?, ?, ?)"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:260
+msgid "DELETE FROM ViconECSymbolTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\ViconDictObject.cpp:265
+msgid "DELETE FROM ViconECResultTable WHERE WordID = ?"
+msgstr ""
+
+#: .\LingosHookApp\Consts.h:19
+msgid "1.3.000(Debug)"
+msgstr ""
+
+#: .\LingosHookApp\Consts.h:21
+msgid "1.3.000"
+msgstr ""
+
+#: .\LingosHookApp\Consts.h:32
+msgid "LingosHook.db3"
+msgstr ""
+
+#: .\LingosHookApp\LHControls.h:232
+msgid "<HTML><!-- created by Codejie(codejie@gmail.com) --></HTML>"
+msgstr ""
+
+#: .\LingosHookApp\LHControls.h:260
+msgid ""
+"<HTML><HTML><!-- created by Codejie(codejie@gmail.com) --></HTML></HTML>"
+msgstr ""
+
+#: .\LingosHookApp\LHControls.h:264
+msgid "file:///"
+msgstr ""
+
+msgid "Interface Language"
+msgstr "界面语言"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "OK"
+msgstr "确定"
