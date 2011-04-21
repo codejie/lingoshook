@@ -11,6 +11,7 @@
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
+!include "x64.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -48,11 +49,42 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+Function InstallX64
+  Push $R0
+  ClearErrors
+  ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8220EEFE-38CD-377E-8595-13398D740ACE}" "Version"
+  IfErrors 0 VSRedistInstalled
+  File "..\Output\Setup-Files\vcredist_x64.exe"
+  ExecWait "$INSTDIR\vcredist_x64.exe"
+VSRedistInstalled:
+   Exch $R0
+FunctionEnd
+
+Function InstallX86
+  Push $R0
+  ClearErrors
+  ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}" "Version"
+  IfErrors 0 VSRedistInstalled
+  File "..\Output\Setup-Files\vcredist_x86.exe"
+  ExecWait "$INSTDIR\vcredist_x86.exe"
+VSRedistInstalled:
+   Exch $R0
+FunctionEnd
+
+Function CheckVCRedist
+  ${If} ${RunningX64}
+    Call InstallX64
+  ${Else}
+    Call InstallX86
+  ${EndIf}
+FunctionEnd
+
 Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
 
 Section "MainSection" SEC01
+
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "..\Output\Release\LingosHook.dll"
@@ -75,9 +107,13 @@ Section "MainSection" SEC01
   File "..\Output\plugins\P_WordExport.dll"
   SetOutPath "$INSTDIR"
   File "..\Output\Release\LingosHookApp.exe"
+  
+  Call CheckVCRedist
+
   CreateDirectory "$SMPROGRAMS\LingosHook"
   CreateShortCut "$SMPROGRAMS\LingosHook\LingosHook.lnk" "$INSTDIR\LingosHookApp.exe"
 SectionEnd
+
 
 Section -AdditionalIcons
   CreateShortCut "$SMPROGRAMS\LingosHook\Uninstall.lnk" "$INSTDIR\uninst.exe"
