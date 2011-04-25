@@ -64,7 +64,7 @@ FunctionEnd
 Function InstallX86
   Push $R0
   ClearErrors
-  ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC1604751}" "Version"
+  ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}" "Version"
   IfErrors 0 VSRedistInstalled
   MessageBox MB_ICONQUESTION|MB_YESNO "LingosHook need MS VC++ 2008 Redistributable, do you want to install it ?" IDNO VSRedistInstalled
   File "..\Output\Setup-Files\vcredist_x86.exe"
