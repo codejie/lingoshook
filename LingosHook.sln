@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_ForDonator", "Plugins\P_F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DonatorXMLGenerator", "Plugins\P_ForDonator\DonatorXMLGenerator\DonatorXMLGenerator.vcproj", "{E11C2A34-4520-469C-9865-FE7977524218}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxActiveX_Test", "wxActiveX_Test\wxActiveX_Test.vcproj", "{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -126,6 +128,16 @@ Global
 		{E11C2A34-4520-469C-9865-FE7977524218}.Release (fast)|Win32.Build.0 = Release|Win32
 		{E11C2A34-4520-469C-9865-FE7977524218}.Release|Win32.ActiveCfg = Release|Win32
 		{E11C2A34-4520-469C-9865-FE7977524218}.Release|Win32.Build.0 = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Debug|Win32.Build.0 = Debug|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release - dll|Win32.Build.0 = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release (fast)|Win32.Build.0 = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release|Win32.ActiveCfg = Release|Win32
+		{AC36AAC2-E87E-497B-98A6-BE8B7ABF58C3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

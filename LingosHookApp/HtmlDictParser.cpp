@@ -464,11 +464,12 @@ int CHtmlDictParser::RemoveResult(CDBAccess::TDatabase &db, int wordid)
 
 int CHtmlDictParser::GenHtmlResult(const HtmlDictParser::TDictResultMap &result, const std::wstring &html, std::wstring& output) const
 {
-    output = L"";
+    output = L"<HTML><HEAD></HEAD><BODY>";
     for(HtmlDictParser::TDictResultMap::const_iterator it = result.begin(); it != result.end(); ++ it)
     {
         output  += html.substr(it->m_iDictStart, it->m_iDictEnd - it->m_iDictStart + 1);
     }
+    output += L"</BODY></HTML>";
     return 0;
 }
 
