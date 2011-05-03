@@ -58,7 +58,9 @@ void CDisplayObject::ShowSpecialDictResult(const SpecialDictParser::CDictParser*
 void CDisplayObject::ShowHtmlDictResult(const wxString& html)
 {
 //    _frame->m_winHTML->SetCharset(wxT("utf-8"));
-    _frame->m_winHTML->LoadString(html);
+    wxString *h = const_cast<wxString*>(&html);
+    h->insert(12, wxT("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"));
+    _frame->m_winHTML->LoadString(*h);
 }
 
 void CDisplayObject::RemoveWord(int wordid)
