@@ -468,6 +468,14 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\LingosHook-mini-Setup.nsi"
+				>
+			</File>
+			<File
+				RelativePath=".\LingosHook-Setup.nsi"
+				>
+			</File>
+			<File
 				RelativePath=".\LingosHookApp.rc"
 				>
 			</File>
