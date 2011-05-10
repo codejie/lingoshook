@@ -34,7 +34,7 @@ int CHtmlTidyObject::Tidy(const std::wstring &input, std::wstring &output)
         return -1;
     if(tidyOptSetBool(tdoc, TidyHtmlOut, yes) != yes)
         return -1;
-    if(tidySetCharEncoding(tdoc, "raw") != 0)
+    if(tidySetCharEncoding(tdoc, "utf8") != 0)
         return -1;
     
     //if(tidyOptSetBool(tdoc, TidyShowWarnings, no) != yes)

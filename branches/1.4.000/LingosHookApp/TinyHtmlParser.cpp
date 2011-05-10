@@ -166,13 +166,14 @@ void CElementObject::FreeAnalyseAttribute()
 
 int CElementObject::AnalyseValue()
 {
+/*
     std::wstring::size_type pos = this->value.find(L"&nbsp;");
     while(pos != std::wstring::npos)
     {
         this->value.replace(pos, 6, L" ");
         pos = this->value.find(L"&nbsp;", pos + 1);
     }
-
+*/
     return 0;
 }
 

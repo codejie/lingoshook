@@ -8,6 +8,21 @@
 #include "FundsetDictObject.h"
 #include "SpecialDictParser.h"
 
+namespace SpecialDictParser
+{
+
+ const std::wstring& CDictParser::TrimValue(std::wstring& value) const
+{
+    std::wstring::size_type pos = value.find(L"&nbsp;");
+    while(pos != std::wstring::npos)
+    {
+        value.replace(pos, 6, L" ");
+        pos = value.find(L"&nbsp;", pos + 1);
+    }
+    return value;
+}
+
+}
 ///
 CSpecialDictParser::~CSpecialDictParser()
 {
