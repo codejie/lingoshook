@@ -39,6 +39,8 @@ public:
     const std::wstring& GetID() const { return _strID; }
     const std::wstring& GetTitle() const { return _strTitle; }
 protected:
+    const std::wstring& TrimValue(std::wstring& value) const;
+protected:
     int _iIndex;
     std::wstring _strID;
     std::wstring _strTitle;

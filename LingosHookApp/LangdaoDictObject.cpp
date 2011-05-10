@@ -68,7 +68,7 @@ int CECParser::ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocum
 
 int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const
 {
-    std::wstring word;
+    std::wstring word = L"";
     std::auto_ptr<CECResult> res(new CECResult);
 
     TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
@@ -79,12 +79,12 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
         if(pa == NULL)
             return -1;
 
-        if(pa->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
+        if(pa->value == L"\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"")
         {//word and symbol
             if(p->child == NULL || p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
             //word
-            word = p->child->child->value;//.c_str());//, wxConvISO8859_1);
+            word = CDictParser::TrimValue(p->child->child->value);//.c_str());//, wxConvISO8859_1);
             //symbo
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
@@ -93,7 +93,7 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
             }
             else
             {
-                res->m_strSymbol = std::wstring(p->child->sibling->child->value.c_str());//, wxConvISO8859_1);
+                res->m_strSymbol = p->child->sibling->child->value.c_str();//, wxConvISO8859_1);
             }
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
@@ -112,8 +112,12 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
         }
         p = doc->FindNextElement(pr, L"DIV", tmpstack);
     }
-    TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
-    it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
+    
+    if(!word.empty())
+    {
+        TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
+        it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
+    }
 
     return 0;
 }
@@ -133,7 +137,7 @@ int CECParser::GetResult(const TinyHtmlParser::CDocumentObject* doc, const TinyH
                 res.m_eClass = StrToWC(pdiv->child->child->child->value);//.c_str()));//, wxConvISO8859_1);
                 if(pdiv->child->child->sibling == NULL || pdiv->child->child->sibling->type != TinyHtmlParser::ET_ELEMENT)
                     return -1;
-                res.m_strResult = pdiv->child->child->sibling->value;//.c_str());//,wxConvISO8859_1);
+                res.m_strResult = CDictParser::TrimValue(pdiv->child->child->sibling->value);//.c_str());//,wxConvISO8859_1);
 
                 result.m_stRecord.m_vctResult.push_back(res);
             }
@@ -144,8 +148,8 @@ int CECParser::GetResult(const TinyHtmlParser::CDocumentObject* doc, const TinyH
                     CECResult::_special_t res;
                     if(pdiv->child->child->type != TinyHtmlParser::ET_ELEMENT)
                         return -1;
-                    res.m_strSpecial = pdiv->child->child->value;//.c_str());//, wxConvISO8859_1);
-                    res.m_strResult = pdiv->child->value;//.c_str();//);//, wxConvISO8859_1);
+                    res.m_strSpecial = CDictParser::TrimValue(pdiv->child->child->value);//.c_str());//, wxConvISO8859_1);
+                    res.m_strResult = CDictParser::TrimValue(pdiv->child->value);//.c_str();//);//, wxConvISO8859_1);
 
                     result.m_stRecord.m_vctSpecial.push_back(res);
                 }
@@ -156,8 +160,8 @@ int CECParser::GetResult(const TinyHtmlParser::CDocumentObject* doc, const TinyH
                     const TinyHtmlParser::CElementObject* pc = pdiv->child->sibling;
                     while(pc != NULL && pc->child->FindAttribute(L"noWrap") != NULL)
                     {
-                        res.m_strResult = pc->child->child->child->value + pc->child->child->value;
-                        res.m_strResult += pc->child->sibling->value;
+                        res.m_strResult = CDictParser::TrimValue(pc->child->child->child->value + pc->child->child->value);
+                        res.m_strResult += CDictParser::TrimValue(pc->child->sibling->value);
                         result.m_stRecord.m_vctResult.push_back(res);                    
 
                         pc = pc->sibling;

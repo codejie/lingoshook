@@ -67,7 +67,7 @@ int CECParser::ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocum
 
 int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const
 {
-    std::wstring word;
+    std::wstring word = L"";
     std::auto_ptr<CECResult> res(new CECResult);
 
     TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
@@ -78,13 +78,13 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
         if(pa == NULL)
             return -1;
 
-        if(pa->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
+        if(pa->value == L"\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"")
         {//word and symbol
             if(p->child == NULL)
                 return -1;
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            word = p->child->child->value;//.c_str());//, wxConvISO8859_1);
+            word = CDictParser::TrimValue(p->child->child->value);//.c_str());//, wxConvISO8859_1);
 
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
@@ -93,7 +93,7 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
             }
             else
             {
-                res->m_strSymbol = std::wstring(p->child->sibling->child->value.c_str());//, wxConvISO8859_1);
+                res->m_strSymbol = p->child->sibling->child->value.c_str();//, wxConvISO8859_1);
             }
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
@@ -102,7 +102,7 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
 
             if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            rec.m_strResult = p->child->value;//.c_str());//,wxConvISO8859_1);
+            rec.m_strResult = CDictParser::TrimValue(p->child->value);//.c_str());//,wxConvISO8859_1);
             //rec.m_strResult.Trim(false);
 
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
@@ -120,9 +120,11 @@ int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyH
         p = doc->FindNextElement(pr, L"DIV", tmpstack);
     }
 
-
-    TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
-    it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
+    if(!word.empty())
+    {
+        TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
+        it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
+    }
 
     return 0;
 }
