@@ -17,7 +17,7 @@ WordExportDialog::WordExportDialog(CDBAccess* dbaccess, wxWindow* parent, int id
 , _objDBAccess(dbaccess)
 {
     // begin wxGlade: WordExportDialog::WordExportDialog
-    label_1 = new wxStaticText(this, wxID_ANY, wxT("Range"));
+    label_1 = new wxStaticText(this, wxID_ANY, wxT("Region"));
     m_rdRangeAll = new wxRadioButton(this, 1000, wxT("All Words"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     m_rdRangeAlphabet = new wxRadioButton(this, 1001, wxT("Alphabet"));
     const wxString m_listRange_choices[] = {
