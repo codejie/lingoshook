@@ -27,6 +27,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_ForDonator", "Plugins\P_F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DonatorXMLGenerator", "Plugins\P_ForDonator\DonatorXMLGenerator\DonatorXMLGenerator.vcproj", "{E11C2A34-4520-469C-9865-FE7977524218}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Libcurl_Test", "LibCurl_Test\LibCurl_Test.vcproj", "{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_VersionCheck", "P_VersionCheck\P_VersionCheck.vcproj", "{CC02B9B8-E9BF-4D67-B241-CF228FD74403}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -126,6 +130,26 @@ Global
 		{E11C2A34-4520-469C-9865-FE7977524218}.Release (fast)|Win32.Build.0 = Release|Win32
 		{E11C2A34-4520-469C-9865-FE7977524218}.Release|Win32.ActiveCfg = Release|Win32
 		{E11C2A34-4520-469C-9865-FE7977524218}.Release|Win32.Build.0 = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Debug|Win32.Build.0 = Debug|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release - dll|Win32.Build.0 = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release (fast)|Win32.Build.0 = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release|Win32.ActiveCfg = Release|Win32
+		{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}.Release|Win32.Build.0 = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Debug|Win32.Build.0 = Debug|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release - dll|Win32.Build.0 = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release (fast)|Win32.Build.0 = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release|Win32.ActiveCfg = Release|Win32
+		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
