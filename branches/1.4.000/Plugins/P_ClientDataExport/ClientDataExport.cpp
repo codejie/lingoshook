@@ -1,4 +1,5 @@
 
+#include "ClientDataExportDialog.h"
 #include "ClientDataExport.h"
 
 IMPLEMENT_PLUGIN(ClientDataExport)
@@ -24,7 +25,7 @@ int ClientDataExport::LoadProperty(PropertyData &data) const
 
 int ClientDataExport::Active(wxApp *papp, wxWindow *pwindow)
 {
-    ClientDataExportDialog dlg(_objDBAccess, pWindow, wxID_ANY, wxEmptyString);
+    ClientDataExportDialog dlg(_objDBAccess, pwindow, wxID_ANY, wxEmptyString);
     dlg.ShowModal();
 
     return 0;
