@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="../P_Common;../../LingosHookApp;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;P_CLIENTDATAEXPORT_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,7 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
+				OutputFile="$(SolutionDir)\Output\plugins\$(ProjectName)d.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -182,6 +186,10 @@
 				RelativePath=".\ClientDataExport.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\ClientDataExportDialog.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -194,6 +202,10 @@
 			</File>
 			<File
 				RelativePath=".\ClientDataExport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ClientDataExportDialog.h"
 				>
 			</File>
 			<File
