@@ -7,15 +7,13 @@
 #include <wx/datectrl.h>
 // end wxGlade
 
+#include "DBAccess.h"
 
 #ifndef CLIENTDATAEXPORTDIALOG_H
 #define CLIENTDATAEXPORTDIALOG_H
 
 
 // begin wxGlade: ::extracode
-// end wxGlade
-
-class CDBAccess;
 
 class ClientDataExportDialog: public wxDialog {
 private:
@@ -68,11 +66,15 @@ public:
     virtual void OnBtnCloseClick(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnExportClick(wxCommandEvent &event); // wxGlade: <event_handler>
 private:
+    void LoadTags();
+
     int Export();
     int MakeSQL(wxString& sql);
-    int OpenDB(const wxString& file, wxSQLite3Database& db);
-    int TransDB(wxSQLite3Database& db, const wxString& sql);
-    void CloseDB(wxSQLite3Database& db);
+    int OpenDB(const wxString& file, CDBAccess::TDatabase& db);
+    int TransDB(CDBAccess::TDatabase& db, const wxString& sql);
+    void CloseDB(CDBAccess::TDatabase& db);
+private:
+    void RemoveTable(CDBAccess::TDatabase& db, const wxString& name);
 private:
     CDBAccess* _objDBAccess;
 }; // wxGlade: end class
