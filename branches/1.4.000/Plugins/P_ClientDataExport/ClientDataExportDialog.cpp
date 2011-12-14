@@ -275,6 +275,7 @@ int ClientDataExportDialog::MakeSQL(wxString &sql)
     {
         return -1;
     }
+    sql += wxT(" order by WordTable.SrcID");
     //sql += wxT(" group by WordTable.WordID");
     return 0;
 }
@@ -354,7 +355,7 @@ int ClientDataExportDialog::TransDB(CDBAccess::TDatabase &db, const wxString &sq
             }
 
             qword.ClearBindings();
-            qword.Bind(1, srcid);
+            qword.Bind(1, tmp);
             qword.Bind(2, res.GetString(1));
             qword.ExecuteUpdate();
         }
