@@ -337,25 +337,24 @@ int ClientDataExportDialog::TransDB(CDBAccess::TDatabase &db, const wxString &sq
         CDBAccess::TQuery qword = db.PrepareStatement("INSERT INTO word (srcid, word) VALUES (?, ?)");
 
         int count = 0;
-        int tmp = -1;
+        int p = -1, n = -1;
         int srcid = 0;
 
         while(res.NextRow())
         {
-            srcid = res.GetInt(0);
-            if(tmp != srcid)
+            n = res.GetInt(0);
+            if(p != n)
             {
                 qsrc.ClearBindings();
                 qsrc.Bind(1, res.GetString(2));
-
                 qsrc.ExecuteUpdate();
 
-                tmp = srcid;
+                p = n;
                 srcid = db.GetLastRowId().ToLong();
             }
 
             qword.ClearBindings();
-            qword.Bind(1, tmp);
+            qword.Bind(1, srcid);
             qword.Bind(2, res.GetString(1));
             qword.ExecuteUpdate();
         }
