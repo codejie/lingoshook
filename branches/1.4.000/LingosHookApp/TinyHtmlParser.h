@@ -6,6 +6,7 @@
 #define __TINYHTMLPARSER_H__
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <queue>
 #include <stack>
@@ -88,7 +89,7 @@ public:
 class CParserData
 {
 public:
-    enum DataType { DT_UNKNOWN = -1, DT_TAG = 0, /*DT_VALUE,*/ DT_END, DT_SPECIAL, /*DT_TAG_VALUE*//*, DT_BROKEN*/ };
+    enum DataType { DT_UNKNOWN = -1, DT_TAG = 0, /*DT_VALUE,*/ DT_END, DT_SPECIAL, DT_END_SPECIAL /*DT_TAG_VALUE*//*, DT_BROKEN*/ }; //DT_END_SPECIAL is used to <TAG/>
     typedef std::pair<size_t, size_t> TRange;//start + end;
     typedef std::vector<TRange> TValueVector;
 public:
@@ -118,6 +119,8 @@ protected:
     static const wchar_t TAG_SLASH     =   L'/';
     static const wchar_t TAG_BSLASH    =   L'\\';
     static const wchar_t TAG_AND       =   L'&';
+    static const wchar_t TAG_SPACE     =   L' ';
+    static const wchar_t TAG_EQUAL     =   L'=';
 
     typedef std::stack<CParserData> TDataStack;
     //typedef std::pair<size_t, CParserData> TNodeData;//level + tag;
@@ -155,6 +158,8 @@ public:
     bool IsMistake() const { return _bIsMistake; }
 
     void Show(std::wostream& os) const;
+
+    void Rewrite(std::wofstream& ofs) const;
 protected:
     int PreProcess(const std::wstring& str, std::wstring& html, bool strict);
     int PreParser(const std::wstring& html, TNodeQueue& que, bool strict);
@@ -172,7 +177,8 @@ private:
     //int CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const;
     CElementObject* MakeElement(const std::wstring& html, const TNodeData& node, CElementObject* parent, CElementObject* sibling) const;
 
-    void CDocumentObject::ShowElement(std::wostream& os, const CElementObject* e) const;
+    void ShowElement(std::wostream& os, const CElementObject* e) const;
+    void RewriteElement(std::wofstream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
 
     void FreeElement(CElementObject* root);
 

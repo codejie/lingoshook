@@ -190,6 +190,10 @@
 				RelativePath=".\ClientDataExportDialog.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\TinyHtmlParser.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -210,6 +214,10 @@
 			</File>
 			<File
 				RelativePath="..\P_Common\Exports.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\TinyHtmlParser.h"
 				>
 			</File>
 		</Filter>

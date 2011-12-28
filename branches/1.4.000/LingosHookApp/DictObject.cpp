@@ -86,7 +86,7 @@ int CDictObject::HTMLProc(const wxString& str)
 {
     std::wstring html(str.begin(), str.end());
 
-    TinyHtmlParser::CDocumentObject doc;
+    //TinyHtmlParser::CDocumentObject doc;
     
     if(_config.m_iUseTidy == 1)
     {

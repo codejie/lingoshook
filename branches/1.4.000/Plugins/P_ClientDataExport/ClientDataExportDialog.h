@@ -75,6 +75,8 @@ private:
     void CloseDB(CDBAccess::TDatabase& db);
 private:
     void RemoveTable(CDBAccess::TDatabase& db, const wxString& name);
+
+    int OptimizeHTML(const wxString& src, wxString& ret);
 private:
     CDBAccess* _objDBAccess;
 }; // wxGlade: end class
