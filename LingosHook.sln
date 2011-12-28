@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_WordExport", "Plugins\P_W
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_Plugins", "Plugins\Test_Plugins\Test_Plugins.vcproj", "{576AB589-A647-49C5-A639-57D7920566AC}"
 	ProjectSection(ProjectDependencies) = postProject
-		{7D7CF6AA-2FA7-409F-9C6D-C244547F5D78} = {7D7CF6AA-2FA7-409F-9C6D-C244547F5D78}
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A} = {D307014B-A6D5-4220-B4D7-1B3E51665A7A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_ForDonator", "Plugins\P_ForDonator\P_ForDonator.vcproj", "{B5AD8F26-A7FD-4094-A4FC-799AA48E81E6}"
@@ -30,6 +30,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Libcurl_Test", "LibCurl_Test\LibCurl_Test.vcproj", "{28FDC6A0-E455-47B7-A509-93BEB8FFEE97}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_VersionCheck", "P_VersionCheck\P_VersionCheck.vcproj", "{CC02B9B8-E9BF-4D67-B241-CF228FD74403}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_WordRemover", "Plugins\P_WordRemover\P_WordRemover.vcproj", "{356F3FEA-A424-485A-AB37-06B541364FBE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P_ClientDataExport", "Plugins\P_ClientDataExport\P_ClientDataExport.vcproj", "{D307014B-A6D5-4220-B4D7-1B3E51665A7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +154,26 @@ Global
 		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release (fast)|Win32.Build.0 = Release|Win32
 		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release|Win32.ActiveCfg = Release|Win32
 		{CC02B9B8-E9BF-4D67-B241-CF228FD74403}.Release|Win32.Build.0 = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Debug|Win32.Build.0 = Debug|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release - dll|Win32.Build.0 = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release (fast)|Win32.Build.0 = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release|Win32.ActiveCfg = Release|Win32
+		{356F3FEA-A424-485A-AB37-06B541364FBE}.Release|Win32.Build.0 = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Debug|Win32.Build.0 = Debug|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release - dll (fast)|Win32.ActiveCfg = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release - dll (fast)|Win32.Build.0 = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release - dll|Win32.ActiveCfg = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release - dll|Win32.Build.0 = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release (fast)|Win32.ActiveCfg = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release (fast)|Win32.Build.0 = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release|Win32.ActiveCfg = Release|Win32
+		{D307014B-A6D5-4220-B4D7-1B3E51665A7A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
