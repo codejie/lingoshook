@@ -11,6 +11,9 @@
 #include <queue>
 #include <stack>
 
+#include "wx/wfstream.h"
+#include "wx/txtstrm.h"
+
 namespace TinyHtmlParser
 {
 
@@ -160,6 +163,8 @@ public:
     void Show(std::wostream& os) const;
 
     void Rewrite(std::wofstream& ofs) const;
+    void Rewrite(wxTextOutputStream& ofs) const;
+    void Rewrite(wxString& os) const;
 protected:
     int PreProcess(const std::wstring& str, std::wstring& html, bool strict);
     int PreParser(const std::wstring& html, TNodeQueue& que, bool strict);
@@ -179,6 +184,8 @@ private:
 
     void ShowElement(std::wostream& os, const CElementObject* e) const;
     void RewriteElement(std::wofstream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
+    void RewriteElement(wxTextOutputStream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
+    void RewriteElement(wxString& os, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
 
     void FreeElement(CElementObject* root);
 

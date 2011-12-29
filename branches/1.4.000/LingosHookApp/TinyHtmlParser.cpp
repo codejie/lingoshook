@@ -307,7 +307,7 @@ int CDocumentObject::PreProcess(const std::wstring& str, std::wstring& html, boo
             {
                 //if(isspace((unsigned char)*it) != 0)
                 //    continue;
-                if((unsigned char)(*it) == '\r' || (unsigned char)(*it) == '\n')
+                if((*it) == L'\r' || (*it) == L'\n')
                     continue;
             }
         }
@@ -702,11 +702,6 @@ void CDocumentObject::Rewrite(std::wofstream& ofs) const
     {
         std::stack<std::wstring> tagstack;
         RewriteElement(ofs, _root, tagstack);
-        //while(!tagstack.empty())
-        //{
-            //ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-            //tagstack.pop();    
-        //}
     }
 }
 
@@ -732,10 +727,7 @@ void CDocumentObject::RewriteElement(std::wofstream& ofs, const CElementObject* 
     }
     else
     {
-        if(pe->tag != L"FONT")
-            ofs << TAG_GT << pe->value;
-        else
-            ofs << TAG_GT;
+        ofs << TAG_GT << pe->value;
         tagstack.push(pe->tag);
     }
     
@@ -751,11 +743,6 @@ void CDocumentObject::RewriteElement(std::wofstream& ofs, const CElementObject* 
             ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
             tagstack.pop();
         }
-        //if(ps == NULL)
-        //{
-        //    ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-        //    tagstack.pop();
-        //}
     }
 
     if(ps != NULL)
@@ -767,51 +754,127 @@ void CDocumentObject::RewriteElement(std::wofstream& ofs, const CElementObject* 
         ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
         tagstack.pop();
     }
-    //if(!hasTagParent)
-    //{
-    //    ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-    //    tagstack.pop();
-    //}
-    //else
-    //{
-    //    if(pe == NULL)
-    //    {
-    //        if(!hasTagParent)
-    //        {
-    //            ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-    //            tagstack.pop();
-    //        }
-    //    }
-    //}
+}
 
-    //if(pe == NULL && ps == NULL)
-    //{
-    //    if(!hasTagParent)
-    //    {
-    //        ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-    //        tagstack.pop();
-    //    }
-    //}
+void CDocumentObject::Rewrite(wxTextOutputStream& ofs) const 
+{
+    if(_root != NULL)
+    {
+        std::stack<std::wstring> tagstack;
+        RewriteElement(ofs, _root, tagstack);
+    }
+}
+
+void CDocumentObject::RewriteElement(wxTextOutputStream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const
+{
+    const CElementObject* pe = e, *ps = e->sibling;
+
+    //bool hasTagParent = false;
+
+    ofs << TAG_LT << pe->tag;
+    const CAttributeObject* attr = pe->attrib;
+    while(attr != NULL)
+    {
+        ofs << TAG_SPACE << attr->attr;
+        if(!attr->value.empty())
+            ofs << TAG_EQUAL << attr->value;
+        attr = attr->next;
+    }
+    if(pe->type == ET_TAG)
+    {
+        ofs << TAG_SLASH << TAG_GT;
+        //hasTagParent = true;
+    }
+    else
+    {
+        ofs << TAG_GT << pe->value;
+        tagstack.push(pe->tag);
+    }
+    
+    pe = pe->child;
+    if(pe != NULL)
+    {
+        RewriteElement(ofs, pe, tagstack);
+    }
+    else
+    {
+        if(e->type != ET_TAG)
+        {
+            ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+            tagstack.pop();
+        }
+    }
+
+    if(ps != NULL)
+    {
+        RewriteElement(ofs, ps, tagstack);
+    }
+    else if(e != _root)
+    {
+        ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+        tagstack.pop();
+    }
+}
 
 
-    //while(!tagstack.empty())
-    //{
-    //    ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-    //    tagstack.pop();    
-    //}
+void CDocumentObject::Rewrite(wxString& os) const 
+{
+    if(_root != NULL)
+    {
+        std::stack<std::wstring> tagstack;
+        RewriteElement(os, _root, tagstack);
+    }
+}
 
+void CDocumentObject::RewriteElement(wxString& os, const CElementObject* e, std::stack<std::wstring>& tagstack) const
+{
+    const CElementObject* pe = e, *ps = e->sibling;
 
-    //pe->Show(os);
-    //
-    //pe = pe->child;
-    //if(pe != NULL)
-    //{
-    //    ShowElement(os, pe);
-    //}
-    //if(ps != NULL)
-    //{
-    //    ShowElement(os, ps);
-    //}
+    //bool hasTagParent = false;
+
+    os << TAG_LT << pe->tag;
+    const CAttributeObject* attr = pe->attrib;
+    while(attr != NULL)
+    {
+        os << TAG_SPACE << attr->attr;
+        if(!attr->value.empty())
+            os << TAG_EQUAL << attr->value;
+        attr = attr->next;
+    }
+    if(pe->type == ET_TAG)
+    {
+        os << TAG_SLASH << TAG_GT;
+        //hasTagParent = true;
+    }
+    else
+    {
+        os << TAG_GT << pe->value;
+        tagstack.push(pe->tag);
+    }
+    
+    pe = pe->child;
+    if(pe != NULL)
+    {
+        RewriteElement(os, pe, tagstack);
+    }
+    else
+    {
+        if(e->type != ET_TAG)
+        {
+            os << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+            tagstack.pop();
+        }
+    }
+
+    if(ps != NULL)
+    {
+        RewriteElement(os, ps, tagstack);
+    }
+    else if(e != _root)
+    {
+        os << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+        tagstack.pop();
+    }
 }
 
 void CDocumentObject::FreeElement(CElementObject* root)
