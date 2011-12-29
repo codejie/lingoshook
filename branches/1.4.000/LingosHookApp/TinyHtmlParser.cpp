@@ -702,11 +702,11 @@ void CDocumentObject::Rewrite(std::wofstream& ofs) const
     {
         std::stack<std::wstring> tagstack;
         RewriteElement(ofs, _root, tagstack);
-        while(!tagstack.empty())
-        {
-            ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-            tagstack.pop();    
-        }
+        //while(!tagstack.empty())
+        //{
+            //ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+            //tagstack.pop();    
+        //}
     }
 }
 
@@ -714,23 +714,28 @@ void CDocumentObject::RewriteElement(std::wofstream& ofs, const CElementObject* 
 {
     const CElementObject* pe = e, *ps = e->sibling;
 
-    bool hasTagParent = false;
+    //bool hasTagParent = false;
 
     ofs << TAG_LT << pe->tag;
     const CAttributeObject* attr = pe->attrib;
     while(attr != NULL)
     {
-        ofs << TAG_SPACE << attr->attr << TAG_EQUAL << attr->value;
+        ofs << TAG_SPACE << attr->attr;
+        if(!attr->value.empty())
+            ofs << TAG_EQUAL << attr->value;
         attr = attr->next;
     }
     if(pe->type == ET_TAG)
     {
         ofs << TAG_SLASH << TAG_GT;
-        hasTagParent = true;
+        //hasTagParent = true;
     }
     else
     {
-        ofs << TAG_GT << pe->value;
+        if(pe->tag != L"FONT")
+            ofs << TAG_GT << pe->value;
+        else
+            ofs << TAG_GT;
         tagstack.push(pe->tag);
     }
     
@@ -741,28 +746,43 @@ void CDocumentObject::RewriteElement(std::wofstream& ofs, const CElementObject* 
     }
     else
     {
-        if(!hasTagParent)
+        if(e->type != ET_TAG)
         {
             ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
             tagstack.pop();
         }
+        //if(ps == NULL)
+        //{
+        //    ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+        //    tagstack.pop();
+        //}
     }
 
     if(ps != NULL)
     {
         RewriteElement(ofs, ps, tagstack);
     }
-    else
+    else if(e != _root)
     {
-        if(pe == NULL)
-        {
-            if(!hasTagParent)
-            {
-                ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
-                tagstack.pop();
-            }
-        }
+        ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+        tagstack.pop();
     }
+    //if(!hasTagParent)
+    //{
+    //    ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+    //    tagstack.pop();
+    //}
+    //else
+    //{
+    //    if(pe == NULL)
+    //    {
+    //        if(!hasTagParent)
+    //        {
+    //            ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+    //            tagstack.pop();
+    //        }
+    //    }
+    //}
 
     //if(pe == NULL && ps == NULL)
     //{
