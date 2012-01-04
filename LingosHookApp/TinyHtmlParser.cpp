@@ -9,13 +9,13 @@
 namespace TinyHtmlParser
 {
 
-CExceptionObject::CExceptionObject(TinyHtmlParser::ExceptionNumber type, const std::wstring &info)
+CExceptionObject::CExceptionObject(ExceptionNumber type, const std::wstring &info)
 : _type(type)
 , _info(info)
 {
 }
 
-CExceptionObject::CExceptionObject(const TinyHtmlParser::CExceptionObject &right)
+CExceptionObject::CExceptionObject(const CExceptionObject &right)
 : _type(right._type)
 , _info(right._info)
 {
@@ -192,11 +192,11 @@ const CAttributeObject* CElementObject::FindAttribute(const std::wstring& attr) 
 void CElementObject::Show(std::wostream& os) const
 {
     os << "[" << this->level << "-" << this->type << "]" << "Tag:";
-    if(this->type == ET_ELEMENT)
+    if(this->type != ET_VALUE)
     {
         os << this->tag << " - " << this->start << "," << this->end << " -- value = " << this->value;
     }
-    else if(this->type == ET_VALUE)
+    else// if(this->type == ET_VALUE)
     {
         os << "<VALUE> - " << this->start << "," << this->end << " -- value = " << this->value;
     }
@@ -1035,7 +1035,7 @@ const CElementObject* CDocumentObject::FindElement(const CElementObject* root, c
     return FindElement(root, pe, tag, stack);
 }
 
-const CAttributeObject* CDocumentObject::FindAttribute(const TinyHtmlParser::CElementObject *element, const std::wstring &attr) const
+const CAttributeObject* CDocumentObject::FindAttribute(const CElementObject *element, const std::wstring &attr) const
 {
     if(element == NULL)
         return NULL;
@@ -1051,67 +1051,213 @@ const CAttributeObject* CDocumentObject::FindAttribute(const TinyHtmlParser::CEl
 }
 
 //
-void CDocumentOutputObject::Rewrite(const TinyHtmlParser::CDocumentObject &doc, wxString &ostr)
+
+void CDocumentOutputObject::AddKey(TKeyMap* keymap, KeyType type, const wxString& str)
+{
+    if(keymap == NULL)
+        return;
+
+    TKeyMap::iterator it = keymap->find(type);
+    if(it == keymap->end())
+    {
+        it = keymap->insert(std::make_pair(type, TKeySet())).first;
+    }
+
+    it->second.insert(std::wstring(str.begin(), str.end()));
+}
+
+void CDocumentOutputObject::RemoveKey(TKeyMap* keymap, KeyType type, const wxString& str)
+{
+    if(keymap == NULL)
+        return;
+
+    TKeyMap::iterator it = keymap->find(type);
+    if(it != keymap->end())
+    {
+        it->second.erase(std::wstring(str.begin(), str.end()));
+    }
+}
+
+bool CDocumentOutputObject::IsKey(const TKeyMap* keymap, KeyType type, const wxString& str)
+{
+    return IsKey(keymap, type, std::wstring(str.begin(), str.end()));
+}
+
+bool CDocumentOutputObject::IsKey(const TKeyMap* keymap, KeyType type, const std::wstring& str)
+{
+    if(keymap == NULL)
+        return false;
+
+    TKeyMap::const_iterator it = keymap->find(type);
+    if(it == keymap->end())
+        return false;
+    if(it->second.find(str) == it->second.end())
+        return false;
+    return true;
+}
+
+int CDocumentOutputObject::Rewrite(const CDocumentObject &doc, wxString &ostr, const CDocumentOutputObject::TKeyMap *exclude)
 {
     if(doc.Root() != NULL)
     {
         TTagStack tagstack;
-        RewriteElement(ostr, doc.Root(), doc.Root(), tagstack);
+        try
+        {
+            RewriteElement(ostr, doc.Root(), doc.Root(), tagstack, exclude);
+        }
+        catch(std::exception& e)
+        {
+            return -1;
+        }
     }
+    return 0;
 }
+//
+//void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject* root, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+//{
+//    const CElementObject* pe = e, *ps = e->sibling;
+//
+//    if(pe->type != ET_VALUE)
+//    {
+//        ostr << CDocumentObject::TAG_LT << pe->tag;
+//        const CAttributeObject* attr = pe->attrib;
+//        while(attr != NULL)
+//        {
+//            ostr << CDocumentObject::TAG_SPACE << attr->attr;
+//            if(!attr->value.empty())
+//                ostr << CDocumentObject::TAG_EQUAL << attr->value;
+//            attr = attr->next;
+//        }
+//        if(pe->type == ET_TAG)
+//        {
+//            ostr << CDocumentObject::TAG_SLASH << CDocumentObject::TAG_GT;
+//        }
+//        else
+//        {
+//            ostr << CDocumentObject::TAG_GT << pe->value;
+//            tagstack.push(pe->tag);
+//        }
+//
+//        pe = pe->child;
+//        if(pe != NULL)
+//        {
+//            RewriteElement(ostr, root, pe, tagstack, exclude);
+//        }
+//        else
+//        {
+//            if(e->type != ET_TAG)
+//            {
+//                ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tagstack.top() << CDocumentObject::TAG_GT;
+//                tagstack.pop();
+//            }
+//        }
+//    }
+//    else
+//    {
+//        ostr << pe->value;
+//    }
+//
+//    if(ps != NULL)
+//    {
+//        RewriteElement(ostr, root, ps, tagstack, exclude);
+//    }
+//    else if(e != root)
+//    {
+//            ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tagstack.top() << CDocumentObject::TAG_GT;
+//            tagstack.pop();
+//    }
+//}
 
-void CDocumentOutputObject::RewriteElement(wxString &ostr, const TinyHtmlParser::CElementObject* root, const TinyHtmlParser::CElementObject *e, CDocumentOutputObject::TTagStack &tagstack)
+void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject* root, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
 {
     const CElementObject* pe = e, *ps = e->sibling;
 
     if(pe->type != ET_VALUE)
     {
-        ostr << CDocumentObject::TAG_LT << pe->tag;
-        const CAttributeObject* attr = pe->attrib;
-        while(attr != NULL)
+        RewriteTag(ostr, pe, tagstack, exclude);
+
+        pe = pe->child;
+        if(pe != NULL)
         {
-            ostr << CDocumentObject::TAG_SPACE << attr->attr;
-            if(!attr->value.empty())
-                ostr << CDocumentObject::TAG_EQUAL << attr->value;
-            attr = attr->next;
+            RewriteElement(ostr, root, pe, tagstack, exclude);
         }
-        if(pe->type == ET_TAG)
+        else
+        {
+            RewriteTagEnd(ostr, e, tagstack, exclude);
+        }
+    }
+    else
+    {
+        RewriteValue(ostr, pe, exclude);
+    }
+
+    if(ps != NULL)
+    {
+        RewriteElement(ostr, root, ps, tagstack, exclude);
+    }
+    else// if(e != root)
+    {
+        RewriteTagEnd(ostr, e, tagstack, exclude);
+    }
+}
+
+void CDocumentOutputObject::RewriteTag(wxString &ostr, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(!IsKey(exclude, KT_TAG, e->tag))
+    {
+        ostr << CDocumentObject::TAG_LT << e->tag;
+        RewriteAttrib(ostr, e, exclude);
+
+        if(e->type == ET_TAG)
         {
             ostr << CDocumentObject::TAG_SLASH << CDocumentObject::TAG_GT;
         }
         else
         {
-            ostr << CDocumentObject::TAG_GT << pe->value;
-            tagstack.push(pe->tag);
+            ostr << CDocumentObject::TAG_GT;// << pe->value;
+            RewriteValue(ostr, e, exclude);
         }
-
-        pe = pe->child;
-        if(pe != NULL)
-        {
-            RewriteElement(ostr, root, pe, tagstack);
-        }
-        else
-        {
-            if(e->type != ET_TAG)
-            {
-                ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tagstack.top() << CDocumentObject::TAG_GT;
-                tagstack.pop();
-            }
-        }
-    }
-    else
-    {
-        ostr << pe->value;
     }
 
-    if(ps != NULL)
+    if(e->type != ET_TAG)
     {
-        RewriteElement(ostr, root, ps, tagstack);
+        tagstack.push(e->tag);
     }
-    else if(e != root)
+}
+
+void CDocumentOutputObject::RewriteTagEnd(wxString &ostr, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(e->type != ET_TAG)
     {
-        ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tagstack.top() << CDocumentObject::TAG_GT;
+        std::wstring& tag = tagstack.top();
+        if(!IsKey(exclude, KT_TAG, tag))
+        {
+            ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tag << CDocumentObject::TAG_GT;
+        }
         tagstack.pop();
+    }
+}
+
+void CDocumentOutputObject::RewriteValue(wxString &ostr, const CElementObject *e, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(!IsKey(exclude, KT_VALUE, e->value))
+    {
+        ostr << e->value;
+    }
+}
+
+void CDocumentOutputObject::RewriteAttrib(wxString &ostr, const CElementObject *e, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    const CAttributeObject* attr = e->attrib;
+    while(attr != NULL)
+    {
+        if(!IsKey(exclude, KT_ATTRIB, attr->attr))
+        {
+            ostr << CDocumentObject::TAG_SPACE << attr->attr;
+            if(!attr->value.empty())
+                ostr << CDocumentObject::TAG_EQUAL << attr->value;
+        }
+        attr = attr->next;
     }
 }
 

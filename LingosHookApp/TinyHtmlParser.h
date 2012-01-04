@@ -10,6 +10,8 @@
 #include <string>
 #include <queue>
 #include <stack>
+#include <set>
+#include <map>
 
 #include "wx/wfstream.h"
 #include "wx/txtstrm.h"
@@ -204,11 +206,25 @@ private:
 class CDocumentOutputObject
 {
 protected:
+    typedef std::set<std::wstring> TKeySet;
     typedef std::stack<std::wstring> TTagStack;
 public:
-    static void Rewrite(const CDocumentObject& doc, wxString& ostr);
+    enum KeyType { KT_TAG = 0, KT_VALUE, KT_ATTRIB, KT_ALL_TAG, KT_ALL_VALUE, KT_ALL_ATTRIB };
+    typedef std::map<KeyType, TKeySet> TKeyMap;
+public:
+    static void AddKey(TKeyMap* keymap, KeyType type, const wxString& str);
+    static void RemoveKey(TKeyMap* keymap, KeyType type, const wxString& str);
+    static bool IsKey(const TKeyMap* keymap, KeyType type, const wxString& str);
+
+    static int Rewrite(const CDocumentObject& doc, wxString& ostr, const TKeyMap* exclude = NULL);
 protected:
-    static void RewriteElement(wxString& os, const TinyHtmlParser::CElementObject* root, const CElementObject* e, TTagStack& tagstack);
+    static void RewriteElement(wxString& ostr, const TinyHtmlParser::CElementObject* root, const CElementObject* e, TTagStack& tagstack, const TKeyMap* exclude);
+    static bool IsKey(const TKeyMap* keymap, KeyType type, const std::wstring& str);
+private:
+    static void RewriteTag(wxString& ostr, const CElementObject* e, TTagStack& tagstack, const TKeyMap* exclude);
+    static void RewriteTagEnd(wxString& ostr, const CElementObject* e, TTagStack& tagstack, const TKeyMap* exclude);
+    static void RewriteAttrib(wxString& ostr, const CElementObject* e, const TKeyMap* exclude);
+    static void RewriteValue(wxString& ostr, const CElementObject* e, const TKeyMap* exclude);
 };
 
 }
