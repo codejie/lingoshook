@@ -39,7 +39,7 @@ private:
 };
 
 
-enum ElementType { ET_UNKNOWN = -1, ET_TAG = 0, ET_NODE, ET_ELEMENT };//0:just a tag, 1:no value, 2:have value
+enum ElementType { ET_UNKNOWN = -1, ET_TAG = 0, ET_NODE, ET_ELEMENT, ET_VALUE };//0:just a tag, 1:no value, 2:have value
 
 class CAttributeObject
 {
@@ -92,7 +92,7 @@ public:
 class CParserData
 {
 public:
-    enum DataType { DT_UNKNOWN = -1, DT_TAG = 0, /*DT_VALUE,*/ DT_END, DT_SPECIAL, DT_END_SPECIAL /*DT_TAG_VALUE*//*, DT_BROKEN*/ }; //DT_END_SPECIAL is used to <TAG/>
+    enum DataType { DT_UNKNOWN = -1, DT_TAG = 0, /*DT_VALUE,*/ DT_END, DT_SPECIAL, DT_END_SPECIAL, DT_VALUE /*DT_TAG_VALUE*//*, DT_BROKEN*/ }; //DT_END_SPECIAL is used to <TAG/>
     typedef std::pair<size_t, size_t> TRange;//start + end;
     typedef std::vector<TRange> TValueVector;
 public:
@@ -116,7 +116,7 @@ public:
 
 class CDocumentObject
 {
-protected:
+public:
     static const wchar_t TAG_LT        =   L'<';
     static const wchar_t TAG_GT        =   L'>';
     static const wchar_t TAG_SLASH     =   L'/';
@@ -124,7 +124,7 @@ protected:
     static const wchar_t TAG_AND       =   L'&';
     static const wchar_t TAG_SPACE     =   L' ';
     static const wchar_t TAG_EQUAL     =   L'=';
-
+protected:
     typedef std::stack<CParserData> TDataStack;
     //typedef std::pair<size_t, CParserData> TNodeData;//level + tag;
     struct TNodeData
@@ -146,7 +146,7 @@ public:
     CDocumentObject();
     virtual ~CDocumentObject();
 
-    int Load(const std::wstring& str, bool strict = true);
+    int Load(const std::wstring& str, bool strict = true, bool valueseparate = false);
 
     const CElementObject* Root() const { return _root; }
 
@@ -162,17 +162,18 @@ public:
 
     void Show(std::wostream& os) const;
 
-    void Rewrite(std::wofstream& ofs) const;
-    void Rewrite(wxTextOutputStream& ofs) const;
-    void Rewrite(wxString& os) const;
+    //void Rewrite(std::wofstream& ofs) const;
+    //void Rewrite(wxTextOutputStream& ofs) const;
+    //void Rewrite(wxString& os) const;
 protected:
     int PreProcess(const std::wstring& str, std::wstring& html, bool strict);
-    int PreParser(const std::wstring& html, TNodeQueue& que, bool strict);
+    int PreParser(const std::wstring& html, TNodeQueue& que, bool strict, bool valueseparate);
     int Parser(const std::wstring& html, TNodeQueue& que, bool strict);
 private:
     int PreParserLT(const std::wstring& html, std::wstring::size_type& pos, CParserData& data);
 
     int PushValueData(/*CParserData::DataType type, */size_t start, size_t end, TDataStack& datastack) const;
+    int PushValueData(size_t start, size_t end, TDataStack& datastack, CDocumentObject::TNodeQueue& nodeque) const;
     int PushTagData(const std::wstring& html, CParserData& data, TDataStack& datastack, TNodeQueue& nodeque) const;
     int PreParserBroken(const std::wstring& html, TDataStack& datastack, TNodeQueue& nodeque) const;
     
@@ -183,9 +184,9 @@ private:
     CElementObject* MakeElement(const std::wstring& html, const TNodeData& node, CElementObject* parent, CElementObject* sibling) const;
 
     void ShowElement(std::wostream& os, const CElementObject* e) const;
-    void RewriteElement(std::wofstream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
-    void RewriteElement(wxTextOutputStream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
-    void RewriteElement(wxString& os, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
+    //void RewriteElement(std::wofstream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
+    //void RewriteElement(wxTextOutputStream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
+    //void RewriteElement(wxString& os, const CElementObject* e, std::stack<std::wstring>& tagstack) const;
 
     void FreeElement(CElementObject* root);
 
@@ -197,6 +198,17 @@ private:
     mutable TElementStack _findstack;
 private:
     bool _bIsMistake;
+};
+
+//
+class CDocumentOutputObject
+{
+protected:
+    typedef std::stack<std::wstring> TTagStack;
+public:
+    static void Rewrite(const CDocumentObject& doc, wxString& ostr);
+protected:
+    static void RewriteElement(wxString& os, const TinyHtmlParser::CElementObject* root, const CElementObject* e, TTagStack& tagstack);
 };
 
 }
