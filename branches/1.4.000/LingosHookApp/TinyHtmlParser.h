@@ -212,8 +212,8 @@ public:
     enum KeyType { KT_TAG = 0, KT_VALUE, KT_ATTRIB, KT_ALL_TAG, KT_ALL_VALUE, KT_ALL_ATTRIB };
     typedef std::map<KeyType, TKeySet> TKeyMap;
 public:
-    static void AddKey(TKeyMap* keymap, KeyType type, const wxString& str);
-    static void RemoveKey(TKeyMap* keymap, KeyType type, const wxString& str);
+    static void AddKey(TKeyMap* keymap, KeyType type, const wxString& str = wxEmptyString);
+    static void RemoveKey(TKeyMap* keymap, KeyType type, const wxString& str = wxEmptyString);
     static bool IsKey(const TKeyMap* keymap, KeyType type, const wxString& str);
 
     static int Rewrite(const CDocumentObject& doc, wxString& ostr, const TKeyMap* exclude = NULL);
