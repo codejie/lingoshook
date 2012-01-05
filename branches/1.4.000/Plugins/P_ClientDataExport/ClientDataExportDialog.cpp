@@ -409,7 +409,7 @@ int ClientDataExportDialog::OptimizeHTML(const wxString& src, wxString& ret)
 
     try
     {
-        if(doc.Load(html, true) != 0)
+        if(doc.Load(html, true, true) != 0)
         {
             return -1;
         }
@@ -419,10 +419,22 @@ int ClientDataExportDialog::OptimizeHTML(const wxString& src, wxString& ret)
         return -1;
     }    
 
+    TinyHtmlParser::CDocumentOutputObject::TKeyMap exclude;
+    
+    //TinyHtmlParser::CDocumentOutputObject::AddKey(&exclude, TinyHtmlParser::CDocumentOutputObject::KT_TAG, wxT("IMG"));
+    //TinyHtmlParser::CDocumentOutputObject::AddKey(&exclude, TinyHtmlParser::CDocumentOutputObject::KT_TAG, wxT("A"));
+    //TinyHtmlParser::CDocumentOutputObject::AddKey(&exclude, TinyHtmlParser::CDocumentOutputObject::KT_TAG, wxT("PARAM"));
+    //TinyHtmlParser::CDocumentOutputObject::AddKey(&exclude, TinyHtmlParser::CDocumentOutputObject::KT_TAG, wxT("EMBED"));
+    //TinyHtmlParser::CDocumentOutputObject::AddKey(&exclude, TinyHtmlParser::CDocumentOutputObject::KT_TAG, wxT("OBJECT"));
+    //TinyHtmlParser::CDocumentOutputObject::AddKey(&exclude, TinyHtmlParser::CDocumentOutputObject::KT_ATTRIB, wxT("onselectstart"));
+
+    TinyHtmlParser::CDocumentOutputObject::Rewrite(doc, ret, &exclude);
+
+    ret.insert(12, wxT("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"));
 
 
 //h->insert(12, wxT("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"));
 
-    return wxEmptyString;
+    return 0;
 }
 
