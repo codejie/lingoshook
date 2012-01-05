@@ -1088,6 +1088,22 @@ bool CDocumentOutputObject::IsKey(const TKeyMap* keymap, KeyType type, const std
     if(keymap == NULL)
         return false;
 
+    if(type == KT_TAG || type == KT_ALL_TAG)
+    {
+        if(keymap->find(KT_ALL_TAG) != keymap->end())
+            return true;
+    }
+    else if(type == KT_VALUE || type == KT_ALL_VALUE)
+    {
+        if(keymap->find(KT_ALL_VALUE) != keymap->end())
+            return true;
+    }
+    else if(type == KT_ATTRIB || type == KT_ALL_ATTRIB)
+    {
+        if(keymap->find(KT_ALL_ATTRIB) != keymap->end())
+            return true;
+    }
+
     TKeyMap::const_iterator it = keymap->find(type);
     if(it == keymap->end())
         return false;
@@ -1183,7 +1199,10 @@ void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject*
         }
         else
         {
-            RewriteTagEnd(ostr, e, tagstack, exclude);
+            if(e->type != ET_TAG)
+            {
+                RewriteTagEnd(ostr, e, tagstack, exclude);
+            }
         }
     }
     else
@@ -1195,7 +1214,7 @@ void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject*
     {
         RewriteElement(ostr, root, ps, tagstack, exclude);
     }
-    else// if(e != root)
+    else if(e != root)
     {
         RewriteTagEnd(ostr, e, tagstack, exclude);
     }
@@ -1227,15 +1246,12 @@ void CDocumentOutputObject::RewriteTag(wxString &ostr, const CElementObject *e, 
 
 void CDocumentOutputObject::RewriteTagEnd(wxString &ostr, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
 {
-    if(e->type != ET_TAG)
+    std::wstring& tag = tagstack.top();
+    if(!IsKey(exclude, KT_TAG, tag))
     {
-        std::wstring& tag = tagstack.top();
-        if(!IsKey(exclude, KT_TAG, tag))
-        {
-            ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tag << CDocumentObject::TAG_GT;
-        }
-        tagstack.pop();
+        ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tag << CDocumentObject::TAG_GT;
     }
+    tagstack.pop();
 }
 
 void CDocumentOutputObject::RewriteValue(wxString &ostr, const CElementObject *e, const CDocumentOutputObject::TKeyMap *exclude)
