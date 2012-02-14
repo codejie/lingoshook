@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../LingosHookApp;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="../LingosHookApp;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
+				AdditionalDependencies="tidy.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../LingosHookApp;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHookApp;D:\Studio\LingosHook\Tidy\tidylib\include;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,7 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="tidy.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="D:\Studio\LingosHook\Tidy\Release - dll (fast)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -175,7 +177,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\LingosHookApp\HtmlTidyObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\output.cpp"
 				>
 			</File>
 			<File
@@ -188,6 +206,17 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\LingosHookApp\HtmlTidyObject.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="..\LingosHookApp\TinyHtmlParser.h"
 				>

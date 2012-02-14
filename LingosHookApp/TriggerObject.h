@@ -5,14 +5,26 @@
 #ifndef __TRIGGEROBJECT_H__
 #define __TRIGGEROBJECT_H__
 
+#include "LHControls.h"
 #include "TinyHtmlParser.h"
-#include "ConfigData.h"
-#include "DictObject.h"
-#include "DisplayObject.h"
+//#include "ConfigData.h"
+//#include "DictObject.h"
+//#include "DisplayObject.h"
 #include "TagObject.h"
 #include "MemoryDailyObject.h"
-#include "SpeakObject.h"
-#include "FilterShowObject.h"
+//#include "SpeakObject.h"
+//#include "FilterShowObject.h"
+#include "DictStructure.h"
+#include "SpecialDictParser.h"
+#include "ActivityObject.h"
+
+
+class CConfigData;
+class CDictObject;
+class CDisplayObject;
+//class MemoryDaily::CManageObject;
+class CSpeakObject;
+class CFilterShowObject;
 
 class CTriggerObject
 {
@@ -39,9 +51,9 @@ public:
 
     //void OnWordDataGet(const TWordData& data);
     void OnWordFound(int wordid, const wxString& word);
-    void OnResultSave(const TWordResultMap& result);
-    void OnResultSave(int wordid, const CDictParser* dict, const CDictResult& result);
-    void OnResultGet(int wordid, const CDictParser* dict, const CDictResult& result);
+    //void OnResultSave(int wordid, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result);
+    void OnResultSpecialDictGet(int wordid, const SpecialDictParser::CDictParser* dict, const SpecialDictParser::CDictResult& result);
+    void OnResultHtmlDictGet(int wordid, const wxString& html);
     void OnWordRemove(int wordid);
     void OnWordResultGetOver(int wordid, const TWordData& data);
     
@@ -69,6 +81,8 @@ public:
     void OnParserUnknown(const wxString& id, const wxString& title);
     void OnParserInitFail(const wxString& id, const wxString& title);
     void OnParserLoad(int index, const wxString& id, const wxString& title);
+
+    void OnPluginLoad(int index, const ActivityObject::PropertyData& data, bool imcompatible = false);
 protected:
     CConfigData* _dataConfig;
     CDictObject* _objDict;

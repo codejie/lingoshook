@@ -6,13 +6,16 @@
 
 #include "ViconDictObject.h"
 
+namespace SpecialDictParser
+{
+
 namespace VICON
 {
 
-const wxString CECParser::ID        =   _("E1C27E806399D047822B6650194A3D32");
-const wxString CECParser::TITLE     =   _("Vicon English-Chinese(S) Dictionary");
+const std::wstring CECParser::ID        =   L"E1C27E806399D047822B6650194A3D32";
+const std::wstring CECParser::TITLE     =   L"Vicon English-Chinese(S) Dictionary";
 
-CECParser::CECParser(int index, const wxString& id, const wxString& title, const wxDateTime& create)
+CECParser::CECParser(int index, const std::wstring& id, const std::wstring& title, const wxDateTime& create)
 : CDictParser(index, id, title, create)
 {
 }
@@ -38,7 +41,7 @@ int CECParser::Init(CDBAccess::TDatabase &db)
     return 0;
 }
 
-int CECParser::ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TWordResultMap& result) const
+int CECParser::ParserHTML(const std::wstring& html, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result) const
 {
     if(dict == NULL)
         return -1;
@@ -62,9 +65,9 @@ int CECParser::ParserHTML(const wxString& html, TinyHtmlParser::CDocumentObject&
 	return 0;
 }
 
-int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TWordResultMap& result) const
+int CECParser::GetRecord(const TinyHtmlParser::CDocumentObject* doc, const TinyHtmlParser::CElementObject* pr, TResultMap& result) const
 {
-    wxString word;
+    std::wstring word = L"";
     std::auto_ptr<CECResult> res(new CECResult);
 
     TinyHtmlParser::CDocumentObject::TElementStack tmpstack;
@@ -75,22 +78,22 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
         if(pa == NULL)
             return -1;
 
-        if(pa->value == L"\"MARGIN: 0px 0px 5px; COLOR: #808080; LINE-HEIGHT: normal\"")
+        if(pa->value == L"\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"")
         {//word and symbol
             if(p->child == NULL)
                 return -1;
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            word = wxString(p->child->child->value.c_str(), wxConvISO8859_1);
+            word = CDictParser::TrimValue(p->child->child->value);//.c_str());//, wxConvISO8859_1);
 
             if(p->child->sibling == NULL || p->child->sibling->child == NULL || p->child->sibling->child->type != TinyHtmlParser::ET_ELEMENT)
             {
-                res->m_strSymbol = _("null");
+                res->m_strSymbol = wxT("null");
                 //return -1;
             }
             else
             {
-                res->m_strSymbol = wxString(p->child->sibling->child->value.c_str(), wxConvISO8859_1);
+                res->m_strSymbol = p->child->sibling->child->value.c_str();//, wxConvISO8859_1);
             }
         }
         else if(pa->value == L"\"MARGIN: 0px 0px 5px\"")
@@ -99,8 +102,8 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
 
             if(p->child == NULL || p->child->type != TinyHtmlParser::ET_ELEMENT)
                 return -1;
-            rec.m_strResult = wxString(p->child->value.c_str(),wxConvISO8859_1);
-            rec.m_strResult.Trim(false);
+            rec.m_strResult = CDictParser::TrimValue(p->child->value);//.c_str());//,wxConvISO8859_1);
+            //rec.m_strResult.Trim(false);
 
             if(p->child->child == NULL || p->child->child->type != TinyHtmlParser::ET_ELEMENT)
             {
@@ -109,7 +112,7 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
             }
             else
             {
-                rec.m_eClass = StrToWC(wxString(p->child->child->value.c_str(), wxConvISO8859_1));
+                rec.m_eClass = StrToWC(p->child->child->value);//.c_str()));//, wxConvISO8859_1);
             }
             res->m_vctRecord.push_back(rec);            
         }
@@ -117,61 +120,64 @@ int CECParser::GetRecord(TinyHtmlParser::CDocumentObject* doc, const TinyHtmlPar
         p = doc->FindNextElement(pr, L"DIV", tmpstack);
     }
 
-    TWordResultMap::iterator it = result.insert(std::make_pair(word, TDictResultMap())).first;
-    it->second.insert(std::make_pair(ID, CDictResult(res.release())));
+    if(!word.empty())
+    {
+        TResultMap::iterator it = result.insert(std::make_pair(word, TResult())).first;
+        it->second.m_resultDict.insert(std::make_pair(ID, CDictResult(res.release())));
+    }
 
     return 0;
 }
 
-WordClass CECParser::StrToWC(const wxString &str) const
+WordClass CECParser::StrToWC(const std::wstring &str) const
 {
 	WordClass wc = WC_UNKNOWN;
-	if(str == _("n."))
+	if(str == wxT("n."))
 		return WC_NOUN;
-	else if(str == _("adj."))
+	else if(str == wxT("adj."))
 		return WC_ADJECTIVE;
-	else if(str == _("v."))
+	else if(str == wxT("v."))
 		return WC_VERB;
-	else if(str == _("adv."))
+	else if(str == wxT("adv."))
 		return WC_ADVERB;
-	else if(str == _("conj."))
+	else if(str == wxT("conj."))
 		return WC_CONJ;
-    else if(str == _("interj."))
+    else if(str == wxT("interj."))
         return WC_INTERJECTION;
-    else if(str == _("prep."))
+    else if(str == wxT("prep."))
         return WC_PREPOSITION;
-    else if(str == _("pron."))
+    else if(str == wxT("pron."))
         return WC_PRONOUN;
 	else
 		return WC_UNKNOWN;
 }
 
-const wxString CECParser::WCToStr(WordClass wc) const
+const std::wstring CECParser::WCToStr(WordClass wc) const
 {
 	switch(wc)
 	{
 	case WC_NOUN:
-		return _("n.");
+		return wxT("n.");
 	case WC_ADJECTIVE:
-		return _("adj.");
+		return wxT("adj.");
 	case WC_VERB:
-		return _("v.");
+		return wxT("v.");
 	case WC_ADVERB:
-		return _("adv.");
+		return wxT("adv.");
 	case WC_CONJ:
-		return _("conj.");
+		return wxT("conj.");
     case WC_INTERJECTION:
-        return _("interj.");
+        return wxT("interj.");
     case WC_PREPOSITION:
-        return _("prep.");
+        return wxT("prep.");
     case WC_PRONOUN:
-        return _("pron.");
+        return wxT("pron.");
 	default:
-		return _("unkn.");
+		return wxT("unkn.");
 	}
 }
 
-int CECParser::IsWordExist(CDBAccess::TDatabase &db, int wordid)
+int CECParser::IsWordExist(CDBAccess::TDatabase &db, int wordid) const
 {
     CDBAccess::TQuery query = db.PrepareStatement("SELECT COUNT(*) FROM ViconECSymbolTable WHERE WordID = ?");
     query.Bind(1, wordid);
@@ -181,76 +187,95 @@ int CECParser::IsWordExist(CDBAccess::TDatabase &db, int wordid)
     return 0;
 }
 
-int CECParser::GetResult(CDBAccess::TDatabase &db, int wordid, TDictResultMap &result)
+int CECParser::GetResult(CDBAccess::TDatabase &db, int wordid, CDictResult &result) const
 {
-    return -1;
-}
-
-int CECParser::GetResult(CDBAccess::TDatabase &db, int wordid, CDictResult &result)
-{
-    CDBAccess::TQuery query = db.PrepareStatement("SELECT Symbol FROM ViconECSymbolTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    CDBAccess::TResult res = query.ExecuteQuery();
-    if(res.Eof())
-        return -1;
-    std::auto_ptr<CECResult> ecres(new CECResult());
-    ecres->m_strSymbol = res.GetString(0);
-
-    query.Reset();
-    query = db.PrepareStatement("SELECT ClassID, Result FROM ViconECResultTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    res = query.ExecuteQuery();
-    while(res.NextRow())
+    try
     {
-        CECResult::_record_t rec;
-        rec.m_eClass = (WordClass)(res.GetInt(0));
-        rec.m_strResult = res.GetString(1);
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Symbol FROM ViconECSymbolTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(res.Eof())
+            return -1;
 
-        ecres->m_vctRecord.push_back(rec);
-    }
-    
-    result.Attach(ecres.release());
+        std::auto_ptr<CECResult> ecres(new CECResult());
+        ecres->m_strSymbol = res.GetString(0);
 
-    return 0;
-}
-
-int CECParser::SaveResult(CDBAccess::TDatabase &db, int wordid, const CDictResult &result)
-{
-    if(IsWordExist(db, wordid) == 0)
-        return 0;
-
-    const CECResult* res = dynamic_cast<const CECResult*>(result.Result());
-    
-    CDBAccess::TQuery query = db.PrepareStatement("INSERT INTO ViconECSymbolTable VALUES(?, ?)");
-    query.Bind(1, wordid);
-    query.Bind(2, res->m_strSymbol);
-    query.ExecuteUpdate();
-    
-    for(CECResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
-    {
         query.Reset();
-        query = db.PrepareStatement("INSERT INTO ViconECResultTable VALUES(?, ?, ?)");
-	    query.Bind(1, wordid);
-        query.Bind(2, it->m_eClass);
-        query.Bind(3, it->m_strResult);
-	    query.ExecuteUpdate();	
+        query = db.PrepareStatement("SELECT ClassID, Result FROM ViconECResultTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        res = query.ExecuteQuery();
+        while(res.NextRow())
+        {
+            CECResult::_record_t rec;
+            rec.m_eClass = (WordClass)(res.GetInt(0));
+            rec.m_strResult = res.GetString(1);
+
+            ecres->m_vctRecord.push_back(rec);
+        }
+        
+        result.Attach(ecres.release());
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
     }
 
     return 0;
 }
 
-int CECParser::RemoveResult(CDBAccess::TDatabase &db, int wordid)
+int CECParser::SaveResult(CDBAccess::TDatabase &db, int wordid, const CDictResult &result) const
 {
-    CDBAccess::TQuery query = db.PrepareStatement("DELETE FROM ViconECSymbolTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    query.ExecuteUpdate();
+    try
+    {
+        if(IsWordExist(db, wordid) == 0)
+            return 0;
 
-    query.Reset();
-    query = db.PrepareStatement("DELETE FROM ViconECResultTable WHERE WordID = ?");
-    query.Bind(1, wordid);
-    query.ExecuteUpdate();
+        const CECResult* res = dynamic_cast<const CECResult*>(result.Result());
+        
+        CDBAccess::TQuery query = db.PrepareStatement("INSERT INTO ViconECSymbolTable VALUES(?, ?)");
+        query.Bind(1, wordid);
+        query.Bind(2, res->m_strSymbol);
+        query.ExecuteUpdate();
+        
+        for(CECResult::TRecordVector::const_iterator it = res->m_vctRecord.begin(); it != res->m_vctRecord.end(); ++ it)
+        {
+            query.Reset();
+            query = db.PrepareStatement("INSERT INTO ViconECResultTable VALUES(?, ?, ?)");
+	        query.Bind(1, wordid);
+            query.Bind(2, it->m_eClass);
+            query.Bind(3, it->m_strResult);
+	        query.ExecuteUpdate();	
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
 
     return 0;
+}
+
+int CECParser::RemoveResult(CDBAccess::TDatabase &db, int wordid)  const
+{
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("DELETE FROM ViconECSymbolTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        query.ExecuteUpdate();
+
+        query.Reset();
+        query = db.PrepareStatement("DELETE FROM ViconECResultTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        query.ExecuteUpdate();
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
 }
 
 }

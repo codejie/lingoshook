@@ -5,224 +5,134 @@
 #include <string>
 #include <memory>
 
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
+#include "wx/listctrl.h"
+
 #include "ConfigData.h"
-
-#include "ViconDictObject.h"
-#include "LangdaoDictObject.h"
+#include "HtmlTidyObject.h"
 #include "TriggerObject.h"
+#include "SpecialDictParser.h"
+#include "HtmlDictParser.h"
+#include "DictLoadChoiceDialog.h"
+#include "DictStoreChoiceDialog.h"
 #include "DictObject.h"
-
-
-CDictResult::CDictResult(const CParserResult* result)
-: _result(NULL)
-{
-    if(result != NULL)
-    {
-        _result.reset(result);
-    }
-}
-
-CDictResult::~CDictResult()
-{
-}
-
-const CParserResult* CDictResult::Result() const
-{
-    return _result.get();;
-}
-
-void CDictResult::Attach(const CParserResult* result)
-{
-    _result.reset(result);
-}
-
-CDictResult::CDictResult(const CDictResult& right)
-{
-    if(this != &right)
-    {
-        _result.reset((const_cast<CDictResult&>(right))._result.release());
-    }
-}
 
 ////////////////////////////////////////
 CDictObject::CDictObject(CDBAccess &db, CConfigData& config)
 : _db(db.Database())
 , _config(config)
 , _strCacheWord(wxEmptyString)
+, _objSpecialDictParser(NULL)
+, _objHtmlDictParser(NULL)
 {
 }
 
 CDictObject::~CDictObject()
 {
-    FreeParser();
 }
 
 int CDictObject::Init()
 {
+    _objSpecialDictParser.reset(new CSpecialDictParser);
+    _objHtmlDictParser.reset(new CHtmlDictParser);
+
     //word table
     try
     {
-        if(!_db.TableExists(_("DictTable")))
+        if(!_db.TableExists(wxT("DictTable")))
         {
-		    const char* dicttable = "CREATE TABLE DictTable (ID INTEGER PRIMARY KEY AUTOINCREMENT,DictID VARCHAR(64), Title VARCHAR(128),CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))";
+		    const char* dicttable = "CREATE TABLE DictTable (DictIndex INTEGER PRIMARY KEY AUTOINCREMENT,DictID VARCHAR(64), Title VARCHAR(128),CreateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))";
 		    _db.ExecuteUpdate(dicttable);
-
         }
-        if(AddKnownParser() != 0)
-            return -1;
 
-        if(LoadParser() != 0)
-            return -1;
- 
-		const char* wordtable = "CREATE TABLE IF NOT EXISTS WordTable (ID INTEGER PRIMARY KEY AUTOINCREMENT,Word VARCHAR(32) UNIQUE,Counter INTEGER, CheckinTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), UpdateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')),HTML TEXT)";
-		_db.ExecuteUpdate(wordtable);
-
-    }
-    catch(const CDBAccess::TException& e)
-    {
-        return -1;
-    }
-    return 0;
-}
-
-int CDictObject::AddKnownParser()
-{
-    if(RegisterParser(VICON::CECParser::ID, VICON::CECParser::TITLE) != 0)
-        return -1;
-    if(RegisterParser(LANGDAO::CECParser::ID, LANGDAO::CECParser::TITLE) != 0)
-        return -1;
-    return 0;
-}
-
-int CDictObject::RegisterParser(const wxString& id, const wxString& title)
-{
-    try
-    {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT COUNT(*) FROM DictTable WHERE DictID = ?");
-        query.Bind(1, id);
-        CDBAccess::TResult res = query.ExecuteQuery();
-        if(res.GetInt(0) != 0)
-            return 0;
-
-        query.Reset();
-        query = _db.PrepareStatement("INSERT INTO DictTable (DictID, Title) VALUES(?, ?)");
-        query.Bind(1, id);
-        query.Bind(2, title);
-        if(query.ExecuteUpdate() == 0)
-            return -1;
-    }
-    catch(const CDBAccess::TException& e)
-    {
-        return -1;
-    }
-    return 0;
-}
-
-int CDictObject::LoadParser()
-{
-    try
-    {
-        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, DictID, Title, CreateTime FROM DictTable");
-        if(!res.IsOk())
-            return -1;
-        while(res.NextRow())
+        if(!_db.TableExists(wxT("DictConfigTable")))
         {
-            wxString dictid = res.GetString(1);
-            std::auto_ptr<CDictParser> p(NULL);
-
-            if(dictid == VICON::CECParser::ID)
-            {
-                p.reset(new VICON::CECParser(res.GetInt(0), res.GetString(1), res.GetString(2), res.GetTimestamp(3)));
-            }
-            else if(dictid == LANGDAO::CECParser::ID)
-            {
-                p.reset(new LANGDAO::CECParser(res.GetInt(0), res.GetString(1), res.GetString(2), res.GetTimestamp(3)));
-            }
-            else
-            {
-                g_objTrigger.OnParserUnknown(res.GetString(1), res.GetString(2));
-            }
-            if(p.get() == NULL)
-                continue;
-
-            if(p->Init(_db) == 0)
-            {
-                _mapParser.insert(std::make_pair(dictid, p.release()));
-                g_objTrigger.OnParserLoad(res.GetInt(0), dictid, res.GetString(2));
-            }
-            else
-            {
-                g_objTrigger.OnParserInitFail(res.GetString(1), res.GetString(2));
-            }
+		    const char* dicttable = "CREATE TABLE DictConfigTable (DictIndex INTEGER, LoadParam INTEGER, StoreParam INTEGER)";
+		    _db.ExecuteUpdate(dicttable);
+        }
+        
+        if(!_db.TableExists(wxT("SrcDataTable")))
+        {
+		    const char* datatable = "CREATE TABLE SrcDataTable (SrcID INTEGER PRIMARY KEY AUTOINCREMENT, CheckinTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')), HTML TEXT)";
+    		_db.ExecuteUpdate(datatable);
+        }        
+        
+        if(!_db.TableExists(wxT("WordTable")))
+        {
+		    const char* wordtable = "CREATE TABLE WordTable (WordID INTEGER PRIMARY KEY AUTOINCREMENT, SrcID INTEGER, Word VARCHAR(32) UNIQUE,Counter INTEGER, UpdateTime TIMESTAMP DEFAULT (DATETIME('now', 'localtime')))";
+    		_db.ExecuteUpdate(wordtable);
         }
     }
     catch(const CDBAccess::TException& e)
     {
         return -1;
     }
+
+    if(_objSpecialDictParser->Init(_db) != 0)
+        return -1;
+    if(_objHtmlDictParser->Init(_db) != 0)
+        return -1;
+
     return 0;
-}
-
-//int CDictObject::AddParser(const wxString& id)
-//{
-//    if(GetParser(id) == NULL)
-//        return -1;
-//    return 0;
-//}
-
-CDictParser* CDictObject::GetParser(const wxString &id)
-{
-    TParserMap::iterator it = _mapParser.find(id);
-    if(it != _mapParser.end())
-        return it->second;
-
-    return NULL;
-}
-
-void CDictObject::FreeParser()
-{
-    TParserMap::iterator it = _mapParser.begin();
-    while(it != _mapParser.end())
-    {
-        delete it->second;
-        _mapParser.erase(it ++ );
-    }
 }
 
 void CDictObject::CacheWord(const wxString& word)
 {
-    _strCacheWord = word;
+    _strCacheWord = word.c_str();
 }
 
-int CDictObject::HTMLProc(const wxString &str, int mode)
+int CDictObject::HTMLProc(const wxString& str)
 {
-    if(mode == 0)
+    std::wstring html(str.begin(), str.end());
+
+    //TinyHtmlParser::CDocumentObject doc;
+    
+    if(_config.m_iUseTidy == 1)
     {
-        return HTMLProc(str);
+        if(CHtmlTidyObject::Tidy(html, html) != 0)
+            return -1;
     }
-    else if(mode == 1)
+
+    std::wstring prochtml;
+
+    for(std::wstring::const_iterator it = html.begin(); it != html.end(); ++ it)
     {
-        if(HTMLProc(str) != 0)
+        if((*it) == L'\r' || (*it) == L'\n')
         {
-            return ForceSaveHTML(str);
+            continue;
+        }
+        prochtml += (*it);
+    }
+
+    if(_config.m_iSkipDict != 1 || _config.m_iSkipHtml != 1)
+    {
+        if(ParserHTML(prochtml) != 0)
+        {
+            if(_config.m_iSkipError == 1)
+            {
+                return ForceSaveHTML(prochtml);
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
     else
     {
-        return ForceSaveHTML(str);
+        return ForceSaveHTML(prochtml);
     }
     return 0;
 }
 
-int CDictObject::HTMLProc(const wxString &str)
+int CDictObject::ParserHTML(const std::wstring& html)
 {
-    std::wstring html(str.begin(), str.end());
-
-    //find dict
     TinyHtmlParser::CDocumentObject doc;
+
     try
     {
-        if(doc.Load(html, false) != 0)
+        if(doc.Load(html, true) != 0)
         {
             g_objTrigger.OnHTMLParserFail(html);
             return -1;
@@ -234,101 +144,300 @@ int CDictObject::HTMLProc(const wxString &str)
         return -1;
     }
 
-    TWordResultMap result;
+    TResultMap result;
 
-    const TinyHtmlParser::CElementObject* pe = doc.FindFirstElement(L"DIV");
-    while(pe != NULL)
+    const TinyHtmlParser::CElementObject* pdiv = doc.FindFirstElement(L"DIV");
+    const TinyHtmlParser::CAttributeObject* pa = NULL;
+
+
+    while(pdiv != NULL)
     {
-        const TinyHtmlParser::CAttributeObject* pa = pe->FindAttribute(L"style");
-        if(pa != NULL && pa->value == L"\"PADDING-RIGHT: 10px; PADDING-LEFT: 10px; FONT-SIZE: 10.5pt; PADDING-BOTTOM: 0px; WIDTH: 100%; LINE-HEIGHT: 1.2em; PADDING-TOP: 10px; FONT-FAMILY: 'Tahoma'\"")
+        pa = pdiv->FindAttribute(L"id");
+        if(pa != NULL && pa->value == L"\"lingoes_dictarea\"")
         {
-            pa = pe->FindAttribute(L"dictid");
-            if(pa != NULL)
+            pdiv = pdiv->sibling;
+            if(pdiv == NULL)
+                break;
+            pa = pdiv->FindAttribute(L"dictid");
+            if(pa == NULL)
+                break;
+
+            std::wstring dictid = pa->value;
+            dictid = dictid.substr(1, dictid.size() - 2);
+
+            if(_config.m_iSkipDict != 1)
             {
-                wxString dictid(pa->value.c_str(), wxConvISO8859_1);
-                dictid = dictid.substr(1, dictid.size() - 2);
-                CDictParser* parser = GetParser(dictid);
-                if(parser != NULL)
-                {
-                    if(parser->ParserHTML(str, doc, pe, result) != 0)
-                    {
-                       
-                    }
-                }
-                else
-                {
-                }
+                if(ParserSpecialDict(html, dictid, doc, pdiv, result) != 0)
+                    return -1;
+            }
+            if(_config.m_iSkipHtml != 1)
+            {
+                if(ParserHtmlDict(html, dictid, doc, pdiv, result) != 0)
+                    return -1;
             }
         }
-        pe = doc.FindNextElement();
+        pdiv = doc.FindNextElement();
     }
-    if(SaveResult(str, result) == 0)
+
+//It will be faster by the below way
+
+    //while(pdiv != NULL)
+    //{
+    //    pa = pdiv->FindAttribute(L"id");
+    //    if(pa != NULL && pa->value == L"\"lingoes_dictarea\"")
+    //        break;
+    //    pdiv = doc.FindNextElement();
+    //}
+
+    //while(pdiv != NULL)
+    //{
+    //    pdiv = pdiv->sibling;
+    //    if(pdiv == NULL)
+    //        break;
+    //    pa = pdiv->FindAttribute(L"dictid");
+    //    if(pa == NULL)
+    //        break;
+
+    //    std::wstring dictid = pa->value;
+    //    dictid = dictid.substr(1, dictid.size() - 2);
+
+    //    if(_config.m_iSkipDict != 1)
+    //    {
+    //        if(ParserSpecialDict(html, dictid, doc, pdiv, result) != 0)
+    //            return -1;
+    //    }
+    //    if(_config.m_iSkipHtml != 1)
+    //    {
+    //        if(ParserHtmlDict(html, dictid, doc, pdiv, result) != 0)
+    //            return -1;
+    //    }
+
+    //    pdiv = pdiv->sibling;
+    //    if(pdiv == NULL)
+    //        break;
+    //    pa = pdiv->FindAttribute(L"id");
+    //    if(pa == NULL || pa->value != L"\"lingoes_dictarea\"")
+    //        break;
+    //}
+
+    if(result.size() == 0)
+        return -1;
+
+    if(SaveResult(html, result) == 0)
     {
-        g_objTrigger.OnResultSave(result);
+        //g_objTrigger.OnResultSave(result);
         return 0;
     }
 
-    return -1;
+    return -1;    
 }
 
-int CDictObject::ForceSaveHTML(const wxString& str)
+int CDictObject::ForceSaveHTML(const std::wstring& html)
 {
     if(_strCacheWord.empty())
         return -1;
-    int wordid = -1;
 
-    int ret = SaveWord(_strCacheWord, str, wordid);
+    int wordid = -1;
+    int count = 0;
+
+    if(CheckWord(_strCacheWord, wordid, count) != 0)
+        return -1;
+
+    if(wordid != -1)
+        return 0;
+
+    int srcid = -1;
+    
+    if(SaveSrcData(html, srcid) != 0)
+        return -1;
+    if(SaveWord(srcid, _strCacheWord, wordid) != 0)
+        return -1;
 
     _strCacheWord = wxEmptyString;
 
-    return ret;
+    return 0;
 }
 
-int CDictObject::SaveWord(const wxString& word, const wxString& html, int& wordid)
+int CDictObject::ParserSpecialDict(const std::wstring& html, const std::wstring& dictid, const TinyHtmlParser::CDocumentObject& doc, const TinyHtmlParser::CElementObject* dict, TResultMap& result)
 {
-    CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID, Counter FROM WordTable WHERE Word = ?");
-	query.Bind(1, word);
-    CDBAccess::TResult res = query.ExecuteQuery();
-	if(!res.IsOk())
-        throw CDBAccess::TException(255, _("SELECT ID of WordTable FAILED."));
-	if(!res.Eof())
-	{
-		wordid = res.GetInt(0);
-        int counter = res.GetInt(1);
+    return _objSpecialDictParser->ParserHTML(_db, html, dictid, doc, dict, result);
+}
 
-        UpdateWordData(wordid, counter + 1);
+int CDictObject::ParserHtmlDict(const std::wstring &html, const std::wstring& dictid, const TinyHtmlParser::CDocumentObject &doc, const TinyHtmlParser::CElementObject *dict, TResultMap &result)
+{
+    return _objHtmlDictParser->ParserHTML(_config, _db, html, dictid, doc, dict, result);
+}
 
-        g_objTrigger.OnWordUpdate(wordid, word);
-	}
-	else
-	{
-        if(_config.m_iHTMLSave == 1)
+int CDictObject::CheckWord(const std::wstring &word, int &wordid, int &count)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordID, Counter FROM WordTable WHERE Word = ?");
+        query.Bind(1, word);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            throw CDBAccess::TException(255, wxT("SELECT WordID of WordTable FAILED."));
+        if(res.Eof())
         {
-		    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (Word, Counter, HTML) VALUES(?, 1, ?)");
-		    query.Bind(1, word);
-		    query.Bind(2, html);
-		    query.ExecuteUpdate();
-
-		    wordid = _db.GetLastRowId().ToLong();
+            wordid = -1;
+            count = 0;
         }
         else
         {
-		    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (Word, Counter) VALUES(?, 1)");
-		    query.Bind(1, word);
-		    query.ExecuteUpdate();
-
-		    wordid = _db.GetLastRowId().ToLong();
+            wordid = res.GetInt(0);
+            count = res.GetInt(1);
         }
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::FilterResult(TResultMap& result)
+{
+    int wordid = -1, count = 0;
+    TResultMap::iterator it = result.begin();
+    while(it != result.end())
+    {
+        if(CheckWord(it->first, wordid, count) != 0)
+            return -1;
+        if(wordid == -1)
+        {
+            ++ it;
+        }
+        else
+        {
+            UpdateWordData(wordid, count + 1);
+
+            g_objTrigger.OnWordUpdate(wordid, it->first);
+
+            result.erase(it ++);
+            continue;
+        }
+    }
+    return 0;
+}
+
+int CDictObject::SaveSrcData(const std::wstring& html, int& srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO SrcDataTable (HTML) VALUES (?)");
+        query.Bind(1, html);
+
+        if(query.ExecuteUpdate() == 0)
+            return -1;
+        
+        srcid = _db.GetLastRowId().ToLong();
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::RemoveSrcData(int srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT COUNT(*) FROM WordTable WHERE SrcID = ?");
+        query.Bind(1, srcid);
+        
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(res.Eof())
+            return -1;
+        int count = res.GetInt(0);
+        if(count == 0)
+        {
+            query.Reset();
+            query = _db.PrepareStatement("DELETE FROM SrcDataTable WHERE SrcID = ?");
+            query.Bind(1, srcid);
+
+            if(query.ExecuteUpdate() == 0)
+                return -1;
+        }
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::SaveWord(int srcid, const std::wstring& word, int& wordid)
+{
+    try
+    {
+	    CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO WordTable (SrcID, Word, Counter) VALUES(?, ?, 1)");
+        query.Bind(1, srcid);
+        query.Bind(2, word);
+	    if(query.ExecuteUpdate() == 0)
+            return -1;
+
+	    wordid = _db.GetLastRowId().ToLong();
 
         g_objTrigger.OnWordSave(wordid, word);
- 	}
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
 
-	return 0;    
+int CDictObject::RemoveWord(const wxString& word)
+{
+    int wordid = -1, srcid = -1;
+    if(GetWordID(word.c_str(), wordid, srcid) != 0)
+        return -1;
+    return RemoveWord(wordid, srcid);
+}
+
+int CDictObject::SaveResult(int srcid, const TResultMap &result)
+{
+    try
+    {
+        for(TResultMap::const_iterator it = result.begin(); it != result.end(); ++ it)
+        {
+            int wordid = -1;
+            if(SaveWord(srcid, it->first, wordid) != 0)
+                return -1;
+            if(_objSpecialDictParser->SaveResult(_db, wordid, it->second.m_resultDict) != 0)
+                return -1;
+            if(_objHtmlDictParser->SaveResult(_db, wordid, it->second.m_resultHtml) != 0)
+                return -1;
+        }
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::SaveResult(const std::wstring& html, TResultMap& result)
+{
+    if(FilterResult(result) != 0)
+        return -1;
+    int srcid = -1;
+    if(SaveSrcData(html, srcid) != 0)
+        return -1;
+    if(SaveResult(srcid, result) != 0)
+    {
+        RemoveSrcData(srcid);
+        return -1;
+    }
+    return 0;
 }
 
 int CDictObject::UpdateWordData(int wordid, int counter)
 {
-    CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE ID = ?");
+    CDBAccess::TQuery query = _db.PrepareStatement("UPDATE WordTable SET Counter = ?, UpdateTime = DATETIME('NOW', 'LOCALTIME') WHERE WordID = ?");
     query.Bind(1, counter);
     query.Bind(2, wordid);
     query.ExecuteUpdate();
@@ -336,119 +445,23 @@ int CDictObject::UpdateWordData(int wordid, int counter)
     return 0;
 }
 
-int CDictObject::SaveResult(const wxString& html, const TWordResultMap &result)
-{
-    if(result.size() == 0)
-        return -1;
-
-    try
-    {
-        _db.Begin();
-
-        for(TWordResultMap::const_iterator it = result.begin(); it != result.end(); ++ it)
-        {
-            int wordid = -1;
-            SaveWord(it->first, html, wordid);
-            for(TDictResultMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
-            {
-                TParserMap::iterator p = _mapParser.find(i->first);
-                if(p != _mapParser.end())
-                {
-                    p->second->SaveResult(_db, wordid, i->second);
-
-                    g_objTrigger.OnResultSave(wordid, p->second, i->second);
-                }
-                else
-                {
-                }
-            }
-        }
-        _db.Commit();
-    }
-    catch(CDBAccess::TException& e)
-    {
-        _db.Rollback();
-        return -1;
-    }
-    return 0;
-}
-
-
-
-int CDictObject::GetWordData(int wordid, TWordData& data)
+int CDictObject::GetAllWords()
 {
     try
     {
-        if(_config.m_iHTMLLoad == 1)
-        {
-	        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter, CheckinTime, UpdateTime, HTML FROM WordTable WHERE ID = ?");
-	        query.Bind(1, wordid);
-	        CDBAccess::TResult res = query.ExecuteQuery();
-	        if(!res.IsOk())
-		        return -1;
-	        if(!res.Eof())
-	        {
-                data.m_iID = wordid;
-                data.m_strWord = res.GetString(0);
-                data.m_iCounter = res.GetInt(1);
-                data.m_dtCheckin = res.GetDateTime(2);
-                data.m_dtUpdate = res.GetDateTime(3);
-                data.m_strHTML = res.GetString(4);
-
-//                g_objTrigger.OnWordDataGet(data);
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        else
-        {
-	        CDBAccess::TQuery query = _db.PrepareStatement("SELECT Word, Counter, CheckinTime, UpdateTime FROM WordTable WHERE ID = ?");
-	        query.Bind(1, wordid);
-	        CDBAccess::TResult res = query.ExecuteQuery();
-	        if(!res.IsOk())
-		        return -1;
-	        if(!res.Eof())
-	        {
-                data.m_iID = wordid;
-                data.m_strWord = res.GetString(0);
-                data.m_iCounter = res.GetInt(1);
-                data.m_dtCheckin = res.GetDateTime(2);
-                data.m_dtUpdate = res.GetDateTime(3);
-                data.m_strHTML = _("<HTML></HTML>");
-
-//                g_objTrigger.OnWordDataGet(data);
-            }
-            else
-            {
-                return -1;
-            }
-        }
-    }
-    catch(CDBAccess::TException& e)
-    {
-        return -1;
-    }
-    return 0;
-}
-
-int CDictObject::GetResult(int wordid, TWordData &data, TDictResultMap &result)
-{
-    if(GetWordData(wordid, data) != 0)
-        return -1;
-
-    g_objTrigger.OnWordFound(wordid, data.m_strWord);
-
-    for(TParserMap::iterator it = _mapParser.begin(); it != _mapParser.end(); ++ it)
-    {
-        if(it->second->GetResult(_db, wordid, result) != 0)
-        {
+        CDBAccess::TResult res = _db.ExecuteQuery("SELECT WordID, Word FROM WordTable");
+        if(!res.IsOk())
             return -1;
+        while(res.NextRow())
+        {
+            g_objTrigger.OnWordLoad(res.GetInt(0), res.GetString(1));
         }
     }
-    g_objTrigger.OnWordResultGetOver(wordid, data);
-    return 0;
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;  
 }
 
 int CDictObject::GetResult(int wordid)
@@ -460,15 +473,10 @@ int CDictObject::GetResult(int wordid)
             return -1;
 
         g_objTrigger.OnWordFound(wordid, data.m_strWord);
+    
+        GetSpecialDictResult(data);
+        GetHtmlDictResult(data);
 
-        for(TParserMap::iterator it = _mapParser.begin(); it != _mapParser.end(); ++ it)
-        {
-            CDictResult result;
-            if(it->second->GetResult(_db, wordid, result) == 0)
-            {
-                g_objTrigger.OnResultGet(wordid, it->second, result);
-            }
-        }
         g_objTrigger.OnWordResultGetOver(wordid, data);
     }
     catch(CDBAccess::TException& e)
@@ -478,19 +486,101 @@ int CDictObject::GetResult(int wordid)
     return 0;
 }
 
-int CDictObject::RemoveWord(int wordid)
+
+int CDictObject::GetWordData(int wordid, TWordData& data)
 {
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("DELETE FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordTable.SrcID, WordTable.Word, WordTable.Counter, WordTable.UpdateTime, SrcDataTable.CheckinTime, SrcDataTable.HTML FROM WordTable, SrcDataTable WHERE WordTable.WordID = ? and WordTable.SrcID = SrcDataTable.SrcID");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+	        return -1;
+        if(!res.Eof())
+        {
+            data.m_iWordID = wordid;
+            data.m_iSrcID = res.GetInt(0);
+            data.m_strWord = res.GetString(1);
+            data.m_iCounter = res.GetInt(2);
+            data.m_dtUpdate = res.GetDateTime(3);
+            data.m_dtCheckin = res.GetDateTime(4);
+            data.m_strHTML = res.GetString(5);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CDictObject::GetSpecialDictResult(const TWordData& data)
+{
+    SpecialDictParser::TDictResultMap dictresult;
+    if(_objSpecialDictParser->GetResult(_db, data.m_iWordID, dictresult) != 0)
+        return -1;
+
+    for(SpecialDictParser::TDictResultMap::const_iterator it = dictresult.begin(); it != dictresult.end(); ++ it)
+    {
+        const SpecialDictParser::CDictParser* parser = _objSpecialDictParser->GetParser(it->first);
+        if(parser != NULL)
+        {
+            g_objTrigger.OnResultSpecialDictGet(data.m_iWordID, parser, it->second);
+        }
+    }
+
+    return 0;
+}
+
+int CDictObject::GetHtmlDictResult(const TWordData& data)
+{
+    if(_config.m_iLoadHtmlDict == 0)
+    {
+        g_objTrigger.OnResultHtmlDictGet(data.m_iWordID, data.m_strHTML);
+    }
+    else
+    {
+        HtmlDictParser::TDictResultMap htmlresult;
+        if(_objHtmlDictParser->GetResult(_db, data.m_iWordID, htmlresult) != 0)
+            return -1;
+
+        std::wstring html;
+        if(_objHtmlDictParser->GenHtmlResult(htmlresult, data.m_strHTML, html) != 0)
+            return -1;
+        if(!html.empty())
+            g_objTrigger.OnResultHtmlDictGet(data.m_iWordID, html.c_str());
+        else if(_config.m_iLoadHtmlDict == 2)
+            g_objTrigger.OnResultHtmlDictGet(data.m_iWordID, data.m_strHTML);
+    }
+    return 0;
+}
+
+int CDictObject::RemoveWord(int wordid)
+{
+    int srcid = -1;
+    if(GetWordSrcID(wordid, srcid) != 0)
+        return -1;
+    return RemoveWord(wordid, srcid);
+}
+
+int CDictObject::RemoveWord(int wordid, int srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("DELETE FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         if(query.ExecuteUpdate() != 0)
         {
-            for(TParserMap::iterator it = _mapParser.begin(); it != _mapParser.end(); ++ it)
-            {
-                it->second->RemoveResult(_db, wordid);
-            }
+            _objSpecialDictParser->RemoveResult(_db, wordid);
+            _objHtmlDictParser->RemoveResult(_db, wordid);
         }
+
+        RemoveSrcData(srcid);
+
         g_objTrigger.OnWordRemove(wordid);
     }
     catch(CDBAccess::TException& e)
@@ -500,12 +590,13 @@ int CDictObject::RemoveWord(int wordid)
     return 0;
 }
 
-int CDictObject::GetWordID(const wxString& word, int& wordid)
+
+int CDictObject::GetWordID(const std::wstring& word, int& wordid)
 {
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT ID FROM WordTable WHERE Word = ?");
-        query.Bind(1, word);
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordID FROM WordTable WHERE Word = ?");
+        query.Bind(1, word.c_str());
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -520,27 +611,85 @@ int CDictObject::GetWordID(const wxString& word, int& wordid)
     return 0;
 }
 
-int CDictObject::GetAllWords()
+int CDictObject::GetWordSrcID(int wordid, int& srcid)
 {
     try
     {
-        CDBAccess::TResult res = _db.ExecuteQuery("SELECT ID, Word FROM WordTable");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT SrcID FROM WordTable WHERE WordID = ?");
+        query.Bind(1, wordid);
+        CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
-        while(res.NextRow())
-        {
-            g_objTrigger.OnWordLoad(res.GetInt(0), res.GetString(1));
-        }
+        if(res.Eof())
+            return -1;
+        srcid = res.GetInt(0);
     }
     catch(CDBAccess::TException& e)
     {
         return -1;
     }
-    return 0;  
-
+    return 0;
 }
 
-//////////////////////////////////////////////////////////////
+int CDictObject::GetWordID(const std::wstring& word, int& wordid, int& srcid)
+{
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT WordID, SrcID FROM WordTable WHERE Word = ?");
+        query.Bind(1, word);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(res.Eof())
+            return -1;
+        wordid = res.GetInt(0);
+        srcid = res.GetInt(1);
+    }
+    catch(CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
 
+////////////////////////////////////////////
+void CDictObject::ShowHtmlDictLoadInfo(CHtmlDictLoadChoiceDialog &dlg) const
+{
+    _objHtmlDictParser->ShowDictLoadInfo(_config.m_iLoadHtmlDict, dlg);
+}
 
+int CDictObject::GetHtmlDictLoadInfo(const CHtmlDictLoadChoiceDialog& dlg)
+{
+    return _objHtmlDictParser->GetDictLoadInfo(_db, _config.m_iLoadHtmlDict, dlg);
+}
+
+void CDictObject::ShowHtmlDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg) const
+{
+    _objHtmlDictParser->ShowDictStoreInfo(dlg);
+}
+
+int CDictObject::GetHtmlDictStoreInfo(const CHtmlDictStoreChoiceDialog& dlg)
+{
+    return _objHtmlDictParser->GetDictStoreInfo(_db, dlg);
+}
+
+int CDictObject::ResetDictStoreInfo(CHtmlDictStoreChoiceDialog& dlg)
+{
+    return _objHtmlDictParser->ResetDictStoreInfo(_db, dlg);
+}
+
+void CDictObject::ShowDictStoreInfoItemContextMenu(const CHtmlDictStoreChoiceDialog &dlg, long item, int menubase, wxMenu* submenu) const
+{
+    _objHtmlDictParser->ShowDictStoreInfoItemContextMenu(dlg, item, menubase, submenu);
+}
+
+void CDictObject::RefreshDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg, long item, int type) const
+{
+    _objHtmlDictParser->RefreshDictStoreInfo(dlg, item, type);
+}
+
+int CDictObject::UpdateDictStoreInfoDefType(CHtmlDictStoreChoiceDialog &dlg, long item)
+{
+    return _objHtmlDictParser->UpdateDictStoreInfoDefType(_db, dlg, item);
+}
 

@@ -5,6 +5,8 @@
 #ifndef __CONFIGDATA_H__
 #define __CONFIGDATA_H__
 
+#include <string>
+
 #include "wx/wx.h"
 
 #include "DBAccess.h"
@@ -25,6 +27,22 @@ public:
     static const int CA_EXPANDDICT      =   11;
     static const int CA_IGNOREDICT      =   12;
     static const int CA_AUTOSPEAK       =   13;
+    static const int CA_USETIDY         =   14;
+    static const int CA_SAVEUSETIDY     =   15;
+    static const int CA_SKIPDICT        =   16;//special dict
+    static const int CA_SKIPHTML        =   17;//html dict
+    static const int CA_FAVORITETAB     =   18;
+    static const int CA_DATAPROCFLAG    =   19;
+    static const int CA_SKIPERROR       =   20;
+    static const int CA_LOADHTMLDICT    =   21;
+    static const int CA_LINGOESEXEC     =   22;
+    static const int CA_LINGOESPATH     =   23;
+    static const int CA_RETRIEVEDELAY   =   24;
+    static const int CA_AF_CASEINSENSITIVE  =   25;
+    static const int CA_AF_ONEWORDEACHDICT  =   26;
+    static const int CA_AF_ONEWORDALLDICT   =   27;
+    static const int CA_STOPAUTORETRIEVE =   28;
+    static const int CA_HOOKLANGUAGE    =   29;//0: English; 1: Chinese
 public:
     CConfigData(CDBAccess& db);
 	virtual ~CConfigData() {}
@@ -36,14 +54,21 @@ public:
 
     unsigned int GetContolKey() const;
     unsigned int GetHotKey() const;
+
+    int GetLingoesParam(const std::wstring& local);
+
+    int SetLoadHtmlDict(int value);
+    int SetAnalysisFilter();
 protected:
     int GetData(int attr, int& value);
-    int GetData(int attr, wxString& value);
+    int GetData(int attr, std::wstring& value);
     int SetData(int attr, int& value);
-    int SetData(int attr, wxString& value);
+    int SetData(int attr, const std::wstring& value);
 protected:
     CDBAccess::TDatabase& _db;
 public:
+    static std::wstring m_strDBFile;
+
 	int m_iIfLanguage;
     int m_iAutoHook;
 	int m_iOpenTrace;
@@ -54,8 +79,24 @@ public:
     int m_iHTMLSave;
     int m_iHTMLLoad;
     int m_iExpandDict;
-    int m_iIgnoreDict;
+    //int m_iIgnoreDict;
     int m_iAutoSpeak;
+    int m_iUseTidy;
+//    int m_iSaveUseTidy;
+    int m_iSkipDict;
+    int m_iSkipHtml;
+    int m_iFavoriteTab;
+//    int m_iDataProcFlag;//0:normal; 1: Ignore Dict error; 2: Skip Dict; 3: Skip HTML
+    int m_iSkipError;
+    int m_iLoadHtmlDict;//0: only html; 1: only dict; 2: dict -> html
+    std::wstring m_strLingoesExec;
+    std::wstring m_strLingoesPath;
+    int m_iRetrieveDelay;
+    int m_iAFCaseInsensitive;
+    int m_iAFOneWordEachDict;
+    int m_iAFOneWordAllDict;
+    int m_iStopAutoRetrieve;
+    int m_iHookLanguage;
 };
 
 

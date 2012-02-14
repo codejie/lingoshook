@@ -9,13 +9,13 @@
 namespace TinyHtmlParser
 {
 
-CExceptionObject::CExceptionObject(TinyHtmlParser::ExceptionNumber type, const std::wstring &info)
+CExceptionObject::CExceptionObject(ExceptionNumber type, const std::wstring &info)
 : _type(type)
 , _info(info)
 {
 }
 
-CExceptionObject::CExceptionObject(const TinyHtmlParser::CExceptionObject &right)
+CExceptionObject::CExceptionObject(const CExceptionObject &right)
 : _type(right._type)
 , _info(right._info)
 {
@@ -76,55 +76,61 @@ int CElementObject::AnalyseAttribute(const std::wstring& attr)
 {
     if(attr.size() == 0)
         return 0;
-
-    std::wstring a, v;
-    std::wstring::size_type pos = attr.find(L"="), start = 0;
-    while(pos != std::wstring::npos)
+    
+    std::wstring::size_type as = 0, ae = 0, vs = 0, ve = 0;
+    std::wstring::size_type pos = 0;
+    bool v = false;
+    bool semicolon = false;
+    while(pos < attr.size())
     {
-        if(pos == attr.size() - 1)
+        if(attr[pos] == L'=')
         {
-            THROW_EXCEPTION(EN_ATTRIB_VALUEMISS, L"Attribue analyse failed - attribute string : " << attr);
-            return -1;
+            ae = pos - 1;
+            vs = pos + 1;
+
+            v = true;
         }
-        a = attr.substr(start, pos - start);
-        start = pos + 1;
-        if(attr[pos + 1] == L'\"')
+        else if(attr[pos] == L' ')
         {
-            pos = attr.find(L"\"", start + 1);
-            if(pos == std::wstring::npos)
+            if(!semicolon)
             {
-                THROW_EXCEPTION(EN_ATTRIB_VALUEBROKEN, L"Attribue analyse failed - attribute string : " << attr);
-                return -1;
+                if(v)
+                {
+                    ve = pos - 1;
+                    if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
+                        return -1; 
+                }
+                else
+                {
+                    ae = pos - 1;
+                    if(MakeAttribute(attr.substr(as, ae - as + 1), L"") != 0)
+                        return -1; 
+                }
+                as = pos + 1;
+                vs = pos + 1;
+                v = false;
             }
-            v = attr.substr(start, pos - start + 1);
-            start = pos + 2;
         }
-        else
+        else if(attr[pos] == L'"')
         {
-            pos = attr.find(L" ", start);
-            if(pos == std::wstring::npos)
-                pos = attr.size();
-            v = attr.substr(start, pos - start);
-            start = pos + 1;
+            semicolon = !semicolon;
         }
-        if(MakeAttribute(a, v) != 0)
+        ++ pos;
+    }
+
+    if(v)
+    {
+        ve = attr.size() - 1;
+        if(MakeAttribute(attr.substr(as, ae - as + 1), attr.substr(vs, ve - vs + 1)) != 0)
             return -1;
-
-        if(start >= attr.size())
-            break;
-
-        pos = attr.find(L"=", start);
+    }
+    else
+    {
+        ae = attr.size() - 1;
+        if(MakeAttribute(attr.substr(as, ae - as + 1), L"") != 0)
+            return -1;
     }
     return 0;
-}
-
-int CElementObject::MakeAttribute(const std::wstring &attr)
-{
-    std::wstring::size_type pos = attr.find(L"=");
-    if(pos == std::wstring::npos)
-        return -1;
-
-    return MakeAttribute(attr.substr(0, pos), attr.substr(pos));
 }
 
 int CElementObject::MakeAttribute(const std::wstring &attr, const std::wstring& value)
@@ -160,13 +166,14 @@ void CElementObject::FreeAnalyseAttribute()
 
 int CElementObject::AnalyseValue()
 {
+/*
     std::wstring::size_type pos = this->value.find(L"&nbsp;");
     while(pos != std::wstring::npos)
     {
         this->value.replace(pos, 6, L" ");
         pos = this->value.find(L"&nbsp;", pos + 1);
-    }    
-
+    }
+*/
     return 0;
 }
 
@@ -184,9 +191,15 @@ const CAttributeObject* CElementObject::FindAttribute(const std::wstring& attr) 
 
 void CElementObject::Show(std::wostream& os) const
 {
-    os << "[" << this->level << "]" << "Tag : " << this->tag;
-    if(this->type == ET_ELEMENT)
-        os << " -- value = " << /*std::wstring*/(this->value);
+    os << "[" << this->level << "-" << this->type << "]" << "Tag:";
+    if(this->type != ET_VALUE)
+    {
+        os << this->tag << " - " << this->start << "," << this->end << " -- value = " << this->value;
+    }
+    else// if(this->type == ET_VALUE)
+    {
+        os << "<VALUE> - " << this->start << "," << this->end << " -- value = " << this->value;
+    }
     os << std::endl;
 
     const CAttributeObject* attr = this->attrib;
@@ -198,10 +211,35 @@ void CElementObject::Show(std::wostream& os) const
     os << std::endl;
 }
 //
+
+int CParserData::GetTitle(const std::wstring& html)
+{
+    if(type == DT_TAG || type == DT_SPECIAL || type == DT_END_SPECIAL)
+    {
+        title = html.substr(range.first + 1, range.second - range.first - 1);
+        std::wstring::size_type pos = title.find(L" ");
+        if(pos != std::wstring::npos)
+            title = title.substr(0, pos);
+    }
+    else if(type == DT_END)
+    {
+        title = html.substr(range.first + 2, range.second - range.first - 2);
+    }
+    else if(type == DT_VALUE)
+    {
+        title = html.substr(range.first, range.second - range.first + 1);;
+    }
+    else
+    {
+        return -1;
+    }
+    return 0;
+}
+
 void CParserData::Show(std::wostream &os) const
 {
     os << "\nType = " << this->type;
-    os << "\nTag Start = " << this->tag.first << " - End = " << this->tag.second;
+    os << "\nTag Start = " << this->range.first << " - End = " << this->range.second;
 
     for(TValueVector::const_iterator it = this->value.begin(); it != this->value.end(); ++ it)
     {
@@ -213,7 +251,7 @@ void CParserData::Show(std::wostream &os) const
 void CParserData::Show(std::wostream& os, const std::wstring& html) const
 {
     os << "\nType = " << this->type;
-    os << "\nTag = " << "[" << this->tag.first << "," << this->tag.second << "]" << html.substr(this->tag.first, this->tag.second - this->tag.first + 1);
+    os << "\nTag = " << "[" << this->range.first << "," << this->range.second << "]" << html.substr(this->range.first, this->range.second - this->range.first + 1);
     for(TValueVector::const_iterator it = this->value.begin(); it != this->value.end(); ++ it)
     {
         os << "\nValue = " << "[" << it->first << "," << it->second << "]" << html.substr(it->first, it->second - it->first + 1);
@@ -233,15 +271,15 @@ CDocumentObject::~CDocumentObject()
         FreeElement(_root);
 }
 
-int CDocumentObject::Load(const std::wstring &str, bool strict)
+int CDocumentObject::Load(const std::wstring &str, bool strict, bool valueseparate)
 {
-    std::wstring html;
-    if(PreProcess(str, html, strict) != 0)
-        return -1;
+    //std::wstring html;
+    //if(PreProcess(str, html, strict) != 0)
+    //    return -1;
     TNodeQueue que;
-    if(PreParser(html, que, strict) != 0)
+    if(PreParser(str, que, strict, valueseparate) != 0)
         return -1;
-    if(Parser(html, que, strict) != 0)
+    if(Parser(str, que, strict) != 0)
         return -1;
     return 0;
 }
@@ -252,6 +290,9 @@ int CDocumentObject::PreProcess(const std::wstring& str, std::wstring& html, boo
     bool tag = false;
     for(std::wstring::const_iterator it = str.begin(); it != str.end(); ++ it)
     {
+        //if((*it) == L'\r' || (*it) == L'\n')
+        //    continue;
+
         if(*it == TAG_LT)
         {
             if(tag == true)
@@ -276,7 +317,7 @@ int CDocumentObject::PreProcess(const std::wstring& str, std::wstring& html, boo
             {
                 //if(isspace((unsigned char)*it) != 0)
                 //    continue;
-                if((unsigned char)(*it) == '\r' || (unsigned char)(*it) == '\n')
+                if((*it) == L'\r' || (*it) == L'\n')
                     continue;
             }
         }
@@ -286,7 +327,7 @@ int CDocumentObject::PreProcess(const std::wstring& str, std::wstring& html, boo
     return 0;
 }
 
-int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQueue& que, bool strict)
+int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQueue& que, bool strict, bool valueseparate)
 {
     std::wstring::size_type pos = 0;
 
@@ -311,8 +352,16 @@ int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQ
         {
             if(pos > start)
             {
-                if(PushValueData(CParserData::DT_VALUE, start, pos -1, datastack) != 0)
-                    return -1;
+                if(valueseparate)
+                {
+                    if(PushValueData(start, pos -1, datastack, que) != 0)
+                       return -1;
+                }
+                else
+                {
+                    if(PushValueData(start, pos -1, datastack) != 0)
+                       return -1;
+                }
             }
 
             if(PreParserLT(html, pos, data) != 0)
@@ -328,6 +377,7 @@ int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQ
                     break;
                 }
             }
+
             if(PushTagData(html, data, datastack, que) != 0)
                 return -1;
             
@@ -354,7 +404,7 @@ int CDocumentObject::PreParser(const std::wstring& html, CDocumentObject::TNodeQ
 
         if(pos > start)
         {
-            if(PushValueData(CParserData::DT_BROKEN, start, pos, datastack) != 0)
+            if(PushValueData(/*CParserData::DT_BROKEN, */start, pos, datastack) != 0)
                 return -1;
         }
 
@@ -372,12 +422,12 @@ int CDocumentObject::Parser(const std::wstring& html, CDocumentObject::TNodeQueu
     while(que.size()> 0)
     {
         const TNodeData &node = que.front();
-        if(level < node.first)
+        if(level < node.level)
         {
             pp = pe;
             ps = NULL;
         }
-        else if(level == node.first)
+        else if(level == node.level)
         {
             ps = pe;
         }
@@ -385,15 +435,15 @@ int CDocumentObject::Parser(const std::wstring& html, CDocumentObject::TNodeQueu
         {
             ps = pe;
             pp = pe->parent;
-            int t = level - node.first;
-            while(t > 0)
+            int t = level - node.level;
+            while(t > 0/* && pp != NULL && ps != NULL*/)
             {
                 ps = ps->parent;
                 pp = pp->parent;
                 -- t;
             }
         }        
-        level = node.first;
+        level = node.level;
 
         pe = MakeElement(html, node, pp, ps);
 
@@ -423,7 +473,7 @@ int CDocumentObject::PreParserLT(const std::wstring& html, std::wstring::size_ty
         return -1;
     }
     
-    data.tag.first = pos;
+    data.range.first = pos;
 
     ++ pos;
 
@@ -443,10 +493,11 @@ int CDocumentObject::PreParserLT(const std::wstring& html, std::wstring::size_ty
         {
             if(html[pos - 1] == TAG_SLASH)
             {
-                data.type = CParserData::DT_DONE;
+                data.type = CParserData::DT_END_SPECIAL;
             }
 
-            data.tag.second = pos;
+            data.range.second = pos;
+            data.GetTitle(html);
      
             return 0;
         }
@@ -462,66 +513,133 @@ int CDocumentObject::PreParserLT(const std::wstring& html, std::wstring::size_ty
     return -1;
 }
 
-int CDocumentObject::PushValueData(CParserData::DataType type, size_t start, size_t end, TDataStack& datastack) const
+int CDocumentObject::PushValueData(/*CParserData::DataType type, */size_t start, size_t end, TDataStack& datastack) const
 {
     if(datastack.size() == 0)
     {
         THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss '<' before got value - pos : " << start);
         return -1;
-    } 
+    }
 
     CParserData& prev = datastack.top();
-    if(prev.type == CParserData::DT_TAG)
-    {
-        prev.value.push_back(std::make_pair(start, end));
+    prev.value.push_back(std::make_pair(start, end));
 
-        prev.type = CParserData::DT_TAG_VALUE;
-    }
-    else if(prev.type == CParserData::DT_TAG_VALUE)
+    return 0;
+}
+
+int CDocumentObject::PushValueData(size_t start, size_t end, TDataStack& datastack, CDocumentObject::TNodeQueue& nodeque) const
+{
+    if(datastack.size() == 0)
     {
-        prev.value.push_back(std::make_pair(start, end));
-    }
-    else
-    {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Type does match : " << prev.type << " - pos : " << start);
+        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss '<' before got value - pos : " << start);
         return -1;
     }
+
+    size_t level = datastack.size();
+    CParserData vd;
+    vd.type = CParserData::DT_VALUE;
+    vd.range.first = start;
+    vd.range.second = end;
+    nodeque.push_front(TNodeData(level, vd.range.first, vd.range.second, vd));
 
     return 0;
 }
 
 int CDocumentObject::PushTagData(const std::wstring& html, CParserData& data, CDocumentObject::TDataStack& datastack, CDocumentObject::TNodeQueue& nodeque) const
 {
-    if(CheckSpecialTag(html, data) == 0)
-    {
-        data.type = CParserData::DT_DONE;
-    }
+    //if(CheckSpecialTag(html, data) == 0)
+    //{
+    //    data.type = CParserData::DT_SPECIAL;
+    //}
 
     if(data.type == CParserData::DT_TAG)
     {
+        //if(datastack.size() > 0)
+        //{
+        //    CParserData& pre = datastack.top();
+        //    if(pre.value.size() > 0)
+        //    {
+        //        size_t level = datastack.size();
+        //        CParserData vd;
+        //        vd.type = CParserData::DT_VALUE;
+        //        vd.range.first = pre.value[0].first - 1;
+        //        vd.range.second = pre.value[0].second;
+        //        nodeque.push_front(TNodeData(level, vd.range.first, vd.range.second, vd));
+        //        pre.value.clear();
+        //    }
+        //}
         datastack.push(data);
     }
     else if(data.type == CParserData::DT_END)
     {
         if(datastack.size() == 0)
         {
-            THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss start-tag before end-tag - pos : " << data.tag.first);
+            THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Miss start-tag before end-tag - pos : " << data.range.first);
             return -1;
         }
 
-        if(CheckTag(html, datastack.top(), data) != 0)
-            return -1;
-        
-        nodeque.push_front(std::make_pair(datastack.size() - 1, datastack.top()));
-        datastack.pop();
+        while(datastack.size() > 0)
+        {
+            CParserData& tag = datastack.top();
+            if(tag.title == data.title)//str == end)
+            {
+                size_t level = datastack.size() - 1;
+                //if(nodeque.size() > 0)
+                //{
+                //    level = nodeque.begin()->level;
+                //}
+                nodeque.push_front(TNodeData(level, tag.range.first, data.range.second,  datastack.top()));//(std::make_pair(datastack.size() - 1, datastack.top()));
+                datastack.pop();
+                break;
+            }
+            else
+            {
+                if(IsSpecialTag(tag) == 0)
+                {
+                    tag.type = CParserData::DT_SPECIAL;
+                    size_t level = datastack.size() - 1;
+
+                    TNodeQueue::iterator it = nodeque.begin();
+                    while(it != nodeque.end())
+                    {
+                        //if(it->data.type == CParserData::DT_SPECIAL)
+                        //    it->level = level;
+                        //else
+                        //    break;
+                        //-- it->level;
+                        if(it->level > level)
+                            -- it->level;// = level;
+                        else
+                            break;
+
+                        ++ it;
+                    }
+
+                    size_t end = tag.range.second;
+                    if(tag.value.size() > 0)
+                    {
+                        end = tag.value.begin()->second;
+                    }
+                    //nodeque.push_front(TNodeData(level, tag.range.first, end, tag));//. (std::make_pair(level, tag));
+                    nodeque.insert(it, TNodeData(level, tag.range.first, end, tag));
+                    datastack.pop();
+                }
+                else
+                {
+                    THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << tag.title << L"(Non-Special) and " << data.title);
+                    return -1;
+                }
+            }
+        }
     }
-    else if(data.type == CParserData::DT_DONE)
+    else if(data.type == CParserData::DT_END_SPECIAL)
     {
-        nodeque.push_front(std::make_pair(datastack.size(), data));
+        size_t level = datastack.size();
+        nodeque.push_front(TNodeData(level, data.range.first, data.range.second, data));//(std::make_pair(datastack.size() - 1, datastack.top()));
     }
     else
     {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Wrong tag type : " << data.type << L" - pos : " << data.tag.first);
+        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Wrong tag type : " << data.type << L" - pos : " << data.range.first);
         return -1;
     }
     return 0;
@@ -532,94 +650,79 @@ int CDocumentObject::PreParserBroken(const std::wstring& html, TDataStack& datas
     while(datastack.size() > 0)
     {
         CParserData& data = datastack.top();
-        if(data.type == CParserData::DT_TAG || data.type == CParserData::DT_TAG_VALUE)
-        {
-            nodeque.push_front(std::make_pair(datastack.size() - 1, data));
 
-            datastack.pop();
-        }
-        else if(data.type == CParserData::DT_BROKEN)
-        {
-            nodeque.push_front(std::make_pair(datastack.size() - 1, data));
+        nodeque.push_front(TNodeData(datastack.size() - 1, data.range.first, data.range.second, data));// (std::make_pair(datastack.size() - 1, data));
 
-            datastack.pop();        
-        }
-        else
-        {
-            return -1;
-        }
+        datastack.pop(); 
     }
 
     return 0;    
 }
 
-int CDocumentObject::CheckSpecialTag(const std::wstring& html, const CParserData& data) const
+int CDocumentObject::IsSpecialTag(const CParserData& tag) const
 {
-    std::wstring tag = html.substr(data.tag.first + 1, data.tag.second - data.tag.first - 1);
-    std::wstring::size_type pos = tag.find(L" ");
-    if(pos != std::wstring::npos)
-        tag = tag.substr(0, pos);   
-   
-    if(tag == L"IMG")
+    if(tag.title == L"IMG")
         return 0;
-    if(tag == L"PARAM")
+    if(tag.title == L"PARAM")
         return 0;
-    if(tag == L"BR")
+    if(tag.title == L"HR")
         return 0;
-    if(tag == L"HR")
+/*    if(tag.title == L"META")
         return 0;
-    if(tag == L"P")
+*/
+    if(tag.title == L"EMBED")
         return 0;
-
+    if(tag.title == L"P")
+        return 0;
+    if(tag.title == L"BR")
+        return 0;
+    if(tag.title == L"INPUT")
+        return 0;
     return -1;
-}
-
-int CDocumentObject::CheckTag(const std::wstring& html, const CParserData& tag, const CParserData& end) const
-{
-    std::wstring str = html.substr(tag.tag.first + 1, tag.tag.second - tag.tag.first - 1);
-    std::wstring::size_type pos = str.find(L" ");
-    if(pos != std::wstring::npos)
-        str = str.substr(0, pos);
-    
-    if(str != html.substr(end.tag.first + 2, end.tag.second - end.tag.first - 2))
-    {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"do NOT match tag : " << str << L" and " << html.substr(end.tag.first + 2, end.tag.second - end.tag.first - 2));
-        return -1;
-    }
-   return 0;
 }
 
 CElementObject* CDocumentObject::MakeElement(const std::wstring& html, const CDocumentObject::TNodeData &node, CElementObject *parent, CElementObject *sibling) const
 {
     std::auto_ptr<CElementObject> ele(new CElementObject);
     
-    ele->level = node.first;
+    ele->level = node.level;
 
-    if(node.second.type == CParserData::DT_TAG)
+    if(node.data.type == CParserData::DT_END_SPECIAL)
     {
-        ele->type = ET_NODE;
-        ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
+        ele->tag = html.substr(node.data.range.first + 1, node.data.range.second - node.data.range.first - 2);
     }
-    else if(node.second.type == CParserData::DT_DONE)
+    else if(node.data.type == CParserData::DT_VALUE)
     {
-        ele->type = ET_TAG;
-        ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
+//        ele->tag = L"<VALUE>";
+        ele->value = html.substr(node.data.range.first, node.data.range.second - node.data.range.first + 1);
     }
-    else if(node.second.type == CParserData::DT_TAG_VALUE)
+    else
+    {
+        ele->tag = html.substr(node.data.range.first + 1, node.data.range.second - node.data.range.first - 1);
+    }
+    //if(node.data.type != CParserData::DT_END_SPECIAL)
+    //    ele->tag = html.substr(node.data.range.first + 1, node.data.range.second - node.data.range.first - 1);
+    //else
+    //    ele->tag = html.substr(node.data.range.first + 1, node.data.range.second - node.data.range.first - 2);
+    ele->start = node.start;
+    ele->end = node.end;
+
+    if(node.data.value.size() > 0)
     {
         ele->type = ET_ELEMENT;
-        ele->tag = html.substr(node.second.tag.first + 1, node.second.tag.second - node.second.tag.first - 1);
-        
-        ele->value = L"";
-        for(CParserData::TValueVector::const_iterator it = node.second.value.begin(); it != node.second.value.end(); ++ it)
+        for(CParserData::TValueVector::const_iterator it = node.data.value.begin(); it != node.data.value.end(); ++ it)
         {
             ele->value += html.substr(it->first, it->second - it->first + 1);
         }
     }
     else
     {
-        THROW_EXCEPTION(EN_DOCUMENT_FORMATERROR, L"Wrong Tag Type : " << node.second.type);
-        return NULL;
+        if(node.data.type == CParserData::DT_SPECIAL || node.data.type == CParserData::DT_END_SPECIAL)
+            ele->type = ET_TAG;
+        else if(node.data.type == CParserData::DT_VALUE)
+            ele->type = ET_VALUE;
+        else
+            ele->type = ET_NODE;
     }
 
     if(ele->Analyse() != 0)
@@ -658,6 +761,197 @@ void CDocumentObject::ShowElement(std::wostream& os, const CElementObject* e) co
     }
 }
 
+//void CDocumentObject::Rewrite(std::wofstream& ofs) const 
+//{
+//    if(_root != NULL)
+//    {
+//        std::stack<std::wstring> tagstack;
+//        RewriteElement(ofs, _root, tagstack);
+//    }
+//}
+//
+//void CDocumentObject::RewriteElement(std::wofstream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const
+//{
+//    const CElementObject* pe = e, *ps = e->sibling;
+//
+//    //bool hasTagParent = false;
+//
+//    ofs << TAG_LT << pe->tag;
+//    const CAttributeObject* attr = pe->attrib;
+//    while(attr != NULL)
+//    {
+//        ofs << TAG_SPACE << attr->attr;
+//        if(!attr->value.empty())
+//            ofs << TAG_EQUAL << attr->value;
+//        attr = attr->next;
+//    }
+//    if(pe->type == ET_TAG)
+//    {
+//        ofs << TAG_SLASH << TAG_GT;
+//        //hasTagParent = true;
+//    }
+//    else
+//    {
+//        ofs << TAG_GT << pe->value;
+//        tagstack.push(pe->tag);
+//    }
+//    
+//    pe = pe->child;
+//    if(pe != NULL)
+//    {
+//        RewriteElement(ofs, pe, tagstack);
+//    }
+//    else
+//    {
+//        if(e->type != ET_TAG)
+//        {
+//            ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+//            tagstack.pop();
+//        }
+//    }
+//
+//    if(ps != NULL)
+//    {
+//        RewriteElement(ofs, ps, tagstack);
+//    }
+//    else if(e != _root)
+//    {
+//        ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+//        tagstack.pop();
+//    }
+//}
+//
+//void CDocumentObject::Rewrite(wxTextOutputStream& ofs) const 
+//{
+//    if(_root != NULL)
+//    {
+//        std::stack<std::wstring> tagstack;
+//        RewriteElement(ofs, _root, tagstack);
+//    }
+//}
+//
+//void CDocumentObject::RewriteElement(wxTextOutputStream& ofs, const CElementObject* e, std::stack<std::wstring>& tagstack) const
+//{
+//    const CElementObject* pe = e, *ps = e->sibling;
+//
+//    //bool hasTagParent = false;
+//
+//    ofs << TAG_LT << pe->tag;
+//    const CAttributeObject* attr = pe->attrib;
+//    while(attr != NULL)
+//    {
+//        ofs << TAG_SPACE << attr->attr;
+//        if(!attr->value.empty())
+//            ofs << TAG_EQUAL << attr->value;
+//        attr = attr->next;
+//    }
+//    if(pe->type == ET_TAG)
+//    {
+//        ofs << TAG_SLASH << TAG_GT;
+//        //hasTagParent = true;
+//    }
+//    else
+//    {
+//        ofs << TAG_GT << pe->value;
+//        tagstack.push(pe->tag);
+//    }
+//    
+//    pe = pe->child;
+//    if(pe != NULL)
+//    {
+//        RewriteElement(ofs, pe, tagstack);
+//    }
+//    else
+//    {
+//        if(e->type != ET_TAG)
+//        {
+//            ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+//            tagstack.pop();
+//        }
+//    }
+//
+//    if(ps != NULL)
+//    {
+//        RewriteElement(ofs, ps, tagstack);
+//    }
+//    else if(e != _root)
+//    {
+//        ofs << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+//        tagstack.pop();
+//    }
+//}
+//
+//
+//void CDocumentObject::Rewrite(wxString& os) const 
+//{
+//    if(_root != NULL)
+//    {
+//        std::stack<std::wstring> tagstack;
+//        RewriteElement(os, _root, tagstack);
+//    }
+//}
+//
+//void CDocumentObject::RewriteElement(wxString& os, const CElementObject* e, std::stack<std::wstring>& tagstack) const
+//{
+//    const CElementObject* pe = e, *ps = e->sibling;
+//
+//    //bool hasTagParent = false;
+//
+//    if(pe->type != ET_VALUE)
+//    {
+//        os << TAG_LT << pe->tag;
+//        const CAttributeObject* attr = pe->attrib;
+//        while(attr != NULL)
+//        {
+//            os << TAG_SPACE << attr->attr;
+//            if(!attr->value.empty())
+//                os << TAG_EQUAL << attr->value;
+//            attr = attr->next;
+//        }
+//        if(pe->type == ET_TAG)
+//        {
+//            os << TAG_SLASH << TAG_GT;
+//            //hasTagParent = true;
+//        }
+//        else
+//        {
+//            os << TAG_GT << pe->value;
+//            tagstack.push(pe->tag);
+//        }
+//    }
+//    else
+//    {
+//        os << pe->value;
+//    }
+//
+//    if(pe->type != ET_VALUE)
+//    {
+//        pe = pe->child;
+//        if(pe != NULL)
+//        {
+//            RewriteElement(os, pe, tagstack);
+//        }
+//        else
+//        {
+//            if(e->type != ET_TAG)
+//            {
+//                os << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+//                tagstack.pop();
+//            }
+//        }
+//    }
+//
+//    if(ps != NULL)
+//    {
+//        RewriteElement(os, ps, tagstack);
+//    }
+//    else if(e != _root)
+//    {
+//        os << TAG_LT << TAG_SLASH << tagstack.top() << TAG_GT;
+//        tagstack.pop();
+//    }
+//}
+//
 void CDocumentObject::FreeElement(CElementObject* root)
 {
     CElementObject* pe = root->child, *ps = root->sibling;
@@ -680,7 +974,7 @@ void CDocumentObject::FreeElement(CElementObject* root)
     }
 }
 
-const CElementObject* CDocumentObject::FindFirstElement(const std::wstring &tag)
+const CElementObject* CDocumentObject::FindFirstElement(const std::wstring &tag) const
 {
     if(_root == NULL)
         return NULL;
@@ -692,7 +986,7 @@ const CElementObject* CDocumentObject::FindFirstElement(const std::wstring &tag)
     return FindElement(NULL, _root, _findtag, _findstack);
 }
 
-const CElementObject* CDocumentObject::FindNextElement()
+const CElementObject* CDocumentObject::FindNextElement() const
 {
     if(_findstack.empty())
         return NULL;
@@ -700,7 +994,7 @@ const CElementObject* CDocumentObject::FindNextElement()
     return FindElement(NULL, _findstack.top()->child, _findtag, _findstack);
 }
 
-const CElementObject* CDocumentObject::FindFirstElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack)
+const CElementObject* CDocumentObject::FindFirstElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack) const
 {
     if(element == NULL)
         return NULL;
@@ -711,7 +1005,7 @@ const CElementObject* CDocumentObject::FindFirstElement(const CElementObject* el
     return FindElement(element, element, tag, tmpstack);
 }
 
-const CElementObject* CDocumentObject::FindNextElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack)
+const CElementObject* CDocumentObject::FindNextElement(const CElementObject* element, const std::wstring& tag, TElementStack& tmpstack) const
 {
     if(tmpstack.empty())
         return NULL;
@@ -719,7 +1013,7 @@ const CElementObject* CDocumentObject::FindNextElement(const CElementObject* ele
     return FindElement(element, tmpstack.top()->child, tag, tmpstack);
 }
 
-const CElementObject* CDocumentObject::FindElement(const CElementObject* root, const CElementObject* pe, const std::wstring& tag, TElementStack& stack)
+const CElementObject* CDocumentObject::FindElement(const CElementObject* root, const CElementObject* pe, const std::wstring& tag, TElementStack& stack) const
 {
     while(pe != NULL)
     {
@@ -741,7 +1035,7 @@ const CElementObject* CDocumentObject::FindElement(const CElementObject* root, c
     return FindElement(root, pe, tag, stack);
 }
 
-const CAttributeObject* CDocumentObject::FindAttribute(const TinyHtmlParser::CElementObject *element, const std::wstring &attr)
+const CAttributeObject* CDocumentObject::FindAttribute(const CElementObject *element, const std::wstring &attr) const
 {
     if(element == NULL)
         return NULL;
@@ -755,5 +1049,233 @@ const CAttributeObject* CDocumentObject::FindAttribute(const TinyHtmlParser::CEl
     }
     return pa;
 }
+
+//
+
+void CDocumentOutputObject::AddKey(TKeyMap* keymap, KeyType type, const wxString& str)
+{
+    if(keymap == NULL)
+        return;
+
+    TKeyMap::iterator it = keymap->find(type);
+    if(it == keymap->end())
+    {
+        it = keymap->insert(std::make_pair(type, TKeySet())).first;
+    }
+
+    it->second.insert(std::wstring(str.begin(), str.end()));
+}
+
+void CDocumentOutputObject::RemoveKey(TKeyMap* keymap, KeyType type, const wxString& str)
+{
+    if(keymap == NULL)
+        return;
+
+    TKeyMap::iterator it = keymap->find(type);
+    if(it != keymap->end())
+    {
+        it->second.erase(std::wstring(str.begin(), str.end()));
+    }
+}
+
+bool CDocumentOutputObject::IsKey(const TKeyMap* keymap, KeyType type, const wxString& str)
+{
+    return IsKey(keymap, type, std::wstring(str.begin(), str.end()));
+}
+
+bool CDocumentOutputObject::IsKey(const TKeyMap* keymap, KeyType type, const std::wstring& str)
+{
+    if(keymap == NULL)
+        return false;
+
+    if(type == KT_TAG || type == KT_ALL_TAG)
+    {
+        if(keymap->find(KT_ALL_TAG) != keymap->end())
+            return true;
+    }
+    else if(type == KT_VALUE || type == KT_ALL_VALUE)
+    {
+        if(keymap->find(KT_ALL_VALUE) != keymap->end())
+            return true;
+    }
+    else if(type == KT_ATTRIB || type == KT_ALL_ATTRIB)
+    {
+        if(keymap->find(KT_ALL_ATTRIB) != keymap->end())
+            return true;
+    }
+
+    TKeyMap::const_iterator it = keymap->find(type);
+    if(it == keymap->end())
+        return false;
+    if(it->second.find(str) == it->second.end())
+        return false;
+    return true;
+}
+
+int CDocumentOutputObject::Rewrite(const CDocumentObject &doc, wxString &ostr, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(doc.Root() != NULL)
+    {
+        TTagStack tagstack;
+        try
+        {
+            RewriteElement(ostr, doc.Root(), doc.Root(), tagstack, exclude);
+        }
+        catch(std::exception& e)
+        {
+            return -1;
+        }
+    }
+    return 0;
+}
+//
+//void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject* root, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+//{
+//    const CElementObject* pe = e, *ps = e->sibling;
+//
+//    if(pe->type != ET_VALUE)
+//    {
+//        ostr << CDocumentObject::TAG_LT << pe->tag;
+//        const CAttributeObject* attr = pe->attrib;
+//        while(attr != NULL)
+//        {
+//            ostr << CDocumentObject::TAG_SPACE << attr->attr;
+//            if(!attr->value.empty())
+//                ostr << CDocumentObject::TAG_EQUAL << attr->value;
+//            attr = attr->next;
+//        }
+//        if(pe->type == ET_TAG)
+//        {
+//            ostr << CDocumentObject::TAG_SLASH << CDocumentObject::TAG_GT;
+//        }
+//        else
+//        {
+//            ostr << CDocumentObject::TAG_GT << pe->value;
+//            tagstack.push(pe->tag);
+//        }
+//
+//        pe = pe->child;
+//        if(pe != NULL)
+//        {
+//            RewriteElement(ostr, root, pe, tagstack, exclude);
+//        }
+//        else
+//        {
+//            if(e->type != ET_TAG)
+//            {
+//                ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tagstack.top() << CDocumentObject::TAG_GT;
+//                tagstack.pop();
+//            }
+//        }
+//    }
+//    else
+//    {
+//        ostr << pe->value;
+//    }
+//
+//    if(ps != NULL)
+//    {
+//        RewriteElement(ostr, root, ps, tagstack, exclude);
+//    }
+//    else if(e != root)
+//    {
+//            ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tagstack.top() << CDocumentObject::TAG_GT;
+//            tagstack.pop();
+//    }
+//}
+
+void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject* root, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    const CElementObject* pe = e, *ps = e->sibling;
+
+    if(pe->type != ET_VALUE)
+    {
+        RewriteTag(ostr, pe, tagstack, exclude);
+
+        pe = pe->child;
+        if(pe != NULL)
+        {
+            RewriteElement(ostr, root, pe, tagstack, exclude);
+        }
+        else
+        {
+            if(e->type != ET_TAG)
+            {
+                RewriteTagEnd(ostr, e, tagstack, exclude);
+            }
+        }
+    }
+    else
+    {
+        RewriteValue(ostr, pe, exclude);
+    }
+
+    if(ps != NULL)
+    {
+        RewriteElement(ostr, root, ps, tagstack, exclude);
+    }
+    else if(e != root)
+    {
+        RewriteTagEnd(ostr, e, tagstack, exclude);
+    }
+}
+
+void CDocumentOutputObject::RewriteTag(wxString &ostr, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(!IsKey(exclude, KT_TAG, e->tag))
+    {
+        ostr << CDocumentObject::TAG_LT << e->tag;
+        RewriteAttrib(ostr, e, exclude);
+
+        if(e->type == ET_TAG)
+        {
+            ostr << CDocumentObject::TAG_SLASH << CDocumentObject::TAG_GT;
+        }
+        else
+        {
+            ostr << CDocumentObject::TAG_GT;// << pe->value;
+            RewriteValue(ostr, e, exclude);
+        }
+    }
+
+    if(e->type != ET_TAG)
+    {
+        tagstack.push(e->tag);
+    }
+}
+
+void CDocumentOutputObject::RewriteTagEnd(wxString &ostr, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    std::wstring& tag = tagstack.top();
+    if(!IsKey(exclude, KT_TAG, tag))
+    {
+        ostr << CDocumentObject::TAG_LT << CDocumentObject::TAG_SLASH << tag << CDocumentObject::TAG_GT;
+    }
+    tagstack.pop();
+}
+
+void CDocumentOutputObject::RewriteValue(wxString &ostr, const CElementObject *e, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(!IsKey(exclude, KT_VALUE, e->value))
+    {
+        ostr << e->value;
+    }
+}
+
+void CDocumentOutputObject::RewriteAttrib(wxString &ostr, const CElementObject *e, const CDocumentOutputObject::TKeyMap *exclude)
+{
+    const CAttributeObject* attr = e->attrib;
+    while(attr != NULL)
+    {
+        if(!IsKey(exclude, KT_ATTRIB, attr->attr))
+        {
+            ostr << CDocumentObject::TAG_SPACE << attr->attr;
+            if(!attr->value.empty())
+                ostr << CDocumentObject::TAG_EQUAL << attr->value;
+        }
+        attr = attr->next;
+    }
+}
+
 
 }

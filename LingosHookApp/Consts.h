@@ -9,19 +9,28 @@
 
 #include "wx/wx.h"
 
+//Debug or Relase
 //#define __LH_DEBUG__
 
 //App
-const wxString APP_TITLE        = _("LingosHook"); 
+const wxString APP_TITLE        = wxT("LingosHook"); 
 
 #ifdef __LH_DEBUG__
-const wxString APP_VERSION      = _("1.0.000(Debug)");
+const wxString APP_VERSION      = wxT("1.4.061(Debug)");
 #else
-const wxString APP_VERSION      = _("1.0.000");
+const wxString APP_VERSION      = wxT("1.4.061");
 #endif
 
 //App message
 #define WM_OBJECT_INIT      WM_USER + 1000
+#define WM_SET_HOOK         WM_USER + 1001
+#define WM_SET_AUTORETRIEVE WM_USER + 1002
 
+//wxHtmlWindow or wxIE
+#define __LH_USE_WXIE__
+
+const wxString APP_DEFAULT_DBFILE = wxT("LingosHook.db3");
+
+const unsigned int __LH_PLUGINS_INTERFACEVERSION__    =   1;
 
 #endif
