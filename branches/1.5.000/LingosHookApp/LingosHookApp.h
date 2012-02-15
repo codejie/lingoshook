@@ -46,7 +46,8 @@ public:
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
             , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE
 			, CIID_BUTTON_SETANALYSISFILTER, CIID_LIST_PLUGINS, CIID_BUTTON_PLUGINSDETAIL, CIID_BUTTON_PLUGINSRUN };
-    enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END };
+    enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END, FMID_REMOVEWORDBYTAG, FMID_REMOVEWORDBYSCORE
+            , FMID_REMOVEWORDBYDATE_DAY, FMID_REMOVEWORDBYDATE_WEEK};
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
             , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
             , IMID_TAGMOVE_START = IMID_TAGCOPY_END + 1 , IMID_TAGMOVE_END = IMID_TAGMOVE_START + 500 };
@@ -224,6 +225,7 @@ public:
     virtual void OnTreeFilterChange(wxTreeEvent &event); // wxGlade: <event_handler>
     virtual void OnTreeFilterFocus(wxCommandEvent& event);
     virtual void OnMenuFilter(wxCommandEvent& event);
+    virtual void OnContextMenuFilter(wxCommandEvent& event);
     virtual void OnBtnMemRemove(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnMemNext(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnRadioMemLevel(wxCommandEvent &event); // wxGlade: <event_handler>
@@ -275,7 +277,10 @@ private:
 	int InitObjects();
     int LoadObjects();
     int UpdateConfigData(bool retrieve);
-    int MakeContextMenu(const wxString& title, bool isword, int orig, const wxPoint& pos);
+    //int MakeContextMenu(const wxString& title, bool isword, int menuid, const wxPoint& pos);
+    int MakeWordContextMenu(const wxString& title, const wxPoint& pos);
+    int MakeWordContextMenu(const wxString& title, int filtertype, const wxPoint& pos);
+    int MakeFilterContextMenu(const wxString& title, int menuid, const wxPoint& pos);
     wxMenu* MakeTagSubMenu(int baseid);
 
     int CallHook(bool hook);
