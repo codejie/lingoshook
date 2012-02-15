@@ -16,9 +16,9 @@
 const wxString APP_TITLE        = wxT("LingosHook"); 
 
 #ifdef __LH_DEBUG__
-const wxString APP_VERSION      = wxT("1.4.061(Debug)");
+const wxString APP_VERSION      = wxT("1.5.xxx(Debug)");
 #else
-const wxString APP_VERSION      = wxT("1.4.061");
+const wxString APP_VERSION      = wxT("1.5.xxx");
 #endif
 
 //App message

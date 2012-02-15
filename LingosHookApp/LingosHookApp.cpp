@@ -254,7 +254,7 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnAboutDonate = new wxButton(notebook_context_panel[CNID_ABOUT], CIID_BUTTON_ABOUTDONATE, _("Please DONATE to LingosHook"));
     panel_9 = new wxPanel(notebook_context_panel[CNID_ABOUT], wxID_ANY);
 
-    m_labelInfo = new wxStaticText(this, wxID_ANY, _("Ready.."));
+    m_labelInfo = new wxStaticText(this, wxID_ANY, _("Ready..."));
     m_btnHook = new wxToggleButton(this, CIID_BUTTON_HOOK, _("Hook"));
 
     //SetIcon(wxICON(ICON_MAIN));
@@ -298,6 +298,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_TREE_SEL_CHANGED(CIID_TREE_FILTER, LingosHookFrame::OnTreeFilterChange)
     EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_FOCUS, LingosHookFrame::OnTreeFilterFocus)
     EVT_MENU_RANGE(FMID_BEGIN, FMID_END, LingosHookFrame::OnMenuFilter)
+    EVT_MENU_RANGE(FMID_REMOVEWORDBYTAG, FMID_REMOVEWORDBYDATE_WEEK, LingosHookFrame::OnContextMenuFilter)
     EVT_CHECKBOX(CIID_CHECKBOX_STOPRETRIEVE, LingosHookFrame::OnCheckSetStopRetrieve)
     EVT_CHECKBOX(CIID_CHECKBOX_USEHOTKEY, LingosHookFrame::OnCheckSetUseHotkey)
     EVT_BUTTON(CIID_BUTTON_SETDICTCHOICE, LingosHookFrame::OnBtnSetDictChoice)
@@ -794,7 +795,7 @@ int LingosHookFrame::LoadObjects()
 //    _objPlugin->Load();
 
 
-    ShowHint(_("Ready.."));
+    ShowHint(_("Ready..."));
 
     return 0;
 }
@@ -943,34 +944,112 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
     return 0;
 }
 
-int LingosHookFrame::MakeContextMenu(const wxString& title, bool isword, int orig, const wxPoint& pos)
+//int LingosHookFrame::MakeContextMenu(const wxString& title, bool isword, int orig, const wxPoint& pos)
+//{
+//    wxMenu menu;
+//    
+//    if(orig == 0 || orig == 2)
+//    {
+//        menu.SetTitle(title);
+//        menu.Append(IMID_SPEAK, _("Speak.."));
+//        menu.AppendSeparator();
+//        menu.Append(wxID_ANY, _("Copy to tag"), MakeTagSubMenu(IMID_TAGCOPY_START));
+//        if(orig == 2)
+//        {//pop on Tag panel
+//            menu.Append(IMID_TAGREMOVE, _("Remove from this tag"));
+//        }
+//        
+//        menu.AppendSeparator();
+//        menu.Append(IMID_COPY, _("Copy"));
+//        menu.AppendSeparator();
+//        menu.Append(IMID_DELETE, _("Delete"));
+//    }
+//    else if(orig == 1)
+//    {
+//        menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
+//    }
+//    else
+//    {
+//        return 0;
+//    }
+//
+//    PopupMenu(&menu, pos.x, pos.y);
+//
+//    return 0;
+//}
+
+int LingosHookFrame::MakeWordContextMenu(const wxString& title, const wxPoint& pos)
 {
     wxMenu menu;
+
+    menu.SetTitle(title);
+    menu.Append(IMID_SPEAK, _("Speak.."));
+    menu.AppendSeparator();
+    menu.Append(wxID_ANY, _("Copy to tag"), MakeTagSubMenu(IMID_TAGCOPY_START));
     
-    if(orig == 0 || orig == 2)
-    {
-        menu.SetTitle(title);
-        menu.Append(IMID_SPEAK, _("Speak.."));
-        menu.AppendSeparator();
-        menu.Append(wxID_ANY, _("Copy to tag"), MakeTagSubMenu(IMID_TAGCOPY_START));
-        if(orig == 2)
-        {//pop on Tag panel
-            menu.Append(IMID_TAGREMOVE, _("Remove from this tag"));
-        }
-        
-        menu.AppendSeparator();
-        menu.Append(IMID_COPY, _("Copy"));
-        menu.AppendSeparator();
-        menu.Append(IMID_DELETE, _("Delete"));
+    menu.AppendSeparator();
+    menu.Append(IMID_COPY, _("Copy"));
+    menu.AppendSeparator();
+
+    PopupMenu(&menu, pos.x, pos.y);
+
+    return 0;
+}
+
+int LingosHookFrame::MakeWordContextMenu(const wxString& title, int filtertype, const wxPoint& pos)
+{
+    wxMenu menu;
+
+    menu.SetTitle(title);
+    menu.Append(IMID_SPEAK, _("Speak.."));
+    menu.AppendSeparator();
+    menu.Append(wxID_ANY, _("Copy to tag"), MakeTagSubMenu(IMID_TAGCOPY_START));
+    if(filtertype == CLHFilterTreeItemData::IT_TAG)
+    {//pop on Tag panel
+        menu.Append(IMID_TAGREMOVE, _("Remove from this tag"));
     }
-    else if(orig == 1)
+    
+    menu.AppendSeparator();
+    menu.Append(IMID_COPY, _("Copy"));
+    menu.AppendSeparator();
+    menu.Append(IMID_DELETE, _("Delete"));
+
+    PopupMenu(&menu, pos.x, pos.y);
+
+    return 0;
+}
+
+int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype, const wxPoint& pos)
+{
+    wxTreeItemId item = m_treeFilter->GetSelection();
+    if(!item.IsOk())
+        return 0;
+    bool enabled = (m_treeFilter->GetChildrenCount(item) > 0);
+
+    wxMenu menu;    
+
+    if(filtertype == CLHFilterTreeItemData::IT_TAG)
     {
         menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
+        menu.AppendSeparator();
+        menu.Append(FMID_REMOVEWORDBYTAG, _("Remove all words under the tag"))->Enable(enabled);
     }
-    else
+    else if(filtertype == CLHFilterTreeItemData::IT_SCORE)
     {
-        return 0;
+        menu.Append(FMID_REMOVEWORDBYSCORE, _("Remove all words under the score"))->Enable(enabled);
     }
+    else if(filtertype == CLHFilterTreeItemData::IT_DATE_DAY)
+    {
+        menu.Append(FMID_REMOVEWORDBYDATE_DAY, _("Remove all words under the date"))->Enable(enabled);
+    }
+    else if(filtertype == CLHFilterTreeItemData::IT_DATE_WEEK)
+    {
+        menu.Append(FMID_REMOVEWORDBYDATE_WEEK, _("Remove all words under the date"))->Enable(enabled);
+    }
+    //else if(filtertype == CLHFilterTreeItemData::IT_DATE_MONTH)
+    //{
+    //    menu.Append(IMID_REMOVEWORDBYDATE_MONTH, _("Remove all words under the date"));
+    //}
 
     PopupMenu(&menu, pos.x, pos.y);
 
@@ -1218,7 +1297,7 @@ void LingosHookFrame::OnIndexContextMenu(wxCommandEvent& event)
     wxPoint pos = ::wxGetMousePosition();
     pos = ScreenToClient(pos);
 
-    MakeContextMenu(event.GetString(), 0, pos);
+    MakeWordContextMenu(event.GetString(), pos);
 }
 
 void LingosHookFrame::OnIndexFocus(wxCommandEvent& event)
@@ -1379,6 +1458,28 @@ void LingosHookFrame::OnMenuFilter(wxCommandEvent& event)
     g_objTrigger.OnSortShow(CLHFilterTreeCtrl::FilterType(event.GetId() - FMID_BEGIN));
 }
 
+void LingosHookFrame::OnContextMenuFilter(wxCommandEvent& event)
+{
+    wxTreeItemId item = m_treeFilter->GetSelection();
+    if(item.IsOk())
+    {
+        wxString str = _("Are you sure that remove all words under this node ?");
+        if(wxMessageBox(str, wxT("LingosHookApp"), wxCENTRE | wxYES_NO | wxICON_QUESTION) != wxYES)
+            return;        
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId id = m_treeFilter->GetFirstChild(item, cookie);
+        while(id.IsOk())
+        {
+            const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(id);
+            ShowHint(_("Removing word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
+            RemoveWord(cd->ID());
+            id = m_treeFilter->GetFirstChild(item, cookie);
+        }
+        ShowHint(_("Ready..."));
+    }
+}
+
 void LingosHookFrame::OnBtnMemRemove(wxCommandEvent &event)
 {
     int wordid = _objMemoryDaily->GetWordID();
@@ -1524,36 +1625,16 @@ void LingosHookFrame::OnTreeFilterContextMenu(wxCommandEvent& event)
     wxPoint pos = ::wxGetMousePosition();
     pos = ScreenToClient(pos);
 
-    MakeContextMenu(event.GetString(), (event.GetInt() == CLHFilterTreeItemData::IT_WORD), m_treeFilter->GetFilterType());
-/*
     int dt = event.GetInt();
 
     if(dt == CLHFilterTreeItemData::IT_WORD)
     {
-        if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        {
-            MakeContextMenu(event.GetString(), 2, pos);
-        }
-        else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_DATE)
-        {
-            MakeContextMenu(event.GetString(), 0, pos);
-        }
-        else if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_SCORE)
-        {
-            MakeContextMenu(event.GetString(), 0, pos);
-        }
-        else
-        {
-        }
+        MakeWordContextMenu(event.GetString(), m_treeFilter->GetFilterType(), pos);
     }
     else
     {
-        if(m_treeFilter->GetFilterType() == CLHFilterTreeCtrl::FT_TAG)
-        {
-            MakeContextMenu(event.GetString(), 1, pos);
-        }
+        MakeFilterContextMenu(event.GetString(), m_treeFilter->GetFilterType(), pos);
     }
-*/
 }
 
 void LingosHookFrame::OnTreeResultContextMenu(wxCommandEvent& event)
@@ -1561,7 +1642,7 @@ void LingosHookFrame::OnTreeResultContextMenu(wxCommandEvent& event)
     wxPoint pos = ::wxGetMousePosition();
     pos = ScreenToClient(pos);
 
-    MakeContextMenu(event.GetString(), 0, pos);
+    MakeWordContextMenu(event.GetString(), pos);
 }
 
 void LingosHookFrame::OnCheckIgnoreDict(wxCommandEvent &event)
