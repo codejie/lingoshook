@@ -60,8 +60,9 @@ public:
     void OnTagLoad(int tagid, const CTagObject::TRecord& record);
     void OnTagDefLoad(int tagid, const CTagObject::TRecord& record);
     void OnTagInsert(int tag, const CTagObject::TRecord& record);
-    void OnTagUpdate(int tagid, const CTagObject::TRecord& record);
+    void OnTagUpdateCount(int tagid, const CTagObject::TRecord& record);
     void OnTagRemove(int tagid);
+    void OnTagRename(int tagid, const CTagObject::TRecord& record);
 
     void OnTagIndexUpdate(int wordid, int tagid);
      

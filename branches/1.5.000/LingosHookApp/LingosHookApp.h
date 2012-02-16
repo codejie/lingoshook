@@ -39,7 +39,7 @@ public:
     enum ContextNoteID { CNID_RESULT = 0, CNID_HTML, CNID_TAGS, CNID_SETTING, CNID_PLUGINS, CNID_ABOUT, CNID_TRACE, CNID_MAX_PAGES };
 
     enum ControlID { CIID_PAGE_INDEX = 10000, CIID_PAGE_CONTEXT, CIID_TEXT_INDEX, CIID_LIST_INDEX, CIID_CHECKBOX_AUTOHOOK, CIID_CHECKBOX_USEHOTKEY, CIID_CHECKBOX_STOPRETRIEVE
-            , CIID_BUTTON_APPLY, CIID_LIST_TAGMGNT, CIID_BUTTON_TAGSETDEFAULT, CIID_BUTTON_TAGADD, CIID_TREE_RESULT
+            , CIID_BUTTON_APPLY, CIID_LIST_TAGMGNT, CIID_BUTTON_TAGSETDEFAULT, CIID_BUTTON_TAGADD, CIID_BUTTON_TAGRENAME, CIID_TREE_RESULT
             , CIID_BUTTON_TAGREMOVE, CIID_BUTTON_HOOK, XIID_BUTTON_FILTER, CIID_TREE_FILTER, CIID_BUTTON_MEMREMOVE
             , CIID_BUTTON_MEMNEXT, CIID_RADIO_MEMLEVEL1, CIID_RADIO_MEMLEVEL2, CIID_RADIO_MEMLEVEL3, CIID_RADIO_MEMLEVEL4
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE, CIID_BUTTON_ABOUTDONATE
@@ -167,6 +167,8 @@ protected:
     wxButton* m_btnTagDefault;
     wxPanel* panel_3;
     wxButton* m_btnTagAdd;
+    wxPanel* panel_14;
+    wxButton* m_btnTagRename;
     wxPanel* panel_4;
     wxButton* m_btnTagRemove;
     //wxPanel* m_noteContext_pane_3;
@@ -219,6 +221,7 @@ public:
     virtual void OnBtnTagSetDefault(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnTagAdd(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnTagRemove(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnTagRename(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnNoteContextChanged(wxNotebookEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnHook(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnFilter(wxCommandEvent &event); // wxGlade: <event_handler>

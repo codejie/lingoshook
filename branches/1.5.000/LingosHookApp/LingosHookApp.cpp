@@ -234,6 +234,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_btnTagDefault = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGSETDEFAULT, _("Set as Default"));
     panel_3 = new wxPanel(notebook_context_panel[CNID_TAGS], wxID_ANY);
     m_btnTagAdd = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGADD, _("Add.."));
+    panel_14 = new wxPanel(notebook_context_panel[CNID_TAGS], wxID_ANY);
+    m_btnTagRename = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGRENAME, _("Rename.."));	
     panel_4 = new wxPanel(notebook_context_panel[CNID_TAGS], wxID_ANY);
     m_btnTagRemove = new wxButton(notebook_context_panel[CNID_TAGS], CIID_BUTTON_TAGREMOVE, _("Delete"));
 
@@ -287,6 +289,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_LIST_ITEM_SELECTED(CIID_LIST_TAGMGNT, LingosHookFrame::OnListTagMgntSelect)
     EVT_BUTTON(CIID_BUTTON_TAGSETDEFAULT, LingosHookFrame::OnBtnTagSetDefault)
     EVT_BUTTON(CIID_BUTTON_TAGADD, LingosHookFrame::OnBtnTagAdd)
+	EVT_BUTTON(CIID_BUTTON_TAGRENAME, LingosHookFrame::OnBtnTagRename)
     EVT_BUTTON(CIID_BUTTON_TAGREMOVE, LingosHookFrame::OnBtnTagRemove)
     EVT_LIST_ITEM_DESELECTED(CIID_LIST_PLUGINS, LingosHookFrame::OnListPluginsDeselected)
     EVT_LIST_ITEM_SELECTED(CIID_LIST_PLUGINS, LingosHookFrame::OnListPluginsSelected)
@@ -379,6 +382,7 @@ void LingosHookFrame::set_properties()
     m_listTagMgnt->InsertColumn(2, _("CreateTime"));
     m_listTagMgnt->InsertColumn(3, _("Description"));
 
+    m_btnTagRename->Enable(false);
     m_btnTagRemove->Enable(false);
     m_btnTagDefault->Enable(false);
 	
@@ -615,6 +619,8 @@ void LingosHookFrame::do_layout()
     sizer_25->Add(m_btnTagDefault, 0, 0, 0);
     sizer_25->Add(panel_3, 1, wxEXPAND, 0);
     sizer_25->Add(m_btnTagAdd, 0, 0, 0);
+    sizer_25->Add(panel_14, 1, wxEXPAND, 0);
+    sizer_25->Add(m_btnTagRename, 0, 0, 0);
     sizer_25->Add(panel_4, 1, wxEXPAND, 0);
     sizer_25->Add(m_btnTagRemove, 0, 0, 0);
     sizer_13->Add(sizer_25, 0, wxALL|wxEXPAND, 4);
@@ -990,6 +996,7 @@ int LingosHookFrame::MakeWordContextMenu(const wxString& title, const wxPoint& p
     menu.AppendSeparator();
     menu.Append(IMID_COPY, _("Copy"));
     menu.AppendSeparator();
+    menu.Append(IMID_DELETE, _("Delete"));
 
     PopupMenu(&menu, pos.x, pos.y);
 
@@ -1032,19 +1039,19 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
     {
         menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
         menu.AppendSeparator();
-        menu.Append(FMID_REMOVEWORDBYTAG, _("Remove all words under the tag"))->Enable(enabled);
+        menu.Append(FMID_REMOVEWORDBYTAG, _("Delete all words under the tag"))->Enable(enabled);
     }
     else if(filtertype == CLHFilterTreeItemData::IT_SCORE)
     {
-        menu.Append(FMID_REMOVEWORDBYSCORE, _("Remove all words under the score"))->Enable(enabled);
+        menu.Append(FMID_REMOVEWORDBYSCORE, _("Delete all words under the score"))->Enable(enabled);
     }
     else if(filtertype == CLHFilterTreeItemData::IT_DATE_DAY)
     {
-        menu.Append(FMID_REMOVEWORDBYDATE_DAY, _("Remove all words under the date"))->Enable(enabled);
+        menu.Append(FMID_REMOVEWORDBYDATE_DAY, _("Delete all words under the date"))->Enable(enabled);
     }
     else if(filtertype == CLHFilterTreeItemData::IT_DATE_WEEK)
     {
-        menu.Append(FMID_REMOVEWORDBYDATE_WEEK, _("Remove all words under the date"))->Enable(enabled);
+        menu.Append(FMID_REMOVEWORDBYDATE_WEEK, _("Delete all words under the date"))->Enable(enabled);
     }
     //else if(filtertype == CLHFilterTreeItemData::IT_DATE_MONTH)
     //{
@@ -1370,6 +1377,7 @@ void LingosHookFrame::OnBtnSetLgsBrowse(wxCommandEvent &event)
 
 void LingosHookFrame::OnListTagMgntDeselect(wxListEvent &event)
 {
+    m_btnTagRename->Enable(false);
     m_btnTagRemove->Enable(false);
     m_btnTagDefault->Enable(false);
 }
@@ -1378,6 +1386,7 @@ void LingosHookFrame::OnListTagMgntSelect(wxListEvent &event)
 {
     if((int)event.GetData() != _objTag->SysDefTag())
     {
+        m_btnTagRename->Enable(true);
         m_btnTagRemove->Enable(true);
     }
     m_btnTagDefault->Enable(true);
@@ -1400,6 +1409,23 @@ void LingosHookFrame::OnBtnTagAdd(wxCommandEvent &event)
         _objTag->InsertTag(dlg.Title(), dlg.Description());
     }
 }
+
+void LingosHookFrame::OnBtnTagRename(wxCommandEvent &event)
+{
+    long item = m_listTagMgnt->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if(item != -1)
+    {
+        TagInputDialog dlg(this);
+        int tagid = m_listTagMgnt->GetItemData(item);
+        dlg.SetTagTitle(_objTag->GetTitle(tagid));
+        dlg.SetTagDescription(_objTag->GetDescription(tagid));
+        if(dlg.ShowModal() == wxID_OK)
+        {
+            _objTag->RenameTag(tagid, dlg.Title(), dlg.Description());
+        }
+    }
+}
+
 
 void LingosHookFrame::OnBtnTagRemove(wxCommandEvent &event)
 {

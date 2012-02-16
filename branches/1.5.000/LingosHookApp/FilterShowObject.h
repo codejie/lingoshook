@@ -31,6 +31,7 @@ public:
     virtual int AddTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
     virtual int RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
     virtual int UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
+    virtual int SetDefTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id) { return -1; }
     virtual int AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) = 0;
     virtual int RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) = 0;
     virtual int UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) = 0;
@@ -81,6 +82,7 @@ public:
     virtual int AddTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
     virtual int RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
     virtual int UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
+    virtual int SetDefTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id);
     virtual int AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) { return -1; }
     virtual int RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid) { return -1; }
 
@@ -142,6 +144,7 @@ public:
     int AddTitle(int id);
     int RemoveTitle(int id);
     int UpdateTitle(int id);
+    int SetDefTitle(int id);
 
     int AddWord(int wordid);
     int RemoveWord(int wordid);

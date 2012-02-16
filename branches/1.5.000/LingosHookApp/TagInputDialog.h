@@ -24,6 +24,9 @@ public:
     const wxString Title() const;
     const wxString Description() const;
 
+    void SetTagTitle(const wxString& title);
+    void SetTagDescription(const wxString& desc);
+
 private:
     // begin wxGlade: TagInputDialog::methods
     void set_properties();

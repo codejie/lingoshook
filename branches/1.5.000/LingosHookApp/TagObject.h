@@ -36,6 +36,7 @@ public:
 
     int InsertTag(const wxString& title, const wxString& desc);
     int RemoveTag(int id);
+    int RenameTag(int tagid, const wxString& title, const wxString& desc);
 
     int UpdateDefaultTag(int id);
 
@@ -53,6 +54,7 @@ public:
     int SysDefTag() const;
 
     const wxString GetTitle(int tagid) const;
+    const wxString GetDescription(int tagid) const;
 
     //void GetAll();
 
