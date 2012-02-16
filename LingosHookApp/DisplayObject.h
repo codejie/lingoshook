@@ -35,8 +35,9 @@ public:
 
     void AppendTag(int tagid, const CTagObject::TRecord& record);
     void ShowDefaultTag(int tagid, const CTagObject::TRecord& record);
-    void UpdateTag(int tagid, const CTagObject::TRecord& record);
+    void UpdateTagCount(int tagid, const CTagObject::TRecord& record);
     void RemoveTag(int tagid);
+    void UpdateTag(int tagid, const CTagObject::TRecord& record);
     void ShowTag();
     void ShowTag(const wxString& tag);
 

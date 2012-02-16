@@ -172,7 +172,7 @@ void CTriggerObject::OnTagDefLoad(int tagid, const CTagObject::TRecord &record)
 
     if(_dataConfig->m_iDataSyncTag == 1)
     {
-        _objFilterShow->UpdateTitle(tagid);
+        _objFilterShow->SetDefTitle(tagid);
     }
 }
 
@@ -187,9 +187,9 @@ void CTriggerObject::OnTagInsert(int tagid, const CTagObject::TRecord& record)
     }
 }
 
-void CTriggerObject::OnTagUpdate(int tagid, const CTagObject::TRecord& record)
+void CTriggerObject::OnTagUpdateCount(int tagid, const CTagObject::TRecord& record)
 {
-    _objDisplay->UpdateTag(tagid, record);
+    _objDisplay->UpdateTagCount(tagid, record);
 }
 
 void CTriggerObject::OnTagRemove(int tagid)
@@ -201,6 +201,16 @@ void CTriggerObject::OnTagRemove(int tagid)
         if(_objFilterShow->GetMode() == FilterShow::FM_TAG)            
             _objFilterShow->RemoveTitle(tagid);  
     }    
+}
+
+void CTriggerObject::OnTagRename(int tagid, const CTagObject::TRecord& record)
+{
+    _objDisplay->UpdateTag(tagid, record);
+    if(_dataConfig->m_iDataSyncTag == 1)
+    {
+        if(_objFilterShow->GetMode() == FilterShow::FM_TAG)            
+            _objFilterShow->UpdateTitle(tagid);  
+    }   
 }
 
 void CTriggerObject::OnTagIndexUpdate(int wordid, int tagid)

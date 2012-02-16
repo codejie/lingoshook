@@ -406,6 +406,23 @@ int CTagMode::RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int
 
 int CTagMode::UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id)
 {
+    TTagMap::iterator it = _mapTag.find(id);
+    if(it == _mapTag.end())
+        return -1;
+
+    wxString title;
+    if(GetTagData(db, id, title) != 0)
+        return -1;
+
+    it->second.first = title;
+
+    UpdateItemText(tree, id, it->second);
+
+    return 0;
+}
+
+int CTagMode::SetDefTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id)
+{
     TTagMap::const_iterator it = _mapTag.find(_iDefaultTag);
     if(it == _mapTag.end())
         return -1;
@@ -807,6 +824,13 @@ int CFilterShowObject::UpdateTitle(int id)
     if(_objFilter.get() == NULL)
         return -1;
     return _objFilter->UpdateTitle(_db, _tree, id);
+}
+
+int CFilterShowObject::SetDefTitle(int id)
+{
+    if(_objFilter.get() == NULL)
+        return -1;
+    return _objFilter->SetDefTitle(_db, _tree, id);
 }
 
 int CFilterShowObject::AddWord(int wordid)

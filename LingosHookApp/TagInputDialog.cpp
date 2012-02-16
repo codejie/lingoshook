@@ -87,3 +87,14 @@ const wxString TagInputDialog::Description() const
 {
     return m_textDescription->GetValue();
 }
+
+void TagInputDialog::SetTagTitle(const wxString &title)
+{
+    m_textTitle->SetValue(title);
+}
+
+void TagInputDialog::SetTagDescription(const wxString &desc)
+{
+    m_textDescription->SetValue(desc);
+}
+

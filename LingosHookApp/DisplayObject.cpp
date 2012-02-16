@@ -92,7 +92,7 @@ void CDisplayObject::ShowDefaultTag(int tagid, const CTagObject::TRecord &record
     _frame->m_textDefTag->SetValue(record.m_strTitle);
 }
 
-void CDisplayObject::UpdateTag(int tagid, const CTagObject::TRecord &record)
+void CDisplayObject::UpdateTagCount(int tagid, const CTagObject::TRecord &record)
 {
     long index = _frame->m_listTagMgnt->FindItem(-1, tagid);
     if(index != -1)
@@ -107,6 +107,16 @@ void CDisplayObject::RemoveTag(int tagid)
     if(index != -1)
     {
         _frame->m_listTagMgnt->DeleteItem(index);
+    }
+}
+
+void CDisplayObject::UpdateTag(int tagid, const CTagObject::TRecord& record)
+{
+    long index = _frame->m_listTagMgnt->FindItem(-1, tagid);
+    if(index != -1)
+    {
+        _frame->m_listTagMgnt->SetItemText(index, record.m_strTitle);
+        _frame->m_listTagMgnt->SetItem(index, 3, record.m_strDesc);
     }
 }
 

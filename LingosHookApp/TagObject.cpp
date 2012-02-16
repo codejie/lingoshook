@@ -183,9 +183,45 @@ int CTagObject::RemoveTag(int id)
             int rows = qry.ExecuteUpdate();
 
             _mapRecord[_iDefaultTag].m_uiCounter += rows;
-            g_objTrigger.OnTagUpdate(_iSysDefTag, _mapRecord[_iSysDefTag]);
+            g_objTrigger.OnTagUpdateCount(_iSysDefTag, _mapRecord[_iSysDefTag]);
 
             g_objTrigger.OnTagRemove(id);
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int CTagObject::RenameTag(int tagid, const wxString& title, const wxString& desc)
+{
+    if(tagid == _iSysDefTag)
+    {
+        return -1;
+    }
+
+    try
+    {
+        CDBAccess::TQuery query = _db.PrepareStatement("UPDATE TagTable SET Title=?, Description=? WHERE TagID = ?");
+        query.Bind(1, title);
+        query.Bind(2, desc);
+        query.Bind(3, tagid);
+        if(query.ExecuteUpdate() != 0)
+        {
+            TRecordMap::iterator it = _mapRecord.find(tagid);
+            if(it != _mapRecord.end())
+            {
+                it->second.m_strTitle = title;
+                it->second.m_strDesc = desc;
+            }
+            else
+            {
+                return -1;
+            }
+
+            g_objTrigger.OnTagRename(tagid, it->second);
         }
     }
     catch(const CDBAccess::TException& e)
@@ -222,7 +258,7 @@ int CTagObject::AddIndex(int wordid, int tagid)
     if(InsertIndex(wordid, tagid) != 0)
         return -1;
 
-    g_objTrigger.OnTagUpdate(tagid, _mapRecord[tagid]);
+    g_objTrigger.OnTagUpdateCount(tagid, _mapRecord[tagid]);
 
     g_objTrigger.OnTagIndexUpdate(wordid, tagid);
 
@@ -236,7 +272,7 @@ int CTagObject::DeleteIndex(int wordid, int tagid)
     if(RemoveIndex(wordid, tagid) != 0)
         return -1;
 
-    g_objTrigger.OnTagUpdate(tagid, _mapRecord[tagid]);
+    g_objTrigger.OnTagUpdateCount(tagid, _mapRecord[tagid]);
 
     if(IsNoTag(wordid) == 0)
     {
@@ -244,7 +280,7 @@ int CTagObject::DeleteIndex(int wordid, int tagid)
         {
             return -1;
         }
-        g_objTrigger.OnTagUpdate(_iSysDefTag, _mapRecord[_iSysDefTag]);
+        g_objTrigger.OnTagUpdateCount(_iSysDefTag, _mapRecord[_iSysDefTag]);
     }
 
     g_objTrigger.OnTagIndexUpdate(wordid, tagid);
@@ -266,7 +302,7 @@ int CTagObject::DeleteWord(int wordid)
             int tagid = res.GetInt(0);
             if(RemoveIndex(wordid, tagid) != 0)
                 return -1;
-            g_objTrigger.OnTagUpdate(tagid, _mapRecord[tagid]);    
+            g_objTrigger.OnTagUpdateCount(tagid, _mapRecord[tagid]);    
         }
         g_objTrigger.OnTagIndexUpdate(wordid, -1);
     }
@@ -474,6 +510,14 @@ const wxString CTagObject::GetTitle(int tagid) const
     if(it != _mapRecord.end())
         return it->second.m_strTitle;
     return _("Undefined");
+}
+
+const wxString CTagObject::GetDescription(int tagid) const
+{
+    TRecordMap::const_iterator it = _mapRecord.find(tagid);
+    if(it != _mapRecord.end())
+        return it->second.m_strDesc;
+    return _("");
 }
 
 int CTagObject::ShowTagSubMenu(int menubase, wxMenu*& submenu) const
