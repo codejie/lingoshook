@@ -1323,6 +1323,10 @@ msgstr "设置为缺省"
 msgid "Add.."
 msgstr "添加.."
 
+#: .\LingosHookApp\LingosHookApp.cpp:238
+msgid "Rename.."
+msgstr "更名.."
+
 #: .\LingosHookApp\LingosHookApp.cpp:235
 msgid "Detail.."
 msgstr "详细.."
@@ -1459,6 +1463,18 @@ msgstr "拷贝"
 #: .\LingosHookApp\LingosHookApp.cpp:951
 msgid "Set as default"
 msgstr "设置为缺省"
+#: .\LingosHookApp\LingosHookApp.cpp:1042
+msgid "Delete all words under the tag"
+msgstr "删除当前标签下所有单词"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1046
+msgid "Delete all words under the score"
+msgstr "删除当前分数下所有单词"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1050
+#: .\LingosHookApp\LingosHookApp.cpp:1054
+msgid "Delete all words under the date"
+msgstr "删除当前日期下所有单词"
 
 #: .\LingosHookApp\LingosHookApp.cpp:996
 msgid ""
@@ -1516,6 +1532,18 @@ msgstr ""
 #: .\LingosHookApp\LingosHookApp.cpp:1332
 msgid "Close"
 msgstr "关闭"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1492
+msgid "Are you sure that remove all words under this node ?"
+msgstr "确定要删除当前节点下所有单词吗？"
+
+#: .\LingosHookApp\LingosHookApp.cpp:1501
+msgid "Removing word : "
+msgstr "正在删除单词："
+
+#: .\LingosHookApp\LingosHookApp.cpp:1501
+msgid " ..."
+msgstr ""
 
 #: .\LingosHookApp\LingosHookApp.cpp:1442
 msgid "http://code.google.com/p/lingoshook"
@@ -1972,11 +2000,11 @@ msgid "DELETE FROM ViconECResultTable WHERE WordID = ?"
 msgstr ""
 
 #: .\LingosHookApp\Consts.h:19
-msgid "1.3.000(Debug)"
+msgid "1.5.000(Debug)"
 msgstr ""
 
 #: .\LingosHookApp\Consts.h:21
-msgid "1.3.000"
+msgid "1.5.000"
 msgstr ""
 
 #: .\LingosHookApp\Consts.h:32
