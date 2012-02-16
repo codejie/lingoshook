@@ -301,7 +301,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_TREE_SEL_CHANGED(CIID_TREE_FILTER, LingosHookFrame::OnTreeFilterChange)
     EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_FOCUS, LingosHookFrame::OnTreeFilterFocus)
     EVT_MENU_RANGE(FMID_BEGIN, FMID_END, LingosHookFrame::OnMenuFilter)
-    EVT_MENU_RANGE(FMID_REMOVEWORDBYTAG, FMID_REMOVEWORDBYDATE_WEEK, LingosHookFrame::OnContextMenuFilter)
+    EVT_MENU_RANGE(FMID_REMOVEWORDBYTAG, FMID_REMOVEWORDBYDATE, LingosHookFrame::OnContextMenuFilter)
     EVT_CHECKBOX(CIID_CHECKBOX_STOPRETRIEVE, LingosHookFrame::OnCheckSetStopRetrieve)
     EVT_CHECKBOX(CIID_CHECKBOX_USEHOTKEY, LingosHookFrame::OnCheckSetUseHotkey)
     EVT_BUTTON(CIID_BUTTON_SETDICTCHOICE, LingosHookFrame::OnBtnSetDictChoice)
@@ -1035,23 +1035,19 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
 
     wxMenu menu;    
 
-    if(filtertype == CLHFilterTreeItemData::IT_TAG)
+    if(filtertype == CLHFilterTreeCtrl::FT_TAG)
     {
         menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
         menu.AppendSeparator();
         menu.Append(FMID_REMOVEWORDBYTAG, _("Delete all words under the tag"))->Enable(enabled);
     }
-    else if(filtertype == CLHFilterTreeItemData::IT_SCORE)
+    else if(filtertype == CLHFilterTreeCtrl::FT_SCORE)
     {
         menu.Append(FMID_REMOVEWORDBYSCORE, _("Delete all words under the score"))->Enable(enabled);
     }
-    else if(filtertype == CLHFilterTreeItemData::IT_DATE_DAY)
+    else if(filtertype == CLHFilterTreeCtrl::FT_DATE)
     {
-        menu.Append(FMID_REMOVEWORDBYDATE_DAY, _("Delete all words under the date"))->Enable(enabled);
-    }
-    else if(filtertype == CLHFilterTreeItemData::IT_DATE_WEEK)
-    {
-        menu.Append(FMID_REMOVEWORDBYDATE_WEEK, _("Delete all words under the date"))->Enable(enabled);
+        menu.Append(FMID_REMOVEWORDBYDATE, _("Delete all words under the date"))->Enable(enabled);
     }
     //else if(filtertype == CLHFilterTreeItemData::IT_DATE_MONTH)
     //{
@@ -1861,10 +1857,6 @@ void LingosHookFrame::OnBtnDebug(wxCommandEvent &event)
 #ifndef __LH_DEBUG__
     return;
 #endif
-    //wxString str = wxT("<HTML>жа</HTML>");
-
-    //size_t sz = strlen(str.mb_str());
-
     wxFileDialog dlg(this, _("Select a HTML File.."), wxEmptyString, wxEmptyString, wxT("HTML Files(*.html;*.htm)|*.html;*.htm|All Files(*.*)|*.*"), wxFD_OPEN);
     if(dlg.ShowModal() == wxID_OK)
     {
