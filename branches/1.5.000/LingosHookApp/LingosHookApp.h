@@ -279,6 +279,7 @@ private:
     int InitLocale();
 	int InitObjects();
     int LoadObjects();
+    int LoadHomePage();
     int UpdateConfigData(bool retrieve);
     //int MakeContextMenu(const wxString& title, bool isword, int menuid, const wxPoint& pos);
     int MakeWordContextMenu(const wxString& title, const wxPoint& pos);

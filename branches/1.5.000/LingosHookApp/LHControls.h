@@ -232,6 +232,29 @@ public:
         wxIEHtmlWin::LoadWString(wxT("<HTML><!-- created by Codejie(codejie@gmail.com) --></HTML>"));
         //fw->SetFocus();
     }
+
+    void LoadHomePage()
+    {
+        wxIEHtmlWin::LoadWString(
+            wxT("<html>")
+            wxT("<body>")
+            wxT("<div style=\"text-align: center;\"><span style=\"font-size: 36pt;\">LingosHook</span> version 1.5.xxx</div>")
+            wxT("<br />")
+            wxT("<ul>")
+            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://www.cppblog.com/codejie/archive/2010/07/23/108996.html\">LingosHook Download Link</a></span></li>")
+            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://lingoshook.googlecode.com\">LingosHook Source Link</a></span></li>")
+            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://www.cppblog.com/codejie/category/13873.html\">LingosHook Blog Link</a></span></li>")
+            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://www.cppblog.com/codejie/archive/2011/03/17/142091.html\">LingosHook Donators Link</a></span></li>")
+            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://shop64703519.taobao.com\">LingosHook Donation Link</a></span></li>")
+            wxT("</ul>")
+            wxT("<br />")
+            wxT("<div style=\"text-align: right;\"><span style=\"font-size: 14pt;\"><a href=\"mailto:codejie@gmail.com\">codejie</a></span></div>")
+            wxT("<div style=\"text-align: right;\">2012/02/17</div>")
+            wxT("</body>")
+            wxT("</html>")
+            );
+    }
+
     bool LoadString(const wxString& html)
     { 
         //wxWindow* fw = this->FindFocus();
@@ -239,7 +262,10 @@ public:
         //fw->SetFocus();
         return true;
     }
-    void SetCharset(const wxString& charset) { wxIEHtmlWin::SetCharset(charset); }
+    void SetCharset(const wxString& charset)
+    {
+        wxIEHtmlWin::SetCharset(charset); 
+    }
 };
 
 #else

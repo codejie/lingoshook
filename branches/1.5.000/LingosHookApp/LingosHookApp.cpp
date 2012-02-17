@@ -461,7 +461,7 @@ void LingosHookFrame::do_layout()
 //    wxBoxSizer* sizer_37 = new wxBoxSizer(wxHORIZONTAL);
 //    wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
 
-    wxBoxSizer* sizer_19 = new wxBoxSizer(wxHORIZONTAL);
+    //wxBoxSizer* sizer_19 = new wxBoxSizer(wxHORIZONTAL);
 //    wxBoxSizer* sizer_23 = new wxBoxSizer(wxHORIZONTAL);
     wxStaticBoxSizer* sizer_15 = new wxStaticBoxSizer(sizer_15_staticbox, wxVERTICAL);
     wxBoxSizer* sizer_52 = new wxBoxSizer(wxHORIZONTAL);
@@ -553,14 +553,15 @@ void LingosHookFrame::do_layout()
     sizer_23->Add(m_listInfLang, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_16->Add(sizer_23, 0, wxBOTTOM|wxEXPAND, 4);
 
-    sizer_59->Add(m_cbSetStopRetrieve, 0, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_59->Add(m_cbSetAutoSpeak, 0, wxALIGN_CENTER_VERTICAL, 8);
+    sizer_59->Add(m_cbSetStopRetrieve, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 8);
     sizer_59->Add(m_cbSetUseHotkey, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8);
     sizer_59->Add(m_listSetHotkey, 0, wxALIGN_CENTER_VERTICAL, 0);
     sizer_59->Add(panel_13, 1, wxEXPAND, 0);
     sizer_16->Add(sizer_59, 0, wxBOTTOM|wxEXPAND, 4);
 	
-    sizer_19->Add(m_cbSetAutoSpeak, 0, wxALIGN_CENTER_VERTICAL, 8);
-    sizer_16->Add(sizer_19, 0, wxBOTTOM|wxEXPAND, 4);
+    //sizer_19->Add(m_cbSetAutoSpeak, 0, wxALIGN_CENTER_VERTICAL, 8);
+    //sizer_16->Add(sizer_19, 0, wxBOTTOM|wxEXPAND, 4);
 	
 //    sizer_37->Add(label_1, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
 //    sizer_37->Add(m_checkSetTagSync, 0, wxALL|wxALIGN_CENTER_VERTICAL, 4);
@@ -782,6 +783,8 @@ int LingosHookFrame::InitObjects()
 int LingosHookFrame::LoadObjects()
 {
     UpdateConfigData(false);
+
+    LoadHomePage();
     
     _objTag->Load();
 
@@ -802,6 +805,23 @@ int LingosHookFrame::LoadObjects()
 
 
     ShowHint(_("Ready..."));
+
+    return 0;
+}
+
+int LingosHookFrame::LoadHomePage()
+{
+    if(m_winHTML == NULL)
+        return -1;
+
+    if(_dataConfig->m_strHomePage.empty())
+    {
+        m_winHTML->LoadHomePage();
+    }
+    else
+    {
+        m_winHTML->LoadUrl(_dataConfig->m_strHomePage);
+    }
 
     return 0;
 }
@@ -1464,6 +1484,7 @@ void LingosHookFrame::OnTreeFilterChange(wxTreeEvent &event)
     {
         m_treeResult->DeleteAllItems();
         m_winHTML->LoadBlankPage();
+        //LoadHomePage();
     }
 }
 
