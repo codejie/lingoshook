@@ -43,6 +43,8 @@ public:
     static const int CA_AF_ONEWORDALLDICT   =   27;
     static const int CA_STOPAUTORETRIEVE =   28;
     static const int CA_HOOKLANGUAGE    =   29;//0: English; 1: Chinese
+    static const int CA_HOMEPAGE        =   30;
+
 public:
     CConfigData(CDBAccess& db);
 	virtual ~CConfigData() {}
@@ -97,6 +99,7 @@ public:
     int m_iAFOneWordAllDict;
     int m_iStopAutoRetrieve;
     int m_iHookLanguage;
+    std::wstring m_strHomePage;
 };
 
 

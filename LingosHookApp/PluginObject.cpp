@@ -98,7 +98,8 @@ int CPluginObject::ActivePlugin(int index)
     ActivityObject* act = ptr();
     if(act != NULL)
     {
-        if(act->GetInterfaceVersion() > __LH_PLUGINS_INTERFACEVERSION__)
+        int ver = act->GetInterfaceVersion();
+        if(ver > __LH_PLUGINS_INTERFACEVERSION__)
         {
             if(wxMessageBox(wxT("This interface version of this plugin is imcompatible with current LingosHook application, are you sure to run it ?"), wxT("LingosHook Warning"), wxYES_NO | wxCENTER | wxICON_WARNING) != wxYES)
             {
@@ -113,8 +114,18 @@ int CPluginObject::ActivePlugin(int index)
                 act->SetDBObject(_objDB);
             //if(act->NeedTagAccess())
             //    act->SetTagObject(_objTag);
-            if(act->Active(&wxGetApp(), _frame) == 0)
-                ret = 0;
+            if(ver == 1)
+            {
+                if(act->Active(&wxGetApp(), _frame) == 0)
+                    ret = 0;
+            }
+            else
+            {
+                int fprarm = -1, sprarm = -1;
+                if(act->ActiveEx(&wxGetApp, _frame, &fprarm, &sparam) == 0)
+                    ret = 0;
+                ResultProc(act->GetID(), fparam, sparam);
+            }
             act->Final();
             delete act, act = NULL;
         }

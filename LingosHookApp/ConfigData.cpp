@@ -37,6 +37,7 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iAFOneWordAllDict(0)
 , m_iStopAutoRetrieve(0)
 , m_iHookLanguage(0)
+, m_strHomePage(wxEmptyString)
 {
 }
 
@@ -242,6 +243,9 @@ int CConfigData::Load()
 
     if(GetData(CA_HOOKLANGUAGE, m_iHookLanguage) != 0)
         m_iHookLanguage = 0;
+
+    if(GetData(CA_HOMEPAGE, m_strHomePage) != 0)
+        m_strHomePage = wxEmptyString;
     return 0;
 }
 
@@ -307,6 +311,9 @@ int CConfigData::Save()
         return -1;
 
     if(SetData(CA_HOOKLANGUAGE, m_iHookLanguage) != 0)
+        return -1;
+
+    if(SetData(CA_HOMEPAGE, m_strHomePage) != 0)
         return -1;
 
     return 0;
