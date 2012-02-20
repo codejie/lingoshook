@@ -11,6 +11,7 @@ ActivityObject::ActivityObject()
 #endif
 {
     _iInterfaceVersion = __LH_PLUGINS_INTERFACEVERSION__;
+    _iID = 0;
 }
 
 ActivityObject::~ActivityObject()

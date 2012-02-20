@@ -1,4 +1,6 @@
 
+#include "Consts.h"
+
 #include "ClientDataExportDialog.h"
 #include "ClientDataExport.h"
 
@@ -7,6 +9,8 @@ IMPLEMENT_PLUGIN(ClientDataExport)
 ClientDataExport::ClientDataExport()
 : ActivityObject()
 {
+    _iInterfaceVersion = INTERFACE_VERSION_1;
+    _iID = PLUGIN_ID_CLIENTDATAEXPORT;
 }
 
 ClientDataExport::~ClientDataExport()

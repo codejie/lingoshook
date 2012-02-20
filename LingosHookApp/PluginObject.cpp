@@ -121,8 +121,8 @@ int CPluginObject::ActivePlugin(int index)
             }
             else
             {
-                int fprarm = -1, sprarm = -1;
-                if(act->ActiveEx(&wxGetApp, _frame, &fprarm, &sparam) == 0)
+                int fparam = -1, sparam = -1;
+                if(act->ActiveEx(&wxGetApp(), _frame, &fparam, &sparam) == 0)
                     ret = 0;
                 ResultProc(act->GetID(), fparam, sparam);
             }

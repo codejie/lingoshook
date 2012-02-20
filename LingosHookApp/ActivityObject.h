@@ -27,13 +27,13 @@ public:
 
     virtual int Init(int fparam = 0, int sparam = 0) { return 0; }
     virtual void Final() {}
-    virtual int GetID() const { return 0; }
+    unsigned int GetID() const { return _iID; }
 
     virtual int LoadProperty(PropertyData& data) const = 0;
     unsigned int GetInterfaceVersion() const { return _iInterfaceVersion; }
 
-    virtual int Active(wxApp* papp, wxWindow* pwindow) { return -1 };
-    virtual int ActiveEx(wxApp* papp, wxWindow* pwindow, int* fparam, int* sparam) { return -1 };
+    virtual int Active(wxApp* papp, wxWindow* pwindow) { return -1; }
+    virtual int ActiveEx(wxApp* papp, wxWindow* pwindow, int* fparam, int* sparam) { return -1; }
 
 #ifndef __TEST_PLUGINS__
     virtual bool NeedDBAccess() const { return false; }
@@ -49,6 +49,7 @@ protected:
 #endif
 protected:
     unsigned int _iInterfaceVersion;
+    unsigned int _iID;
 };
 
 #endif

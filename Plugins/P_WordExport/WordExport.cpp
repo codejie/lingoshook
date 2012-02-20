@@ -1,4 +1,6 @@
 
+#include "Consts.h"
+
 #include "WordExportDialog.h"
 
 #include "WordExport.h"
@@ -8,7 +10,8 @@ IMPLEMENT_PLUGIN(WordExport)
 WordExport::WordExport()
 : ActivityObject()
 {
-//    _iInterfaceVersion = 2;
+    _iInterfaceVersion = INTERFACE_VERSION_1;
+    _iID = PLUGIN_ID_WORDEXPORT;
 }
 
 WordExport::~WordExport()
