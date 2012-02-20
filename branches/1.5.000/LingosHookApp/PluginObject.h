@@ -23,6 +23,7 @@ public:
 protected:
     void Free();
     int LoadPlugin(int index, const wxString& plugfile);
+    int ResultProc(int id, int fparam, int sparam) { return 0; }
 private:
     LingosHookFrame* _frame;
     CDBAccess * _objDB;

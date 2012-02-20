@@ -40,5 +40,4 @@
         return TRUE;                                                                        \
     }                                                                                       \
 
-
 #endif
