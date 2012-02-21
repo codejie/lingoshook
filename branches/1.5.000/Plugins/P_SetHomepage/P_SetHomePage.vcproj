@@ -186,6 +186,10 @@
 				RelativePath=".\SetHomePage.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\SetHomepageDialog.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -206,6 +210,10 @@
 			</File>
 			<File
 				RelativePath=".\SetHomePage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SetHomepageDialog.h"
 				>
 			</File>
 		</Filter>
