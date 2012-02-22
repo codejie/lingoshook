@@ -333,7 +333,7 @@ void CLHTextCtrl::OnKeyDown(wxKeyEvent &event)
 {
     int key = event.GetKeyCode();
     
-    if(::wxIsdigit(key) || key == 126 || key == VK_ESCAPE)
+    if(::wxIsdigit(key) || (key >= (VK_NUMPAD0 + 0xE4) && (key <= VK_NUMPAD9 + 0xE4))|| key == 126 || key == VK_ESCAPE)
     {
         wxCommandEvent ev(wxEVT_COMMAND_LH_TEXTCTRL_KEYDOWN);
         ev.SetEventObject(this);
