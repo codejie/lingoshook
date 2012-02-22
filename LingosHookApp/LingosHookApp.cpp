@@ -1738,18 +1738,23 @@ void LingosHookFrame::OnMemTypeKeyDown(wxCommandEvent &event)
     switch(key)
     {
     case 1 + 48:
+    case VK_NUMPAD1 + 0xE4:
         m_radioMemLevel0->SetValue(true);
         break;
     case 2+ 48:
+    case VK_NUMPAD2 + 0xE4:
         m_radioMemLevel1->SetValue(true);
         break;
     case 3 + 48:
+    case VK_NUMPAD3 + 0xE4:
         m_radioMemLevel2->SetValue(true);
         break;
     case 4 + 48:
+    case VK_NUMPAD4 + 0xE4:
         m_radioMemLevel3->SetValue(true);
         break;
     case 0 + 48:
+    case VK_NUMPAD0 + 0xE4:
         {
             if(m_btnMemRemove->IsEnabled())
             {
