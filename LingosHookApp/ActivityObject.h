@@ -27,20 +27,20 @@ public:
 
     virtual int Init(int fparam = 0, int sparam = 0) { return 0; }
     virtual void Final() {}
-    unsigned int GetID() const { return _iID; }
 
     virtual int LoadProperty(PropertyData& data) const = 0;
     unsigned int GetInterfaceVersion() const { return _iInterfaceVersion; }
 
     virtual int Active(wxApp* papp, wxWindow* pwindow) { return -1; }
-    virtual int ActiveEx(wxApp* papp, wxWindow* pwindow, int* fparam, int* sparam) { return -1; }
-
 #ifndef __TEST_PLUGINS__
     virtual bool NeedDBAccess() const { return false; }
 //    virtual bool NeedTagAccess() const { return false; }
 
     void SetDBObject(CDBAccess* obj);
 #endif
+//keep function order
+    unsigned int GetID() const { return _iID; }
+    virtual int ActiveEx(wxApp* papp, wxWindow* pwindow, int* fparam, int* sparam) { return -1; }
 
 protected:
 
