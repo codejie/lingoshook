@@ -21,6 +21,8 @@ const wxString APP_VERSION      = wxT("1.5.222(Debug)");
 const wxString APP_VERSION      = wxT("1.5.222");
 #endif
 
+const unsigned int MAX_NUMBER_TAG	= 200;
+
 //App message
 #define WM_OBJECT_INIT      WM_USER + 1000
 #define WM_SET_HOOK         WM_USER + 1001

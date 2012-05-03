@@ -47,10 +47,11 @@ public:
             , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE
 			, CIID_BUTTON_SETANALYSISFILTER, CIID_LIST_PLUGINS, CIID_BUTTON_PLUGINSDETAIL, CIID_BUTTON_PLUGINSRUN };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END, FMID_REMOVEWORDBYTAG, FMID_REMOVEWORDBYSCORE
-            , FMID_REMOVEWORDBYDATE};
+            , FMID_REMOVEWORDBYDATE, FMID_MOVEALLBYTAG };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
-            , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + 500
-            , IMID_TAGMOVE_START = IMID_TAGCOPY_END + 1 , IMID_TAGMOVE_END = IMID_TAGMOVE_START + 500 };
+            , IMID_DELETE, IMID_SETTAGDEFAULT, IMID_TAGCOPY_START, IMID_TAGCOPY_END = IMID_TAGCOPY_START + MAX_NUMBER_TAG
+            , IMID_TAGMOVE_START = IMID_TAGCOPY_END + 1, IMID_TAGMOVE_END = IMID_TAGMOVE_START + MAX_NUMBER_TAG
+			, IMID_TAGMOVEALL_START = IMID_TAGMOVE_END + 1, IMID_TAGMOVEALL_END = IMID_TAGMOVEALL_START + MAX_NUMBER_TAG };
 public:
     // begin wxGlade: LingosHookFrame::ids
     // end wxGlade
@@ -243,6 +244,7 @@ public:
     virtual void OnMenuIndexCopy(wxCommandEvent& event);
     virtual void OnMenuIndexDelete(wxCommandEvent& event);
     virtual void OnMenuIndexTagCopy(wxCommandEvent& event);
+	virtual void OnMenuIndexTagMoveAll(wxCommandEvent& event);
     virtual void OnMenuIndexTagRemove(wxCommandEvent& event);
     virtual void OnMenuSetTagDefault(wxCommandEvent& event);    
     virtual void OnTreeFilterContextMenu(wxCommandEvent& event);
