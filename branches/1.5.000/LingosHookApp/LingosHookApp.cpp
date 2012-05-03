@@ -331,6 +331,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_MENU(IMID_DELETE, LingosHookFrame::OnMenuIndexDelete)
     EVT_MENU(IMID_TAGREMOVE, LingosHookFrame::OnMenuIndexTagRemove)
     EVT_MENU_RANGE(IMID_TAGCOPY_START, IMID_TAGCOPY_END, OnMenuIndexTagCopy)
+	EVT_MENU_RANGE(IMID_TAGMOVEALL_START, IMID_TAGMOVEALL_END, OnMenuIndexTagMoveAll)
     EVT_MENU(IMID_SETTAGDEFAULT, LingosHookFrame::OnMenuSetTagDefault)
     EVT_COMMAND(CIID_TREE_FILTER, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeFilterContextMenu)
     EVT_COMMAND(CIID_TREE_RESULT, wxEVT_COMMAND_LH_TREECTRL_CONTEXTMENU, LingosHookFrame::OnTreeResultContextMenu)
@@ -1059,7 +1060,11 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
     {
         menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
         menu.AppendSeparator();
-        menu.Append(FMID_REMOVEWORDBYTAG, _("Delete all words under the tag"))->Enable(enabled);
+		menu.Append(FMID_MOVEALLBYTAG, _("Copy all words to other tag"), MakeTagSubMenu(IMID_TAGMOVEALL_START))->Enable(enabled);
+		menu.AppendSeparator();
+		menu.Append(FMID_REMOVEWORDBYTAG, _("Delete all words under the tag"))->Enable(enabled);
+		
+		//menu.Append(wxID_ANY, _("Copy all words to other tag"))->Enable(enabled);
     }
     else if(filtertype == CLHFilterTreeCtrl::FT_SCORE)
     {
@@ -1449,7 +1454,7 @@ void LingosHookFrame::OnBtnTagRemove(wxCommandEvent &event)
     if(item != -1)
     {
         wxString str = _objTag->GetTitle(m_listTagMgnt->GetItemData(item));
-        str = _("Are you sure that remove '") + str + _("' tag ?");
+        str = _("Are you sure that delete '") + str + _("' tag ?");
         if(wxMessageBox(str, wxT("LingosHookApp"), wxCENTRE | wxYES_NO | wxICON_QUESTION) == wxYES)
             _objTag->RemoveTag(m_listTagMgnt->GetItemData(item));
     }
@@ -1506,7 +1511,7 @@ void LingosHookFrame::OnContextMenuFilter(wxCommandEvent& event)
     wxTreeItemId item = m_treeFilter->GetSelection();
     if(item.IsOk())
     {
-        wxString str = _("Are you sure that remove all words under this node ?");
+        wxString str = _("Are you sure that delete all words under this node ?");
         if(wxMessageBox(str, wxT("LingosHookApp"), wxCENTRE | wxYES_NO | wxICON_QUESTION) != wxYES)
             return;        
 
