@@ -57,10 +57,10 @@ BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT hookp
 
 	LPCTSTR name = classname;
 	if(name == NULL)
-		name = _T("Afx:400000:0");
+		name = LINGOES_HANDLE_LONG;
 	LPCTSTR title = wintitle;
 	if(title == NULL)
-		title = _T("Lingoes");
+		title = LINGOES_TITLE_ENG;
 
 	HWND h = ::FindWindow(name, title);
 	if(h == NULL)

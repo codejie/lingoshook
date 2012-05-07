@@ -51,6 +51,11 @@ typedef struct _HookData_t
 	wchar_t* data;
 } HookData;
 
+#define LINGOES_HANDLE_LONG			_T("Afx:400000:0")
+#define LINGOES_HANDLE_SHORT		_T("Afx:400000")
+#define LINGOES_TITLE_ENG			_T("Lingoes")
+#define LINGOES_TITLE_CHN			_T("Lingoes ¡È∏ÒÀπ")
+
 /////////////
 
 BOOL SetThread();
