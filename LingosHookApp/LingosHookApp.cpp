@@ -1060,7 +1060,7 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
     {
         menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
         menu.AppendSeparator();
-		menu.Append(FMID_MOVEALLBYTAG, _("Copy all words to other tag"), MakeTagSubMenu(IMID_TAGMOVEALL_START))->Enable(enabled);
+		menu.Append(FMID_MOVEALLBYTAG, _("Move all words to other tag"), MakeTagSubMenu(IMID_TAGMOVEALL_START))->Enable(enabled);
 		menu.AppendSeparator();
 		menu.Append(FMID_REMOVEWORDBYTAG, _("Delete all words under the tag"))->Enable(enabled);
 		
@@ -1520,12 +1520,17 @@ void LingosHookFrame::OnContextMenuFilter(wxCommandEvent& event)
         while(id.IsOk())
         {
             const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(id);
-            ShowHint(_("Removing word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
+            ShowHint(_("Delete word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
             RemoveWord(cd->ID());
             id = m_treeFilter->GetFirstChild(item, cookie);
         }
         ShowHint(_("Ready..."));
     }
+}
+
+void LingosHookFrame::OnMenuIndexTagMoveAll(wxCommandEvent& event)
+{
+
 }
 
 void LingosHookFrame::OnBtnMemRemove(wxCommandEvent &event)

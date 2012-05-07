@@ -140,7 +140,7 @@ void CHotkeyObject::Unhook()
 int CHotkeyObject::GetResult(WXWPARAM wparam, WXLPARAM lparam)
 {
     //FindWindows
-//    HWND hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes"));
+//    HWND hwnd = ::FindWindow(_T("Afx:400000:0"), LINGOES_TITLE_ENG);
     if(_hwndLgs == NULL)
         return -1;
     if(::IsWindowVisible(_hwndLgs) == FALSE)
@@ -544,17 +544,17 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
     HWND hwnd = NULL;
     if(_iIfLanguage == 0)
     {
-        hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes"));
+        hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_ENG);
         if(hwnd == NULL)
-            hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes 灵格斯"));
+            hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_CHN);
     }
     else if(_iIfLanguage == 1)
     {
-        hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes"));
+        hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_ENG);
     }
     else
     {
-        hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes 灵格斯"));
+        hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_CHN);
     }
     
     wchar_t buf[64];
@@ -562,44 +562,44 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
     {
         if(_iIfLanguage == 0)
         {
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_ENG);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
 
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes 灵格斯"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_CHN);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }
         else if(_iIfLanguage == 1)
         {
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_ENG);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }
         else
         {
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes 灵格斯"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_CHN);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }        
     }
