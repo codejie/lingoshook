@@ -288,6 +288,30 @@ int CTagObject::DeleteIndex(int wordid, int tagid)
     return 0;
 }
 
+int CTagObject::MoveIndex(int wordid, int fromtagid, int totagid)
+{
+	if(fromtagid == totagid)
+		return 0;
+
+    if(IsIndexExist(wordid, totagid) != 0)
+	{
+		if(InsertIndex(wordid, totagid) != 0)
+			return -1;
+		g_objTrigger.OnTagUpdateCount(totagid, _mapRecord[totagid]);
+
+		g_objTrigger.OnTagIndexUpdate(wordid, totagid);
+	}
+
+    if(RemoveIndex(wordid, fromtagid) != 0)
+        return -1;
+
+    g_objTrigger.OnTagUpdateCount(fromtagid, _mapRecord[fromtagid]);
+
+    g_objTrigger.OnTagIndexUpdate(wordid, fromtagid);
+
+	return 0;
+}
+
 int CTagObject::DeleteWord(int wordid)
 {
     try

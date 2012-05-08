@@ -1052,6 +1052,7 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
     wxTreeItemId item = m_treeFilter->GetSelection();
     if(!item.IsOk())
         return 0;
+	int selectedid = ((const CLHFilterTreeItemData*)m_treeFilter->GetItemData(item))->ID();
     bool enabled = (m_treeFilter->GetChildrenCount(item) > 0);
 
     wxMenu menu;    
@@ -1060,7 +1061,7 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
     {
         menu.Append(IMID_SETTAGDEFAULT, _("Set as default"));
         menu.AppendSeparator();
-		menu.Append(FMID_MOVEALLBYTAG, _("Move all words to other tag"), MakeTagSubMenu(IMID_TAGMOVEALL_START))->Enable(enabled);
+		menu.Append(FMID_MOVEALLBYTAG, _("Move all words to other tag"), MakeTagSubMenu(IMID_TAGMOVEALL_START, selectedid))->Enable(enabled);
 		menu.AppendSeparator();
 		menu.Append(FMID_REMOVEWORDBYTAG, _("Delete all words under the tag"))->Enable(enabled);
 		
@@ -1084,7 +1085,7 @@ int LingosHookFrame::MakeFilterContextMenu(const wxString& title, int filtertype
     return 0;
 }
 
-wxMenu* LingosHookFrame::MakeTagSubMenu(int baseid)
+wxMenu* LingosHookFrame::MakeTagSubMenu(int baseid, int selectedid)
 {
     wxMenu* menu = new wxMenu();
     long item = -1;
@@ -1093,6 +1094,8 @@ wxMenu* LingosHookFrame::MakeTagSubMenu(int baseid)
         item = m_listTagMgnt->GetNextItem(item);
         if(item == -1)
             break;
+		if(selectedid != -1 && selectedid == m_listTagMgnt->GetItemData(item))
+			continue;
         menu->Append(baseid + item, m_listTagMgnt->GetItemText(item));
     };
     return menu;
@@ -1511,9 +1514,9 @@ void LingosHookFrame::OnContextMenuFilter(wxCommandEvent& event)
     wxTreeItemId item = m_treeFilter->GetSelection();
     if(item.IsOk())
     {
-        wxString str = _("Are you sure that delete all words under this node ?");
+        wxString str = _("Are you sure that DELETE all words under this node ?");
         if(wxMessageBox(str, wxT("LingosHookApp"), wxCENTRE | wxYES_NO | wxICON_QUESTION) != wxYES)
-            return;        
+            return;
 
         wxTreeItemIdValue cookie;
         wxTreeItemId id = m_treeFilter->GetFirstChild(item, cookie);
@@ -1530,7 +1533,43 @@ void LingosHookFrame::OnContextMenuFilter(wxCommandEvent& event)
 
 void LingosHookFrame::OnMenuIndexTagMoveAll(wxCommandEvent& event)
 {
+    wxTreeItemId item = m_treeFilter->GetSelection();
+    if(item.IsOk())
+    {
+		wxMenu* menu = (wxMenu*)event.GetEventObject();
+		int to = event.GetId() - IMID_TAGMOVEALL_START;
 
+		wxString str = _("Are you sure that move all words under this node to '") + m_listTagMgnt->GetItemText(to) + _("' ?");
+        if(wxMessageBox(str, wxT("LingosHookApp"), wxCENTRE | wxYES_NO | wxICON_QUESTION) != wxYES)
+            return;        
+
+		to = m_listTagMgnt->GetItemData(to);
+		if(to == -1)
+			return;
+
+		const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(item);
+		int from = cd->ID();
+
+		//wxMenu* menu = (wxMenu*)event.GetEventObject();
+		//int to = event.GetId() - IMID_TAGMOVEALL_START;
+		//to = m_listTagMgnt->GetItemData(to);
+		//if(to == -1)
+		//	return;
+
+		if(from == to)
+			return;
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId id = m_treeFilter->GetFirstChild(item, cookie);
+        while(id.IsOk())
+        {
+            cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(id);
+            ShowHint(_("Move word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
+			_objTag->MoveIndex(cd->ID(), from, to);
+            id = m_treeFilter->GetFirstChild(item, cookie);
+        }
+        ShowHint(_("Ready..."));
+    }	
 }
 
 void LingosHookFrame::OnBtnMemRemove(wxCommandEvent &event)
@@ -1641,8 +1680,19 @@ void LingosHookFrame::OnMenuIndexDelete(wxCommandEvent& event)
 void LingosHookFrame::OnMenuIndexTagCopy(wxCommandEvent& event)
 {
     wxMenu* menu = (wxMenu*)event.GetEventObject();
-    int tagpos = event.GetId() - IMID_TAGCOPY_START;
-    CopyToTag(menu->GetTitle(), tagpos);
+	wxTreeItemId item = m_treeFilter->GetSelection();
+
+    int tagid = event.GetId() - IMID_TAGCOPY_START;
+    tagid = m_listTagMgnt->GetItemData(tagid);
+    if(tagid == -1)
+        return;
+
+	const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(item);
+	int wordid = cd->ID();
+
+	 _objTag->AddIndex(wordid, tagid);
+
+//    CopyToTag(menu->GetTitle(), tagpos);
 }
 
 void LingosHookFrame::OnMenuIndexTagRemove(wxCommandEvent& event)

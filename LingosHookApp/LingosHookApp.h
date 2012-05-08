@@ -287,7 +287,7 @@ private:
     int MakeWordContextMenu(const wxString& title, const wxPoint& pos);
     int MakeWordContextMenu(const wxString& title, int filtertype, const wxPoint& pos);
     int MakeFilterContextMenu(const wxString& title, int menuid, const wxPoint& pos);
-    wxMenu* MakeTagSubMenu(int baseid);
+    wxMenu* MakeTagSubMenu(int baseid, int selectedid = -1);
 
     int CallHook(bool hook);
 private:
