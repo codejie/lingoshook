@@ -43,6 +43,7 @@ public:
     int AddIndex(int wordid, int tagid);
     int DeleteIndex(int wordid, int tagid);
     int DeleteWord(int wordid);
+	int MoveIndex(int wordid, int fromtagid, int totagid);
 
     int GetWordByTag(int tagid, TWordIDVector& vctwordid);
     int GetTagByWord(int wordid, TTagIDVector& vcttagid);
