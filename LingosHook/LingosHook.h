@@ -51,10 +51,19 @@ typedef struct _HookData_t
 	wchar_t* data;
 } HookData;
 
-#define LINGOES_HANDLE_LONG			_T("Afx:400000:0")
-#define LINGOES_HANDLE_SHORT		_T("Afx:400000")
+#define LINGOES_CLASSNAME_LONG		_T("Afx:400000:0")
+#define LINGOES_CLASSNAME_SHORT		_T("Afx:400000")
 #define LINGOES_TITLE_ENG			_T("Lingoes")
 #define LINGOES_TITLE_CHN			_T("Lingoes 灵格斯")
+#define LINGOES_POPWIN_CLASSNAME	_T("Afx:400000:2400b:")
+#define LINGOES_POPWIN_EDIT_CLASSNAME	_T("Edit")
+
+//#define LINGOES_CLASSNAME_LONG		_T("YodaoMainWndClass")
+//#define LINGOES_CLASSNAME_SHORT		_T("YodaoMainWndClass")
+//#define LINGOES_TITLE_ENG			_T("有道词典")
+//#define LINGOES_TITLE_CHN			_T("有道词典")
+//#define LINGOES_POPWIN_CLASSNAME	_T("Afx:00400000:3:00010003:00000000:00000000")
+//#define LINGOES_POPWIN_EDIT_CLASSNAME	_T("Edit")
 
 /////////////
 
