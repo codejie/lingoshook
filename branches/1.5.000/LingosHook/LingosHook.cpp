@@ -57,7 +57,7 @@ BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT hookp
 
 	LPCTSTR name = classname;
 	if(name == NULL)
-		name = LINGOES_HANDLE_LONG;
+		name = LINGOES_CLASSNAME_LONG;
 	LPCTSTR title = wintitle;
 	if(title == NULL)
 		title = LINGOES_TITLE_ENG;
@@ -216,7 +216,7 @@ DWORD WINAPI ThreadProc(LPVOID param)
                     s = wcslen(buf);
                     if(s > 17)
                     {
-                        if(wcsncmp(buf, _T("Afx:400000:2400b:"), 17) == 0)
+                        if(wcsncmp(buf, LINGOES_POPWIN_CLASSNAME, 17) == 0)
                         {
 				            if(hwnd != NULL)
 				            {
@@ -398,7 +398,7 @@ BOOL CALLBACK EnumEditChildProc(HWND hwnd, LPARAM lparam)
 {
 	TCHAR buf[128];
 	::GetClassName(hwnd, (LPWSTR)&buf, 128);
-	if (::_tcscmp(buf, _T("Edit")) == 0 )
+	if (::_tcscmp(buf, LINGOES_POPWIN_EDIT_CLASSNAME) == 0 )
 	{
 		*(HWND*)lparam = hwnd;
 		return FALSE;

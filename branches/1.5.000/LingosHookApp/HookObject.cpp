@@ -544,29 +544,29 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
     HWND hwnd = NULL;
     if(_iIfLanguage == 0)
     {
-        hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_ENG);
+        hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_ENG);
         if(hwnd == NULL)
-            hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_CHN);
+            hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_CHN);
     }
     else if(_iIfLanguage == 1)
     {
-        hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_ENG);
+        hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_ENG);
     }
     else
     {
-        hwnd = ::FindWindow(LINGOES_HANDLE_LONG, LINGOES_TITLE_CHN);
+        hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_CHN);
     }
     
-    wchar_t buf[64];
-    if(strick == false)
+    if(hwnd == NULL && strick == false)
     {
+		wchar_t buf[64];
         if(_iIfLanguage == 0)
         {
             hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_ENG);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
@@ -575,7 +575,7 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
@@ -586,7 +586,7 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
@@ -597,7 +597,7 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_HANDLE_SHORT, 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
