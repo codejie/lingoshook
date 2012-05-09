@@ -48,6 +48,8 @@ public:
     void ShowDictStoreInfoItemContextMenu(const CHtmlDictStoreChoiceDialog& dlg, long item, int menubase, wxMenu* submenu) const;
     void RefreshDictStoreInfo(CHtmlDictStoreChoiceDialog &dlg, long item, int type) const;
     int UpdateDictStoreInfoDefType(CHtmlDictStoreChoiceDialog &dlg, long item);
+
+	int ClearHTMLProc(int wordid, int srcid, const wxString& html);
 private:
     int ParserHTML(const std::wstring& html);
     int ForceSaveHTML(const std::wstring& html);

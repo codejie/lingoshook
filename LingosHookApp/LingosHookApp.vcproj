@@ -374,6 +374,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HtmlClearObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HtmlDictParser.h"
 				>
 			</File>

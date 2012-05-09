@@ -33,6 +33,6 @@ const unsigned int MAX_NUMBER_TAG	= 200;
 
 const wxString APP_DEFAULT_DBFILE = wxT("LingosHook.db3");
 
-const unsigned int __LH_PLUGINS_INTERFACEVERSION__    =   2;
+const unsigned int __LH_PLUGINS_INTERFACEVERSION__    =   3;
 
 #endif

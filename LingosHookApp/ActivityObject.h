@@ -42,10 +42,13 @@ public:
     unsigned int GetID() const { return _iID; }
     virtual int ActiveEx(wxApp* papp, wxWindow* pwindow, int* fparam, int* sparam) { return -1; }
 
+	virtual bool NeedDictObject() const { return false; }
+	void SetDictObject(DictObject* obj);
 protected:
 
 #ifndef __TEST_PLUGINS__
     CDBAccess* _objDBAccess;
+	CDictObject* _objDict;
 #endif
 protected:
     unsigned int _iInterfaceVersion;
