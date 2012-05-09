@@ -1539,7 +1539,7 @@ void LingosHookFrame::OnMenuIndexTagMoveAll(wxCommandEvent& event)
 		wxMenu* menu = (wxMenu*)event.GetEventObject();
 		int to = event.GetId() - IMID_TAGMOVEALL_START;
 
-		wxString str = _("Are you sure that move all words under this node to '") + m_listTagMgnt->GetItemText(to) + _("' ?");
+		wxString str = _("Are you sure that move all words under this tag to '") + m_listTagMgnt->GetItemText(to) + _("' ?");
         if(wxMessageBox(str, wxT("LingosHookApp"), wxCENTRE | wxYES_NO | wxICON_QUESTION) != wxYES)
             return;        
 
