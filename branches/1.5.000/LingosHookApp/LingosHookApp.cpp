@@ -23,6 +23,7 @@
 #include "AnalysisFilterSettingDialog.h"
 #include "TrayIconObject.h"
 #include "PluginObject.h"
+#include "HtmlOptimumConfigDialog.h"
 
 #include "LingosHookApp.h"
 
@@ -206,6 +207,8 @@ LingosHookFrame::LingosHookFrame(wxWindow* parent, int id, const wxString& title
     m_checkSkipHtml = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_SKIPHTML, _("Skip HTML Data  Analysis Process"));
     m_btnSetDictStoreChoice = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETDICTSTORECHOICE, _("Dictionary Chooser.."));
     m_btnSetAnalysisFilter = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETANALYSISFILTER, _("Analysis Filter.."));
+    m_checkHtmlOptimum = new wxCheckBox(notebook_context_panel[CNID_SETTING], CIID_CHECKBOX_SETHTMLOPTIMUM, _("Automatically Optimize HTML Data"));
+    m_btnSetHtmlOptimum = new wxButton(notebook_context_panel[CNID_SETTING], CIID_BUTTON_SETHTMLOPTIMUM, _("Optimum Configuration"));
     static_line_5 = new wxStaticLine(notebook_context_panel[CNID_SETTING], wxID_ANY);
     label_4 = new wxStaticText(notebook_context_panel[CNID_SETTING], wxID_ANY, _("Expanded Dictionary on Result"));
     const wxString m_comboxExpandDict_choices[] = {
@@ -307,6 +310,7 @@ BEGIN_EVENT_TABLE(LingosHookFrame, wxFrame)
     EVT_BUTTON(CIID_BUTTON_SETDICTCHOICE, LingosHookFrame::OnBtnSetDictChoice)
     EVT_BUTTON(CIID_BUTTON_SETDICTSTORECHOICE, LingosHookFrame::OnBtnSetDictStoreChoice)
     EVT_BUTTON(CIID_BUTTON_SETANALYSISFILTER, LingosHookFrame::OnBtnSetAnalysisFilter)
+	EVT_BUTTON(CIID_BUTTON_SETHTMLOPTIMUM, LingosHookFrame::OnBtnSetHtmlOptimum)
     EVT_BUTTON(CIID_BUTTON_MEMREMOVE, LingosHookFrame::OnBtnMemRemove)
     EVT_BUTTON(CIID_BUTTON_MEMNEXT, LingosHookFrame::OnBtnMemNext)
     EVT_RADIOBUTTON(CIID_RADIO_MEMLEVEL1, LingosHookFrame::OnRadioMemLevel)
@@ -452,6 +456,7 @@ void LingosHookFrame::do_layout()
 
 
     wxBoxSizer* sizer_44 = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* sizer_45 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_54 = new wxBoxSizer(wxHORIZONTAL);
 
     wxBoxSizer* sizer_43 = new wxBoxSizer(wxHORIZONTAL);
@@ -589,6 +594,9 @@ void LingosHookFrame::do_layout()
     sizer_54->Add(m_btnSetAnalysisFilter, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
     sizer_44->Add(sizer_54, 1, wxEXPAND, 0);
 //    sizer_44->Add(m_checkSkipHtml, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
+    sizer_45->Add(m_checkHtmlOptimum, 0, wxTOP|wxBOTTOM|wxEXPAND|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_45->Add(m_btnSetHtmlOptimum, 0, wxLEFT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_44->Add(sizer_45, 1, wxEXPAND, 0);
     sizer_16->Add(sizer_44, 0, wxEXPAND, 0);
     sizer_16->Add(static_line_5, 0, wxALL|wxEXPAND, 4);
     sizer_43->Add(label_4, 0, wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2);
@@ -1888,6 +1896,14 @@ void LingosHookFrame::OnBtnSetAnalysisFilter(wxCommandEvent &event)
         _dataConfig->m_iAFOneWordEachDict = dlg.CheckBoxOneWordEachDict()->IsChecked() ? 1 : 0;
         _dataConfig->m_iAFOneWordAllDict = dlg.CheckBoxOneWordAllDict()->IsChecked() ? 1 : 0;
         _dataConfig->SetAnalysisFilter();
+    }
+}
+
+void LingosHookFrame::OnBtnSetHtmlOptimum(wxCommandEvent &event)
+{
+	HtmlOptimumConfigDialog dlg(this, wxID_ANY, wxEmptyString);
+    if(dlg.ShowModal() == wxID_OK)
+    {
     }
 }
 

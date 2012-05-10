@@ -45,7 +45,7 @@ public:
             , CIID_BUTTON_MEMREGEN, CIID_BUTTON_ABOUTHELP, CIID_BUTTON_ABOUTSEND, CIID_BUTTON_ABOUTPOST, CIID_BUTTON_ABOUTOPENSOURCE, CIID_BUTTON_ABOUTDONATE
             , CIID_CHECKBOX_IGNOREDICT, CIID_CHECKBOX_SKIPHTML, CIID_CHECKBOX_SKIPDICT, CIID_TEXT_MEMTYPE, CIID_BUTTON_DEBUG, CIID_CONTROL_HTMLWINDOW
             , CIID_BUTTON_SETDICTCHOICE, CIID_BUTTON_SETLGSBROWSE, CIID_SLIDER_SETDELAY,CIID_PANEL_HTML, CIID_BUTTON_SETDICTSTORECHOICE
-			, CIID_BUTTON_SETANALYSISFILTER, CIID_LIST_PLUGINS, CIID_BUTTON_PLUGINSDETAIL, CIID_BUTTON_PLUGINSRUN };
+			, CIID_BUTTON_SETANALYSISFILTER, CIID_LIST_PLUGINS, CIID_BUTTON_PLUGINSDETAIL, CIID_BUTTON_PLUGINSRUN, CIID_CHECKBOX_SETHTMLOPTIMUM, CIID_BUTTON_SETHTMLOPTIMUM };
     enum FilterMemuID { FMID_BEGIN = 12000, FMID_TAG, FMID_DATE, FMID_COUNTER, FMID_CLOSE, FMID_END, FMID_REMOVEWORDBYTAG, FMID_REMOVEWORDBYSCORE
             , FMID_REMOVEWORDBYDATE, FMID_MOVEALLBYTAG };
     enum IndexMenuID { IMID_BEGIN = 13000, IMID_SPEAK, IMID_COPY, IMID_TAGREMOVE
@@ -150,6 +150,8 @@ protected:
     wxCheckBox* m_checkSkipHtml;
     wxButton* m_btnSetDictStoreChoice;
     wxButton* m_btnSetAnalysisFilter;
+	wxCheckBox* m_checkHtmlOptimum;
+	wxButton* m_btnSetHtmlOptimum;
     wxStaticLine* static_line_5;
     wxStaticText* label_4;
     wxComboBox* m_comboxExpandDict;
@@ -259,6 +261,7 @@ public:
 
     virtual void OnBtnSetDictStoreChoice(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetAnalysisFilter(wxCommandEvent &event); // wxGlade: <event_handler>
+	virtual void OnBtnSetHtmlOptimum(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnSetDictChoice(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnScrollSetDelayEnd(wxScrollEvent &event); // wxGlade: <event_handler>
 

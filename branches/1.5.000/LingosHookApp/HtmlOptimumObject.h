@@ -1,21 +1,19 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
-#ifndef __HTMLCLEAROBJECT_H__
-#define __HTMLCLEAROBJECT_H__
+#ifndef __HTMLOPTIMUMOBJECT_H__
+#define __HTMLOPTIMUMOBJECT_H__
 
-class CHtmlClearObject
+#include <string>
+
+class CHtmlOptimumObject
 {
 public:
-	CHtmlClearObject();
-	virtual ~CHtmlClearObject();
-
-	int UpdateDatabase(DictObject *objDict);
+	CHtmlOptimumObject();
+	virtual ~CHtmlOptimumObject();
 
 	static int Clear(const std::wstring& input, std::wstring& output);
-private:
-	int LoadSrcData(int& wordid, int& srcid);
-	int CheckSrcID(int srcid);
+
 };
 
 

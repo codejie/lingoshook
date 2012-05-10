@@ -245,6 +245,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HtmlOptimumConfigDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HtmlTidyObject.cpp"
 				>
 			</File>
@@ -374,11 +378,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HtmlClearObject.h"
+				RelativePath=".\HtmlDictParser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\HtmlDictParser.h"
+				RelativePath=".\HtmlOptimumConfigDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HtmlOptimumObject.h"
 				>
 			</File>
 			<File

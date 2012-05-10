@@ -8,6 +8,7 @@
 ActivityObject::ActivityObject()
 #ifndef __TEST_PLUGINS__
 : _objDBAccess(NULL)
+, _objDict(NULL)
 #endif
 {
     _iInterfaceVersion = __LH_PLUGINS_INTERFACEVERSION__;
@@ -23,6 +24,11 @@ ActivityObject::~ActivityObject()
 void ActivityObject::SetDBObject(CDBAccess *obj)
 {
     _objDBAccess = obj;
+}
+
+void ActivityObject::SetDictObject(CDictObject *obj)
+{
+	_objDict = obj;
 }
 
 #endif
