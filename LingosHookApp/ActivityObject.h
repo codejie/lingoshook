@@ -7,6 +7,7 @@
 
 #ifndef __TEST_PLUGINS__
 #include "DBAccess.h"
+#include "DictObject.h"
 #endif
 
 class ActivityObject //: public wxEvtHandler
@@ -42,8 +43,11 @@ public:
     unsigned int GetID() const { return _iID; }
     virtual int ActiveEx(wxApp* papp, wxWindow* pwindow, int* fparam, int* sparam) { return -1; }
 
+#ifndef __TEST_PLUGINS__
 	virtual bool NeedDictObject() const { return false; }
-	void SetDictObject(DictObject* obj);
+	void SetDictObject(CDictObject* obj);
+#endif
+
 protected:
 
 #ifndef __TEST_PLUGINS__

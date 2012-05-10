@@ -45,6 +45,11 @@ int CConfigData::Init()
 {
     try
     {
+		if(!_db.TableExists(wxT("HtmlOptimumConfigTable")))
+		{
+			const char* sql = "CREATE TABLE HtmlOptimumConfigTable (Type INTEGER, Item VARCHAR(127))";
+			_db.ExecuteUpdate(sql);
+		}
         if(!_db.TableExists(wxT("ConfigTable")))
         {
             const char* conftable = "CREATE TABLE ConfigTable (Attr INTEGER PRIMARY KEY, IntVal INTEGER, StrVal VARCHAR(255))";
@@ -246,6 +251,10 @@ int CConfigData::Load()
 
     if(GetData(CA_HOMEPAGE, m_strHomePage) != 0)
         m_strHomePage = wxEmptyString;
+
+	if(LoadHtmlOptimumConfig() != 0)
+		return -1;
+
     return 0;
 }
 
@@ -383,4 +392,58 @@ int CConfigData::SetAnalysisFilter()
     if(SetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
         return -1;
     return 0;
+}
+
+int CConfigData::LoadHtmlOptimumConfig()
+{
+	try {
+		CDBAccess::TQuery query = _db.PrepareStatement("SELECT Type, Item FROM HtmlOptimumConfigTable");
+		CDBAccess::TResult res = query.ExecuteQuery();
+		if(!res.IsOk())
+			throw CDBAccess::TException(255, wxT("SELECT HtmlOptimumConfigTable FAILED."));
+
+		m_mapHtmlOptimumKey.clear();
+
+		while(res.NextRow())
+		{
+			CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, (CDocumentOutputObject::KeyType)res.GetInt(0), res.GetString(1));
+		}
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+	return 0;
+}
+
+int CConfigData::SaveHtmlOptimumConfig()
+{
+	try {
+		const char* sql = "DELETE FROM HtmlOptimumConfigTable";
+		_db.ExecuteUpdate(sql);
+
+		CDocumentOutputObject::TKeyMap::const_iterator it = m_mapHtmlOptimumKey.begin();
+		while(it != m_mapHtmlOptimumKey.end())
+		{
+			CDocumentOutputObject::TKeySet::const_iterator i = it->second.begin();
+			while(i != it->second.end())
+			{
+				CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO HtmlOptimumConfigTable (Type, Item) VALUES (?, :?)");
+				query.Bind(1, it->first);
+				query.Bind(2, *i);
+				
+				query.ExecuteUpdate();
+
+				++ i;
+			}
+
+			++ it;
+		}
+
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+	return 0;
 }

@@ -10,6 +10,9 @@
 #include "wx/wx.h"
 
 #include "DBAccess.h"
+#include "TinyHtmlParser.h"
+
+using namespace TinyHtmlParser;
 
 class CConfigData
 {
@@ -61,6 +64,9 @@ public:
 
     int SetLoadHtmlDict(int value);
     int SetAnalysisFilter();
+
+	int LoadHtmlOptimumConfig();
+	int SaveHtmlOptimumConfig();
 protected:
     int GetData(int attr, int& value);
     int GetData(int attr, std::wstring& value);
@@ -100,6 +106,8 @@ public:
     int m_iStopAutoRetrieve;
     int m_iHookLanguage;
     std::wstring m_strHomePage;
+
+	CDocumentOutputObject::TKeyMap m_mapHtmlOptimumKey;
 };
 
 

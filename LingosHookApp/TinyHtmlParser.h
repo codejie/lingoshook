@@ -205,10 +205,10 @@ private:
 //
 class CDocumentOutputObject
 {
-protected:
+public:
     typedef std::set<std::wstring> TKeySet;
     typedef std::stack<std::wstring> TTagStack;
-public:
+
     enum KeyType { KT_TAG = 0, KT_VALUE, KT_ATTRIB, KT_ALL_TAG, KT_ALL_VALUE, KT_ALL_ATTRIB };
     typedef std::map<KeyType, TKeySet> TKeyMap;
 public:
