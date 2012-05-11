@@ -66,7 +66,7 @@ public:
     int SetAnalysisFilter();
 
 	int LoadHtmlOptimumConfig();
-	int SaveHtmlOptimumConfig();
+	int SaveHtmlOptimumConfig() const;
 protected:
     int GetData(int attr, int& value);
     int GetData(int attr, std::wstring& value);
