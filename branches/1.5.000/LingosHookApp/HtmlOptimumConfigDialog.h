@@ -10,17 +10,25 @@
 #ifndef HTMLOPTIMUMCONFIGDIALOG_H
 #define HTMLOPTIMUMCONFIGDIALOG_H
 
+#include "ConfigData.h"
 
 // begin wxGlade: ::extracode
 // end wxGlade
 
 
 class HtmlOptimumConfigDialog: public wxDialog {
+private:
+	const static wxString STR_TAG_ALL;
+	const static wxString STR_TAG_LINK;
+	const static wxString STR_TAG_IMG;
+	const static wxString STR_TAG_OBJECT;
+	const static wxString STR_TAG_EMBED;
+	const static wxString STR_TAG_PARAM;
 public:
     // begin wxGlade: HtmlOptimumConfigDialog::ids
     // end wxGlade
 
-    HtmlOptimumConfigDialog(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
+    HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* parent, int id, const wxString& title = wxEmptyString, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
 
 private:
     // begin wxGlade: HtmlOptimumConfigDialog::methods
@@ -76,6 +84,10 @@ public:
     virtual void OnBtnDefault(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnCanel(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnOK(wxCommandEvent &event); // wxGlade: <event_handler>
+private:
+	int InitConfig();
+private:
+    CConfigData* _config;
 }; // wxGlade: end class
 
 

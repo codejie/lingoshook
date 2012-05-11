@@ -416,7 +416,7 @@ int CConfigData::LoadHtmlOptimumConfig()
 	return 0;
 }
 
-int CConfigData::SaveHtmlOptimumConfig()
+int CConfigData::SaveHtmlOptimumConfig() const
 {
 	try {
 		const char* sql = "DELETE FROM HtmlOptimumConfigTable";
