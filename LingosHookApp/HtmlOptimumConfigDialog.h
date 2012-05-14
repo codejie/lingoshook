@@ -18,12 +18,27 @@
 
 class HtmlOptimumConfigDialog: public wxDialog {
 private:
+	const static wxString STR_TAG_DEFAULT;
 	const static wxString STR_TAG_ALL;
 	const static wxString STR_TAG_LINK;
 	const static wxString STR_TAG_IMG;
 	const static wxString STR_TAG_OBJECT;
 	const static wxString STR_TAG_EMBED;
 	const static wxString STR_TAG_PARAM;
+
+	const static wxString STR_ATTR_DEFAULT;
+	const static wxString STR_ATTR_ALL;
+	const static wxString STR_ATTR_CLASS;
+	const static wxString STR_ATTR_ONCLICK;
+	const static wxString STR_ATTR_ONMOUSEOUT;
+	const static wxString STR_ATTR_ONMOUSEOVER;
+	const static wxString STR_ATTR_ONMOUSEUP;
+	const static wxString STR_ATTR_ONMOUSEDOWN;
+	const static wxString STR_ATTR_ONSELECTSTART;
+
+	const static wxString STR_VALUE_DEFAULT;
+	const static wxString STR_VALUE_ALL;
+
 public:
     // begin wxGlade: HtmlOptimumConfigDialog::ids
     // end wxGlade
@@ -74,7 +89,7 @@ protected:
 public:
     virtual void OnBtnTagAdd(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnTagRemove(wxCommandEvent &event); // wxGlade: <event_handler>
-    virtual void OnBtnRemoveAll(wxCommandEvent &event); // wxGlade: <event_handler>
+    virtual void OnBtnTagRemoveAll(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAttrAdd(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAttrRemove(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnAttrRemoveAll(wxCommandEvent &event); // wxGlade: <event_handler>
@@ -82,10 +97,10 @@ public:
     virtual void OnBtnValRemove(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnValRemoveAll(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnDefault(wxCommandEvent &event); // wxGlade: <event_handler>
-    virtual void OnBtnCanel(wxCommandEvent &event); // wxGlade: <event_handler>
     virtual void OnBtnOK(wxCommandEvent &event); // wxGlade: <event_handler>
 private:
 	int InitConfig();
+	int UpdateConfig();
 private:
     CConfigData* _config;
 }; // wxGlade: end class

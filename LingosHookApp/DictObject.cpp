@@ -16,6 +16,7 @@
 #include "HtmlDictParser.h"
 #include "DictLoadChoiceDialog.h"
 #include "DictStoreChoiceDialog.h"
+#include "HtmlOptimumObject.h"
 #include "DictObject.h"
 
 ////////////////////////////////////////
@@ -104,6 +105,12 @@ int CDictObject::HTMLProc(const wxString& str)
         }
         prochtml += (*it);
     }
+
+	if(_config.m_iHtmlOptimum == 1)
+	{
+		if(CHtmlOptimumObject::Clear(prochtml, prochtml, _config.m_mapHtmlOptimumKey) != 0)
+			return -1;
+	}
 
     if(_config.m_iSkipDict != 1 || _config.m_iSkipHtml != 1)
     {
