@@ -4,16 +4,32 @@
 
 #include "HtmlOptimumConfigDialog.h"
 
+using namespace TinyHtmlParser;
+
 // begin wxGlade: ::extracode
 // end wxGlade
 
 
+const wxString HtmlOptimumConfigDialog::STR_TAG_DEFAULT	=	wxT("Default Configuration");
 const wxString HtmlOptimumConfigDialog::STR_TAG_ALL		=	wxT("All Tag Elements");
 const wxString HtmlOptimumConfigDialog::STR_TAG_LINK	=	wxT("A (Link Elements)");
 const wxString HtmlOptimumConfigDialog::STR_TAG_IMG		=	wxT("IMG (Image/Picture Elements)");
 const wxString HtmlOptimumConfigDialog::STR_TAG_OBJECT	=	wxT("OBJECT (Object Elements)");
 const wxString HtmlOptimumConfigDialog::STR_TAG_EMBED	=	wxT("EMBED (Embedded Elemetns)");
 const wxString HtmlOptimumConfigDialog::STR_TAG_PARAM	=	wxT("PARAM (Parameter Elements)");
+
+const wxString HtmlOptimumConfigDialog::STR_ATTR_DEFAULT		=	wxT("Default Configuration");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ALL			=	wxT("All Attribute Elements");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_CLASS			=	wxT("class");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ONCLICK		=	wxT("onclick");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ONMOUSEOUT		=	wxT("onmouseout");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ONMOUSEOVER	=	wxT("onmouseover");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ONMOUSEUP		=	wxT("onmouseup");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ONMOUSEDOWN	=	wxT("onmousedown");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_ONSELECTSTART	=	wxT("onselectstart");
+
+const wxString HtmlOptimumConfigDialog::STR_VALUE_DEFAULT	=	wxT("Default Configuration");
+const wxString HtmlOptimumConfigDialog::STR_VALUE_ALL		=	wxT("All Value Elements");
 
 HtmlOptimumConfigDialog::HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
     wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxTHICK_FRAME)
@@ -23,13 +39,13 @@ HtmlOptimumConfigDialog::HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* pa
     label_1 = new wxStaticText(this, wxID_ANY, wxT("Tag Elements"));
     static_line_2 = new wxStaticLine(this, wxID_ANY);
     const wxString comboTag_choices[] = {
-        wxT("Default Configuration"),
-        wxT("A (Link Elements)"),
-        wxT("IMG (Image/Picture Elements)"),
-        wxT("OBJECT (Object Elements)"),
-        wxT("EMBED (Embedded Elemetns)"),
-        wxT("PARAM (Parameter Elements)"),
-        wxT("All Tag Elements")
+        STR_TAG_DEFAULT,
+        STR_TAG_LINK,
+        STR_TAG_IMG,
+        STR_TAG_OBJECT,
+        STR_TAG_EMBED,
+        STR_TAG_PARAM,
+        STR_TAG_ALL
     };
     comboTag = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 7, comboTag_choices, wxCB_DROPDOWN|wxCB_DROPDOWN);
     button_4 = new wxButton(this, 1000, wxT("Add"));
@@ -41,14 +57,15 @@ HtmlOptimumConfigDialog::HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* pa
     label_1_copy = new wxStaticText(this, wxID_ANY, wxT("Attribute Elements"));
     static_line_2_copy = new wxStaticLine(this, wxID_ANY);
     const wxString comboAttrib_choices[] = {
-        wxT("Default Configuration"),
-        wxT("onclick"),
-        wxT("onmouseout"),
-        wxT("onmouseover"),
-        wxT("onmouseup"),
-        wxT("onmousedown"),
-        wxT("onselectstart"),
-        wxT("All Attribute Elements")
+        STR_ATTR_DEFAULT,
+		STR_ATTR_CLASS,
+        STR_ATTR_ONCLICK,
+        STR_ATTR_ONMOUSEOUT,
+        STR_ATTR_ONMOUSEOVER,
+        STR_ATTR_ONMOUSEUP,
+        STR_ATTR_ONMOUSEDOWN,
+        STR_ATTR_ONSELECTSTART,
+        STR_ATTR_ALL
     };
     comboAttrib = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 8, comboAttrib_choices, wxCB_DROPDOWN|wxCB_DROPDOWN);
     button_4_copy = new wxButton(this, 2000, wxT("Add"));
@@ -60,8 +77,8 @@ HtmlOptimumConfigDialog::HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* pa
     label_1_copy_1 = new wxStaticText(this, wxID_ANY, wxT("Value Elements"));
     static_line_2_copy_1 = new wxStaticLine(this, wxID_ANY);
     const wxString comboValue_choices[] = {
-        wxT("Default Configuration"),
-        wxT("All Value Elements")
+        STR_VALUE_DEFAULT,
+        STR_VALUE_ALL
     };
     comboValue = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 2, comboValue_choices, wxCB_DROPDOWN|wxCB_DROPDOWN);
     button_4_copy_1 = new wxButton(this, 3000, wxT("Add"));
@@ -86,7 +103,7 @@ BEGIN_EVENT_TABLE(HtmlOptimumConfigDialog, wxDialog)
     // begin wxGlade: HtmlOptimumConfigDialog::event_table
     EVT_BUTTON(1000, HtmlOptimumConfigDialog::OnBtnTagAdd)
     EVT_BUTTON(1001, HtmlOptimumConfigDialog::OnBtnTagRemove)
-    EVT_BUTTON(1002, HtmlOptimumConfigDialog::OnBtnRemoveAll)
+    EVT_BUTTON(1002, HtmlOptimumConfigDialog::OnBtnTagRemoveAll)
     EVT_BUTTON(2000, HtmlOptimumConfigDialog::OnBtnAttrAdd)
     EVT_BUTTON(2001, HtmlOptimumConfigDialog::OnBtnAttrRemove)
     EVT_BUTTON(2002, HtmlOptimumConfigDialog::OnBtnAttrRemoveAll)
@@ -94,7 +111,6 @@ BEGIN_EVENT_TABLE(HtmlOptimumConfigDialog, wxDialog)
     EVT_BUTTON(3001, HtmlOptimumConfigDialog::OnBtnValRemove)
     EVT_BUTTON(3002, HtmlOptimumConfigDialog::OnBtnValRemoveAll)
     EVT_BUTTON(4000, HtmlOptimumConfigDialog::OnBtnDefault)
-    EVT_BUTTON(wxID_CANCEL, HtmlOptimumConfigDialog::OnBtnCanel)
     EVT_BUTTON(wxID_OK, HtmlOptimumConfigDialog::OnBtnOK)
     // end wxGlade
 END_EVENT_TABLE();
@@ -182,10 +198,13 @@ void HtmlOptimumConfigDialog::set_properties()
     SetSize(wxSize(451, 564));
     label_1->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     comboTag->SetSelection(0);
+	comboTag->SetToolTip(wxT("Input and add the tag element of HTML want to be deleted, such as 'IMG'"));
     label_1_copy->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     comboAttrib->SetSelection(0);
+	comboAttrib->SetToolTip(wxT("Input and add the attribute element of HTML want to be deleted, such as 'height'"));
     label_1_copy_1->SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     comboValue->SetSelection(0);
+	comboValue->SetToolTip(wxT("Input and add the value element of HTML want to be deleted"));
     // end wxGlade
 
 	InitConfig();
@@ -193,85 +212,193 @@ void HtmlOptimumConfigDialog::set_properties()
 
 void HtmlOptimumConfigDialog::OnBtnTagAdd(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnTagAdd) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	if(comboTag->GetStringSelection() == STR_TAG_ALL)
+	{
+		listTag->AppendString(STR_TAG_ALL);
+	}
+	else if(comboTag->GetStringSelection() == STR_TAG_DEFAULT)
+	{
+		OnBtnTagRemoveAll(event);
+
+		listTag->AppendString(wxT("A"));
+		listTag->AppendString(wxT("OBJECT"));
+		listTag->AppendString(wxT("EMBED"));
+		listTag->AppendString(wxT("PARAM"));
+	}
+	else if(comboTag->GetStringSelection() == STR_TAG_LINK)
+	{
+		listTag->AppendString(wxT("A"));
+	}
+	else if(comboTag->GetStringSelection() == STR_TAG_IMG)
+	{
+		listTag->AppendString(wxT("IMG"));
+	}
+	else if(comboTag->GetStringSelection() == STR_TAG_OBJECT)
+	{
+		listTag->AppendString(wxT("OBJECT"));
+	}
+	else if(comboTag->GetStringSelection() == STR_TAG_EMBED)
+	{
+		listTag->AppendString(wxT("EMBED"));
+	}
+	else if(comboTag->GetStringSelection() == STR_TAG_PARAM)
+	{
+		listTag->AppendString(wxT("PARAM"));
+	}
+	else if(comboTag->GetLabelText() != wxEmptyString)
+	{
+		listTag->AppendString(comboTag->GetLabelText());
+	}
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnTagRemove(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnTagRemove) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	int idx = listTag->GetSelection();
+	if(idx == -1)
+		return;
+
+	listTag->Delete(idx);
 }
 
 
-void HtmlOptimumConfigDialog::OnBtnRemoveAll(wxCommandEvent &event)
+void HtmlOptimumConfigDialog::OnBtnTagRemoveAll(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnRemoveAll) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	int num = listTag->GetCount();
+	while(num > 0)
+	{
+		listTag->Delete(0);
+		-- num;
+	}
 }
-
 
 void HtmlOptimumConfigDialog::OnBtnAttrAdd(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnAttrAdd) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	if(comboAttrib->GetStringSelection() == STR_ATTR_ALL)
+	{
+		listAttrib->AppendString(STR_ATTR_ALL);
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_DEFAULT)
+	{
+		OnBtnAttrRemoveAll(event);
+
+		listAttrib->AppendString(wxT("class"));
+		listAttrib->AppendString(wxT("onclick"));
+		listAttrib->AppendString(wxT("onmouseout"));
+		listAttrib->AppendString(wxT("onmouseover"));
+		listAttrib->AppendString(wxT("onmouseup"));
+		listAttrib->AppendString(wxT("onmousedown"));
+		listAttrib->AppendString(wxT("onselectstart"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_CLASS)
+	{
+		listAttrib->AppendString(wxT("class"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_ONCLICK)
+	{
+		listAttrib->AppendString(wxT("onclick"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_ONMOUSEOUT)
+	{
+		listAttrib->AppendString(wxT("onmouseout"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_ONMOUSEOVER)
+	{
+		listAttrib->AppendString(wxT("onmouseover"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_ONMOUSEUP)
+	{
+		listAttrib->AppendString(wxT("onmouseup"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_ONMOUSEDOWN)
+	{
+		listAttrib->AppendString(wxT("onmousedown"));
+	}
+	else if(comboAttrib->GetStringSelection() == STR_ATTR_ONSELECTSTART)
+	{
+		listAttrib->AppendString(wxT("onselectstart"));
+	}
+	else if(comboAttrib->GetLabelText() != wxEmptyString)
+	{
+		listAttrib->AppendString(comboAttrib->GetLabelText());
+	}
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnAttrRemove(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnAttrRemove) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	int idx = listAttrib->GetSelection();
+	if(idx == -1)
+		return;
+
+	listAttrib->Delete(idx);
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnAttrRemoveAll(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnAttrRemoveAll) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	int num = listAttrib->GetCount();
+	while(num > 0)
+	{
+		listAttrib->Delete(0);
+		-- num;
+	}
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnValAdd(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnValAdd) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	if(comboValue->GetStringSelection() == STR_VALUE_ALL)
+	{
+		listValue->AppendString(STR_VALUE_ALL);
+	}
+	else if(comboValue->GetStringSelection() == STR_VALUE_DEFAULT)
+	{
+		OnBtnValRemoveAll(event);
+	}
+	else if(comboValue->GetLabelText() != wxEmptyString)
+	{
+		listValue->AppendString(comboValue->GetLabelText());
+	}
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnValRemove(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnValRemove) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	int idx = listValue->GetSelection();
+	if(idx == -1)
+		return;
+
+	listValue->Delete(idx);
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnValRemoveAll(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnValRemoveAll) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	int num = listValue->GetCount();
+	while(num > 0)
+	{
+		listValue->Delete(0);
+		-- num;
+	}
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnDefault(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnDefault) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
-}
-
-
-void HtmlOptimumConfigDialog::OnBtnCanel(wxCommandEvent &event)
-{
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnCanel) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	comboTag->SetSelection(0);
+	OnBtnTagAdd(event);
+	comboAttrib->SetSelection(0);
+	OnBtnAttrAdd(event);
+	comboValue->SetSelection(0);
+	OnBtnValAdd(event);
 }
 
 
 void HtmlOptimumConfigDialog::OnBtnOK(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (HtmlOptimumConfigDialog::OnBtnOK) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	UpdateConfig();
+	wxDialog::Close();
 }
 
 
@@ -281,13 +408,118 @@ int HtmlOptimumConfigDialog::InitConfig()
 	if(_config == NULL)
 		return -1;
 
-	const TinyHtmlParser::CDocumentOutputObject::TKeyMap& mapKey = _config->m_mapHtmlOptimumKey;
+	const CDocumentOutputObject::TKeyMap& mapKey = _config->m_mapHtmlOptimumKey;
 
 	//Tag
-	if(TinyHtmlParser::CDocumentOutputObject::IsKey(&mapKey, TinyHtmlParser::CDocumentOutputObject::KT_ALL_TAG))
+	if(CDocumentOutputObject::IsKey(&mapKey, CDocumentOutputObject::KT_ALL_TAG))
 	{
 		listTag->AppendString(STR_TAG_ALL);
 	}
-	else 
+
+
+	CDocumentOutputObject::TKeyMap::const_iterator it = mapKey.begin();
+	while(it != mapKey.end())
+	{
+		if(it->first == CDocumentOutputObject::KT_ALL_TAG)
+		{
+			listTag->AppendString(STR_TAG_ALL);
+		}
+		else if(it->first == CDocumentOutputObject::KT_ALL_ATTRIB)
+		{
+			listAttrib->AppendString(STR_ATTR_ALL);
+		}
+		else if(it->first == CDocumentOutputObject::KT_ALL_VALUE)
+		{
+			listValue->AppendString(STR_VALUE_ALL);
+		}
+		else if(it->first == CDocumentOutputObject::KT_TAG)
+		{
+			CDocumentOutputObject::TKeySet::const_iterator i = it->second.begin();
+			while(i != it->second.end())
+			{
+				listTag->AppendString(*i);
+				++ i;
+			}
+		}
+		else if(it->first == CDocumentOutputObject::KT_ATTRIB)
+		{
+			CDocumentOutputObject::TKeySet::const_iterator i = it->second.begin();
+			while(i != it->second.end())
+			{
+				listAttrib->AppendString(*i);
+				++ i;
+			}
+		}
+		else if(it->first == CDocumentOutputObject::KT_VALUE)
+		{
+			CDocumentOutputObject::TKeySet::const_iterator i = it->second.begin();
+			while(i != it->second.end())
+			{
+				listValue->AppendString(*i);
+				++ i;
+			}
+		}
+
+		++ it;
+	}
+
+	return 0;
 }
 
+int HtmlOptimumConfigDialog::UpdateConfig()
+{
+	if(_config == NULL)
+		return -1;
+
+	CDocumentOutputObject::TKeyMap& mapKey = _config->m_mapHtmlOptimumKey;
+
+	mapKey.clear();
+
+	unsigned int num = 0;
+	wxString str = wxEmptyString;
+	while(num < listTag->GetCount())
+	{
+		str = listTag->GetString(num);
+		if(str == STR_TAG_ALL)
+		{
+			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ALL_TAG);
+		}
+		else
+		{
+			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, str);
+		}
+		++ num;
+	}
+
+	num = 0;
+	while(num < listAttrib->GetCount())
+	{
+		str = listAttrib->GetString(num);
+		if(str == STR_TAG_ALL)
+		{
+			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ALL_ATTRIB);
+		}
+		else
+		{
+			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, str);
+		}
+		++ num;
+	}
+
+	num = 0;
+	while(num < listValue->GetCount())
+	{
+		str = listValue->GetString(num);
+		if(str == STR_TAG_ALL)
+		{
+			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ALL_VALUE);
+		}
+		else
+		{
+			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_VALUE, str);
+		}
+		++ num;
+	}
+
+	return _config->SaveHtmlOptimumConfig();
+}

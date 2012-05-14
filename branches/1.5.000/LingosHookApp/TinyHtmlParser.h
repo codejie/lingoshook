@@ -214,7 +214,7 @@ public:
 public:
     static void AddKey(TKeyMap* keymap, KeyType type, const wxString& str = wxEmptyString);
     static void RemoveKey(TKeyMap* keymap, KeyType type, const wxString& str = wxEmptyString);
-    static bool IsKey(const TKeyMap* keymap, KeyType type, const wxString& str);
+    static bool IsKey(const TKeyMap* keymap, KeyType type, const wxString& str = wxEmptyString);
 
     static int Rewrite(const CDocumentObject& doc, wxString& ostr, const TKeyMap* exclude = NULL);
 protected:

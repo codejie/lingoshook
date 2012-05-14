@@ -6,13 +6,15 @@
 
 #include <string>
 
+#include "TinyHtmlParser.h"
+
 class CHtmlOptimumObject
 {
 public:
 	CHtmlOptimumObject();
 	virtual ~CHtmlOptimumObject();
 
-	static int Clear(const std::wstring& input, std::wstring& output);
+	static int Clear(const std::wstring& input, std::wstring& output, const TinyHtmlParser::CDocumentOutputObject::TKeyMap& mapKey);
 
 };
 

@@ -47,6 +47,7 @@ public:
     static const int CA_STOPAUTORETRIEVE =   28;
     static const int CA_HOOKLANGUAGE    =   29;//0: English; 1: Chinese
     static const int CA_HOMEPAGE        =   30;
+	static const int CA_HTMLOPTIMUM		=	31;
 
 public:
     CConfigData(CDBAccess& db);
@@ -72,6 +73,8 @@ protected:
     int GetData(int attr, std::wstring& value);
     int SetData(int attr, int& value);
     int SetData(int attr, const std::wstring& value);
+
+	int SetDefaultHtmlOptimumConfig();
 protected:
     CDBAccess::TDatabase& _db;
 public:
@@ -107,6 +110,7 @@ public:
     int m_iHookLanguage;
     std::wstring m_strHomePage;
 
+	int m_iHtmlOptimum;
 	CDocumentOutputObject::TKeyMap m_mapHtmlOptimumKey;
 };
 

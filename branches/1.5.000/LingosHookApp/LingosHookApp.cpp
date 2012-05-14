@@ -869,6 +869,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         _dataConfig->m_iSkipError = m_checkIgnoreDict->IsChecked() ? 1 : 0;
         _dataConfig->m_iSkipDict = m_checkSkipDict->IsChecked() ? 1 : 0;
         _dataConfig->m_iSkipHtml = m_checkSkipHtml->IsChecked() ? 1 : 0;
+		_dataConfig->m_iHtmlOptimum = m_checkHtmlOptimum->IsChecked() ? 1 : 0;
 
         int sel = m_comboxExpandDict->GetSelection();
         if(sel == 0)
@@ -968,6 +969,7 @@ int LingosHookFrame::UpdateConfigData(bool retrieve)
         m_checkIgnoreDict->SetValue(_dataConfig->m_iSkipError == 1);
         m_checkSkipDict->SetValue(_dataConfig->m_iSkipDict == 1);
         m_checkSkipHtml->SetValue(_dataConfig->m_iSkipHtml == 1);
+		m_checkHtmlOptimum->SetValue(_dataConfig->m_iHtmlOptimum == 1);
 
         m_cbSetAutoSpeak->SetValue(_dataConfig->m_iAutoSpeak == 1);
         //m_checkSetUseTidy->SetValue(_dataConfig->m_iUseTidy == 1);
@@ -1901,7 +1903,7 @@ void LingosHookFrame::OnBtnSetAnalysisFilter(wxCommandEvent &event)
 
 void LingosHookFrame::OnBtnSetHtmlOptimum(wxCommandEvent &event)
 {
-	HtmlOptimumConfigDialog dlg(this, wxID_ANY, wxEmptyString);
+	HtmlOptimumConfigDialog dlg(_dataConfig.get(), this, wxID_ANY, wxEmptyString);
     if(dlg.ShowModal() == wxID_OK)
     {
     }

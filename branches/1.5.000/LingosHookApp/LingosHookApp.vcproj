@@ -249,6 +249,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HtmlOptimumObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\HtmlTidyObject.cpp"
 				>
 			</File>

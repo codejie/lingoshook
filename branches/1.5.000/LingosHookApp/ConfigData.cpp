@@ -38,6 +38,7 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iStopAutoRetrieve(0)
 , m_iHookLanguage(0)
 , m_strHomePage(wxEmptyString)
+, m_iHtmlOptimum(1)
 {
 }
 
@@ -252,7 +253,13 @@ int CConfigData::Load()
     if(GetData(CA_HOMEPAGE, m_strHomePage) != 0)
         m_strHomePage = wxEmptyString;
 
-	if(LoadHtmlOptimumConfig() != 0)
+	if(GetData(CA_HTMLOPTIMUM, m_iHtmlOptimum) != 0)
+	{
+		m_iHtmlOptimum = 1;
+		SetDefaultHtmlOptimumConfig();
+	}
+
+	if(m_iHtmlOptimum == 1 && LoadHtmlOptimumConfig() != 0)
 		return -1;
 
     return 0;
@@ -324,6 +331,9 @@ int CConfigData::Save()
 
     if(SetData(CA_HOMEPAGE, m_strHomePage) != 0)
         return -1;
+	
+	if(SetData(CA_HTMLOPTIMUM, m_iHtmlOptimum) != 0)
+		return -1;
 
     return 0;
 }
@@ -428,7 +438,7 @@ int CConfigData::SaveHtmlOptimumConfig() const
 			CDocumentOutputObject::TKeySet::const_iterator i = it->second.begin();
 			while(i != it->second.end())
 			{
-				CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO HtmlOptimumConfigTable (Type, Item) VALUES (?, :?)");
+				CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO HtmlOptimumConfigTable (Type, Item) VALUES (?, ?)");
 				query.Bind(1, it->first);
 				query.Bind(2, *i);
 				
@@ -446,4 +456,20 @@ int CConfigData::SaveHtmlOptimumConfig() const
         return -1;
     }
 	return 0;
+}
+
+int CConfigData::SetDefaultHtmlOptimumConfig()
+{
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("A"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("PARAM"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("EMBED"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("OBJECT"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("class"));	
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onclick"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseout"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseup"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmousedown"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onselectstart"));
+
+	return SaveHtmlOptimumConfig();
 }
