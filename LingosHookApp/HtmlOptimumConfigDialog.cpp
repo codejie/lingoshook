@@ -21,6 +21,7 @@ const wxString HtmlOptimumConfigDialog::STR_TAG_PARAM	=	wxT("PARAM (Parameter El
 const wxString HtmlOptimumConfigDialog::STR_ATTR_DEFAULT		=	wxT("Default Configuration");
 const wxString HtmlOptimumConfigDialog::STR_ATTR_ALL			=	wxT("All Attribute Elements");
 const wxString HtmlOptimumConfigDialog::STR_ATTR_CLASS			=	wxT("class");
+const wxString HtmlOptimumConfigDialog::STR_ATTR_TITLE			=	wxT("title");
 const wxString HtmlOptimumConfigDialog::STR_ATTR_ONCLICK		=	wxT("onclick");
 const wxString HtmlOptimumConfigDialog::STR_ATTR_ONMOUSEOUT		=	wxT("onmouseout");
 const wxString HtmlOptimumConfigDialog::STR_ATTR_ONMOUSEOVER	=	wxT("onmouseover");
@@ -59,6 +60,7 @@ HtmlOptimumConfigDialog::HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* pa
     const wxString comboAttrib_choices[] = {
         STR_ATTR_DEFAULT,
 		STR_ATTR_CLASS,
+		STR_ATTR_TITLE,
         STR_ATTR_ONCLICK,
         STR_ATTR_ONMOUSEOUT,
         STR_ATTR_ONMOUSEOVER,
@@ -67,7 +69,7 @@ HtmlOptimumConfigDialog::HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* pa
         STR_ATTR_ONSELECTSTART,
         STR_ATTR_ALL
     };
-    comboAttrib = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 8, comboAttrib_choices, wxCB_DROPDOWN|wxCB_DROPDOWN);
+    comboAttrib = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 10, comboAttrib_choices, wxCB_DROPDOWN|wxCB_DROPDOWN);
     button_4_copy = new wxButton(this, 2000, wxT("Add"));
     const wxString *listAttrib_choices = NULL;
     listAttrib = new wxListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, listAttrib_choices, 0);
@@ -283,6 +285,7 @@ void HtmlOptimumConfigDialog::OnBtnAttrAdd(wxCommandEvent &event)
 		OnBtnAttrRemoveAll(event);
 
 		listAttrib->AppendString(wxT("class"));
+		listAttrib->AppendString(wxT("title"));
 		listAttrib->AppendString(wxT("onclick"));
 		listAttrib->AppendString(wxT("onmouseout"));
 		listAttrib->AppendString(wxT("onmouseover"));
@@ -410,13 +413,6 @@ int HtmlOptimumConfigDialog::InitConfig()
 
 	const CDocumentOutputObject::TKeyMap& mapKey = _config->m_mapHtmlOptimumKey;
 
-	//Tag
-	if(CDocumentOutputObject::IsKey(&mapKey, CDocumentOutputObject::KT_ALL_TAG))
-	{
-		listTag->AppendString(STR_TAG_ALL);
-	}
-
-
 	CDocumentOutputObject::TKeyMap::const_iterator it = mapKey.begin();
 	while(it != mapKey.end())
 	{
@@ -495,7 +491,7 @@ int HtmlOptimumConfigDialog::UpdateConfig()
 	while(num < listAttrib->GetCount())
 	{
 		str = listAttrib->GetString(num);
-		if(str == STR_TAG_ALL)
+		if(str == STR_ATTR_ALL)
 		{
 			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ALL_ATTRIB);
 		}
@@ -510,7 +506,7 @@ int HtmlOptimumConfigDialog::UpdateConfig()
 	while(num < listValue->GetCount())
 	{
 		str = listValue->GetString(num);
-		if(str == STR_TAG_ALL)
+		if(str == STR_VALUE_ALL)
 		{
 			CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ALL_VALUE);
 		}

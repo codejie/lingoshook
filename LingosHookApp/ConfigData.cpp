@@ -259,7 +259,7 @@ int CConfigData::Load()
 		SetDefaultHtmlOptimumConfig();
 	}
 
-	if(m_iHtmlOptimum == 1 && LoadHtmlOptimumConfig() != 0)
+	if(LoadHtmlOptimumConfig() != 0)
 		return -1;
 
     return 0;
@@ -460,11 +460,14 @@ int CConfigData::SaveHtmlOptimumConfig() const
 
 int CConfigData::SetDefaultHtmlOptimumConfig()
 {
+	m_mapHtmlOptimumKey.clear();
+
     CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("A"));
     CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("PARAM"));
     CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("EMBED"));
     CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("OBJECT"));
     CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("class"));	
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("title"));
 	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onclick"));
 	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseout"));
 	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseup"));

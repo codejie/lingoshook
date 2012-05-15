@@ -85,10 +85,13 @@ int CElementObject::AnalyseAttribute(const std::wstring& attr)
     {
         if(attr[pos] == L'=')
         {
-            ae = pos - 1;
-            vs = pos + 1;
+			if(!semicolon)
+			{
+				ae = pos - 1;
+				vs = pos + 1;
 
-            v = true;
+				v = true;
+			}
         }
         else if(attr[pos] == L' ')
         {
