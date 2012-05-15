@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../LingosHookApp;&quot;$(TIDY_ROOT)\tidylib\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				AdditionalIncludeDirectories="..\LingosHookApp;..\Tidy\tidylib\include;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,6 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="tidy.lib wxbase28ud.lib wxmsw28ud_core.lib comctl32.lib rpcrt4.lib"
+				OutputFile="..\Output\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"

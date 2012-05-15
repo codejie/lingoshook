@@ -1533,7 +1533,7 @@ void LingosHookFrame::OnContextMenuFilter(wxCommandEvent& event)
         while(id.IsOk())
         {
             const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(id);
-            ShowHint(_("Delete word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
+            ShowHint(_("Deleting word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
             RemoveWord(cd->ID());
             id = m_treeFilter->GetFirstChild(item, cookie);
         }

@@ -29,6 +29,7 @@ private:
 	const static wxString STR_ATTR_DEFAULT;
 	const static wxString STR_ATTR_ALL;
 	const static wxString STR_ATTR_CLASS;
+	const static wxString STR_ATTR_TITLE;
 	const static wxString STR_ATTR_ONCLICK;
 	const static wxString STR_ATTR_ONMOUSEOUT;
 	const static wxString STR_ATTR_ONMOUSEOVER;
