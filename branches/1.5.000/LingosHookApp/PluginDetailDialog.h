@@ -33,8 +33,8 @@ protected:
     wxStaticBox* sizer_3_staticbox;
     wxStaticText* label_1;
     wxStaticText* m_labelName;
-    wxStaticText* label_3;
-    wxStaticText* m_labelLabel;
+//    wxStaticText* label_3;
+//    wxStaticText* m_labelLabel;
     wxStaticText* label_5;
     wxStaticText* m_labelVersion;
     wxStaticText* label_7;

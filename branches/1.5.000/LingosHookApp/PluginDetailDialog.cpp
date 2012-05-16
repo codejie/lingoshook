@@ -15,8 +15,8 @@ PluginDetailDialog::PluginDetailDialog(const ActivityObject::PropertyData& data,
     sizer_3_staticbox = new wxStaticBox(this, -1, wxEmptyString);
     label_1 = new wxStaticText(this, wxID_ANY, _("Name:"));
     m_labelName = new wxStaticText(this, wxID_ANY, wxEmptyString);
-    label_3 = new wxStaticText(this, wxID_ANY, _("Label:"));
-    m_labelLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    //label_3 = new wxStaticText(this, wxID_ANY, _("Label:"));
+    //m_labelLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
     label_5 = new wxStaticText(this, wxID_ANY, _("Version:"));
     m_labelVersion = new wxStaticText(this, wxID_ANY, wxEmptyString);
     label_7 = new wxStaticText(this, wxID_ANY, _("Author:"));
@@ -52,12 +52,12 @@ void PluginDetailDialog::OnBtnClose(wxCommandEvent &event)
 void PluginDetailDialog::set_properties()
 {
     // begin wxGlade: PluginDetailDialog::set_properties
-    SetTitle(_("Plugins  Description - ") + _data.m_strLabel);
+    SetTitle(_("Plugins  Description - ") + _data.m_strName);
     SetSize(wxSize(289, 330));
 
     m_labelName->SetLabel(_data.m_strName);
-    m_labelLabel->SetLabel(_data.m_strLabel);
-    m_labelVersion->SetLabel(_data.m_strVersion);
+    //m_labelLabel->SetLabel(_data.m_strLabel);
+	m_labelVersion->SetLabel(_data.m_strVersion);
     m_labelAuthor->SetLabel(_data.m_strAuthor);
     m_editDesc->SetValue(_data.m_strDescription);
 
@@ -78,9 +78,9 @@ void PluginDetailDialog::do_layout()
     sizer_4->Add(label_1, 1, wxALIGN_CENTER_VERTICAL, 0);
     sizer_4->Add(m_labelName, 4, wxALIGN_CENTER_VERTICAL, 0);
     sizer_3->Add(sizer_4, 1, wxEXPAND, 0);
-    sizer_5->Add(label_3, 1, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_5->Add(m_labelLabel, 4, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_3->Add(sizer_5, 1, wxEXPAND, 0);
+//    sizer_5->Add(label_3, 1, wxALIGN_CENTER_VERTICAL, 0);
+//    sizer_5->Add(m_labelLabel, 4, wxALIGN_CENTER_VERTICAL, 0);
+    //sizer_3->Add(sizer_5, 1, wxEXPAND, 0);
     sizer_6->Add(label_5, 1, wxALIGN_CENTER_VERTICAL, 0);
     sizer_6->Add(m_labelVersion, 4, wxALIGN_CENTER_VERTICAL, 0);
     sizer_3->Add(sizer_6, 1, wxEXPAND, 0);
