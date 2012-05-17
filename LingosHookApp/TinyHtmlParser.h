@@ -217,8 +217,9 @@ public:
     static bool IsKey(const TKeyMap* keymap, KeyType type, const wxString& str = wxEmptyString);
 
     static int Rewrite(const CDocumentObject& doc, wxString& ostr, const TKeyMap* exclude = NULL);
+	static int Rewrite(const CDocumentObject& doc, wxString& ostr, const CElementObject* tag, const TKeyMap* exclude = NULL);
 protected:
-    static void RewriteElement(wxString& ostr, const TinyHtmlParser::CElementObject* root, const CElementObject* e, TTagStack& tagstack, const TKeyMap* exclude);
+    static void RewriteElement(wxString& ostr, const CElementObject* root, const CElementObject* e, TTagStack& tagstack, const TKeyMap* exclude);
     static bool IsKey(const TKeyMap* keymap, KeyType type, const std::wstring& str);
 private:
     static void RewriteTag(wxString& ostr, const CElementObject* e, TTagStack& tagstack, const TKeyMap* exclude);
