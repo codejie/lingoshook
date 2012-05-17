@@ -292,6 +292,10 @@ void HtmlOptimumConfigDialog::OnBtnAttrAdd(wxCommandEvent &event)
 		listAttrib->AppendString(wxT("onmouseup"));
 		listAttrib->AppendString(wxT("onmousedown"));
 		listAttrib->AppendString(wxT("onselectstart"));
+		listAttrib->AppendString(wxT("lingoes_pendfind"));
+		listAttrib->AppendString(wxT("lingoes_pend"));
+		listAttrib->AppendString(wxT("lingoes_find"));
+
 	}
 	else if(comboAttrib->GetStringSelection() == STR_ATTR_CLASS)
 	{

@@ -31,4 +31,9 @@ void ActivityObject::SetDictObject(CDictObject *obj)
 	_objDict = obj;
 }
 
+void ActivityObject::SetTagObject(CTagObject *obj)
+{
+	_objTag = obj;
+}
+
 #endif
