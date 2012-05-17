@@ -1131,6 +1131,24 @@ int CDocumentOutputObject::Rewrite(const CDocumentObject &doc, wxString &ostr, c
     }
     return 0;
 }
+
+int CDocumentOutputObject::Rewrite(const TinyHtmlParser::CDocumentObject &doc, wxString &ostr, const TinyHtmlParser::CElementObject *tag, const TinyHtmlParser::CDocumentOutputObject::TKeyMap *exclude)
+{
+    if(tag != NULL)
+    {
+        TTagStack tagstack;
+        try
+        {
+            RewriteElement(ostr,tag, tag, tagstack, exclude);
+        }
+        catch(std::exception& e)
+        {
+            return -1;
+        }
+    }
+    return 0;
+}
+
 //
 //void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject* root, const CElementObject *e, CDocumentOutputObject::TTagStack &tagstack, const CDocumentOutputObject::TKeyMap *exclude)
 //{
@@ -1212,6 +1230,11 @@ void CDocumentOutputObject::RewriteElement(wxString &ostr, const CElementObject*
     {
         RewriteValue(ostr, pe, exclude);
     }
+
+	if(e == root)
+	{
+		return;
+	}
 
     if(ps != NULL)
     {
