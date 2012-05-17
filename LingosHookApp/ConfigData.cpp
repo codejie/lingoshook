@@ -473,6 +473,9 @@ int CConfigData::SetDefaultHtmlOptimumConfig()
 	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseup"));
 	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmousedown"));
 	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onselectstart"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pendfind"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pend"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_find"));
 
 	return SaveHtmlOptimumConfig();
 }

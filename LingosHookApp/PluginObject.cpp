@@ -101,7 +101,8 @@ int CPluginObject::ActivePlugin(int index)
         int ver = act->GetInterfaceVersion();
         if(ver > __LH_PLUGINS_INTERFACEVERSION__)
         {
-            if(wxMessageBox(wxT("This interface version of this plugin is imcompatible with current LingosHook application, are you sure to run it ?"), wxT("LingosHook Warning"), wxYES_NO | wxCENTER | wxICON_WARNING) != wxYES)
+			wxString str = wxString::Format(wxT("This interface version(%d) of this plugin is imcompatible with current LingosHook application(%d), are you sure to run it ?"), act->GetInterfaceVersion(), __LH_PLUGINS_INTERFACEVERSION__);
+            if(wxMessageBox(str, wxT("LingosHook Warning"), wxYES_NO | wxCENTER | wxICON_WARNING) != wxYES)
             {
                 delete act, act = NULL;
                 lib.Unload();
