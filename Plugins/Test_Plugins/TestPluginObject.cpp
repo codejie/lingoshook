@@ -4,6 +4,7 @@
 #include "wx/dynlib.h"
 
 #include "ActivityObject.h"
+#include "PluginDetailDialog.h"
 
 #include "TestPluginsFrame.h"
 
@@ -93,21 +94,86 @@ int CTestPluginObject::ActivePlugin(int index)
     ActivityObject* act = ptr();
     if(act != NULL)
     {
-        //lib.Detach();
+        int ver = act->GetInterfaceVersion();
+        if(ver > __LH_PLUGINS_INTERFACEVERSION__)
+        {
+			wxString str = wxString::Format(wxT("This interface version(%d) of this plugin is imcompatible with current LingosHook application(%d), are you sure to run it ?"), act->GetInterfaceVersion(), __LH_PLUGINS_INTERFACEVERSION__);
+            if(wxMessageBox(str, wxT("LingosHook Warning"), wxYES_NO | wxCENTER | wxICON_WARNING) != wxYES)
+            {
+                delete act, act = NULL;
+                lib.Unload();
+                return 0;
+            }
+        }
         if(act->Init() == 0)
         {
-            if(act->Active(&wxGetApp(), _frame) == 0)
-                ret = 0;
+            if(ver == 1)
+            {
+                if(act->Active(&wxGetApp(), _frame) == 0)
+                    ret = 0;
+            }
+            else
+            {
+                int fparam = -1, sparam = -1;
+                if(act->ActiveEx(&wxGetApp(), _frame, &fparam, &sparam) == 0)
+                    ret = 0;
+                ResultProc(act->GetID(), fparam, sparam);
+            }
             act->Final();
             delete act, act = NULL;
         }
     }
-    lib.Unload();    
+    lib.Unload(); 
+
+    //TActivityMap::const_iterator it = _mapActivity.find(index);
+    //if(it == _mapActivity.end())
+    //    return -1;
+
+    //wxDynamicLibrary lib(it->second);
+    //if(!lib.IsLoaded())
+    //    return -1;
+
+    //int ret = -1;
+    //GetActivityPtr ptr = (GetActivityPtr)lib.GetSymbol(wxT("GetActivity"));
+    //ActivityObject* act = ptr();
+    //if(act != NULL)
+    //{
+    //    //lib.Detach();
+    //    if(act->Init() == 0)
+    //    {
+    //        if(act->Active(&wxGetApp(), _frame) == 0)
+    //            ret = 0;
+    //        act->Final();
+    //        delete act, act = NULL;
+    //    }
+    //}
+    //lib.Unload();    
     return ret;
 }
 
 void CTestPluginObject::ShowPlugin(int index)
 {
+    TActivityMap::const_iterator it = _mapActivity.find(index);
+    if(it == _mapActivity.end())
+        return;
+
+    wxDynamicLibrary lib(it->second);
+    if(!lib.IsLoaded())
+        return;
+
+    GetActivityPtr ptr = (GetActivityPtr)lib.GetSymbol(wxT("GetActivity"));
+    ActivityObject* act = ptr();
+    if(act != NULL)
+    {
+         ActivityObject::PropertyData data;
+         if(act->LoadProperty(data) == 0)
+         {
+            PluginDetailDialog dlg(data, _frame, wxID_ANY, wxEmptyString);
+            dlg.ShowModal();
+         }
+         delete act, act = NULL;
+    }
+    lib.Unload();
 }
 
 

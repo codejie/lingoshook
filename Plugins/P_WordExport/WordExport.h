@@ -18,7 +18,6 @@ public:
     virtual int Active(wxApp* papp, wxWindow* pwindow);
 
     virtual bool NeedDBAccess() const { return true; }
-
 };
 
 //extern WordExport* _theActivity;

@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\LingosHookApp\PluginDetailDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TestPluginObject.cpp"
 				>
 			</File>
@@ -194,6 +198,10 @@
 			>
 			<File
 				RelativePath="..\..\LingosHookApp\ActivityObject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\PluginDetailDialog.h"
 				>
 			</File>
 			<File

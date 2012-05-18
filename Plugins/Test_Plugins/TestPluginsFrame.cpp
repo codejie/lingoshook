@@ -54,8 +54,11 @@ void TestFrame::OnListSelected(wxListEvent &event)
 
 void TestFrame::OnBtnDetail(wxCommandEvent &event)
 {
-    event.Skip();
-    wxLogDebug(wxT("Event handler (TestFrame::OnBtnDetail) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
+	long item = m_listPlugins->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if(item != -1)
+    {
+		_objTestPlugins->ShowPlugin(m_listPlugins->GetItemData(item));
+    }
 }
 
 
