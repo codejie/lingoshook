@@ -190,6 +190,10 @@
 				RelativePath=".\WordExportDialog.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\WordExportV2Dialog.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -210,6 +214,10 @@
 			</File>
 			<File
 				RelativePath=".\WordExportDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WordExportV2Dialog.h"
 				>
 			</File>
 		</Filter>

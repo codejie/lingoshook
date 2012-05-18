@@ -35,6 +35,7 @@ int WordExport::Active(wxApp* papp, wxWindow* pwindow)
     //wxMessageBox(_objDBAccess->Database().GetVersion());
 
     WordExportDialog dlg(_objDBAccess, pwindow, wxID_ANY, wxEmptyString);
+	//WordExportV2Dialog dlg(_objDBAccess, pwindow, wxID_ANY, wxEmptyString);
     dlg.ShowModal();
 
     return 0;

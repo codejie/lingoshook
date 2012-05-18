@@ -24,6 +24,7 @@ protected:
     int LoadPlugin(int index, const wxString& plugfile);
 
     void OnPluginLoad(int index, const ActivityObject::PropertyData& data);
+	int ResultProc(int id, int fparam, int sparam) { return 0; }
 private:
     TestFrame* _frame;
     bool _bLoaded;
