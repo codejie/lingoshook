@@ -183,6 +183,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\LingosHookApp\HtmlOptimumConfigDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SeparatorDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\TinyHtmlParser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\WordExport.cpp"
 				>
 			</File>
@@ -206,6 +218,18 @@
 			</File>
 			<File
 				RelativePath="..\P_Common\Exports.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\HtmlOptimumConfigDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SeparatorDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\TinyHtmlParser.h"
 				>
 			</File>
 			<File
