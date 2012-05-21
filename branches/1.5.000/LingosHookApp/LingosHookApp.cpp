@@ -1903,9 +1903,10 @@ void LingosHookFrame::OnBtnSetAnalysisFilter(wxCommandEvent &event)
 
 void LingosHookFrame::OnBtnSetHtmlOptimum(wxCommandEvent &event)
 {
-	HtmlOptimumConfigDialog dlg(_dataConfig.get(), this, wxID_ANY, wxEmptyString);
+	HtmlOptimumConfigDialog dlg(_dataConfig->m_mapHtmlOptimumKey, this, wxID_ANY, wxEmptyString);
     if(dlg.ShowModal() == wxID_OK)
     {
+		_dataConfig->SaveHtmlOptimumConfig();
     }
 }
 

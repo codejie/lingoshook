@@ -10,11 +10,12 @@
 #ifndef HTMLOPTIMUMCONFIGDIALOG_H
 #define HTMLOPTIMUMCONFIGDIALOG_H
 
-#include "ConfigData.h"
+#include "TinyHtmlParser.h"
 
 // begin wxGlade: ::extracode
 // end wxGlade
 
+using namespace TinyHtmlParser;
 
 class HtmlOptimumConfigDialog: public wxDialog {
 private:
@@ -44,7 +45,7 @@ public:
     // begin wxGlade: HtmlOptimumConfigDialog::ids
     // end wxGlade
 
-    HtmlOptimumConfigDialog(CConfigData* conf, wxWindow* parent, int id, const wxString& title = wxEmptyString, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
+    HtmlOptimumConfigDialog(CDocumentOutputObject::TKeyMap& mapKey, wxWindow* parent, int id, const wxString& title = wxEmptyString, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
 
 private:
     // begin wxGlade: HtmlOptimumConfigDialog::methods
@@ -103,7 +104,7 @@ private:
 	int InitConfig();
 	int UpdateConfig();
 private:
-    CConfigData* _config;
+    CDocumentOutputObject::TKeyMap& _mapKey;
 }; // wxGlade: end class
 
 
