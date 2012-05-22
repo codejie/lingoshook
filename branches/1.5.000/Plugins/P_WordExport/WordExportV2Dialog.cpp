@@ -14,7 +14,8 @@ using namespace TinyHtmlParser;
 
 
 WordExportV2Dialog::WordExportV2Dialog(CDBAccess* dbaccess, wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-    wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE)
+    wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxTHICK_FRAME)
+, _objDBAccess(dbaccess)
 , _strSeparator(wxT("\r\n"))
 {
     // begin wxGlade: WordExportV2Dialog::WordExportV2Dialog
@@ -91,12 +92,21 @@ void WordExportV2Dialog::OnCheckWordClick(wxCommandEvent &event)
 void WordExportV2Dialog::OnRadioTagClick(wxCommandEvent &event)
 {
 	comboTagSpecific->Enable(radioTagSpecific->GetValue());
+
+	if(radioTagSpecific->GetValue())
+	{
+		InitTag();
+	}
 }
 
 
 void WordExportV2Dialog::OnRadioDictClick(wxCommandEvent &event)
 {
 	comboDictSpecific->Enable(radioDictSpecific->GetValue());
+	if(radioDictSpecific->GetValue())
+	{
+		InitDict();
+	}
 }
 
 
@@ -223,7 +233,7 @@ void WordExportV2Dialog::do_layout()
     sizer_9->Add(sizer_10, 0, wxALL|wxEXPAND, 4);
     sizer_11->Add(radioTagAll, 0, wxTOP|wxBOTTOM, 4);
     sizer_12->Add(radioTagSpecific, 0, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_12->Add(comboTagSpecific, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16);
+    sizer_12->Add(comboTagSpecific, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 16);
     sizer_11->Add(sizer_12, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_9->Add(sizer_11, 0, wxLEFT|wxEXPAND, 32);
     sizer_1->Add(sizer_9, 0, wxALL|wxEXPAND, 4);
@@ -232,7 +242,7 @@ void WordExportV2Dialog::do_layout()
     sizer_13->Add(sizer_14, 0, wxALL|wxEXPAND, 4);
     sizer_15->Add(radioDictAll, 0, wxTOP|wxBOTTOM, 4);
     sizer_16->Add(radioDictSpecific, 0, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_16->Add(comboDictSpecific, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16);
+    sizer_16->Add(comboDictSpecific, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 16);
     sizer_15->Add(sizer_16, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_13->Add(sizer_15, 1, wxLEFT|wxEXPAND, 32);
     sizer_1->Add(sizer_13, 0, wxALL|wxEXPAND, 4);
@@ -268,3 +278,50 @@ void WordExportV2Dialog::do_layout()
     // end wxGlade
 }
 
+int WordExportV2Dialog::InitTag()
+{
+	if(_objDBAccess == NULL)
+		return -1;
+	
+	try
+	{
+		CDBAccess::TResult res = _objDBAccess->Database().ExecuteQuery("SELECT TagID, Title FROM TagTable");
+        if(!res.IsOk())
+            return -1;
+		while(res.NextRow())
+		{
+			comboTagSpecific->AppendString(wxString::Format(wxT("%d:%s"), res.GetInt(0), res.GetAsString(1)));
+		}
+		comboTagSpecific->SetSelection(0);
+
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int WordExportV2Dialog::InitDict()
+{
+	if(_objDBAccess == NULL)
+		return -1;
+	
+	try
+	{
+		CDBAccess::TResult res = _objDBAccess->Database().ExecuteQuery("SELECT DictID, Title FROM DictTable");
+        if(!res.IsOk())
+            return -1;
+		while(res.NextRow())
+		{
+			comboDictSpecific->AppendString(wxString::Format(wxT("%s:%s"), res.GetAsString(0), res.GetAsString(1)));
+		}
+		comboDictSpecific->SetSelection(0);
+
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+    return 0;
+}
