@@ -80,6 +80,10 @@ public:
     virtual void OnBtnExport(wxCommandEvent &event); // wxGlade: <event_handler>
 	virtual void OnBtnClose(wxCommandEvent &event); // wxGlade: <event_handler>
 private:
+	int InitTag();
+	int InitDict();
+private:
+	CDBAccess* _objDBAccess;
 	CDocumentOutputObject::TKeyMap _mapOptimumKey;
 	wxString _strSeparator;
 }; // wxGlade: end class
