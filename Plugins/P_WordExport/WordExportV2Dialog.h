@@ -10,14 +10,18 @@
 #ifndef WORDEXPORTV2DIALOG_H
 #define WORDEXPORTV2DIALOG_H
 
+#include "DBAccess.h"
 #include "HtmlOptimumConfigDialog.h"
 
 // begin wxGlade: ::extracode
 // end wxGlade
 
-class CDBAccess;
 
 class WordExportV2Dialog: public wxDialog {
+private:
+	static const wxString	EXPORT_FILENAME;
+
+	enum ExportType { ET_UNKNOWN = -1, ET_HTML_WITHINDEX = 0, ET_HTML, ET_LAC, ET_TEXT };
 public:
     // begin wxGlade: WordExportV2Dialog::ids
     // end wxGlade
@@ -82,10 +86,22 @@ public:
 private:
 	int InitTag();
 	int InitDict();
+
+	int Export();
+
+	int ExportHtml(CDBAccess::TResult& res);
+	int ExportLAC(CDBAccess::TResult& res);
+	int ExportText(CDBAccess::TResult& res);
+
+	const wxString MakeExportFilename();
+	const wxString MakeExportSql();
+	int CheckHtmlOptimumKey();
 private:
 	CDBAccess* _objDBAccess;
 	CDocumentOutputObject::TKeyMap _mapOptimumKey;
+	ExportType _eExportType;
 	wxString _strSeparator;
+	wxString _strFilterDict;
 }; // wxGlade: end class
 
 
