@@ -50,7 +50,7 @@ void SeparatorDialog::OnBtnOK(wxCommandEvent &event)
 {
 	if(m_rdSepCRLF->GetValue())
 	{
-		m_strSeparator = wxT("\r\n");
+		m_strSeparator = wxT("\n");
 	}
 	else if(m_rdSepComma->GetValue())
 	{
