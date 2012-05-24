@@ -526,10 +526,10 @@ int WordExportV2Dialog::ExportHtmlWithIndex(CDBAccess::TResult& res)
 	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("HEAD"));
 	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("BODY"));
 
-	tos2 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><STYLE>A:link{TEXT-DECORATION:   none;}</STYLE></HEAD><BODY>");
+	tos2 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><STYLE>A:link{TEXT-DECORATION:none;}</STYLE></HEAD><BODY>");
 	tos3 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
 
-	tos2 << wxT("<FONT style=\"FONT-SIZE: 13pt\"><B>");
+	tos2 << wxT("<FONT style=\"FONT-SIZE:13pt\"><B>");
 	wxString ret = wxEmptyString;
 	while(res.NextRow())
 	{
@@ -539,10 +539,10 @@ int WordExportV2Dialog::ExportHtmlWithIndex(CDBAccess::TResult& res)
 		FilterHtml(res.GetString(3), ret);
 
 		tos3 << wxT("<A name=\"") << res.GetInt(1) << wxT("\">") << ret << wxT("</A>");//res.GetString(3);
-		tos3 << wxT("<div style=\"BORDER-TOP: #7070dd 2px solid; PADDING-TOP: 5px\"></div>");
+		tos3 << wxT("<DIV style=\"BORDER-TOP:#7070dd 2px solid; PADDING-TOP:5px\"></DIV>");
 	}
 
-	tos2 << wxT("</B></FONT></BODY></HTML>");
+	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:0;bottom:0;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
 	ofs2.Close();
 	tos3 << wxT("</BODY></HTML>");
 	ofs3.Close();
@@ -574,7 +574,7 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 		FilterHtml(res.GetString(3), ret);
 
 		tos << ret;//res.GetString(3);
-		tos << wxT("<div style=\"BORDER-TOP: #7070dd 2px solid; PADDING-TOP: 5px\"></div>");
+		tos << wxT("<DIV style=\"BORDER-TOP:#7070dd 2px solid; PADDING-TOP:5px\"></DIV>");
 	}
 //	tos << ret;
 
