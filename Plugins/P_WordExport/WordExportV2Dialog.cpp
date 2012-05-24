@@ -45,12 +45,14 @@ WordExportV2Dialog::WordExportV2Dialog(CDBAccess* dbaccess, wxWindow* parent, in
     comboDictSpecific = new wxComboBox(this, 7202, wxT(""), wxDefaultPosition, wxDefaultSize, 0, comboDictSpecific_choices, wxCB_DROPDOWN);
     label_5 = new wxStaticText(this, wxID_ANY, wxT("Output format Setting"));
     static_line_4 = new wxStaticLine(this, wxID_ANY);
-    radioOutputHtml = new wxRadioButton(this, 7300, wxT("Output all data with HTML format"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-    btnOutputOptimum = new wxButton(this, 7301, wxT("Optimizer"));
-    radioOutputLAC = new wxRadioButton(this, 7303, wxT("Output all data with LAC format"));
-    radioOutputWord = new wxRadioButton(this, 7304, wxT("Output word data with TEXT format"));
-    btnOutputWord = new wxButton(this, 7305, wxT("Separator"));
-    label_6 = new wxStaticText(this, wxID_ANY, wxT("Export Directory"));
+    radioOutputHtmlIndex = new wxRadioButton(this, 7300, wxT("Output all data with index using HTML format"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    btnOutputOptimumIndex = new wxButton(this, 7301, wxT("Optimizer"));
+    radioOutputHtml = new wxRadioButton(this, 7302, wxT("Output all data using HTML format"));
+    btnOutputOptimum = new wxButton(this, 7303, wxT("Optimizer"));
+    radioOutputLAC = new wxRadioButton(this, 7304, wxT("Output all data using LAC format"));
+    radioOutputWord = new wxRadioButton(this, 7305, wxT("Output word data using TEXT format"));
+    btnOutputWord = new wxButton(this, 7306, wxT("Separator"));
+	label_6 = new wxStaticText(this, wxID_ANY, wxT("Export Directory"));
     static_line_5 = new wxStaticLine(this, wxID_ANY);
     textExport = new wxTextCtrl(this, 7400, wxEmptyString);
     btnExportBrowse = new wxButton(this, 7401, wxT("Browse.."));
@@ -75,10 +77,12 @@ BEGIN_EVENT_TABLE(WordExportV2Dialog, wxDialog)
 	EVT_RADIOBUTTON(7200, WordExportV2Dialog::OnRadioDictClick)
     EVT_RADIOBUTTON(7201, WordExportV2Dialog::OnRadioDictClick)
     EVT_RADIOBUTTON(7300, WordExportV2Dialog::OnRadioOutputClick)
-    EVT_BUTTON(7301, WordExportV2Dialog::OnBtnOptimizer)
-    EVT_RADIOBUTTON(7303, WordExportV2Dialog::OnRadioOutputClick)
+    EVT_RADIOBUTTON(7302, WordExportV2Dialog::OnRadioOutputClick)
     EVT_RADIOBUTTON(7304, WordExportV2Dialog::OnRadioOutputClick)
-    EVT_BUTTON(7305, WordExportV2Dialog::OnBtnSeparator)
+	EVT_RADIOBUTTON(7305, WordExportV2Dialog::OnRadioOutputClick)
+    EVT_BUTTON(7301, WordExportV2Dialog::OnBtnOptimizer)
+	EVT_BUTTON(7303, WordExportV2Dialog::OnBtnOptimizer)
+    EVT_BUTTON(7306, WordExportV2Dialog::OnBtnSeparator)
     EVT_TEXT(7400, WordExportV2Dialog::OnTextExport)
     EVT_BUTTON(7401, WordExportV2Dialog::OnBtnBrowse)
     EVT_BUTTON(7500, WordExportV2Dialog::OnBtnExport)
@@ -117,6 +121,7 @@ void WordExportV2Dialog::OnRadioDictClick(wxCommandEvent &event)
 
 void WordExportV2Dialog::OnRadioOutputClick(wxCommandEvent &event)
 {
+	btnOutputOptimumIndex->Enable(radioOutputHtmlIndex->GetValue());
 	btnOutputOptimum->Enable(radioOutputHtml->GetValue());
 	btnOutputWord->Enable(radioOutputWord->GetValue());
 	if(radioOutputWord->GetValue())
@@ -172,9 +177,13 @@ void WordExportV2Dialog::OnBtnBrowse(wxCommandEvent &event)
 
 void WordExportV2Dialog::OnBtnExport(wxCommandEvent &event)
 {
-	if(radioOutputHtml->GetValue())
+	if(radioOutputHtmlIndex->GetValue())
 	{
 		_eExportType = ET_HTML_WITHINDEX;
+	}
+	else if(radioOutputHtml->GetValue())
+	{
+		_eExportType = ET_HTML;
 	}
 	else if(radioOutputLAC->GetValue())
 	{
@@ -187,7 +196,7 @@ void WordExportV2Dialog::OnBtnExport(wxCommandEvent &event)
 
 	if(Export() == 0)
 	{
-		wxMessageBox(wxT("Export is Done."), wxT("LingosHook Plugin - Word Export"), wxCENTRE | wxOK);
+		wxMessageBox(wxT("Export completed successfully."), wxT("LingosHook Plugin - Word Export"), wxCENTRE | wxOK);
 	}
 	else
 	{
@@ -218,8 +227,11 @@ void WordExportV2Dialog::set_properties()
     label_5->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     btnOutputWord->Enable(false);
     label_6->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
+	btnOutputOptimum->Enable(false);
     btnExport->Enable(false);
     // end wxGlade
+
+	InitOptimumKey();
 }
 
 
@@ -236,6 +248,7 @@ void WordExportV2Dialog::do_layout()
     wxBoxSizer* sizer_19 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_21 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_20 = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer_20_copy = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_18 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_13 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_15 = new wxBoxSizer(wxVERTICAL);
@@ -269,7 +282,7 @@ void WordExportV2Dialog::do_layout()
     sizer_9->Add(sizer_10, 0, wxALL|wxEXPAND, 4);
     sizer_11->Add(radioTagAll, 0, wxTOP|wxBOTTOM, 4);
     sizer_12->Add(radioTagSpecific, 0, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_12->Add(comboTagSpecific, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 16);
+    sizer_12->Add(comboTagSpecific, 1, wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 16);
     sizer_11->Add(sizer_12, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_9->Add(sizer_11, 0, wxLEFT|wxEXPAND, 32);
     sizer_1->Add(sizer_9, 0, wxALL|wxEXPAND, 4);
@@ -278,33 +291,36 @@ void WordExportV2Dialog::do_layout()
     sizer_13->Add(sizer_14, 0, wxALL|wxEXPAND, 4);
     sizer_15->Add(radioDictAll, 0, wxTOP|wxBOTTOM, 4);
     sizer_16->Add(radioDictSpecific, 0, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_16->Add(comboDictSpecific, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 16);
+    sizer_16->Add(comboDictSpecific, 1, wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 16);
     sizer_15->Add(sizer_16, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_13->Add(sizer_15, 1, wxLEFT|wxEXPAND, 32);
     sizer_1->Add(sizer_13, 0, wxALL|wxEXPAND, 4);
     sizer_18->Add(label_5, 0, 0, 0);
     sizer_18->Add(static_line_4, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_17->Add(sizer_18, 0, wxALL|wxEXPAND, 4);
-    sizer_20->Add(radioOutputHtml, 0, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_20->Add(btnOutputOptimum, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16);
+    sizer_20_copy->Add(radioOutputHtmlIndex, 2, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_20_copy->Add(btnOutputOptimumIndex, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_19->Add(sizer_20_copy, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
+    sizer_20->Add(radioOutputHtml, 2, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_20->Add(btnOutputOptimum, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_19->Add(sizer_20, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_19->Add(radioOutputLAC, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_21->Add(radioOutputWord, 0, wxALIGN_CENTER_VERTICAL, 0);
-    sizer_21->Add(btnOutputWord, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_21->Add(radioOutputWord, 2, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_21->Add(btnOutputWord, 1, wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_19->Add(sizer_21, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_17->Add(sizer_19, 1, wxLEFT|wxRIGHT|wxEXPAND, 32);
     sizer_1->Add(sizer_17, 0, wxALL|wxEXPAND, 4);
     sizer_24->Add(label_6, 0, 0, 0);
     sizer_24->Add(static_line_5, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_23->Add(sizer_24, 0, wxALL|wxEXPAND, 4);
-    sizer_25->Add(textExport, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
-    sizer_25->Add(btnExportBrowse, 0, wxALL, 4);
+    sizer_25->Add(textExport, 3, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 4);
+    sizer_25->Add(btnExportBrowse, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_27->Add(sizer_25, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
-    sizer_23->Add(sizer_27, 0, wxLEFT|wxEXPAND, 32);
+    sizer_23->Add(sizer_27, 0, wxLEFT|wxRIGHT|wxEXPAND, 32);
     sizer_1->Add(sizer_23, 0, wxALL|wxEXPAND, 4);
     sizer_1->Add(static_line_6, 0, wxALL|wxEXPAND, 4);
-    sizer_26->Add(btnExport, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
-    sizer_26->Add(panel_1, 1, wxEXPAND, 0);
+    sizer_26->Add(btnExport, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
+    sizer_26->Add(panel_1, 2, wxEXPAND, 0);
     sizer_26->Add(btnClose, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
     sizer_1->Add(sizer_26, 0, wxALL|wxEXPAND, 16);
     SetSizer(sizer_1);
@@ -312,6 +328,24 @@ void WordExportV2Dialog::do_layout()
     Layout();
     Centre();
     // end wxGlade
+}
+
+void WordExportV2Dialog::InitOptimumKey()
+{
+    CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("A"));
+    CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("PARAM"));
+    CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("EMBED"));
+    CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("OBJECT"));
+    CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("class"));	
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("title"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onclick"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseout"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseup"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmousedown"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onselectstart"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pendfind"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pend"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_find"));
 }
 
 int WordExportV2Dialog::InitTag()
@@ -375,7 +409,8 @@ const wxString WordExportV2Dialog::MakeExportSql()
 
 	if(_eExportType != ET_TEXT)
 	{
-		sql = wxT("SELECT WordTable.Word, WordTable.WordID, WordTable.SrcID FROM WordTable");
+		sql = wxT("SELECT WordTable.Word, WordTable.WordID, WordTable.SrcID, SrcDataTable.HTML FROM WordTable,SrcDataTable");
+		cond.Add(wxT("(WordTable.SrcID=SrcDataTable.SrcID)"));
 	}
 	else
 	{
@@ -424,6 +459,8 @@ const wxString WordExportV2Dialog::MakeExportSql()
 		}
 	}
 
+	sql += wxT(" ORDER BY UPPER(WordTable.Word)");
+
 	return sql;
 }
 
@@ -444,6 +481,7 @@ int WordExportV2Dialog::Export()
 	switch(_eExportType)
 	{
 	case ET_HTML_WITHINDEX:
+		return ExportHtmlWithIndex(res);
 	case ET_HTML:
 		return ExportHtml(res);
 	case ET_LAC:
@@ -457,9 +495,64 @@ int WordExportV2Dialog::Export()
 	return -1;
 }
 
+int WordExportV2Dialog::ExportHtmlWithIndex(CDBAccess::TResult& res)
+{
+	//make sub-directory
+	wxString filename = MakeExportFilename();
+	//export frame
+	wxFileOutputStream ofs1(EXPORT_FILENAME + wxT(".html"));
+	if(!ofs1.IsOk())
+		return -1;	
+	wxTextOutputStream tos1(ofs1);
+	
+	tos1 << wxT("<html><head><title>LingosHook Export</title></head><frameset cols=\"30%,70%\"><frame src=\"index.html\" name=\"i\"></frame><frame src=\"data.html\" name=\"d\"></frame></frameset>");
+
+	ofs1.Close();
+
+	//export index & data
+
+	wxFileOutputStream ofs2(wxT("index.html"));
+	if(!ofs2.IsOk())
+		return -1;	
+	wxTextOutputStream tos2(ofs2);
+
+	wxFileOutputStream ofs3(wxT("data.html"));
+	if(!ofs3.IsOk())
+		return -1;	
+	wxTextOutputStream tos3(ofs3);
+
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("HTML"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("TITLE"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("HEAD"));
+	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("BODY"));
+
+	tos2 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><STYLE>A:link{TEXT-DECORATION:   none;}</STYLE></HEAD><BODY>");
+	tos3 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
+
+	tos2 << wxT("<FONT style=\"FONT-SIZE: 13pt\"><B>");
+	wxString ret = wxEmptyString;
+	while(res.NextRow())
+	{
+		tos2 << wxT("<A href=\"data.html#") << res.GetInt(1) << wxT("\" target=\"d\">") << res.GetString(0) << wxT("</A><BR/>");
+
+		ret = wxEmptyString;
+		FilterHtml(res.GetString(3), ret);
+
+		tos3 << wxT("<A name=\"") << res.GetInt(1) << wxT("\">") << ret << wxT("</A>");//res.GetString(3);
+		tos3 << wxT("<div style=\"BORDER-TOP: #7070dd 2px solid; PADDING-TOP: 5px\"></div>");
+	}
+
+	tos2 << wxT("</B></FONT></BODY></HTML>");
+	ofs2.Close();
+	tos3 << wxT("</BODY></HTML>");
+	ofs3.Close();
+
+	return 0;
+}
+
 int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 {
-	wxFileOutputStream ofs(MakeExportFilename());
+	wxFileOutputStream ofs(MakeExportFilename() + wxT(".html"));
 	if(!ofs.IsOk())
 		return -1;
 
@@ -469,12 +562,23 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("TITLE"));
 	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("HEAD"));
 	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_TAG, wxT("BODY"));
+//	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("style"));
 
+	tos << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
+
+	wxString ret = wxEmptyString;
 	while(res.NextRow())
 	{
-		tos << res.GetString(0);
-	}
+		tos << wxT("<FONT style=\"FONT-SIZE: 11pt\"><B>") << res.GetString(0) << wxT("</B></FONT>");
+		ret = wxEmptyString;
+		FilterHtml(res.GetString(3), ret);
 
+		tos << ret;//res.GetString(3);
+		tos << wxT("<div style=\"BORDER-TOP: #7070dd 2px solid; PADDING-TOP: 5px\"></div>");
+	}
+//	tos << ret;
+
+	tos << wxT("</BODY></HTML>");
 	ofs.Close();
 
 	return 0;
@@ -499,6 +603,56 @@ int WordExportV2Dialog::ExportText(CDBAccess::TResult& res)
 	}
 
 	ofs.Close();
+
+	return 0;
+}
+
+int WordExportV2Dialog::FilterHtml(const wxString &input, wxString &output) const
+{
+	CDocumentObject doc;
+
+    try
+    {
+		if(doc.Load(input.c_str(), true, true) != 0)
+        {
+            return -1;
+        }
+    }
+    catch(CExceptionObject& e)
+    {
+        return -1;
+    }
+
+	const CElementObject* div = doc.FindFirstElement(L"DIV");
+	const CAttributeObject * id = NULL;
+	while(div != NULL)
+	{
+		id = doc.FindAttribute(div, L"id");
+		if(id != NULL && id->value == L"\"lingoes_dictarea\"")
+		{
+			break;
+		}
+
+		div = doc.FindNextElement();
+	}
+
+	if(div == NULL)
+	{
+		return -1;
+	}
+
+	div = div->sibling;
+	if(div == NULL)
+	{
+		return -1;
+	}
+
+	if(CDocumentOutputObject::Rewrite(doc, output, div, &_mapOptimumKey) != 0)
+		return -1;
+
+
+	//if(CDocumentOutputObject::Rewrite(doc, output, &_mapOptimumKey) != 0)
+	//	return -1;
 
 	return 0;
 }

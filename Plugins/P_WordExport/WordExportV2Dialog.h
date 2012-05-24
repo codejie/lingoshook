@@ -55,6 +55,8 @@ protected:
     wxComboBox* comboDictSpecific;
     wxStaticText* label_5;
     wxStaticLine* static_line_4;
+    wxRadioButton* radioOutputHtmlIndex;
+    wxButton* btnOutputOptimumIndex;
     wxRadioButton* radioOutputHtml;
     wxButton* btnOutputOptimum;
     wxRadioButton* radioOutputLAC;
@@ -86,9 +88,11 @@ public:
 private:
 	int InitTag();
 	int InitDict();
+	void InitOptimumKey();
 
 	int Export();
 
+	int ExportHtmlWithIndex(CDBAccess::TResult& res);
 	int ExportHtml(CDBAccess::TResult& res);
 	int ExportLAC(CDBAccess::TResult& res);
 	int ExportText(CDBAccess::TResult& res);
@@ -96,6 +100,7 @@ private:
 	const wxString MakeExportFilename();
 	const wxString MakeExportSql();
 	int CheckHtmlOptimumKey();
+	int FilterHtml(const wxString& input, wxString& output) const;
 private:
 	CDBAccess* _objDBAccess;
 	CDocumentOutputObject::TKeyMap _mapOptimumKey;
