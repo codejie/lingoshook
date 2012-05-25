@@ -21,7 +21,7 @@ class WordExportV2Dialog: public wxDialog {
 private:
 	static const wxString	EXPORT_FILENAME;
 
-	enum ExportType { ET_UNKNOWN = -1, ET_HTML_WITHINDEX = 0, ET_HTML, ET_LAC, ET_TEXT };
+	enum ExportType { ET_UNKNOWN = -1, ET_HTML_INDEX_S = 0, ET_HTML_INDEX_M, ET_HTML, ET_LAC, ET_TEXT };
 public:
     // begin wxGlade: WordExportV2Dialog::ids
     // end wxGlade
@@ -55,8 +55,10 @@ protected:
     wxComboBox* comboDictSpecific;
     wxStaticText* label_5;
     wxStaticLine* static_line_4;
-    wxRadioButton* radioOutputHtmlIndex;
-    wxButton* btnOutputOptimumIndex;
+    wxRadioButton* radioOutputHtmlSingle;
+    wxButton* btnOutputOptimumSingle;
+    wxRadioButton* radioOutputHtmlMulti;
+    wxButton* btnOutputOptimumMulti;
     wxRadioButton* radioOutputHtml;
     wxButton* btnOutputOptimum;
     wxRadioButton* radioOutputLAC;
@@ -92,7 +94,8 @@ private:
 
 	int Export();
 
-	int ExportHtmlWithIndex(CDBAccess::TResult& res);
+	int ExportHtmlWithIndexSingle(CDBAccess::TResult& res);
+	int ExportHtmlWithIndexMulti(CDBAccess::TResult& res);
 	int ExportHtml(CDBAccess::TResult& res);
 	int ExportLAC(CDBAccess::TResult& res);
 	int ExportText(CDBAccess::TResult& res);
@@ -100,7 +103,7 @@ private:
 	const wxString MakeExportFilename();
 	const wxString MakeExportSql();
 	int CheckHtmlOptimumKey();
-	int FilterHtml(const wxString& input, wxString& output) const;
+	int FilterHtml(const wxString& input, wxString& output, const CDocumentOutputObject::TKeyMap& mapKey) const;
 private:
 	CDBAccess* _objDBAccess;
 	CDocumentOutputObject::TKeyMap _mapOptimumKey;
