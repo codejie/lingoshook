@@ -201,11 +201,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\P_Common\Consts.h"
+				RelativePath="..\P_Common\Exports.h"
 				>
 			</File>
 			<File
-				RelativePath="..\P_Common\Exports.h"
+				RelativePath="..\P_Common\PluginsConsts.h"
 				>
 			</File>
 			<File

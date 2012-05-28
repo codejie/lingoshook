@@ -1,5 +1,5 @@
 
-#include "Consts.h"
+#include "PluginsConsts.h"
 
 #include "WordExportDialog.h"
 #include "WordExportV2Dialog.h"
