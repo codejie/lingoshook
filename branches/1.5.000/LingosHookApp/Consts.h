@@ -21,6 +21,8 @@ const wxString APP_VERSION      = wxT("1.5.222(Debug)");
 const wxString APP_VERSION      = wxT("1.5.222");
 #endif
 
+const wxString DATE_RELEASE		=	wxT("2012.05.28");
+
 const unsigned int MAX_NUMBER_TAG	= 200;
 
 //App message

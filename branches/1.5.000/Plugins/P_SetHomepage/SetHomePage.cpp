@@ -1,5 +1,4 @@
-
-#include "Consts.h"
+#include "PluginsConsts.h"
 
 #include "SetHomepageDialog.h"
 #include "SetHomepage.h"

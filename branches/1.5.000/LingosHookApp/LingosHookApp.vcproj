@@ -281,6 +281,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ResHelper.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SpeakObject.cpp"
 				>
 			</File>
@@ -433,6 +437,10 @@
 			</File>
 			<File
 				RelativePath=".\PluginObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResHelper.h"
 				>
 			</File>
 			<File

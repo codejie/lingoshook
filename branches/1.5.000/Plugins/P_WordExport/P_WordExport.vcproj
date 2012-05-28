@@ -187,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\LingosHookApp\ResHelper.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SeparatorDialog.cpp"
 				>
 			</File>
@@ -222,6 +226,10 @@
 			</File>
 			<File
 				RelativePath="..\..\LingosHookApp\HtmlOptimumConfigDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\ResHelper.h"
 				>
 			</File>
 			<File

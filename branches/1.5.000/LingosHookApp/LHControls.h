@@ -7,6 +7,7 @@
 #include "wx/clntdata.h"
 
 #include "Consts.h"
+#include "ResHelper.h"
 
 class CLHListBox : public wxListBox
 {
@@ -235,24 +236,24 @@ public:
 
     void LoadHomePage()
     {
-        wxIEHtmlWin::LoadWString(
-            wxT("<html>")
-            wxT("<body>")
-            wxT("<div style=\"text-align: center;\"><span style=\"font-size: 36pt;\">LingosHook</span> version 1.5.xxx</div>")
-            wxT("<br />")
-            wxT("<ul>")
-            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://www.cppblog.com/codejie/archive/2010/07/23/108996.html\">LingosHook Download Link</a></span></li>")
-            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://lingoshook.googlecode.com\">LingosHook Source Link</a></span></li>")
-            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://www.cppblog.com/codejie/category/13873.html\">LingosHook Blog Link</a></span></li>")
-            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://www.cppblog.com/codejie/archive/2011/03/17/142091.html\">LingosHook Donators Link</a></span></li>")
-            wxT("<li><span style=\"font-size: 18pt;\"><a href=\"http://shop64703519.taobao.com\">LingosHook Donation Link</a></span></li>")
-            wxT("</ul>")
-            wxT("<br />")
-            wxT("<div style=\"text-align: right;\"><span style=\"font-size: 14pt;\"><a href=\"mailto:codejie@gmail.com\">codejie</a></span></div>")
-            wxT("<div style=\"text-align: right;\">2012/02/17</div>")
-            wxT("</body>")
-            wxT("</html>")
-            );
+   //     wxIEHtmlWin::LoadWString(
+   //         wxT("<html><body>")
+			//wxT("<head><STYLE>A:link{TEXT-DECORATION:none;}</STYLE></head>")
+   //         wxT("<div style=\"text-align: center;\"><span style=\"font-size: 36pt;\">LingosHook</span></div>")
+   //         wxT("<br />")
+			//wxT("<ul><font sytle=\"font-size:18pt;\"")
+   //         wxT("<li><a href=\"http://www.cppblog.com/codejie/archive/2010/07/23/108996.html\">LingosHook Download Link</a></li>")
+   //         wxT("<li><a href=\"http://lingoshook.googlecode.com\">LingosHook Source Link</a></li>")
+   //         wxT("<li><a href=\"http://www.cppblog.com/codejie/category/13873.html\">LingosHook Blog Link</a></li>")
+   //         wxT("<li><a href=\"http://www.cppblog.com/codejie/archive/2011/03/17/142091.html\">LingosHook Donators Link</a></li>")
+   //         wxT("<li><a href=\"http://shop64703519.taobao.com\">LingosHook Donation Link</a></li>")
+   //         wxT("</font></ul>")
+   //         wxT("<br />")
+   //         wxT("<div style=\"text-align: right;\"><span style=\"font-size: 14pt;\"><a href=\"mailto:codejie@gmail.com\">codejie</a></span></div>")
+   //         wxT("<div style=\"text-align: right;\">2012/02/17</div>")
+   //         wxT("</body></html>")
+   //         );
+		wxIEHtmlWin::LoadWString(ResHelper::MakeHomepageString());
     }
 
     bool LoadString(const wxString& html)
