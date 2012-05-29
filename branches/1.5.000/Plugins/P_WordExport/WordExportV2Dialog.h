@@ -19,6 +19,7 @@
 
 class WordExportV2Dialog: public wxDialog {
 private:
+	static const wxString	PLUGINS_TITLE;
 	static const wxString	EXPORT_FILENAME;
 
 	enum ExportType { ET_UNKNOWN = -1, ET_HTML_INDEX_S = 0, ET_HTML_INDEX_M, ET_HTML, ET_LAC, ET_TEXT };
@@ -104,6 +105,7 @@ private:
 	const wxString MakeExportSql();
 	int CheckHtmlOptimumKey();
 	int FilterHtml(const wxString& input, wxString& output, const CDocumentOutputObject::TKeyMap& mapKey) const;
+	void WordExportV2Dialog::RemoveTable(CDBAccess::TDatabase& db, const wxString& name) const;
 private:
 	CDBAccess* _objDBAccess;
 	CDocumentOutputObject::TKeyMap _mapOptimumKey;

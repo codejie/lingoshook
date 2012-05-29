@@ -1,5 +1,5 @@
-#ifndef __CONSTS_H__
-#define __CONSTS_H__
+#ifndef __PLUGINSCONSTS_H__
+#define __PLUGINSCONSTS_H__
 
 const unsigned int INTERFACE_VERSION_1          =   1;
 const unsigned int INTERFACE_VERSION_2          =   2;
