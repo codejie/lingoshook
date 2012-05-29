@@ -15,7 +15,7 @@ using namespace TinyHtmlParser;
 
 // begin wxGlade: ::extracode
 // end wxGlade
-
+const wxString WordExportV2Dialog::PLUGINS_TITLE		=	wxT("LingosHook Plugin - Word Export");
 const wxString WordExportV2Dialog::EXPORT_FILENAME		=	wxT("LH_Export");
 
 WordExportV2Dialog::WordExportV2Dialog(CDBAccess* dbaccess, wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
@@ -87,7 +87,7 @@ BEGIN_EVENT_TABLE(WordExportV2Dialog, wxDialog)
     EVT_BUTTON(7301, WordExportV2Dialog::OnBtnOptimizer)
 	EVT_BUTTON(7303, WordExportV2Dialog::OnBtnOptimizer)
 	EVT_BUTTON(7305, WordExportV2Dialog::OnBtnOptimizer)
-    EVT_BUTTON(7306, WordExportV2Dialog::OnBtnSeparator)
+    EVT_BUTTON(7308, WordExportV2Dialog::OnBtnSeparator)
     EVT_TEXT(7400, WordExportV2Dialog::OnTextExport)
     EVT_BUTTON(7401, WordExportV2Dialog::OnBtnBrowse)
     EVT_BUTTON(7500, WordExportV2Dialog::OnBtnExport)
@@ -206,11 +206,11 @@ void WordExportV2Dialog::OnBtnExport(wxCommandEvent &event)
 
 	if(Export() == 0)
 	{
-		wxMessageBox(wxT("Export completed successfully."), wxT("LingosHook Plugin - Word Export"), wxCENTRE | wxOK);
+		wxMessageBox(wxT("Export completed successfully."), PLUGINS_TITLE, wxCENTRE | wxOK);
 	}
 	else
 	{
-		wxMessageBox(wxT("Export Failed."), wxT("LingosHook Plugin - Word Export"), wxCENTRE | wxOK | wxICON_ERROR);
+		wxMessageBox(wxT("Export Failed."), PLUGINS_TITLE, wxCENTRE | wxOK | wxICON_ERROR);
 	}
 }
 
@@ -225,7 +225,7 @@ void WordExportV2Dialog::OnBtnClose(wxCommandEvent &event)
 void WordExportV2Dialog::set_properties()
 {
     // begin wxGlade: WordExportV2Dialog::set_properties
-    SetTitle(wxT("Word Export"));
+    SetTitle(PLUGINS_TITLE);
     label_1->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     textWordPrefix->Enable(false);
     textWordSuffix->Enable(false);
@@ -580,7 +580,7 @@ int WordExportV2Dialog::ExportHtmlWithIndexSingle(CDBAccess::TResult& res)
 		tos3 << wxT("<DIV style=\"BORDER-TOP:#7070dd 2px solid; PADDING-TOP:5px\"></DIV>");
 	}
 
-	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:10px;bottom:40px;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
+	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:10px;bottom:25px;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
 	ofs2.Close();
 	tos3 << wxT("</BODY></HTML>");
 	ofs3.Close();
@@ -652,7 +652,7 @@ int WordExportV2Dialog::ExportHtmlWithIndexMulti(CDBAccess::TResult& res)
 		tos2 << wxT("<A href=\"") << res.GetString(0) << wxT(".html\" target=\"d\">") << res.GetString(0) << wxT("</A><BR/>");
 	}
 
-	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:10px;bottom:40px;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
+	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:10px;bottom:25px;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
 	ofs2.Close();
 
 	return 0;
@@ -701,6 +701,99 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 
 int WordExportV2Dialog::ExportLAC(CDBAccess::TResult& res)
 {
+	wxString filename = MakeExportFilename();
+
+	CDocumentOutputObject::TKeyMap mapKey;
+
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("IMG"));
+    CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("A"));
+    CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("PARAM"));
+    CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("EMBED"));
+    CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("OBJECT"));
+    CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("class"));	
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("title"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("onclick"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseout"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseup"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmousedown"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("onselectstart"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pendfind"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pend"));
+	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_find"));
+
+	//open db
+	try
+	{
+		CDBAccess::TDatabase db;
+		db.Open(filename + wxT(".db3"), wxEmptyString);
+		
+        RemoveTable(db, wxT("info"));
+        const char* sql = "CREATE TABLE info (item INTEGER PRIMARY KEY AUTOINCREMENT, value VARCHAR(32))";
+        db.ExecuteUpdate(sql);
+
+        RemoveTable(db, wxT("word"));
+        sql = "CREATE TABLE word (srcid INTEGER, word VARCHAR(32))";
+        db.ExecuteUpdate(sql);
+
+        RemoveTable(db, wxT("src"));
+        sql = "CREATE TABLE src (srcid INTEGER PRIMARY KEY AUTOINCREMENT, html TEXT)";
+        db.ExecuteUpdate(sql);
+
+        CDBAccess::TQuery qsrc = db.PrepareStatement("INSERT INTO src (html) VALUES (?)");
+        CDBAccess::TQuery qword = db.PrepareStatement("INSERT INTO word (srcid, word) VALUES (?, ?)");
+
+        int count = 0;
+        int p = -1, n = -1;
+        int srcid = 0;
+
+		wxString ret = wxEmptyString;
+        while(res.NextRow())
+        {
+            n = res.GetInt(0);
+            if(p != n)
+            {
+                qsrc.ClearBindings();
+
+                ret = wxEmptyString;
+                FilterHtml(res.GetString(3), ret, mapKey);
+				if(ret.empty())
+				{
+					continue;
+				}
+				ret = wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>") + ret;
+				ret += wxT("</BODY></HTML>");
+
+                qsrc.Bind(1, ret/*res.GetString(2)*/);
+                qsrc.ExecuteUpdate();
+
+                p = n;
+                srcid = db.GetLastRowId().ToLong();
+            }
+
+            qword.ClearBindings();
+            qword.Bind(1, srcid);
+            qword.Bind(2, res.GetString(1));
+            qword.ExecuteUpdate();
+        }
+
+        CDBAccess::TQuery qinfo = db.PrepareStatement("INSERT INTO info (item, value) VALUES (?, ?)");
+        qinfo.Bind(1, 1);
+        qinfo.Bind(2, 1);//version
+        qinfo.ExecuteUpdate();
+
+        qinfo.ClearBindings();
+        qinfo.Bind(1, 2);
+        qinfo.Bind(2, wxT("cde"));
+        qinfo.ExecuteQuery();
+
+		db.Close();
+
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+
 	return -1;
 }
 
@@ -721,6 +814,8 @@ int WordExportV2Dialog::ExportText(CDBAccess::TResult& res)
 
 	return 0;
 }
+
+///
 
 int WordExportV2Dialog::FilterHtml(const wxString &input, wxString &output, const CDocumentOutputObject::TKeyMap& mapKey) const
 {
@@ -773,4 +868,13 @@ int WordExportV2Dialog::FilterHtml(const wxString &input, wxString &output, cons
 	}
 
 	return 0;
+}
+
+void WordExportV2Dialog::RemoveTable(CDBAccess::TDatabase& db, const wxString& name) const
+{
+    if(db.TableExists(name))
+    {
+        wxString sql = wxT("DROP TABLE ") + name;
+        db.ExecuteUpdate(sql);
+    }
 }
