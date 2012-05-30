@@ -21,6 +21,8 @@ class WordExportV2Dialog: public wxDialog {
 private:
 	static const wxString	PLUGINS_TITLE;
 	static const wxString	EXPORT_FILENAME;
+	static const wxString	INDEX_FILENAME;
+	static const wxString	DATA_FILENAME;
 
 	enum ExportType { ET_UNKNOWN = -1, ET_HTML_INDEX_S = 0, ET_HTML_INDEX_M, ET_HTML, ET_LAC, ET_TEXT };
 public:
@@ -101,7 +103,10 @@ private:
 	int ExportLAC(CDBAccess::TResult& res);
 	int ExportText(CDBAccess::TResult& res);
 
-	const wxString MakeExportFilename();
+	const wxString MakeExportPath() const;
+	const wxString GetExportFilename() const;
+	const wxString GetIndexFilename() const;
+	const wxString GetDataFilename() const;
 	const wxString MakeExportSql();
 	int CheckHtmlOptimumKey();
 	int FilterHtml(const wxString& input, wxString& output, const CDocumentOutputObject::TKeyMap& mapKey) const;
@@ -112,6 +117,7 @@ private:
 	ExportType _eExportType;
 	wxString _strSeparator;
 	wxString _strFilterDict;
+//	wxString _strExportPath;
 }; // wxGlade: end class
 
 
