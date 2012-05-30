@@ -203,10 +203,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\WordExportDialog.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\WordExportV2Dialog.cpp"
 				>
 			</File>
@@ -242,10 +238,6 @@
 			</File>
 			<File
 				RelativePath=".\WordExport.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WordExportDialog.h"
 				>
 			</File>
 			<File

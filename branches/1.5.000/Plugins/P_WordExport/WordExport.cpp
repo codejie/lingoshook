@@ -25,7 +25,7 @@ int WordExport::LoadProperty(PropertyData& data) const
     data.m_strName = wxT("Word Export");
     data.m_strVersion = wxT("1.0.0");
     data.m_strAuthor = wxT("codejie");
-    data.m_strDescription = wxT("Export words from LingosHook to a HTML/Text file.");
+	data.m_strDescription = wxT("Export words from LingosHook using HTML/LAC/Text format.");
 //    data.m_strDetail = wxT("NONE.");
 
     return 0;

@@ -17,6 +17,8 @@ using namespace TinyHtmlParser;
 // end wxGlade
 const wxString WordExportV2Dialog::PLUGINS_TITLE		=	wxT("LingosHook Plugin - Word Export");
 const wxString WordExportV2Dialog::EXPORT_FILENAME		=	wxT("LH_Export");
+const wxString WordExportV2Dialog::INDEX_FILENAME		=	wxT("i.html");
+const wxString WordExportV2Dialog::DATA_FILENAME		=	wxT("d.html");
 
 WordExportV2Dialog::WordExportV2Dialog(CDBAccess* dbaccess, wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
     wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxTHICK_FRAME)
@@ -420,9 +422,29 @@ int WordExportV2Dialog::InitDict()
     return 0;
 }
 
-const wxString WordExportV2Dialog::MakeExportFilename()
+const wxString WordExportV2Dialog::MakeExportPath() const
 {
-	return EXPORT_FILENAME;
+	wxString file = textExport->GetValue();
+	if(file.Right(1) != wxT("\\"))
+	{
+		file += wxT("\\");
+	}
+	return file;
+}
+
+const wxString WordExportV2Dialog::GetExportFilename() const
+{
+	return MakeExportPath() + EXPORT_FILENAME;
+}
+
+const wxString WordExportV2Dialog::GetIndexFilename() const
+{
+	return MakeExportPath() + INDEX_FILENAME;
+}
+
+const wxString WordExportV2Dialog::GetDataFilename() const
+{
+	return MakeExportPath() + DATA_FILENAME;
 }
 
 const wxString WordExportV2Dialog::MakeExportSql()
@@ -530,9 +552,9 @@ int WordExportV2Dialog::Export()
 int WordExportV2Dialog::ExportHtmlWithIndexSingle(CDBAccess::TResult& res)
 {
 	//make sub-directory
-	wxString filename = MakeExportFilename();
+	wxString filename = GetExportFilename();
 	//export frame
-	wxFileOutputStream ofs1(EXPORT_FILENAME + wxT(".html"));
+	wxFileOutputStream ofs1(filename + wxT(".html"));
 	if(!ofs1.IsOk())
 		return -1;	
 	wxTextOutputStream tos1(ofs1);
@@ -543,12 +565,12 @@ int WordExportV2Dialog::ExportHtmlWithIndexSingle(CDBAccess::TResult& res)
 
 	//export index & data
 
-	wxFileOutputStream ofs2(wxT("i.html"));
+	wxFileOutputStream ofs2(GetIndexFilename());// wxT("i.html"));
 	if(!ofs2.IsOk())
 		return -1;	
 	wxTextOutputStream tos2(ofs2);
 
-	wxFileOutputStream ofs3(wxT("d.html"));
+	wxFileOutputStream ofs3(GetDataFilename());//wxT("d.html"));
 	if(!ofs3.IsOk())
 		return -1;	
 	wxTextOutputStream tos3(ofs3);
@@ -563,24 +585,31 @@ int WordExportV2Dialog::ExportHtmlWithIndexSingle(CDBAccess::TResult& res)
 	tos2 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><STYLE>A:link{TEXT-DECORATION:none;}</STYLE></HEAD><BODY>");
 	tos3 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
 
-	tos2 << wxT("<FONT style=\"FONT-SIZE:13pt\"><B>");
+	tos2 << wxT("<DIV style=\"PADDING-TOP: 5px; PADDING-LEFT: 10px; FONT-FAMILY: 'Tahoma';\"><FONT style=\"FONT-SIZE:13pt\"><B>");
 	wxString ret = wxEmptyString;
+	int srcid = -1, psrcid = -1;
 	while(res.NextRow())
 	{
-		ret = wxEmptyString;
-		FilterHtml(res.GetString(3), ret, mapKey);
-		if(ret.empty())
+		srcid = res.GetInt(2);
+		if(srcid != psrcid)
 		{
-			continue;
+			ret = wxEmptyString;
+			FilterHtml(res.GetString(3), ret, mapKey);
+			if(ret.empty())
+			{
+				continue;
+			}
+
+			tos3 << wxT("<A name=\"") << srcid << wxT("\">") << ret << wxT("</A>");//res.GetString(3);
+			tos3 << wxT("<DIV style=\"BORDER-TOP:#7070dd 2px solid; PADDING-TOP:5px\"></DIV>");
+
+			psrcid = srcid;
 		}
 
-		tos2 << wxT("<A href=\"d.html#") << res.GetInt(1) << wxT("\" target=\"d\">") << res.GetString(0) << wxT("</A><BR/>");
-
-		tos3 << wxT("<A name=\"") << res.GetInt(1) << wxT("\">") << ret << wxT("</A>");//res.GetString(3);
-		tos3 << wxT("<DIV style=\"BORDER-TOP:#7070dd 2px solid; PADDING-TOP:5px\"></DIV>");
+		tos2 << wxT("<A href=\"d.html#") << srcid << wxT("\" target=\"d\">") << res.GetString(0) << wxT("</A><BR/>");
 	}
 
-	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:10px;bottom:25px;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
+	tos2 << wxT("</B></FONT></DIV><DIV style=\"position:absolute;right:10px;bottom:25px;FONT-FAMILY:'Tahoma';\"><FONT sytle=\"FONT-SIZE:12\"><B>Powered by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
 	ofs2.Close();
 	tos3 << wxT("</BODY></HTML>");
 	ofs3.Close();
@@ -591,9 +620,9 @@ int WordExportV2Dialog::ExportHtmlWithIndexSingle(CDBAccess::TResult& res)
 int WordExportV2Dialog::ExportHtmlWithIndexMulti(CDBAccess::TResult& res)
 {
 	//make sub-directory
-	wxString filename = MakeExportFilename();
+	wxString filename = GetExportFilename();
 	//export frame
-	wxFileOutputStream ofs1(EXPORT_FILENAME + wxT(".html"));
+	wxFileOutputStream ofs1(filename + wxT(".html"));
 	if(!ofs1.IsOk())
 		return -1;	
 	wxTextOutputStream tos1(ofs1);
@@ -604,12 +633,12 @@ int WordExportV2Dialog::ExportHtmlWithIndexMulti(CDBAccess::TResult& res)
 
 	//export index & data
 
-	wxFileOutputStream ofs2(wxT("i.html"));
+	wxFileOutputStream ofs2(GetIndexFilename());//wxT("i.html"));
 	if(!ofs2.IsOk())
 		return -1;	
 	wxTextOutputStream tos2(ofs2);
 
-	wxFileOutputStream ofs3(wxT("d.html"));
+	wxFileOutputStream ofs3(GetDataFilename());//wxT("d.html"));
 	if(!ofs3.IsOk())
 		return -1;	
 	wxTextOutputStream tos3(ofs3);
@@ -625,34 +654,43 @@ int WordExportV2Dialog::ExportHtmlWithIndexMulti(CDBAccess::TResult& res)
 	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("BODY"));
 
 	tos2 << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><STYLE>A:link{TEXT-DECORATION:none;}</STYLE></HEAD><BODY>");
+	tos2 << wxT("<DIV style=\"PADDING-TOP: 5px; PADDING-LEFT: 10px; FONT-FAMILY: 'Tahoma';\"><FONT style=\"FONT-SIZE:13pt\"><B>");
 
-	tos2 << wxT("<FONT style=\"FONT-SIZE:13pt\"><B>");
 	wxString ret = wxEmptyString;
+	int srcid = -1, psrcid = -1;
+	wxString psrcname = wxEmptyString;	
 	wxFileOutputStream* ofs = NULL;
 	while(res.NextRow())
 	{
-		ret = wxEmptyString;
-		FilterHtml(res.GetString(3), ret, mapKey);
-		if(ret.empty())
+		srcid = res.GetInt(2);
+		if(srcid != psrcid)
 		{
-			continue;
-		}
+			ret = wxEmptyString;
+			FilterHtml(res.GetString(3), ret, mapKey);
+			if(ret.empty())
+			{
+				continue;
+			}
 
-		ofs = new wxFileOutputStream(res.GetString(0) + wxT(".html"));
-		wxTextOutputStream tos(*ofs);
+			psrcname = res.GetString(0);
+			ofs = new wxFileOutputStream(MakeExportPath() + psrcname + wxT(".html"));
+			wxTextOutputStream tos(*ofs);
 
 		//ret.insert(12, wxT("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"));
-		tos << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
-		tos << ret;
-		tos << wxT("</BODY></HTML>");
-		ofs->Close();
-		//it is my fist 'delete' in past three years
-		delete ofs;
+			tos << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
+			tos << ret;
+			tos << wxT("</BODY></HTML>");
+			ofs->Close();
+			//it is my fist 'delete' in past three years
+			delete ofs;
 
-		tos2 << wxT("<A href=\"") << res.GetString(0) << wxT(".html\" target=\"d\">") << res.GetString(0) << wxT("</A><BR/>");
+			psrcid = srcid;
+		}
+
+		tos2 << wxT("<A href=\"") << psrcname << wxT(".html\" target=\"d\">") << res.GetString(0) << wxT("</A><BR/>");
 	}
 
-	tos2 << wxT("</B></FONT><DIV style=\"position:absolute;right:10px;bottom:25px;\"><FONT sytle=\"FONT-SIZE:12\"><B>Power by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
+	tos2 << wxT("</B></FONT></DIV><DIV style=\"position:absolute;right:10px;bottom:25px;FONT-FAMILY: 'Tahoma';\"><FONT sytle=\"FONT-SIZE:12\"><B>Powered by <A href=\"http://codejie.tk\" target=\"d\">LingosHook</A></B></FONT></DIV></BODY></HTML>");
 	ofs2.Close();
 
 	return 0;
@@ -660,7 +698,7 @@ int WordExportV2Dialog::ExportHtmlWithIndexMulti(CDBAccess::TResult& res)
 
 int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 {
-	wxFileOutputStream ofs(MakeExportFilename() + wxT(".html"));
+	wxFileOutputStream ofs(GetExportFilename() + wxT(".html"));
 	if(!ofs.IsOk())
 		return -1;
 
@@ -701,7 +739,7 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 
 int WordExportV2Dialog::ExportLAC(CDBAccess::TResult& res)
 {
-	wxString filename = MakeExportFilename();
+	wxString filename = GetExportFilename();
 
 	CDocumentOutputObject::TKeyMap mapKey;
 
@@ -749,7 +787,7 @@ int WordExportV2Dialog::ExportLAC(CDBAccess::TResult& res)
 		wxString ret = wxEmptyString;
         while(res.NextRow())
         {
-            n = res.GetInt(0);
+            n = res.GetInt(2);
             if(p != n)
             {
                 qsrc.ClearBindings();
@@ -772,7 +810,7 @@ int WordExportV2Dialog::ExportLAC(CDBAccess::TResult& res)
 
             qword.ClearBindings();
             qword.Bind(1, srcid);
-            qword.Bind(2, res.GetString(1));
+            qword.Bind(2, res.GetString(0));
             qword.ExecuteUpdate();
         }
 
@@ -794,12 +832,12 @@ int WordExportV2Dialog::ExportLAC(CDBAccess::TResult& res)
         return -1;
     }
 
-	return -1;
+	return 0;
 }
 
 int WordExportV2Dialog::ExportText(CDBAccess::TResult& res)
 {
-	wxFileOutputStream ofs(MakeExportFilename() + wxT(".txt"));
+	wxFileOutputStream ofs(GetExportFilename() + wxT(".txt"));
 	if(!ofs.IsOk())
 		return -1;
 
