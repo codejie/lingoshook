@@ -431,6 +431,8 @@ int CDictObject::SaveResult(const std::wstring& html, TResultMap& result)
 {
     if(FilterResult(result) != 0)
         return -1;
+	if(result.size() == 0)
+		return 0;
     int srcid = -1;
     if(SaveSrcData(html, srcid) != 0)
         return -1;
@@ -586,7 +588,8 @@ int CDictObject::RemoveWord(int wordid, int srcid)
             _objHtmlDictParser->RemoveResult(_db, wordid);
         }
 
-        RemoveSrcData(srcid);
+        if(RemoveSrcData(srcid) != 0)
+			return -1;
 
         g_objTrigger.OnWordRemove(wordid);
     }
