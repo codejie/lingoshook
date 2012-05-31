@@ -1270,6 +1270,13 @@ msgstr "跳过HTML数据解析过程"
 #: .\LingosHookApp\LingosHookApp.cpp:201
 msgid "Analysis Filter.."
 msgstr "解析过滤.."
+#: LingosHookApp.cpp:210
+msgid "Automatically Optimize HTML Data"
+msgstr "自动优化HTML数据"
+
+#: LingosHookApp.cpp:211
+msgid "Optimum Configuration"
+msgstr "优化参数配置"
 
 #: .\LingosHookApp\LingosHookApp.cpp:203
 msgid "Expanded Dictionary on Result"
@@ -1455,6 +1462,10 @@ msgstr "拷贝至"
 #: .\LingosHookApp\LingosHookApp.cpp:941
 msgid "Remove from this tag"
 msgstr "从当前标签删除"
+#: LingosHookApp.cpp:1074
+msgid "Move all words to other tag"
+
+msgstr "移动当前标签下所有单词至"
 
 #: .\LingosHookApp\LingosHookApp.cpp:945
 msgid "Copy"
@@ -1518,7 +1529,7 @@ msgid "Execute Files(*.exe)|*.exe|All Files(*.*)|*.*"
 msgstr ""
 
 #: .\LingosHookApp\LingosHookApp.cpp:1314
-msgid "Are you sure that remove '"
+msgid "Are you sure that delete '"
 msgstr "确定要删除 '"
 
 #: .\LingosHookApp\LingosHookApp.cpp:1314
@@ -1534,17 +1545,28 @@ msgid "Close"
 msgstr "关闭"
 
 #: .\LingosHookApp\LingosHookApp.cpp:1492
-msgid "Are you sure that remove all words under this node ?"
+msgid "Are you sure that DELETE all words under this node ?"
 msgstr "确定要删除当前节点下所有单词吗？"
 
 #: .\LingosHookApp\LingosHookApp.cpp:1501
-msgid "Removing word : "
+msgid "Deleting word : "
 msgstr "正在删除单词："
 
 #: .\LingosHookApp\LingosHookApp.cpp:1501
 msgid " ..."
 msgstr ""
 
+#: LingosHookApp.cpp:1552
+msgid "Are you sure that move all words under this tag to '"
+msgstr "确定要移动当前标签下所有单词到'"
+
+#: LingosHookApp.cpp:1552
+msgid "' ?"
+msgstr "'标签吗？"
+
+#: LingosHookApp.cpp:1577
+msgid "Moving word : "
+msgstr "正在移动单词 : "
 #: .\LingosHookApp\LingosHookApp.cpp:1442
 msgid "http://code.google.com/p/lingoshook"
 msgstr ""
@@ -1575,10 +1597,6 @@ msgstr ""
 #: .\LingosHookApp\PluginDetailDialog.cpp:16
 msgid "Name:"
 msgstr "名称:"
-
-#: .\LingosHookApp\PluginDetailDialog.cpp:18
-msgid "Label:"
-msgstr "标识:"
 
 #: .\LingosHookApp\PluginDetailDialog.cpp:20
 msgid "Version:"
