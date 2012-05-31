@@ -1574,7 +1574,7 @@ void LingosHookFrame::OnMenuIndexTagMoveAll(wxCommandEvent& event)
         while(id.IsOk())
         {
             cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(id);
-            ShowHint(_("Move word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
+            ShowHint(_("Moving word : ") + m_treeFilter->GetItemText(id) + _(" ..."));
 			_objTag->MoveIndex(cd->ID(), from, to);
             id = m_treeFilter->GetFirstChild(item, cookie);
         }
