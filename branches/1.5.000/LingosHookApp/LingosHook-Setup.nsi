@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "LingosHook"
-!define PRODUCT_VERSION "1.5.xxx"
+!define PRODUCT_VERSION "1.6.061"
 !define PRODUCT_PUBLISHER "Jie"
 !define PRODUCT_WEB_SITE "http://lingoshook.googlecode.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}"
@@ -15,7 +15,7 @@
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "..\Output\Setup-Files\res\lh_logo32.ico"
+!define MUI_ICON ".\res\lh_logo32.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
 ; Language Selection Dialog Settings
@@ -55,7 +55,7 @@ Function InstallX64
   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8220EEFE-38CD-377E-8595-13398D740ACE}" "Version"
   IfErrors 0 VSRedistInstalled
   MessageBox MB_ICONQUESTION|MB_YESNO "LingosHook need MS VC++ 2008 Redistributable, do you want to install it ?" IDNO VSRedistInstalled
-  File "..\Output\Setup-Files\vcredist_x64.exe"
+  File "..\Setup-Files\vcredist_x64.exe"
   ExecWait "$INSTDIR\vcredist_x64.exe"
 VSRedistInstalled:
    Exch $R0
@@ -67,7 +67,7 @@ Function InstallX86
   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}" "Version"
   IfErrors 0 VSRedistInstalled
   MessageBox MB_ICONQUESTION|MB_YESNO "LingosHook need MS VC++ 2008 Redistributable, do you want to install it ?" IDNO VSRedistInstalled
-  File "..\Output\Setup-Files\vcredist_x86.exe"
+  File "..\Setup-Files\vcredist_x86.exe"
   ExecWait "$INSTDIR\vcredist_x86.exe"
 VSRedistInstalled:
    Exch $R0
@@ -89,26 +89,27 @@ Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR\lang\zh_cn"
-  File "..\Output\Setup-Files\lang\zh_cn\lang.mo"
-  File "..\Output\Setup-Files\lang\zh_cn\lang.po"
+  File ".\lang\zh_cn\lang.mo"
+  File ".\lang\zh_cn\lang.po"
   SetOutPath "$INSTDIR\plugins"
-  File "..\Output\Setup-Files\plugins\P_WordExport.dll"
-  File "..\Output\Setup-Files\plugins\P_SetHomepage.dll"
+  File "..\Output\plugins\P_WordExport.dll"
+  File "..\Output\plugins\P_SetHomepage.dll"
+  File "..\Output\plugins\P_DataCleanup.dll"
   SetOutPath "$INSTDIR\res"
-  File "..\Output\Setup-Files\res\check.ico"
-  File "..\Output\Setup-Files\res\checked.ico"
-  File "..\Output\Setup-Files\res\lh_hook.ico"
-  File "..\Output\Setup-Files\res\lh_logo16.ico"
-  File "..\Output\Setup-Files\res\lh_logo32.ico"
-  File "..\Output\Setup-Files\res\lh_logo_main.ico"
-  File "..\Output\Setup-Files\res\lh_normal.ico"
-  File "..\Output\Setup-Files\res\unchecked.ico"
+  File ".\res\check.ico"
+  File ".\res\checked.ico"
+  File ".\res\lh_hook.ico"
+  File ".\res\lh_logo16.ico"
+  File ".\res\lh_logo32.ico"
+  File ".\res\lh_logo_main.ico"
+  File ".\res\lh_normal.ico"
+  File ".\res\unchecked.ico"
   SetOutPath "$INSTDIR"
-  File "..\Output\Setup-Files\tidy.dll"
-  File "..\Output\Setup-Files\sqlite3.dll"
-  File "..\Output\Setup-Files\LingosHookApp.exe"
-  File "..\Output\Setup-Files\LingosHook.dll"
-  File "..\Output\Setup-Files\LHSpeak.dll"
+  File "..\Output\Release\tidy.dll"
+  File "..\Setup-Files\sqlite3.dll"
+  File "..\Output\Release\LingosHookApp.exe"
+  File "..\Output\Release\LingosHook.dll"
+  File "..\Output\Release\LHSpeak.dll"
   
   Call CheckVCRedist
   
@@ -156,6 +157,7 @@ Section Uninstall
   Delete "$INSTDIR\res\check.ico"
   Delete "$INSTDIR\plugins\P_WordExport.dll"
   Delete "$INSTDIR\plugins\P_SetHomepage.dll"
+  Delete "$INSTDIR\plugins\P_DataCleanup.dll"
   Delete "$INSTDIR\lang\zh_cn\lang.po"
   Delete "$INSTDIR\lang\zh_cn\lang.mo"
   Delete "$INSTDIR\vcredist_x86.exe"
