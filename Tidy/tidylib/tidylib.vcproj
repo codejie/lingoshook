@@ -68,6 +68,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="..\..\Output\$(ConfigurationName)\tidy.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -86,7 +87,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="Release - lib|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
@@ -320,7 +321,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release - dll (fast)|Win32"
+			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
@@ -375,7 +376,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(SolutionDir)\Output\Tidy\$(ConfigurationName)\tidy.dll"
+				OutputFile="$(SolutionDir)\Output\$(ConfigurationName)\tidy.dll"
 				LinkIncremental="1"
 				GenerateManifest="true"
 				ModuleDefinitionFile="tidylib.def"
