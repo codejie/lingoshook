@@ -19,6 +19,7 @@ DataCleanupDialog::DataCleanupDialog(CDBAccess* dbaccess, wxWindow* parent, int 
     static_line_1 = new wxStaticLine(this, wxID_ANY);
     barProcess = new wxGauge(this, 7002, 0, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL|wxGA_SMOOTH);
     btnCleanup = new wxButton(this, 7001, wxT("Clean-up"));
+	checkRemoveNotMatch = new wxCheckBox(this, wxID_ANY, wxT("Remove 'Not Match' word and data also"));
     static_line_2 = new wxStaticLine(this, wxID_ANY);
     panel_1 = new wxPanel(this, wxID_ANY);
     btnClose = new wxButton(this, wxID_CLOSE, wxT("Close"));
@@ -99,6 +100,7 @@ void DataCleanupDialog::do_layout()
     wxBoxSizer* sizer_1 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* sizer_4 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_3 = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer* sizer_5 = new wxBoxSizer(wxHORIZONTAL);
     wxBoxSizer* sizer_2 = new wxBoxSizer(wxHORIZONTAL);
     sizer_2->Add(label_1, 1, wxALIGN_CENTER_VERTICAL, 0);
     sizer_2->Add(btnBackup, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
@@ -107,6 +109,8 @@ void DataCleanupDialog::do_layout()
     sizer_3->Add(barProcess, 1, wxALIGN_CENTER_VERTICAL, 0);
     sizer_3->Add(btnCleanup, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_1->Add(sizer_3, 0, wxALL|wxEXPAND, 16);
+    sizer_5->Add(checkRemoveNotMatch, 0, 0, 0);
+    sizer_1->Add(sizer_5, 0, wxLEFT|wxRIGHT|wxBOTTOM|wxEXPAND, 16);
     sizer_1->Add(static_line_2, 0, wxLEFT|wxRIGHT|wxEXPAND, 16);
     sizer_4->Add(panel_1, 1, wxEXPAND, 0);
     sizer_4->Add(btnClose, 0, wxLEFT|wxRIGHT, 12);

@@ -38,6 +38,7 @@ protected:
     wxStaticLine* static_line_1;
     wxGauge* barProcess;
     wxButton* btnCleanup;
+	wxCheckBox* checkRemoveNotMatch;
     wxStaticLine* static_line_2;
     wxPanel* panel_1;
     wxButton* btnClose;
