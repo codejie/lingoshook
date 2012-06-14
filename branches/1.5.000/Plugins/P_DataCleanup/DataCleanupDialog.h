@@ -15,6 +15,7 @@
 // end wxGlade
 
 class CDBAccess;
+class CDictObject;
 
 class DataCleanupDialog: public wxDialog {
 private:
@@ -23,7 +24,7 @@ public:
     // begin wxGlade: DataCleanupDialog::ids
     // end wxGlade
 
-    DataCleanupDialog(CDBAccess* dbaccess, wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
+    DataCleanupDialog(CDBAccess* dbaccess, CDictObject* dict, wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
 
 private:
     // begin wxGlade: DataCleanupDialog::methods
@@ -54,8 +55,12 @@ private:
 	int Cleanup();
 	int DeleteData(int srcid);
 	void EnableButtons(bool flag);
+	int RemoveNotMatchData(int& found);
+	bool IsNotMatchData(const wxString& html) const;
+	int DeleteWord(int wordid);
 private:
 	CDBAccess* _objDBAccess;
+	CDictObject* _objDict;
 }; // wxGlade: end class
 
 

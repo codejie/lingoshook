@@ -190,6 +190,14 @@
 				RelativePath=".\DataCleanupDialog.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\DictObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\TinyHtmlParser.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -209,11 +217,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\LingosHookApp\DictObject.h"
+				>
+			</File>
+			<File
 				RelativePath="..\P_Common\Exports.h"
 				>
 			</File>
 			<File
 				RelativePath="..\P_Common\PluginsConsts.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\LingosHookApp\TinyHtmlParser.h"
 				>
 			</File>
 		</Filter>

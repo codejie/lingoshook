@@ -18,6 +18,7 @@ public:
     virtual int Active(wxApp* papp, wxWindow* pwindow);
 
     virtual bool NeedDBAccess() const { return true; }
+	virtual bool NeedDictObject() const { return true; }
 
 };
 

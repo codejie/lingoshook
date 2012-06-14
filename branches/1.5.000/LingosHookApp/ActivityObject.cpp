@@ -9,6 +9,7 @@ ActivityObject::ActivityObject()
 #ifndef __TEST_PLUGINS__
 : _objDBAccess(NULL)
 , _objDict(NULL)
+, _objTag(NULL)
 #endif
 {
     _iInterfaceVersion = __LH_PLUGINS_INTERFACEVERSION__;
