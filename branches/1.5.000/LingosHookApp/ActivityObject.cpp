@@ -8,8 +8,8 @@
 ActivityObject::ActivityObject()
 #ifndef __TEST_PLUGINS__
 : _objDBAccess(NULL)
-, _objDict(NULL)
-, _objTag(NULL)
+//, _objDict(NULL)
+//, _objTag(NULL)
 #endif
 {
     _iInterfaceVersion = __LH_PLUGINS_INTERFACEVERSION__;
@@ -27,14 +27,14 @@ void ActivityObject::SetDBObject(CDBAccess *obj)
     _objDBAccess = obj;
 }
 
-void ActivityObject::SetDictObject(CDictObject *obj)
-{
-	_objDict = obj;
-}
-
-void ActivityObject::SetTagObject(CTagObject *obj)
-{
-	_objTag = obj;
-}
+//void ActivityObject::SetDictObject(CDictObject *obj)
+//{
+//	_objDict = obj;
+//}
+//
+//void ActivityObject::SetTagObject(CTagObject *obj)
+//{
+//	_objTag = obj;
+//}
 
 #endif

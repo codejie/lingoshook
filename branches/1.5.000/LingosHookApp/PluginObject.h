@@ -27,6 +27,8 @@ protected:
 private:
     LingosHookFrame* _frame;
     CDBAccess * _objDB;
+	//CDictObject * _objDict;
+	//CTagObject * _objTag;
     bool _bLoaded;
     TActivityMap _mapActivity;
 };

@@ -191,10 +191,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\LingosHookApp\DictObject.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\LingosHookApp\TinyHtmlParser.cpp"
 				>
 			</File>
@@ -214,10 +210,6 @@
 			</File>
 			<File
 				RelativePath=".\DataCleanupDialog.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\LingosHookApp\DictObject.h"
 				>
 			</File>
 			<File
