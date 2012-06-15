@@ -7,8 +7,8 @@
 
 #ifndef __TEST_PLUGINS__
 #include "DBAccess.h"
-#include "DictObject.h"
-#include "TagObject.h"
+//#include "DictObject.h"
+//#include "TagObject.h"
 #endif
 
 class ActivityObject //: public wxEvtHandler
@@ -42,18 +42,18 @@ public:
 #ifndef __TEST_PLUGINS__
     virtual bool NeedDBAccess() const { return false; }
     void SetDBObject(CDBAccess* obj);
-	virtual bool NeedDictObject() const { return false; }
-	void SetDictObject(CDictObject* obj);
-	virtual bool NeedTagObject() const { return false; }
-	void SetTagObject(CTagObject* obj);
+	//virtual bool NeedDictObject() const { return false; }
+	//void SetDictObject(CDictObject* obj);
+	//virtual bool NeedTagObject() const { return false; }
+	//void SetTagObject(CTagObject* obj);
 #endif
 
 protected:
 
 #ifndef __TEST_PLUGINS__
     CDBAccess* _objDBAccess;
-	CDictObject* _objDict;
-	CTagObject* _objTag;
+	//CDictObject* _objDict;
+	//CTagObject* _objTag;
 #endif
 
 protected:

@@ -30,6 +30,8 @@ const unsigned int MAX_NUMBER_TAG	= 200;
 #define WM_SET_HOOK         WM_USER + 1001
 #define WM_SET_AUTORETRIEVE WM_USER + 1002
 
+#define WM_PLAGIN_REQ		WM_USER + 1003
+
 //wxHtmlWindow or wxIE
 #define __LH_USE_WXIE__
 

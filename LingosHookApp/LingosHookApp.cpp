@@ -1200,6 +1200,7 @@ int LingosHookFrame::SpeakWord(const wxString& word)
 
 int LingosHookFrame::RemoveWord(const wxString& word)
 {
+	ShowHint(_("Deleting word : ") + word + _(" ..."));
     return _objDict->RemoveWord(word);
     //int wordid = -1;
     //if(_objDict->GetWordID(word.c_str(), wordid) != 0)
@@ -1209,6 +1210,8 @@ int LingosHookFrame::RemoveWord(const wxString& word)
 
 int LingosHookFrame::RemoveWord(int wordid)
 {
+	ShowHint(_("Deleting word : ") + wxString::Format(wxT("id(%d)"), wordid) + _(" ..."));
+	m_textTrace->SetValue(m_textTrace->GetValue() + wxString::Format(wxT("\n%d"), wordid)); 
     return _objDict->RemoveWord(wordid);
 }
 
@@ -1250,6 +1253,10 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
         _dataConfig->m_iStopAutoRetrieve = (wParam == 0 ? 1 : 0);
         _objHook->SetStopRetrieve(wParam == 0);
     }
+	else if(message == WM_PLAGIN_REQ)
+	{
+		RemoveWord(wParam);
+	}
     else
     {
 	    if(_objHook.get() != NULL)

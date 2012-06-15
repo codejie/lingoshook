@@ -113,10 +113,10 @@ int CPluginObject::ActivePlugin(int index)
         {
             if(act->NeedDBAccess())
                 act->SetDBObject(_objDB);
-			if(act->NeedDictObject())
-				act->SetDictObject(_objDict);
-            if(act->NeedTagAccess())
-                act->SetTagObject(_objTag);
+			//if(act->NeedDictObject())
+			//	act->SetDictObject(_objDict);
+   //         if(act->NeedTagAccess())
+   //             act->SetTagObject(_objTag);
             if(ver == 1)
             {
                 if(act->Active(&wxGetApp(), _frame) == 0)
