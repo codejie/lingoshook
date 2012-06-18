@@ -1253,8 +1253,9 @@ WXLRESULT LingosHookFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPAR
         _dataConfig->m_iStopAutoRetrieve = (wParam == 0 ? 1 : 0);
         _objHook->SetStopRetrieve(wParam == 0);
     }
-	else if(message == WM_PLAGIN_REQ)
+	else if(message == WM_PLAGINREQ_DELETE_WORD)
 	{
+
 		RemoveWord(wParam);
 	}
     else

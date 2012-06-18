@@ -93,8 +93,8 @@ Global
 		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release (fast)|Win32.Build.0 = Release|Win32
 		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release|Win32.ActiveCfg = Release|Win32
 		{5FFFA763-C78B-4FA4-A4BC-7BCD56ECA093}.Release|Win32.Build.0 = Release|Win32
-		{7E16A598-F9DB-46BB-968D-516430798E86}.Debug|Win32.ActiveCfg = Debug|Win32
-		{7E16A598-F9DB-46BB-968D-516430798E86}.Debug|Win32.Build.0 = Debug|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Debug|Win32.ActiveCfg = Release|Win32
+		{7E16A598-F9DB-46BB-968D-516430798E86}.Debug|Win32.Build.0 = Release|Win32
 		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll (fast)|Win32.ActiveCfg = Release - dll|Win32
 		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll (fast)|Win32.Build.0 = Release - dll|Win32
 		{7E16A598-F9DB-46BB-968D-516430798E86}.Release - dll|Win32.ActiveCfg = Release - dll|Win32
