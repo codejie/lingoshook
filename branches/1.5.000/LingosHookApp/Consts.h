@@ -26,11 +26,11 @@ const wxString DATE_RELEASE		=	wxT("2012.06.01");
 const unsigned int MAX_NUMBER_TAG	= 200;
 
 //App message
-#define WM_OBJECT_INIT      WM_USER + 1000
-#define WM_SET_HOOK         WM_USER + 1001
-#define WM_SET_AUTORETRIEVE WM_USER + 1002
+#define WM_OBJECT_INIT				WM_USER + 1000
+#define WM_SET_HOOK					WM_USER + 1001
+#define WM_SET_AUTORETRIEVE			WM_USER + 1002
 
-#define WM_PLAGIN_REQ		WM_USER + 1003
+#define WM_PLAGINREQ_DELETE_WORD	WM_USER + 1003
 
 //wxHtmlWindow or wxIE
 #define __LH_USE_WXIE__
