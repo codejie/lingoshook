@@ -42,6 +42,8 @@ protected:
     wxStaticText* label_1;
     wxStaticLine* static_line_1;
     wxRadioButton* radioWordAll;
+    wxPanel* panel_2;
+    wxCheckBox* checkOrder;
     wxCheckBox* checkWordPrefix;
     wxTextCtrl* textWordPrefix;
     wxCheckBox* checkWordSuffix;
