@@ -30,6 +30,8 @@ WordExportV2Dialog::WordExportV2Dialog(CDBAccess* dbaccess, wxWindow* parent, in
     label_1 = new wxStaticText(this, wxID_ANY, wxT("Word Range Setting"));
     static_line_1 = new wxStaticLine(this, wxID_ANY);
     radioWordAll = new wxRadioButton(this, 7000, wxT("All Words"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    panel_2 = new wxPanel(this, wxID_ANY);
+    checkOrder = new wxCheckBox(this, 7003, wxT("export  in alphabetical order"));
     checkWordPrefix = new wxCheckBox(this, 7001, wxT("Prefix"));
     textWordPrefix = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
     checkWordSuffix = new wxCheckBox(this, 7002, wxT("Suffix"));
@@ -229,6 +231,7 @@ void WordExportV2Dialog::set_properties()
     // begin wxGlade: WordExportV2Dialog::set_properties
     SetTitle(PLUGINS_TITLE);
     label_1->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
+	checkOrder->SetValue(1);
     textWordPrefix->Enable(false);
     textWordSuffix->Enable(false);
     label_3->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
@@ -282,6 +285,8 @@ void WordExportV2Dialog::do_layout()
     sizer_3->Add(static_line_1, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
     sizer_2->Add(sizer_3, 0, wxALL|wxEXPAND, 8);
     sizer_5->Add(radioWordAll, 0, wxALIGN_CENTER_VERTICAL, 0);
+    sizer_5->Add(panel_2, 1, wxEXPAND, 0);
+    sizer_5->Add(checkOrder, 0, wxALIGN_CENTER_VERTICAL, 0);
     sizer_4->Add(sizer_5, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);
     sizer_7->Add(checkWordPrefix, 0, wxALIGN_CENTER_VERTICAL, 0);
     sizer_7->Add(textWordPrefix, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16);
@@ -289,7 +294,7 @@ void WordExportV2Dialog::do_layout()
     sizer_8->Add(checkWordSuffix, 0, wxALIGN_CENTER_VERTICAL, 0);
     sizer_8->Add(textWordSuffix, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16);
     sizer_4->Add(sizer_8, 0, wxBOTTOM|wxEXPAND, 4);
-    sizer_2->Add(sizer_4, 0, wxLEFT|wxEXPAND, 32);
+    sizer_2->Add(sizer_4, 0, wxLEFT|wxRIGHT|wxEXPAND, 32);
     sizer_1->Add(sizer_2, 0, wxALL|wxEXPAND, 4);
     sizer_10->Add(label_3, 0, 0, 0);
     sizer_10->Add(static_line_2, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 4);
@@ -510,8 +515,15 @@ const wxString WordExportV2Dialog::MakeExportSql()
 			}
 		}
 	}
-
-	sql += wxT(" ORDER BY UPPER(WordTable.Word)");
+	
+	if(checkOrder->GetValue())
+	{
+		sql += wxT(" ORDER BY UPPER(WordTable.Word)");
+	}
+	else
+	{
+		sql += wxT(" ORDER BY WordTable.WordID");
+	}
 
 	return sql;
 }
