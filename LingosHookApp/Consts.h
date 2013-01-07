@@ -16,12 +16,12 @@
 const wxString APP_TITLE        = wxT("LingosHook"); 
 
 #ifdef __LH_DEBUG__
-const wxString APP_VERSION      = wxT("1.6.618(Debug)");
+const wxString APP_VERSION      = wxT("1.6.700(Debug)");
 #else
-const wxString APP_VERSION      = wxT("1.6.618");
+const wxString APP_VERSION      = wxT("1.6.700");
 #endif
 
-const wxString DATE_RELEASE		=	wxT("2012.06.18");
+const wxString DATE_RELEASE		=	wxT("2013.01.07");
 
 const unsigned int MAX_NUMBER_TAG	= 200;
 

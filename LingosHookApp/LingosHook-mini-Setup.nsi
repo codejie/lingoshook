@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "LingosHook"
-!define PRODUCT_VERSION "1.6.618"
+!define PRODUCT_VERSION "1.6.700"
 !define PRODUCT_PUBLISHER "Jie"
 !define PRODUCT_WEB_SITE "http://lingoshook.googlecode.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}"
