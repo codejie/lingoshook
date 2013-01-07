@@ -1698,17 +1698,21 @@ void LingosHookFrame::OnMenuIndexDelete(wxCommandEvent& event)
 void LingosHookFrame::OnMenuIndexTagCopy(wxCommandEvent& event)
 {
     wxMenu* menu = (wxMenu*)event.GetEventObject();
-	wxTreeItemId item = m_treeFilter->GetSelection();
+    int tagpos = event.GetId() - IMID_TAGCOPY_START;
+    CopyToTag(menu->GetTitle(), tagpos);
 
-    int tagid = event.GetId() - IMID_TAGCOPY_START;
-    tagid = m_listTagMgnt->GetItemData(tagid);
-    if(tagid == -1)
-        return;
+ //   wxMenu* menu = (wxMenu*)event.GetEventObject();
+	//wxTreeItemId item = m_treeFilter->GetSelection();
 
-	const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(item);
-	int wordid = cd->ID();
+ //   int tagid = event.GetId() - IMID_TAGCOPY_START;
+ //   tagid = m_listTagMgnt->GetItemData(tagid);
+ //   if(tagid == -1)
+ //       return;
 
-	 _objTag->AddIndex(wordid, tagid);
+	//const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)m_treeFilter->GetItemData(item);
+	//int wordid = cd->ID();
+
+	// _objTag->AddIndex(wordid, tagid);
 
 //    CopyToTag(menu->GetTitle(), tagpos);
 }
