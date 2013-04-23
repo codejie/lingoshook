@@ -252,7 +252,7 @@ int CDictObject::ForceSaveHTML(const std::wstring& html)
 
     if(wordid != -1)
 	{
-		UpdateWordData(wordid, counter + 1);
+		UpdateWordData(wordid, count + 1);
         return 0;
 	}
 

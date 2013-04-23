@@ -604,7 +604,8 @@ protected:
     FuncXArray      m_methods;
     NameMap         m_methodNames;
 
-    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    //long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+	WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 };
 
 // events

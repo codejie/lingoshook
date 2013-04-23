@@ -54,8 +54,7 @@ protected:
     static BOOL CALLBACK EnumListChildProc(HWND hwnd, LPARAM lparam);
 
     int SendData(HookDataType type, const BSTR& str);
-    int SendData(HookDataType type, const wchar_t* data, size_t size);
-
+    int SendData(HookDataType type, const wchar_t* data, size_t size);	
 private:
     HWND _hwndFrame;
     HWND _hwndLgs;
@@ -83,6 +82,7 @@ public:
 	int MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam);
 
     static HWND GetLingoesHandle(int lang, bool strick = false);
+	//static HWND GetLingoesHandle(int lang, bool strick, wchar_t*& buf, size_t bufsize);
 protected:
     int Hook(HWND hwnd);
     int Unhook();
@@ -95,6 +95,7 @@ private:
     int CreateCheckThread();
     void ClearCheckThread();
 
+	static int MatchClassName(const wchar_t* src, const wchar_t* tag, int totalLen, int skipPos, int skipLen);
 private:
 	LingosHookFrame* _objFrame;
 
