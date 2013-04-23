@@ -7,7 +7,7 @@ const wxString ResHelper::MakeHomepageString()
 	return wxString::Format( \
 			wxT("<html>") \
 			wxT("<head><STYLE>A:link{TEXT-DECORATION:none;}</STYLE></head>") \
-			wxT("<body><div style=\"text-align: center;\"><font style=\"font-size: 30pt;\">LingosHook</font>&nbsp;&nbsp;&nbsp;&nbsp;version&nbsp;") \
+			wxT("<body><div style=\"text-align: center;\"><font style=\"font-size: 30pt;\">%s</font>&nbsp;&nbsp;&nbsp;&nbsp;version&nbsp;") \
 			wxT("%s") \
             wxT("</div><br/>") \
 			wxT("<ul><font sytle=\"font-family:'Tahoma';font-size: 28pt;\">") \
@@ -21,5 +21,5 @@ const wxString ResHelper::MakeHomepageString()
             wxT("<div style=\"text-align: right;\"><font style=\"font-size: 14pt;\"><a href=\"mailto:codejie@gmail.com\">codejie</a><br/>") \
 			wxT("%s") \
             wxT("</font></div></body></html>") \
-			, APP_VERSION, DATE_RELEASE);
+			, APP_TITLE, APP_VERSION, DATE_RELEASE);
 }

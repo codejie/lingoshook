@@ -214,9 +214,10 @@ DWORD WINAPI ThreadProc(LPVOID param)
 //                    wcsnset(buf, 0, 64);
                     ::GetClassName(hwnd, buf, 64);
                     s = wcslen(buf);
-                    if(s > 17)
+                    if(s >= LINGOES_POPWIN_CLASSNAME_TOTAL_LEN)
                     {
-                        if(wcsncmp(buf, LINGOES_POPWIN_CLASSNAME, 17) == 0)
+//                        if(wcsncmp(buf, LINGOES_POPWIN_CLASSNAME, LINGOES_POPWIN_CLASSNAME_LEN) == 0)
+						if(MatchClassName(buf, LINGOES_POPWIN_CLASSNAME, LINGOES_POPWIN_CLASSNAME_TOTAL_LEN, LINGOES_POPWIN_CLASSNAME_SKIP_POS, LINGOES_POPWIN_CLASSNAME_SKIP_LEN) == TRUE)
                         {
 				            if(hwnd != NULL)
 				            {
@@ -328,7 +329,7 @@ BOOL GetHTMLData(HWND hwnd, HINSTANCE hinst)
 	    CComPtr<IHTMLDocument2> cpDoc;
 	    UINT msg = ::RegisterWindowMessage(_T("WM_HTML_GETOBJECT"));
 	    LRESULT res = 0;
-	    ::SendMessageTimeout(hc, msg, 0L, 0L, SMTO_ABORTIFHUNG, 1000, (PDWORD)&res);
+	    ::SendMessageTimeout(hc, msg, 0L, 0L, SMTO_ABORTIFHUNG, 1000, (PDWORD_PTR)&res);
 	    LPFNOBJECTFROMLRESULT pfres = (LPFNOBJECTFROMLRESULT)::GetProcAddress(hinst, "ObjectFromLresult");
 	    if(pfres != NULL)
 	    {
@@ -494,5 +495,14 @@ BOOL SendWCharData(enum _HookDataType_t type, const wchar_t* data, size_t size)
 	delete [] hd->data;
 	delete hd;
 
+	return TRUE;
+}
+
+BOOL MatchClassName(const wchar_t* src, const wchar_t* tag, int totalLen, int skipPos, int skipLen)
+{
+	if(wcsncmp(src, tag, skipPos) != 0)
+		return FALSE;
+	if(wcsncmp(src + skipPos + skipLen, tag + skipPos + skipLen, totalLen - skipPos - skipLen) != 0)
+		return FALSE;
 	return TRUE;
 }

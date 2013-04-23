@@ -51,12 +51,29 @@ typedef struct _HookData_t
 	wchar_t* data;
 } HookData;
 
-#define LINGOES_CLASSNAME_LONG		_T("Afx:400000:0")
-#define LINGOES_CLASSNAME_SHORT		_T("Afx:400000")
+//#define LINGOES_CLASSNAME_LONG		_T("Afx:400000:0")
+//#define LINGOES_CLASSNAME_SHORT		_T("Afx:400000")
+//#define LINGOES_CLASSNAME_LEN		10
+//#define LINGOES_TITLE_ENG			_T("Lingoes")
+//#define LINGOES_TITLE_CHN			_T("Lingoes 灵格斯")
+//#define LINGOES_POPWIN_CLASSNAME	_T("Afx:400000:2400b:")
+//#define LINGOES_POPWIN_CLASSNAME_LEN	17	
+//#define LINGOES_POPWIN_EDIT_CLASSNAME	_T("Edit")
+
+#define LINGOES_CLASSNAME_LONG		_T("Afx:000000013F1B0000:0")
+//#define LINGOES_CLASSNAME_SHORT		_T("Afx:000000013F1B0000")
+#define LINGOES_CLASSNAME_TOTAL_LEN	22
+#define LINGOES_CLASSNAME_SKIP_POS	14
+#define LINGOES_CLASSNAME_SKIP_LEN	2
 #define LINGOES_TITLE_ENG			_T("Lingoes")
 #define LINGOES_TITLE_CHN			_T("Lingoes 灵格斯")
-#define LINGOES_POPWIN_CLASSNAME	_T("Afx:400000:2400b:")
+#define LINGOES_POPWIN_CLASSNAME	_T("Afx:000000013F1B0000:2400b:")
+#define LINGOES_POPWIN_CLASSNAME_TOTAL_LEN	27
+#define LINGOES_POPWIN_CLASSNAME_SKIP_POS	14
+#define LINGOES_POPWIN_CLASSNAME_SKIP_LEN	2
 #define LINGOES_POPWIN_EDIT_CLASSNAME	_T("Edit")
+
+
 
 //#define LINGOES_CLASSNAME_LONG		_T("YodaoMainWndClass")
 //#define LINGOES_CLASSNAME_SHORT		_T("YodaoMainWndClass")
@@ -89,6 +106,8 @@ BOOL CALLBACK EnumEditChildProc(HWND hwnd, LPARAM lparam);
 BOOL SendBSTRData(enum _HookDataType_t type, const BSTR& str);
 BOOL SendCDData(enum _HookDataType_t type, const LingosCD* data);
 BOOL SendWCharData(enum _HookDataType_t type, const wchar_t* data, size_t size);
+
+BOOL MatchClassName(const wchar_t* src, const wchar_t* tag, int totalLen, int skipPos, int skipLen);
 ///
 extern HINSTANCE _hInst;
 extern HANDLE _hThread;

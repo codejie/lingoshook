@@ -197,7 +197,7 @@ BOOL CHotkeyObject::GetHTMLData(HWND hwnd, HINSTANCE hinst)
 	    CComPtr<IHTMLDocument2> cpDoc;
 	    UINT msg = ::RegisterWindowMessage(_T("WM_HTML_GETOBJECT"));
 	    LRESULT res = 0;
-	    ::SendMessageTimeout(hc, msg, 0L, 0L, SMTO_ABORTIFHUNG, 1000, (PDWORD)&res);
+	    ::SendMessageTimeout(hc, msg, 0L, 0L, SMTO_ABORTIFHUNG, 1000, (PDWORD_PTR)&res);
 	    LPFNOBJECTFROMLRESULT pfres = (LPFNOBJECTFROMLRESULT)::GetProcAddress(hinst, "ObjectFromLresult");
 	    if(pfres != NULL)
 	    {
@@ -318,7 +318,7 @@ BOOL CHotkeyObject::GetWordData(HWND hwnd, HINSTANCE hinst)
 	    CComPtr<IHTMLDocument2> cpDoc;
 	    UINT msg = ::RegisterWindowMessage(_T("WM_HTML_GETOBJECT"));
 	    LRESULT res = 0;
-	    ::SendMessageTimeout(hlist, msg, 0L, 0L, SMTO_ABORTIFHUNG, 1000, (PDWORD)&res);
+	    ::SendMessageTimeout(hlist, msg, 0L, 0L, SMTO_ABORTIFHUNG, 1000, (PDWORD_PTR)&res);
 	    LPFNOBJECTFROMLRESULT pfres = (LPFNOBJECTFROMLRESULT)::GetProcAddress(hinst, "ObjectFromLresult");
 	    if(pfres != NULL)
 	    {
@@ -566,8 +566,10 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
-                    return hwnd;
+				if(MatchClassName(buf, LINGOES_CLASSNAME_LONG, LINGOES_CLASSNAME_TOTAL_LEN, LINGOES_CLASSNAME_SKIP_POS, LINGOES_CLASSNAME_SKIP_LEN) == 0)
+					return hwnd;
+                //if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, LINGOES_CLASSNAME_LEN) == 0)
+                //    return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
 
@@ -575,8 +577,10 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
-                    return hwnd;
+				if(MatchClassName(buf, LINGOES_CLASSNAME_LONG, LINGOES_CLASSNAME_TOTAL_LEN, LINGOES_CLASSNAME_SKIP_POS, LINGOES_CLASSNAME_SKIP_LEN) == 0)
+					return hwnd;
+                //if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, LINGOES_CLASSNAME_LEN) == 0)
+                //    return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }
@@ -586,8 +590,11 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
-                    return hwnd;
+				if(MatchClassName(buf, LINGOES_CLASSNAME_LONG, LINGOES_CLASSNAME_TOTAL_LEN, LINGOES_CLASSNAME_SKIP_POS, LINGOES_CLASSNAME_SKIP_LEN) == 0)
+					return hwnd;
+
+                //if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, LINGOES_CLASSNAME_LEN) == 0)
+                //    return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }
@@ -597,8 +604,10 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
-                    return hwnd;
+				if(MatchClassName(buf, LINGOES_CLASSNAME_LONG, LINGOES_CLASSNAME_TOTAL_LEN, LINGOES_CLASSNAME_SKIP_POS, LINGOES_CLASSNAME_SKIP_LEN) == 0)
+					return hwnd;
+                //if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, LINGOES_CLASSNAME_LEN) == 0)
+                //    return hwnd;
                 hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }        
@@ -608,6 +617,7 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
 
 int CHookObject::CheckLingoesStatus()
 {
+	wchar_t buf[64];
     HWND hwnd = GetLingoesHandle(_iIfLanguage, false);
     if(hwnd == NULL)
     {
@@ -808,4 +818,15 @@ void CHookObject::ShowInfo(const wxString& info)
 void CHookObject::SetStopRetrieve(bool stop)
 {
     _bStopRetrieve = stop;
+}
+
+int CHookObject::MatchClassName(const wchar_t* src, const wchar_t* tag, int totalLen, int skipPos, int skipLen)
+{
+	if(wcsncmp(src, tag, skipPos) != 0)
+		return -1;
+	//src += (skipPos + skipLen);
+	//tag += (skipPos + skipLen);
+	if(wcsncmp(src + skipPos + skipLen, tag + skipPos + skipLen, totalLen - skipPos - skipLen) != 0)
+		return -1;
+	return 0;
 }

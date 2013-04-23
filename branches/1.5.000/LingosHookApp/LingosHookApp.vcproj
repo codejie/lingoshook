@@ -12,6 +12,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -99,6 +102,89 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;..\Tidy\tidylib\include;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__LH_DEBUG__;__LH_X64__"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;_WINDOWS;NOPCH"
+				AdditionalIncludeDirectories="$(WX_ROOT)\include"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="tidy.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib wxmsw28ud_core.lib sqlite3.lib comctl32.lib rpcrt4.lib"
+				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName)d.exe"
+				Version="1.6.700"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_lib&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
+				GenerateManifest="true"
+				IgnoreEmbeddedIDL="false"
+				TypeLibraryResourceID="1"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(ProjectDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
@@ -154,6 +240,88 @@
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
+				AllowIsolation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\LingosHook;..\LHSpeak;..\wxactivex;..\Tidy\tidylib\include;&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__LH_X64__"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="tidy.lib sqlite3.lib wxcode_msw28u_wxsqlite3.lib wxbase28u.lib wxmsw28u_core.lib comctl32.lib rpcrt4.lib"
+				OutputFile="..\Output\$(ConfigurationName)\$(ProjectName).exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;..\Output\$(ConfigurationName)&quot;;&quot;..\Output\Tidy\Release - dll (fast)&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_lib&quot;;&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;;&quot;F:\Jie\Libs\wxsqlite3-1.9.7\lib\vc_dll&quot;"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="17"
 				AllowIsolation="true"
 			/>
 			<Tool
@@ -380,6 +548,13 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\HookObject.h"
@@ -411,12 +586,26 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LHControls.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -480,6 +669,13 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
