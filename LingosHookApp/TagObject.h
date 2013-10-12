@@ -7,7 +7,9 @@
 
 #include <map>
 
-class CDBAccess;
+#include "DBAccess.h"
+
+//class CDBAccess;
 
 class CTagObject
 {
@@ -34,12 +36,14 @@ public:
 
     int InsertTag(const wxString& title, const wxString& desc);
     int RemoveTag(int id);
+    int RenameTag(int tagid, const wxString& title, const wxString& desc);
 
     int UpdateDefaultTag(int id);
 
     int AddIndex(int wordid, int tagid);
     int DeleteIndex(int wordid, int tagid);
     int DeleteWord(int wordid);
+	int MoveIndex(int wordid, int fromtagid, int totagid);
 
     int GetWordByTag(int tagid, TWordIDVector& vctwordid);
     int GetTagByWord(int wordid, TTagIDVector& vcttagid);
@@ -51,8 +55,11 @@ public:
     int SysDefTag() const;
 
     const wxString GetTitle(int tagid) const;
+    const wxString GetDescription(int tagid) const;
 
-    void GetAll();
+    //void GetAll();
+
+    int ShowTagSubMenu(int menubase, wxMenu*& submenu) const;
 protected:
     int IsIndexExist(int wordid, int tagid);
     int IsOnlySysDefTag(int wordid);

@@ -1,7 +1,7 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
-
+#include "ConfigData.h"
 #include "FilterShowObject.h"
 
 
@@ -40,7 +40,7 @@ int CDateMode::LoadWords(CDBAccess::TDatabase &db, CLHFilterTreeCtrl* tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT ID, Word, CheckinTime FROM WordTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordTable.WordID, WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordTable.SrcID = SrcDataTable.SrcID");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -85,19 +85,19 @@ void CDateMode::PreLoad(CLHFilterTreeCtrl *tree)
     for(int i = 3; i < MAX_DAY + 1; ++ i)
     {
         data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_DAY, i);
-        id = tree->AppendItem(root, wxString::Format(_("%d Days Ago"), i), -1, -1, data);
+        id = tree->AppendItem(root, wxString::Format(wxT("%d "), i) + _("Days Ago"), -1, -1, data);
         _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_DAY, i), id));
     }
     //Weeks
     for(int i = 1; i < MAX_WEEK; ++ i)
     {
         data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_WEEK, i);
-        id = tree->AppendItem(root, wxString::Format(_("%d Weeks Ago"), i), -1, -1, data);
+        id = tree->AppendItem(root, wxString::Format(wxT("%d "), i) + _("Weeks Ago"), -1, -1, data);
         _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_WEEK, i), id));
     }
 
     data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_DATE_WEEK, MAX_WEEK);
-    id = tree->AppendItem(root, wxString::Format(_("More Than %d Weeks Ago"), MAX_WEEK - 1), -1, -1, data);
+    id = tree->AppendItem(root, _("More Than") + wxString::Format(wxT(" %d "), MAX_WEEK - 1) + _("Weeks Ago"), -1, -1, data);
     _mapDate.insert(std::make_pair(std::make_pair(CLHFilterTreeItemData::IT_DATE_WEEK, MAX_WEEK), id));
 
     ////Months
@@ -169,32 +169,32 @@ void CDateMode::UpdateItemText(CLHFilterTreeCtrl *tree, const wxTreeItemId& item
         {
             if(val == 0)
             {
-                tree->SetItemText(itemid, wxString::Format(_("Today [%d]"), count));
+                tree->SetItemText(itemid, _("Today") + wxString::Format(wxT(" [%d]"), count));
             }
             else if(val == 1)
             {
-                tree->SetItemText(itemid, wxString::Format(_("Yesterday [%d]"), count));
+                tree->SetItemText(itemid, _("Yesterday") + wxString::Format(wxT(" [%d]"), count));
             }
             else if(val == 2)
             {
-                tree->SetItemText(itemid, wxString::Format(_("Day before Yesterday [%d]"), count));
+                tree->SetItemText(itemid, _("Day before Yesterday") + wxString::Format(wxT(" [%d]"), count));
             }
             else
             {
-                tree->SetItemText(itemid, wxString::Format(_("%d Days Ago [%d]"), val, count));
+                tree->SetItemText(itemid, wxString::Format(wxT("%d "), val) + _("Days Ago") + wxString::Format(wxT(" [%d]"), count));
             }
         }
         break;
     case CLHFilterTreeItemData::IT_DATE_WEEK:
         {
             if(val != MAX_WEEK)
-                tree->SetItemText(itemid, wxString::Format(_("%d Weeks Ago [%d]"), val, count));
+                tree->SetItemText(itemid, wxString::Format(wxT("%d "), val) + _("Weeks Ago") + wxString::Format(wxT(" [%d]"), count));
             else
-                tree->SetItemText(itemid, wxString::Format(_("More Than %d Weeks Ago [%d]"), val - 1, count));
+                tree->SetItemText(itemid, _("More Than") + wxString::Format(wxT(" %d "), val - 1) + _("Weeks Ago") + wxString::Format(wxT(" [%d]"), count));
         }
         break;
     default:
-        tree->SetItemText(itemid, wxString::Format(_("%d Unknown Ago [%d]"), val, count));
+        tree->SetItemText(itemid, wxString::Format(wxT("%d "), val) + _("Unknown Ago") + wxString::Format(wxT(" [%d]"), count));
     }
 }
 
@@ -244,7 +244,7 @@ int CDateMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word,
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, CheckinTime, CheckinTime FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordTable.Word, SrcDataTable.CheckinTime FROM WordTable, SrcDataTable WHERE WordTable.WordID = ? AND WordTable.SrcID = SrcDataTable.SrcID");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -263,6 +263,7 @@ int CDateMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word,
 /////
 CTagMode::CTagMode()
 : CBase(FM_TAG)
+, _iDefaultTag(-1)
 {
 }
 
@@ -273,7 +274,7 @@ int CTagMode::LoadWords(CDBAccess::TDatabase &db, CLHFilterTreeCtrl *tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT TagIndexTable.WordID, TagIndexTable.TagID, WordTable.Word FROM WordTable, TagIndexTable WHERE WordTable.ID = TagIndexTable.WordID");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT TagIndexTable.WordID, TagIndexTable.TagID, WordTable.Word FROM WordTable, TagIndexTable WHERE WordTable.WordID = TagIndexTable.WordID");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -300,10 +301,31 @@ int CTagMode::PreLoad(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree)
     tree->DeleteAllItems();
 
     wxTreeItemId root = tree->AddRoot(_("Tags"));
+    
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT IntVal FROM ConfigTable WHERE Attr = ?");
+        query.Bind(1, CConfigData::CA_DEFAULTTAG);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(!res.Eof())
+        {
+            _iDefaultTag = res.GetInt(0);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT ID, Title FROM TagTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT TagID, Title FROM TagTable");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -332,7 +354,11 @@ void CTagMode::ShowTag(CLHFilterTreeCtrl *tree, const wxTreeItemId& root, int ta
 {
     CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_TAG, tagid);
     wxTreeItemId id = tree->AppendItem(root, title, -1, -1, data);
-    _mapTag.insert(std::make_pair(tagid, std::make_pair(title, id)));        
+    _mapTag.insert(std::make_pair(tagid, std::make_pair(title, id)));
+    if(tagid == _iDefaultTag)
+    {
+        tree->SetItemBold(id, true);
+    }
 }
 
 int CTagMode::ShowWord(CLHFilterTreeCtrl *tree, int tagid, int wordid, const wxString &word)
@@ -351,7 +377,7 @@ void CTagMode::UpdateItemText(CLHFilterTreeCtrl *tree, int tagid, const TTagValu
 {
     size_t count = tree->GetChildrenCount(tag.second);
     
-    tree->SetItemText(tag.second, wxString::Format(_("%s [%d]"), tag.first, count));
+    tree->SetItemText(tag.second, wxString::Format(wxT("%s [%d]"), tag.first, count));
 
     //g_objTrigger.OnTagUpdateCount(tagid, count);
 }
@@ -378,50 +404,60 @@ int CTagMode::RemoveTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int
     return LoadWords(db, tree);
 }
 
-//int CTagMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)
-//{
-//    wxString word;
-//    TIntSet settag;
-//
-//    if(GetWordData(db, wordid, word, settag) != 0)
-//        return -1;
-//
-//    for(TIntSet::const_iterator it = settag.begin(); it != settag.end(); ++ it)
-//    {
-//        TTagMap::const_iterator i = _mapTag.find((*it));
-//        if(i == _mapTag.end())
-//            return -1;
-//
-//        CLHFilterTreeItemData* cd = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_WORD, wordid, (*it));
-//        tree->AppendItem(i->second.second, word, -1, -1, cd);
-//
-//        UpdateItemText(tree, (*it), i->second);
-//    }
-//
-//    return 0; 
-//}
+int CTagMode::UpdateTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id)
+{
+    TTagMap::iterator it = _mapTag.find(id);
+    if(it == _mapTag.end())
+        return -1;
 
-//int CTagMode::RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
-//{
-//    for(TTagMap::const_iterator::const_iterator it = _mapTag.begin(); it != _mapTag.end(); ++ it)
-//    {
-//        wxTreeItemIdValue cookie;
-//        wxTreeItemId itemid = tree->GetFirstChild(it->second.second, cookie);
-//        while(itemid.IsOk())
-//        {
-//            const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)tree->GetItemData(itemid);
-//            if(cd->ID() == wordid)
-//            {
-//                tree->Delete(itemid);
-//                UpdateItemText(tree, it->first, it->second);
-//
-//                break;
-//            }
-//            itemid = tree->GetNextChild(it->second.second, cookie);
-//        }
-//    }
-//    return 0;
-//}
+    wxString title;
+    if(GetTagData(db, id, title) != 0)
+        return -1;
+
+    it->second.first = title;
+
+    UpdateItemText(tree, id, it->second);
+
+    return 0;
+}
+
+int CTagMode::SetDefTitle(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int id)
+{
+    TTagMap::const_iterator it = _mapTag.find(_iDefaultTag);
+    if(it == _mapTag.end())
+        return -1;
+
+    tree->SetItemBold(it->second.second, false);
+
+    try
+    {
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT IntVal FROM ConfigTable WHERE Attr = ?");
+        query.Bind(1, CConfigData::CA_DEFAULTTAG);
+        CDBAccess::TResult res = query.ExecuteQuery();
+        if(!res.IsOk())
+            return -1;
+        if(!res.Eof())
+        {
+            _iDefaultTag = res.GetInt(0);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+
+    it = _mapTag.find(_iDefaultTag);
+    if(it == _mapTag.end())
+        return -1;
+
+    tree->SetItemBold(it->second.second, true);
+
+    return 0;
+}
 
 int CTagMode::UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
 {
@@ -474,7 +510,7 @@ int CTagMode::GetWordData(CDBAccess::TDatabase& db, int wordid, wxString &word, 
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -512,7 +548,7 @@ int CTagMode::GetTagData(CDBAccess::TDatabase &db, int tagid, wxString &title) c
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Title FROM TagTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Title FROM TagTable WHERE TagID = ?");
         query.Bind(1, tagid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
@@ -539,7 +575,7 @@ int CScoreMode::LoadWords(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree)
 
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT ID, Word, Counter FROM WordTable");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT WordID, Word, Counter FROM WordTable");
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
             return -1;
@@ -569,12 +605,12 @@ void CScoreMode::PreLoad(CLHFilterTreeCtrl* tree)
     for(int i = 1; i < MAX_SCORE; ++ i)
     {
         CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_SCORE, i);
-        wxTreeItemId id = tree->AppendItem(root, wxString::Format(_("Score : %d"), i), -1, -1, data);
+        wxTreeItemId id = tree->AppendItem(root, _("More Than") + wxString::Format(wxT(" : %d"), i), -1, -1, data);
         _mapScore.insert(std::make_pair(i, id));
     }
 
     CLHFilterTreeItemData* data = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_SCORE, MAX_SCORE);
-    wxTreeItemId id = tree->AppendItem(root, wxString::Format(_("Score More Than : %d"), MAX_SCORE - 1), -1, -1, data);
+    wxTreeItemId id = tree->AppendItem(root, _("Score More Than") + wxString::Format(wxT(" : %d"), MAX_SCORE - 1), -1, -1, data);
     _mapScore.insert(std::make_pair(MAX_SCORE, id));
 }
 
@@ -611,9 +647,9 @@ void CScoreMode::UpdateItemText(CLHFilterTreeCtrl* tree, int score, const wxTree
     size_t count = tree->GetChildrenCount(itemid);
 
     if(score != MAX_SCORE)
-        tree->SetItemText(itemid, wxString::Format(_("Score : %d [%d]"), score, count));
+        tree->SetItemText(itemid, _("Score") + wxString::Format(wxT(" : %d [%d]"), score, count));
     else
-        tree->SetItemText(itemid, wxString::Format(_("Score More Than : %d [%d]"), score, count));
+        tree->SetItemText(itemid, _("Score More Than") + wxString::Format(wxT(" : %d [%d]"), score, count));
 }
 
 int CScoreMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)
@@ -631,18 +667,48 @@ int CScoreMode::AddWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int w
     tree->AppendItem(itemid, word, -1, -1, cd);
     
     UpdateItemText(tree, score, itemid);
+
     return 0;
 }
 
 int CScoreMode::RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, int wordid)
 {
+    for(TScoreMap::const_iterator it = _mapScore.begin(); it != _mapScore.end(); ++ it)
+    {
+        if(it->second.IsOk())
+        {
+            wxTreeItemIdValue cookie;
+            wxTreeItemId id = tree->GetFirstChild(it->second, cookie);
+            while(id.IsOk())
+            {
+                const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)tree->GetItemData(id);
+                if(cd->ID() == wordid)
+                {
+                    tree->Delete(id);
+                    UpdateItemText(tree, it->first, it->second);
+                    return 0;
+                }
+                id = tree->GetNextChild(it->second, cookie);
+            }
+        }
+    }
+
+    return 0;
+}
+
+int CScoreMode::UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
+{
     wxString word;
     int score;
     if(GetWordData(db, wordid, word, score) != 0)
         return -1;
-    
-    for(int i = -2; i < 2; ++ i)
+
+    bool find = false;
+
+    for(int i = -2; i <= 2; ++ i)
     {
+        if(score + i < 1 || i == 0)
+            continue;
         wxTreeItemId itemid = GetItemID(tree, score + i);
         if(itemid.IsOk())
         {
@@ -653,20 +719,30 @@ int CScoreMode::RemoveWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl* tree, in
                 const CLHFilterTreeItemData* cd = (const CLHFilterTreeItemData*)tree->GetItemData(id);
                 if(cd->ID() == wordid)
                 {
+                    find = true;
+
                     tree->Delete(id);
                     UpdateItemText(tree, score + i, itemid);
-                    return 0;
+                    break;
                 }
                 id = tree->GetNextChild(itemid, cookie);
             }
         }
-    }
+        if(find == true)
+            break;
+    }    
+
+    wxTreeItemId itemid = GetItemID(tree, score);
+    if(!itemid.IsOk())
+        return -1;
+
+    CLHFilterTreeItemData* cd = new CLHFilterTreeItemData(CLHFilterTreeItemData::IT_WORD, wordid);
+    tree->AppendItem(itemid, word, -1, -1, cd);
+    
+    UpdateItemText(tree, score, itemid);
 
     return 0;
-}
 
-int CScoreMode::UpdateWord(CDBAccess::TDatabase& db, CLHFilterTreeCtrl *tree, int wordid)
-{
     if(RemoveWord(db, tree, wordid) != 0)
         return -1;
 
@@ -677,10 +753,12 @@ int CScoreMode::GetWordData(CDBAccess::TDatabase &db, int wordid, wxString &word
 {
     try
     {
-        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, Counter, CheckinTime FROM WordTable WHERE ID = ?");
+        CDBAccess::TQuery query = db.PrepareStatement("SELECT Word, Counter FROM WordTable WHERE WordID = ?");
         query.Bind(1, wordid);
         CDBAccess::TResult res = query.ExecuteQuery();
         if(!res.IsOk())
+            return -1;
+        if(res.Eof())
             return -1;
         
         word = res.GetString(0);
@@ -739,6 +817,20 @@ int CFilterShowObject::RemoveTitle(int id)
     if(_objFilter.get() == NULL)
         return -1;
     return _objFilter->RemoveTitle(_db, _tree, id);
+}
+
+int CFilterShowObject::UpdateTitle(int id)
+{
+    if(_objFilter.get() == NULL)
+        return -1;
+    return _objFilter->UpdateTitle(_db, _tree, id);
+}
+
+int CFilterShowObject::SetDefTitle(int id)
+{
+    if(_objFilter.get() == NULL)
+        return -1;
+    return _objFilter->SetDefTitle(_db, _tree, id);
 }
 
 int CFilterShowObject::AddWord(int wordid)

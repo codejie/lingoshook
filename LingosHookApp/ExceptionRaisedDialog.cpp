@@ -50,7 +50,7 @@ void CExceptionRaisedDialog::OnBtnCopy(wxCommandEvent &event)
 
 void CExceptionRaisedDialog::OnBtnSend(wxCommandEvent &event)
 {
-    wxString cmd = _("mailto:codejie@gmail.com");
+    wxString cmd = wxT("mailto:codejie@gmail.com");
     ::wxLaunchDefaultBrowser(cmd);
 //    event.Skip();
 //    wxLogDebug(wxT("Event handler (CExceptionRaisedDialog::OnBtnSend) not implemented yet")); //notify the user that he hasn't implemented the event handler yet
@@ -59,7 +59,7 @@ void CExceptionRaisedDialog::OnBtnSend(wxCommandEvent &event)
 
 void CExceptionRaisedDialog::OnBtnPost(wxCommandEvent &event)
 {
-    wxString cmd = _("http://www.cppblog.com/codejie");
+    wxString cmd = wxT("http://www.cppblog.com/codejie");
     ::wxLaunchDefaultBrowser(cmd);
 }
 
@@ -76,7 +76,7 @@ void CExceptionRaisedDialog::OnBtnOK(wxCommandEvent &event)
 void CExceptionRaisedDialog::set_properties()
 {
     // begin wxGlade: CExceptionRaisedDialog::set_properties
-    SetTitle(wxT("LingosHook catches a Exception !"));
+    SetTitle(_("LingosHook catches a Exception !"));
     m_textInfo->SetMinSize(wxSize(489, 295));
     // end wxGlade
 }

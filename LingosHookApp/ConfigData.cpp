@@ -2,7 +2,10 @@
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
 
+#include "Consts.h"
 #include "ConfigData.h"
+
+std::wstring CConfigData::m_strDBFile = APP_DEFAULT_DBFILE;
 
 CConfigData::CConfigData(CDBAccess& db)
 : _db(db.Database())
@@ -16,8 +19,26 @@ CConfigData::CConfigData(CDBAccess& db)
 , m_iHTMLSave(1)
 , m_iHTMLLoad(1)
 , m_iExpandDict(-1)
-, m_iIgnoreDict(0)
+//, m_iIgnoreDict(0)
 , m_iAutoSpeak(0)
+, m_iUseTidy(1)
+//, m_iSaveUseTidy(0)
+, m_iSkipDict(0)
+, m_iSkipHtml(0)
+, m_iFavoriteTab(1)
+//, m_iDataProcFlag(1)
+, m_iSkipError(1)
+, m_iLoadHtmlDict(0)
+, m_strLingoesExec(wxT("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe"))
+, m_strLingoesPath(wxT("C:\\Program Files\\Lingoes\\Translator2"))
+, m_iRetrieveDelay(0)
+, m_iAFCaseInsensitive(0)
+, m_iAFOneWordEachDict(0)
+, m_iAFOneWordAllDict(0)
+, m_iStopAutoRetrieve(0)
+, m_iHookLanguage(0)
+, m_strHomePage(wxEmptyString)
+, m_iHtmlOptimum(1)
 {
 }
 
@@ -25,7 +46,12 @@ int CConfigData::Init()
 {
     try
     {
-        if(!_db.TableExists(_("ConfigTable")))
+		if(!_db.TableExists(wxT("HtmlOptimumConfigTable")))
+		{
+			const char* sql = "CREATE TABLE HtmlOptimumConfigTable (Type INTEGER, Item VARCHAR(127))";
+			_db.ExecuteUpdate(sql);
+		}
+        if(!_db.TableExists(wxT("ConfigTable")))
         {
             const char* conftable = "CREATE TABLE ConfigTable (Attr INTEGER PRIMARY KEY, IntVal INTEGER, StrVal VARCHAR(255))";
             _db.ExecuteUpdate(conftable);
@@ -48,7 +74,7 @@ int CConfigData::GetData(int attr, int& value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
 	    if(!res.Eof())
 	    {
             value = res.GetInt(0);
@@ -65,7 +91,7 @@ int CConfigData::GetData(int attr, int& value)
 	return 0;
 }
 
-int CConfigData::GetData(int attr, wxString& value)
+int CConfigData::GetData(int attr, std::wstring& value)
 {
     try
     {
@@ -73,7 +99,7 @@ int CConfigData::GetData(int attr, wxString& value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
 	    if(!res.Eof())
 	    {
             value = res.GetAsString(0);
@@ -98,7 +124,7 @@ int CConfigData::SetData(int attr, int &value)
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
         if(!res.Eof())
         {
             query.Reset();
@@ -125,15 +151,15 @@ int CConfigData::SetData(int attr, int &value)
     return 0;
 }
 
-int CConfigData::SetData(int attr, wxString &value)
+int CConfigData::SetData(int attr, const std::wstring &value)
 {
     try
     {
-        CDBAccess::TQuery query = _db.PrepareStatement("SELECT COOUNT(*) FROM ConfigTable WHERE Attr = ?");
+        CDBAccess::TQuery query = _db.PrepareStatement("SELECT StrVal FROM ConfigTable WHERE Attr = ?");
 	    query.Bind(1, attr);
         CDBAccess::TResult res = query.ExecuteQuery();
 	    if(!res.IsOk())
-            throw CDBAccess::TException(255, _("SELECT Attr of ConfigTable FAILED."));
+            throw CDBAccess::TException(255, wxT("SELECT Attr of ConfigTable FAILED."));
         if(!res.Eof())
         {
             query.Reset();
@@ -182,10 +208,60 @@ int CConfigData::Load()
         m_iHTMLLoad = 1;
     if(GetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         m_iExpandDict = -1;
-    if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
-        m_iIgnoreDict = 0;
+    //if(GetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+    //    m_iIgnoreDict = 0;
     if(GetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         m_iAutoSpeak = 0;
+    if(GetData(CA_USETIDY, m_iUseTidy) != 0)
+        m_iUseTidy = 1;
+    //if(GetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    m_iSaveUseTidy = 0;
+    if(GetData(CA_SKIPDICT, m_iSkipDict) != 0)
+        m_iSkipDict = 0;
+    if(GetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+        m_iSkipHtml = 0;
+    if(GetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
+        m_iFavoriteTab = 0;
+    //if(GetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //    m_iDataProcFlag = 1;
+    if(GetData(CA_SKIPERROR, m_iSkipError) != 0)
+        m_iSkipError = 1;
+    if(GetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
+        m_iLoadHtmlDict = 0;
+
+    if(GetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
+        m_strLingoesExec = wxT("C:\\Program Files\\Lingoes\\Translator2\\Lingoes.exe");
+    if(GetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
+        m_strLingoesPath = wxT("C:\\Program Files\\Lingoes\\Translator2");
+
+    if(GetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
+        m_iRetrieveDelay = 0;
+
+    if(GetData(CA_AF_CASEINSENSITIVE, m_iAFCaseInsensitive) != 0)
+        m_iAFCaseInsensitive = 0;
+    if(GetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
+        m_iAFOneWordEachDict = 0;
+    if(GetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        m_iAFOneWordAllDict = 0;
+
+    if(GetData(CA_STOPAUTORETRIEVE, m_iStopAutoRetrieve) != 0)
+        m_iStopAutoRetrieve = 0;
+
+    if(GetData(CA_HOOKLANGUAGE, m_iHookLanguage) != 0)
+        m_iHookLanguage = 0;
+
+    if(GetData(CA_HOMEPAGE, m_strHomePage) != 0)
+        m_strHomePage = wxEmptyString;
+
+	if(GetData(CA_HTMLOPTIMUM, m_iHtmlOptimum) != 0)
+	{
+		m_iHtmlOptimum = 1;
+		SetDefaultHtmlOptimumConfig();
+	}
+
+	if(LoadHtmlOptimumConfig() != 0)
+		return -1;
+
     return 0;
 }
 
@@ -211,10 +287,54 @@ int CConfigData::Save()
         return -1;
     if(SetData(CA_EXPANDDICT, m_iExpandDict) != 0)
         return -1;
-    if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
-        return -1;
+    //if(SetData(CA_IGNOREDICT, m_iIgnoreDict) != 0)
+    //    return -1;
     if(SetData(CA_AUTOSPEAK, m_iAutoSpeak) != 0)
         return -1;
+    if(SetData(CA_USETIDY, m_iUseTidy) != 0)
+        return -1;
+    //if(SetData(CA_SAVEUSETIDY, m_iSaveUseTidy) != 0)
+    //    return -1;
+    if(SetData(CA_SKIPDICT, m_iSkipDict) != 0)
+        return -1;
+    if(SetData(CA_SKIPHTML, m_iSkipHtml) != 0)
+        return -1;
+    if(SetData(CA_FAVORITETAB, m_iFavoriteTab) != 0)
+        return -1;
+    //if(SetData(CA_DATAPROCFLAG, m_iDataProcFlag) != 0)
+    //    return -1;
+    if(SetData(CA_SKIPERROR, m_iSkipError) != 0)
+        return -1;
+    if(SetData(CA_LOADHTMLDICT, m_iLoadHtmlDict) != 0)
+        return -1;
+
+    if(SetData(CA_LINGOESEXEC, m_strLingoesExec) != 0)
+        return -1;
+    if(SetData(CA_LINGOESPATH, m_strLingoesPath) != 0)
+        return -1;
+
+    if(SetData(CA_RETRIEVEDELAY, m_iRetrieveDelay) != 0)
+        return -1;
+
+    if(SetData(CA_AF_CASEINSENSITIVE, m_iAFCaseInsensitive) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        return -1;
+
+    if(SetData(CA_STOPAUTORETRIEVE, m_iStopAutoRetrieve) != 0)
+        return -1;
+
+    if(SetData(CA_HOOKLANGUAGE, m_iHookLanguage) != 0)
+        return -1;
+
+    if(SetData(CA_HOMEPAGE, m_strHomePage) != 0)
+        return -1;
+	
+	if(SetData(CA_HTMLOPTIMUM, m_iHtmlOptimum) != 0)
+		return -1;
+
     return 0;
 }
 
@@ -225,6 +345,7 @@ unsigned int CConfigData::GetContolKey() const
     case 0:
     case 2:
     case 4:
+    case 6:
         return MOD_CONTROL;
     case 1:
     case 3:
@@ -248,7 +369,113 @@ unsigned int CConfigData::GetHotKey() const
     case 4:
     case 5:
         return VK_F11;
+    case 6:
+        return 0x31;
     default:
         return VK_F10;
     }
+}
+
+int CConfigData::GetLingoesParam(const std::wstring &local)
+{
+    m_strLingoesExec = local;
+    std::wstring::size_type pos = local.find_last_of(wxT("\\"));
+    if(pos != std::wstring::npos)
+        m_strLingoesPath = local.substr(0, pos);
+    else
+        m_strLingoesPath = wxT("");
+
+    return 0;
+}
+
+int CConfigData::SetLoadHtmlDict(int value)
+{
+    return SetData(CA_LOADHTMLDICT, value);
+}
+
+int CConfigData::SetAnalysisFilter()
+{
+    if(SetData(CA_AF_CASEINSENSITIVE, m_iAFCaseInsensitive) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDEACHDICT, m_iAFOneWordEachDict) != 0)
+        return -1;
+    if(SetData(CA_AF_ONEWORDALLDICT, m_iAFOneWordAllDict) != 0)
+        return -1;
+    return 0;
+}
+
+int CConfigData::LoadHtmlOptimumConfig()
+{
+	try {
+		CDBAccess::TQuery query = _db.PrepareStatement("SELECT Type, Item FROM HtmlOptimumConfigTable");
+		CDBAccess::TResult res = query.ExecuteQuery();
+		if(!res.IsOk())
+			throw CDBAccess::TException(255, wxT("SELECT HtmlOptimumConfigTable FAILED."));
+
+		m_mapHtmlOptimumKey.clear();
+
+		while(res.NextRow())
+		{
+			CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, (CDocumentOutputObject::KeyType)res.GetInt(0), res.GetString(1));
+		}
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+	return 0;
+}
+
+int CConfigData::SaveHtmlOptimumConfig() const
+{
+	try {
+		const char* sql = "DELETE FROM HtmlOptimumConfigTable";
+		_db.ExecuteUpdate(sql);
+
+		CDocumentOutputObject::TKeyMap::const_iterator it = m_mapHtmlOptimumKey.begin();
+		while(it != m_mapHtmlOptimumKey.end())
+		{
+			CDocumentOutputObject::TKeySet::const_iterator i = it->second.begin();
+			while(i != it->second.end())
+			{
+				CDBAccess::TQuery query = _db.PrepareStatement("INSERT INTO HtmlOptimumConfigTable (Type, Item) VALUES (?, ?)");
+				query.Bind(1, it->first);
+				query.Bind(2, *i);
+				
+				query.ExecuteUpdate();
+
+				++ i;
+			}
+
+			++ it;
+		}
+
+	}
+    catch(const CDBAccess::TException& e)
+    {
+        return -1;
+    }
+	return 0;
+}
+
+int CConfigData::SetDefaultHtmlOptimumConfig()
+{
+	m_mapHtmlOptimumKey.clear();
+
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("A"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("PARAM"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("EMBED"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_TAG, wxT("OBJECT"));
+    CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("class"));	
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("title"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onclick"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseout"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmouseup"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onmousedown"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("onselectstart"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pendfind"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_pend"));
+	CDocumentOutputObject::AddKey(&m_mapHtmlOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("lingoes_find"));
+
+	return SaveHtmlOptimumConfig();
 }

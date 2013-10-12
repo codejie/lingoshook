@@ -9,13 +9,16 @@
 #include <comutil.h>
 #include <commctrl.h>
 
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
+
 #include "LingosHookApp.h"
 #include "ConfigData.h"
 #include "HookObject.h"
 
 
-typedef BOOL (*CreateHookThreadPtr)(HWND, LPCTSTR, LPCTSTR, UINT*);
-typedef BOOL (*CreateHookThreadByHWNDPtr)(HWND, HWND, UINT, UINT*);
+typedef BOOL (*CreateHookThreadPtr)(HWND, LPCTSTR, LPCTSTR, UINT, UINT*);
+typedef BOOL (*CreateHookThreadByHWNDPtr)(HWND, HWND, UINT, UINT, UINT*);
 typedef BOOL (*RemoveHookThreadPtr)(void);
 
 
@@ -30,7 +33,7 @@ CDllHookObject::~CDllHookObject()
 	Unhook();
 }
 
-int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT& msgid)
+int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT delay, UINT& msgid)
 {
 	if(frame == NULL || lgs == NULL)
 		return -1;
@@ -41,23 +44,23 @@ int CDllHookObject::Hook(HWND frame, HWND lgs, UINT param, UINT& msgid)
 		CreateHookThreadByHWNDPtr pch = (CreateHookThreadByHWNDPtr)GetProcAddress(_hDll, "CreateHookThreadByHWND");
 		if(pch != NULL)
 		{
-			if(pch(frame, lgs, param, &msgid) != TRUE)
+			if(pch(frame, lgs, param, delay, &msgid) != TRUE)
 			{
-				wxLogDebug(_("call CreateHookThread() failed."));
+				wxLogDebug(wxT("call CreateHookThread() failed."));
 				::FreeLibrary(_hDll);
 				return -1;
 			}
 		}
 		else
 		{
-			wxLogDebug(_("Get CreateHookThread address failed."));
+			wxLogDebug(wxT("Get CreateHookThread address failed."));
 			::FreeLibrary(_hDll);
 			return -1;
 		}
 	}
 	else
 	{
-		wxLogDebug(_("Load LingosHook dll failed."));
+		wxLogDebug(wxT("Load LingosHook dll failed."));
 		return -1;
 	}
 	return 0;
@@ -72,13 +75,13 @@ int CDllHookObject::Unhook()
 		{
 			if(prh() != TRUE)
 			{
-				wxLogDebug(_("call RemoveHookThread() failed."));
+				wxLogDebug(wxT("call RemoveHookThread() failed."));
 				return -1;
 			}
 		}
 		else
 		{
-			wxLogDebug(_("Get RemoveHookThread address failed."));
+			wxLogDebug(wxT("Get RemoveHookThread address failed."));
 		}
 		::FreeLibrary(_hDll);
 		_hDll = NULL;
@@ -86,37 +89,6 @@ int CDllHookObject::Unhook()
 	return 0;
 }
 
-//int CDllHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
-//{
-//	if(msg == _nMsgID)
-//	{
-//		const struct _HookData_t* hd = (reinterpret_cast<const struct _HookData_t*>(lparam));
-//		wxString str;
-//		if(hd != NULL && hd->data != NULL)
-//		{
-//			str.append(hd->data, hd->size);
-//		}		
-//
-//		if(wparam == HKT_RESULT_TEXT)
-//		{
-//			wxLogDebug(_T("get RESULT_TEXT message."));
-//			
-//			if(_objFrame != NULL)
-//				_objFrame->HookTextProc(str);
-//		}
-//		else if(wparam == HKT_RESULT_HTML)
-//		{
-//			wxLogDebug(_T("get RESULT_HTLM message."));
-//			if(_objFrame != NULL)
-//				_objFrame->HookHTMLProc(str);
-//		}
-//		else
-//		{
-//			wxLogDebug(_T("get UNKNOWN message."));
-//		}
-//	}
-//	return 0;
-//}
 /////////////////////////////////////////////////////////
 int CHotkeyObject::_wincount = 0;
 
@@ -165,17 +137,10 @@ void CHotkeyObject::Unhook()
     }
 }
 
-//int CHotkeyObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
-//{
-//    GetResult(wparam, lparam);
-//
-//    return 0;
-//}
-
 int CHotkeyObject::GetResult(WXWPARAM wparam, WXLPARAM lparam)
 {
     //FindWindows
-//    HWND hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes"));
+//    HWND hwnd = ::FindWindow(_T("Afx:400000:0"), LINGOES_TITLE_ENG);
     if(_hwndLgs == NULL)
         return -1;
     if(::IsWindowVisible(_hwndLgs) == FALSE)
@@ -396,9 +361,9 @@ int CHotkeyObject::SendData(HookDataType type, const BSTR& str)
 	size_t size = ::SysStringLen(str);
 	struct _HookData_t* hd = new struct _HookData_t;
 
-	hd->size = size;
-	hd->data = new wchar_t[size];
-	wcsncpy(hd->data, str, size);
+	hd->size = size + 1;
+	hd->data = new wchar_t[hd->size];
+	wcsncpy_s(hd->data, hd->size, str, size);
 
 	::SendMessage(_hwndFrame, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -415,9 +380,9 @@ int CHotkeyObject::SendData(HookDataType type, const wchar_t* data, size_t size)
 
 	struct _HookData_t* hd = new struct _HookData_t;
 
-	hd->size = size;
-	hd->data = new wchar_t[size];
-	wcsncpy(hd->data, data, size);
+	hd->size = size + 1;
+	hd->data = new wchar_t[hd->size];
+	wcsncpy_s(hd->data, hd->size, data, size);
 
 	::SendMessage(_hwndFrame, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -450,8 +415,10 @@ int CHookObject::Init(const CConfigData &conf)
 {
     _bAutoHook = conf.m_iAutoHook == 1 ? true : false;
     _iIfLanguage = conf.m_iIfLanguage;
+    _bStopRetrieve = conf.m_iStopAutoRetrieve == 1 ? true : false;
     _bOpenHotkey = conf.m_iOpenHotkey == 1 ? true : false;
-    _bHookCD = conf.m_iIgnoreDict == 0 ? false: true;
+    _bHookCD = (conf.m_iSkipError == 1 || (conf.m_iSkipDict == 1 && conf.m_iSkipHtml == 1));//  true;//(conf.m_iDataProcFlag == 2 || conf.m_iDataProcFlag == 3) ? true : false;
+    _nDelay = conf.m_iRetrieveDelay;
 
     if(_bOpenHotkey)
     {
@@ -577,62 +544,62 @@ HWND CHookObject::GetLingoesHandle(int lang, bool strick)
     HWND hwnd = NULL;
     if(_iIfLanguage == 0)
     {
-        hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes"));
+        hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_ENG);
         if(hwnd == NULL)
-            hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes 灵格斯"));
+            hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_CHN);
     }
     else if(_iIfLanguage == 1)
     {
-        hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes"));
+        hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_ENG);
     }
     else
     {
-        hwnd = ::FindWindow(_T("Afx:400000:0"), _T("Lingoes 灵格斯"));
+        hwnd = ::FindWindow(LINGOES_CLASSNAME_LONG, LINGOES_TITLE_CHN);
     }
     
-    wchar_t buf[64];
-    if(strick == false)
+    if(hwnd == NULL && strick == false)
     {
+		wchar_t buf[64];
         if(_iIfLanguage == 0)
         {
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_ENG);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
 
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes 灵格斯"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_CHN);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }
         else if(_iIfLanguage == 1)
         {
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_ENG);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }
         else
         {
-            hwnd = ::FindWindowEx(NULL, NULL, NULL, _T("Lingoes 灵格斯"));
+            hwnd = ::FindWindowEx(NULL, NULL, NULL, LINGOES_TITLE_CHN);
             while(hwnd != NULL)
             {
                 ::GetClassName(hwnd, buf, 64);
-                if(wcsncmp(buf, _T("Afx:400000"), 10) == 0)
+                if(wcsncmp(buf, LINGOES_CLASSNAME_SHORT, 10) == 0)
                     return hwnd;
-                hwnd = ::FindWindowEx(NULL, hwnd, NULL, _T("Lingoes"));
+                hwnd = ::FindWindowEx(NULL, hwnd, NULL, LINGOES_TITLE_ENG);
             }
         }        
     }
@@ -672,11 +639,17 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 {
     if(msg == _nHookMsgID)
     {
+        if(_bStopRetrieve == true)
+            return 0;
+
 		const struct _HookData_t* hd = (reinterpret_cast<const struct _HookData_t*>(lparam));
 		wxString str;
 		if(hd != NULL && hd->data != NULL)
-		{
+		{   
 			str.append(hd->data, hd->size);
+            //wxFileOutputStream output(wxT("C:\\T2.html"));
+            //wxTextOutputStream ofs(output);
+            //ofs.WriteString(str);
 		}		
 
         if(wparam == HKT_CATCH)
@@ -745,7 +718,7 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
         }
         else
         {
-			wxLogDebug(_T("get UNKNOWN check message."));
+			wxLogDebug(_T("get UNKNOWN check message - %d."), msg);
         }
     }
 
@@ -754,7 +727,7 @@ int CHookObject::MessageProc(WXUINT msg, WXWPARAM wparam, WXLPARAM lparam)
 
 int CHookObject::Hook(HWND hwnd)
 {
-    if(_objHook.Hook(_hwndFrame, hwnd, (_bHookCD ? 1 : 0), _nHookMsgID) != 0)
+    if(_objHook.Hook(_hwndFrame, hwnd, (_bHookCD ? 1 : 0), _nDelay, _nHookMsgID) != 0)
     {
         ShowInfo(_("Hook hook failed."));
         return -1;
@@ -830,4 +803,9 @@ void CHookObject::ShowInfo(const wxString& info)
 {
     if(_objFrame != NULL)
         _objFrame->ShowHint(info);
+}
+
+void CHookObject::SetStopRetrieve(bool stop)
+{
+    _bStopRetrieve = stop;
 }

@@ -1,7 +1,13 @@
 /*********************************************************/
 // LingosHook by Jie.(codejie@gmail.com), 2010 - 
 /*********************************************************/
+//#include "wx/wfstream.h"
+//#include "wx/txtstrm.h"
 
+
+#include "DisplayObject.h"
+#include "FilterShowObject.h"
+#include "SpeakObject.h"
 #include "TriggerObject.h"
 
 class CTriggerObject g_objTrigger;
@@ -87,7 +93,7 @@ void CTriggerObject::OnWordSave(int wordid, const wxString& word)
         _objMemoryDaily->WordInsert(wordid);
     }
 
-    _objDisplay->ShowInfo(wxString::Format(_("Add a new word : %s."), word));
+    _objDisplay->ShowInfo(_("Add a new word") + wxString::Format(wxT(" : %s."), word));
 }
 
 void CTriggerObject::OnWordUpdate(int wordid, const wxString& word)
@@ -111,17 +117,18 @@ void CTriggerObject::OnWordFound(int wordid, const wxString &word)
     _objDisplay->ShowWord(wordid, word);
 }
 
-void CTriggerObject::OnResultSave(const TWordResultMap &result)
+//void CTriggerObject::OnResultSave(int wordid, const SpecialDictParser::CDictParser *dict, const TResultMap& &result)
+//{
+//}
+
+void CTriggerObject::OnResultSpecialDictGet(int wordid, const SpecialDictParser::CDictParser *dict, const SpecialDictParser::CDictResult &result)
 {
+    _objDisplay->ShowSpecialDictResult(dict, result, (_dataConfig->m_iExpandDict == -1 || _dataConfig->m_iExpandDict == dict->GetIndex()));
 }
 
-void CTriggerObject::OnResultSave(int wordid, const CDictParser *dict, const CDictResult &result)
+void CTriggerObject::OnResultHtmlDictGet(int wordid, const wxString& html)
 {
-}
-
-void CTriggerObject::OnResultGet(int wordid, const CDictParser *dict, const CDictResult &result)
-{
-    _objDisplay->ShowResult(dict, result, (_dataConfig->m_iExpandDict == -1 || _dataConfig->m_iExpandDict == dict->GetIndex()));
+    _objDisplay->ShowHtmlDictResult(html);
 }
 
 void CTriggerObject::OnWordRemove(int wordid)
@@ -146,6 +153,11 @@ void CTriggerObject::OnWordResultGetOver(int wordid, const TWordData& data)
         _objSpeak->Speak(data.m_strWord);
 
     _objTag->GetTagByWord(wordid);
+
+    //wxFileOutputStream output(wxT("C:\\T.html"));
+    //wxTextOutputStream ofs(output);
+    //ofs.WriteString(data.m_strHTML);
+
     _objDisplay->ShowWordData(data);
 }
 
@@ -157,6 +169,11 @@ void CTriggerObject::OnTagLoad(int tagid, const CTagObject::TRecord &record)
 void CTriggerObject::OnTagDefLoad(int tagid, const CTagObject::TRecord &record)
 {
     _objDisplay->ShowDefaultTag(tagid, record);
+
+    if(_dataConfig->m_iDataSyncTag == 1)
+    {
+        _objFilterShow->SetDefTitle(tagid);
+    }
 }
 
 void CTriggerObject::OnTagInsert(int tagid, const CTagObject::TRecord& record)
@@ -170,9 +187,9 @@ void CTriggerObject::OnTagInsert(int tagid, const CTagObject::TRecord& record)
     }
 }
 
-void CTriggerObject::OnTagUpdate(int tagid, const CTagObject::TRecord& record)
+void CTriggerObject::OnTagUpdateCount(int tagid, const CTagObject::TRecord& record)
 {
-    _objDisplay->UpdateTag(tagid, record);
+    _objDisplay->UpdateTagCount(tagid, record);
 }
 
 void CTriggerObject::OnTagRemove(int tagid)
@@ -184,6 +201,16 @@ void CTriggerObject::OnTagRemove(int tagid)
         if(_objFilterShow->GetMode() == FilterShow::FM_TAG)            
             _objFilterShow->RemoveTitle(tagid);  
     }    
+}
+
+void CTriggerObject::OnTagRename(int tagid, const CTagObject::TRecord& record)
+{
+    _objDisplay->UpdateTag(tagid, record);
+    if(_dataConfig->m_iDataSyncTag == 1)
+    {
+        if(_objFilterShow->GetMode() == FilterShow::FM_TAG)            
+            _objFilterShow->UpdateTitle(tagid);  
+    }   
 }
 
 void CTriggerObject::OnTagIndexUpdate(int wordid, int tagid)
@@ -265,17 +292,22 @@ void CTriggerObject::OnMemoryDailyPopWordFail()
 
 void CTriggerObject::OnParserUnknown(const wxString &id, const wxString &title)
 {
-    _objDisplay->ShowInfo(wxString::Format(_("Unknown Dictionary Parser : %s"), title));
+    _objDisplay->ShowInfo(_("Unknown Dictionary Parser") + wxString::Format(wxT(" : %s"), title));
 }
 
 void CTriggerObject::OnParserInitFail(const wxString &id, const wxString &title)
 {
-    _objDisplay->ShowInfo(wxString::Format(_("Init Dictionary Parser Failed - Title : %s"), title));
+    _objDisplay->ShowInfo(_("Init Dictionary Parser Failed - Title") + wxString::Format(wxT(" : %s"), title));
 }
 
 void CTriggerObject::OnParserLoad(int index, const wxString &id, const wxString &title)
 {
-    _objDisplay->ShowInfo(wxString::Format(_("Load Dictionary Parser : %s"), title));
+    _objDisplay->ShowInfo(_("Load Dictionary Parser") + wxString::Format(wxT(" : %s"), title));
     _objDisplay->ParserLoad(index, id, title);
+}
+
+void CTriggerObject::OnPluginLoad(int index, const ActivityObject::PropertyData &data, bool imcompatible)
+{
+    _objDisplay->AppendPluginsData(index, data, imcompatible);    
 }
 

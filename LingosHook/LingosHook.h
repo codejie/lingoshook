@@ -14,8 +14,8 @@ extern "C"
 {
 #endif
 
-DllExport BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT param, UINT* msgid);
-DllExport BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT param, UINT* msgid);
+DllExport BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT param, UINT delay, UINT* msgid);
+DllExport BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT param, UINT delay, UINT* msgid);
 DllExport BOOL RemoveHookThread();
 
 #if defined(__cplusplus)
@@ -50,6 +50,20 @@ typedef struct _HookData_t
 	UINT size;
 	wchar_t* data;
 } HookData;
+
+#define LINGOES_CLASSNAME_LONG		_T("Afx:400000:0")
+#define LINGOES_CLASSNAME_SHORT		_T("Afx:400000")
+#define LINGOES_TITLE_ENG			_T("Lingoes")
+#define LINGOES_TITLE_CHN			_T("Lingoes 灵格斯")
+#define LINGOES_POPWIN_CLASSNAME	_T("Afx:400000:2400b:")
+#define LINGOES_POPWIN_EDIT_CLASSNAME	_T("Edit")
+
+//#define LINGOES_CLASSNAME_LONG		_T("YodaoMainWndClass")
+//#define LINGOES_CLASSNAME_SHORT		_T("YodaoMainWndClass")
+//#define LINGOES_TITLE_ENG			_T("有道词典")
+//#define LINGOES_TITLE_CHN			_T("有道词典")
+//#define LINGOES_POPWIN_CLASSNAME	_T("Afx:00400000:3:00010003:00000000:00000000")
+//#define LINGOES_POPWIN_EDIT_CLASSNAME	_T("Edit")
 
 /////////////
 

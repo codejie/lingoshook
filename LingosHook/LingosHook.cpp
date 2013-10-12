@@ -19,6 +19,7 @@ UINT _nMsgID = 0;
 HANDLE _hEvent[2] = { NULL, NULL };
 
 UINT _nHookParam = 0;//0:none, 1:hook copy data
+UINT _nDelayParam = 0;
 //LingosCD _stLingosCD = LingosCD();
 HWND _hLingoesHwnd = NULL;
 #pragma data_seg()
@@ -47,7 +48,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved)
 
 //
 
-BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT hookparam, UINT* msgid)
+BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT hookparam, UINT delay, UINT* msgid)
 {
 	if(_hWnd != NULL)
 		return FALSE;
@@ -56,10 +57,10 @@ BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT hookp
 
 	LPCTSTR name = classname;
 	if(name == NULL)
-		name = _T("Afx:400000:0");
+		name = LINGOES_CLASSNAME_LONG;
 	LPCTSTR title = wintitle;
 	if(title == NULL)
-		title = _T("Lingoes");
+		title = LINGOES_TITLE_ENG;
 
 	HWND h = ::FindWindow(name, title);
 	if(h == NULL)
@@ -77,11 +78,12 @@ BOOL CreateHookThread(HWND hwnd, LPCTSTR classname, LPCTSTR wintitle, UINT hookp
 		return FALSE;
 
     _nHookParam = hookparam;
+    _nDelayParam = delay;
 
 	return TRUE;
 }
 
-BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT hookparam, UINT* msgid)
+BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT hookparam, UINT delay, UINT* msgid)
 {
     if(hwnd == NULL || hwndLingoes == NULL)
         return FALSE;
@@ -103,6 +105,7 @@ BOOL CreateHookThreadByHWND(HWND hwnd, HWND hwndLingoes, UINT hookparam, UINT* m
 		return FALSE;
 
     _nHookParam = hookparam;
+    _nDelayParam = delay;
 
     _hLingoesHwnd = hwndLingoes;
 	return TRUE;
@@ -213,7 +216,7 @@ DWORD WINAPI ThreadProc(LPVOID param)
                     s = wcslen(buf);
                     if(s > 17)
                     {
-                        if(wcsncmp(buf, _T("Afx:400000:2400b:"), 17) == 0)
+                        if(wcsncmp(buf, LINGOES_POPWIN_CLASSNAME, 17) == 0)
                         {
 				            if(hwnd != NULL)
 				            {
@@ -225,7 +228,27 @@ DWORD WINAPI ThreadProc(LPVOID param)
 					            }
 					            if(v == TRUE)
 					            {
-						            GetIEDocResult(hwnd);
+                                    if(_nDelayParam == 0)
+                                    {
+						                GetIEDocResult(hwnd);
+                                    }
+                                    else
+                                    {
+                                        cnt = 0;
+                                        do
+                                        {
+                                            ::Sleep(200);
+                                            if(::IsWindowVisible(hwnd) == FALSE)
+                                            {
+                                                break;
+                                            }
+                                        }while(++ cnt < (_nDelayParam / 200));
+
+                                        if(cnt >= (_nDelayParam / 200))
+                                        {
+                                            GetIEDocResult(hwnd);
+                                        }
+                                    }
 					            }
 					            cnt = 0;					
 				            }
@@ -375,7 +398,7 @@ BOOL CALLBACK EnumEditChildProc(HWND hwnd, LPARAM lparam)
 {
 	TCHAR buf[128];
 	::GetClassName(hwnd, (LPWSTR)&buf, 128);
-	if (::_tcscmp(buf, _T("Edit")) == 0 )
+	if (::_tcscmp(buf, LINGOES_POPWIN_EDIT_CLASSNAME) == 0 )
 	{
 		*(HWND*)lparam = hwnd;
 		return FALSE;
@@ -424,9 +447,9 @@ BOOL SendBSTRData(enum _HookDataType_t type, const BSTR& str)
 	size_t size = ::SysStringLen(str);
 	struct _HookData_t* hd = new struct _HookData_t;
 
-	hd->size = size;
-	hd->data = new wchar_t[size];
-	wcsncpy(hd->data, str, size);
+	hd->size = size + 1;
+	hd->data = new wchar_t[hd->size];
+	wcsncpy_s(hd->data, hd->size, str, size);
 
 	::SendMessage(_hWnd, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -443,9 +466,9 @@ BOOL SendCDData(enum _HookDataType_t type, const LingosCD* data)
 
 	struct _HookData_t* hd = new struct _HookData_t;
 
-    hd->size = data->_size;
+    hd->size = data->_size + 1;
     hd->data = new wchar_t[hd->size];
-    wcsncpy(hd->data, (const wchar_t*)data->_data, hd->size);
+    wcsncpy_s(hd->data, hd->size, (const wchar_t*)data->_data, data->_size);
 
 	::SendMessage(_hWnd, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
@@ -462,9 +485,9 @@ BOOL SendWCharData(enum _HookDataType_t type, const wchar_t* data, size_t size)
 
 	struct _HookData_t* hd = new struct _HookData_t;
 
-    hd->size = size;
+    hd->size = size + 1;
     hd->data = new wchar_t[hd->size];
-    wcsncpy(hd->data, data, size);
+    wcsncpy_s(hd->data, hd->size, data, size);
 
 	::SendMessage(_hWnd, _nMsgID, (WPARAM)type, (LPARAM)hd);
 
