@@ -66,6 +66,8 @@ WordExportV2Dialog::WordExportV2Dialog(CDBAccess* dbaccess, wxWindow* parent, in
     static_line_6 = new wxStaticLine(this, wxID_ANY);
     btnExport = new wxButton(this, 7500, wxT("Export"));
     panel_1 = new wxPanel(this, wxID_ANY);
+    btnStyle = new wxButton(this, 7501, _("Extended Style Settings"));
+    panel_3 = new wxPanel(this, wxID_ANY);
     btnClose = new wxButton(this, wxID_CLOSE, wxEmptyString);
 
     set_properties();
@@ -96,6 +98,7 @@ BEGIN_EVENT_TABLE(WordExportV2Dialog, wxDialog)
     EVT_BUTTON(7401, WordExportV2Dialog::OnBtnBrowse)
     EVT_BUTTON(7500, WordExportV2Dialog::OnBtnExport)
 	EVT_BUTTON(wxID_CLOSE, WordExportV2Dialog::OnBtnClose)
+	EVT_BUTTON(7501, WordExportV2Dialog::OnBtnStyle)
     // end wxGlade
 END_EVENT_TABLE();
 
@@ -223,6 +226,10 @@ void WordExportV2Dialog::OnBtnClose(wxCommandEvent &event)
     Close();
 }
 
+void WordExportV2Dialog::OnBtnStyle(wxCommandEvent &event)
+{
+	event.Skip();
+}
 // wxGlade: add WordExportV2Dialog event handlers
 
 
@@ -341,8 +348,10 @@ void WordExportV2Dialog::do_layout()
     sizer_23->Add(sizer_27, 0, wxLEFT|wxRIGHT|wxEXPAND, 32);
     sizer_1->Add(sizer_23, 0, wxALL|wxEXPAND, 4);
     sizer_1->Add(static_line_6, 0, wxALL|wxEXPAND, 4);
-    sizer_26->Add(btnExport, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
-    sizer_26->Add(panel_1, 3, wxEXPAND, 0);
+    sizer_26->Add(btnExport, 2, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
+    sizer_26->Add(panel_1, 1, wxEXPAND, 0);
+    sizer_26->Add(btnStyle, 0, 0, 0);
+    sizer_26->Add(panel_3, 1, wxEXPAND, 0);
     sizer_26->Add(btnClose, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 0);
     sizer_1->Add(sizer_26, 0, wxALL|wxEXPAND, 16);
     SetSizer(sizer_1);
