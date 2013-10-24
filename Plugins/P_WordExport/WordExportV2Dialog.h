@@ -28,7 +28,7 @@
 
 #include "DBAccess.h"
 #include "HtmlOptimumConfigDialog.h"
-
+#include "ExtendStyleDialog.h"
 
 
 
@@ -141,6 +141,8 @@ private:
 	ExportType _eExportType;
 	wxString _strSeparator;
 	wxString _strFilterDict;
+
+	ExtendStyleDialog::StyleData _dataStyle;
 //	wxString _strExportPath;
 }; // wxGlade: end class
 
