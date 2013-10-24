@@ -7,6 +7,7 @@
 #include "TinyHtmlParser.h"
 
 #include "SeparatorDialog.h"
+#include "ExtendStyleDialog.h"
 
 #include "WordExportV2Dialog.h"
 
@@ -150,6 +151,8 @@ void WordExportV2Dialog::OnRadioOutputClick(wxCommandEvent &event)
 	{
 		radioDictSpecific->Enable(true);
 	}
+
+	btnStyle->Enable(radioOutputHtml->GetValue());
 }
 
 
@@ -228,7 +231,11 @@ void WordExportV2Dialog::OnBtnClose(wxCommandEvent &event)
 
 void WordExportV2Dialog::OnBtnStyle(wxCommandEvent &event)
 {
-	event.Skip();
+	ExtendStyleDialog dlg(this, wxID_ANY, wxEmptyString);
+	if (dlg.ShowModal() == wxID_OK)
+	{
+		_dataStyle = dlg.GetStyleData();
+	}
 }
 // wxGlade: add WordExportV2Dialog event handlers
 
@@ -253,6 +260,7 @@ void WordExportV2Dialog::set_properties()
     label_6->SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxBOLD, 0, wxT("")));
     btnExport->Enable(false);
     // end wxGlade
+	btnStyle->Enable(false);
 
 	InitOptimumKey();
 }
@@ -732,6 +740,33 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("HEAD"));
 	CDocumentOutputObject::AddKey(&mapKey, CDocumentOutputObject::KT_TAG, wxT("BODY"));
 //	CDocumentOutputObject::AddKey(&_mapOptimumKey, CDocumentOutputObject::KT_ATTRIB, wxT("style"));
+
+	wxString wordStartTag = wxT("<FONT style=\"FONT-SIZE:");
+	wxString wordEndTag = wxT("</FONT>");
+
+	wordStartTag += (_dataStyle.strFontSize + wxT(";"));
+	if(!_dataStyle.strTextColor.IsEmpty())
+	{
+		wordStartTag += (wxT("COLOR:_dataStyle.strTextColor"));
+	}
+	wordStartTag += wxT("\">");
+
+	switch(_dataStyle.iFontStyle)
+	{
+	case 1:
+		wordStartTag += wxT("<B>");
+		wordEndTag = wxT("</B>") + wordEndTag;
+		break;
+	case 2:
+		wordStartTag += wxT("<I>");
+		wordEndTag = wxT("</I>") + wordEndTag;
+		break;
+	case 4:
+		wordStartTag += wxT("<B><I>");
+		wordEndTag = wxT("</B></I>") + wordEndTag;
+		break;
+	default:;
+	}
 
 	tos << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
 
