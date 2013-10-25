@@ -56,7 +56,7 @@ ExtendStyleDialog::ExtendStyleDialog(wxWindow* parent, int id, const wxString& t
         _("Italic"),
         _("Bold and Italic")
     };
-    listFontStyle = new wxChoice(this, 8003, wxDefaultPosition, wxDefaultSize, 4, choice_15_choices, 0);
+    listFontStyle = new wxChoice(this, 8003, wxDefaultPosition, wxDefaultSize, 4, choice_15_choices, 1);
     label_9 = new wxStaticText(this, wxID_ANY, _("Word Explanation Style"));
     static_line_3 = new wxStaticLine(this, wxID_ANY);
     label_10 = new wxStaticText(this, wxID_ANY, _("Content Indentation"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
@@ -159,6 +159,7 @@ END_EVENT_TABLE();
 void ExtendStyleDialog::OnBtenOK(wxCommandEvent &event)
 {
 	MakeStyleData(_dataStyle);
+	wxDialog::EndModal(wxID_OK);
 }
 
 const ExtendStyleDialog::StyleData& ExtendStyleDialog::GetStyleData() const

@@ -33,7 +33,7 @@ public:
 			: strFontSize(wxT("11pt"))
 			, strTextColor(wxEmptyString)
 			, strBackgroundColor(wxEmptyString)
-			, iFontStyle(0)
+			, iFontStyle(1)
 			, strContentIndentation(wxEmptyString)
 		{
 		}
