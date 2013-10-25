@@ -744,10 +744,14 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 	wxString wordStartTag = wxT("<FONT style=\"FONT-SIZE:");
 	wxString wordEndTag = wxT("</FONT>");
 
-	wordStartTag += (_dataStyle.strFontSize + wxT(";"));
+	wordStartTag += (_dataStyle.strFontSize);
 	if(!_dataStyle.strTextColor.IsEmpty())
 	{
-		wordStartTag += (wxT("COLOR:_dataStyle.strTextColor"));
+		wordStartTag += (wxT(";COLOR:") + _dataStyle.strTextColor);
+	}
+	if(!_dataStyle.strBackgroundColor.IsEmpty())
+	{
+		wordStartTag += (wxT(";BACKGROUND-COLOR:") + _dataStyle.strBackgroundColor);
 	}
 	wordStartTag += wxT("\">");
 
@@ -768,6 +772,14 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 	default:;
 	}
 
+	wxString contentStartTag = wxEmptyString;
+	wxString contentEndTag = wxEmptyString;
+	if(!_dataStyle.strContentIndentation.IsEmpty())
+	{
+		contentStartTag = wxT("<DIV style=\"PADDING-LEFT:") + _dataStyle.strContentIndentation + wxT("\">");
+		contentEndTag = wxT("</DIV>");
+	}
+
 	tos << wxT("<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>");
 
 	wxString ret = wxEmptyString;
@@ -780,9 +792,11 @@ int WordExportV2Dialog::ExportHtml(CDBAccess::TResult& res)
 			continue;
 		}
 
-		tos << wxT("<FONT style=\"FONT-SIZE: 11pt\"><B>") << res.GetString(0) << wxT("</B></FONT>");
+		//tos << wxT("<FONT style=\"FONT-SIZE: 11pt\"><B>") << res.GetString(0) << wxT("</B></FONT>");
+		tos << wordStartTag << res.GetString(0) << wordEndTag;
 
-		tos << ret;//res.GetString(3);
+		//tos << ret;//res.GetString(3);
+		tos << contentStartTag << ret << contentEndTag;
 		tos << wxT("<DIV style=\"BORDER-TOP:#7070dd 2px solid; PADDING-TOP:5px\"></DIV>");
 	}
 //	tos << ret;
